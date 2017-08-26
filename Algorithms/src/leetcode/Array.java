@@ -136,7 +136,61 @@ public class Array {
     }
     
     
-    
+    public int[][] imageSmoother(int[][] M) {
+        int X = M.length;
+        int Y = M[0].length;
+        int[][] image = new int[X][Y];
+        for(int i=0;i<X;i++) {
+        	for(int j=0; j<Y; j++) {
+        		int val = M[i][j];
+        		int count = 1;
+        		if(i-1>=0) {
+        			val += M[i-1][j];
+        			count++;
+        		}
+        			
+        		if(i+1<X) {
+        			val += M[i+1][j];
+        			count++;
+        		}
+        			
+        		if(j-1>=0) {
+        			val += M[i][j-1];
+        			count++;
+        		}
+        			
+        		if(j+1<Y) {
+        			val += M[i][j+1];
+        			count++;
+        		}
+        			
+        		if(i-1 >=0 && j-1>=0) {
+        			val += M[i-1][j-1];
+        			count++;
+        		}
+        			
+        		if(i-1 >=0 && j+1<Y) {
+        			val += M[i-1][j+1];
+        			count++;
+        		}
+        			
+        		if(i+1<X && j-1>=0) {
+        			val += M[i+1][j-1];
+        			count++;
+        		}
+        			
+        		if(i+1<X && j+1<Y) {
+        			val += M[i+1][j+1];
+        			count++;
+        		}
+        			val /= count;
+        		
+        		image[i][j] = val;
+        	}
+        }
+        
+        return image;
+    }
     
     
 
