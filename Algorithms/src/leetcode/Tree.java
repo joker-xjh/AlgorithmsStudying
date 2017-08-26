@@ -1,8 +1,11 @@
 package leetcode;
 
 import java.util.ArrayList;
-
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Queue;
 
 public class Tree {
 	
@@ -119,7 +122,82 @@ public class Tree {
     }
     
     
+   private boolean  checkEqualTree = false;
+   private int[] sum= new int[1];
+   public boolean checkEqualTree(TreeNode root) {
+       if(root == null)
+    	   return true;
+       if(root.left==null && root.right == null)
+    	   return false;
+       Map<TreeNode, Integer> map = new HashMap<>();
+       sum[0]= sumTree(root, map);
+       if( (sum[0] & 1 )!= 0)
+    	   return false;
+       int half = sum[0]/2;
+       checkEqualTree(root,map,half);
+       
+	   return checkEqualTree;
+    }
+   private void checkEqualTree(TreeNode node, Map<TreeNode, Integer> map,int half) {
+	   if(node == null)
+		   return;
+	   if(checkEqualTree)
+		   return;
+	   int sum = map.get(node);
+	   if(sum == half) {
+		   checkEqualTree = true;
+	   }
+	   checkEqualTree(node.left,map,half);
+	   checkEqualTree(node.right,map,half);
+   }
+   
+   
+   
+   
+   private int sumTree(TreeNode node,Map<TreeNode, Integer> map) {
+	   if(node == null)
+		   return 0;
+	   int sum = node.val + sumTree(node.left, map) + sumTree(node.right, map);
+	   map.put(node, sum);
+	   return sum;
+   }
     
+   
+   
+   public int widthOfBinaryTree(TreeNode root) {
+	   int width = 1;
+       Map<TreeNode, Integer> position = new HashMap<>();
+       Queue<TreeNode> queue = new LinkedList<>();
+       queue.add(root);
+       position.put(root, 1);
+       while(queue.size() > 0) {
+    	   int start = 0, end = 0;
+    	   int size = queue.size();
+    	   for(int i=0; i<size; i++) {
+    		   TreeNode node = queue.poll();
+    		   if(i==0)
+    			   start = position.get(node);
+    		   if( i== size-1)
+    			   end = position.get(node);
+    		   if(node.left!=null) {
+    			   queue.add(node.left);
+    			   position.put(node.left, position.get(node)*2);
+    		   }
+    		   if(node.right != null) {
+    			   queue.add(node.right);
+    			   position.put(node.right, position.get(node)*2+1);
+    		   }
+    	   }
+    	   
+    	   width = Math.max(width, end-start+1);
+       }
+       return width;
+   }
+   
+   
+   
+   
+   
     
     
 
