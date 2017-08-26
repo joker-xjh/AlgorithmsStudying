@@ -1,5 +1,8 @@
 package leetcode;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class DP {
 	
 	
@@ -121,6 +124,39 @@ public class DP {
         
     	return result;
     }
+    
+    
+    
+    private Map<Integer, Integer> coinChange = new HashMap<>();
+    
+    public int coinChange(int[] coins, int amount) {
+        if(amount == 0)
+        	return 0;
+        if(coinChange.containsKey(amount))
+        	return coinChange.get(amount);
+        int n = amount + 1;
+        
+        for(int coin:coins) {
+        	int cur = 0;
+        	if(coin <= amount) {
+        		int next = coinChange(coins, amount-coin);
+        		if(next >=0)
+        			cur = next + 1;
+        	}
+        	if(cur > 0)
+        		n = Math.min(n, cur);
+        }
+        
+        int ans = n == amount+1 ? -1 : n;
+        coinChange.put(amount, ans);
+        return ans;
+    }
+    
+    
+    
+    
+    
+    
     
     
     
