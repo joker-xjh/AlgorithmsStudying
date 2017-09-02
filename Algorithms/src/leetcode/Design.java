@@ -191,6 +191,7 @@ public class Design {
     		int remove = lists.get(min).iterator().next();
     		lists.get(min).remove(remove);
     		LFU.remove(remove);
+    		LFUCount.remove(remove);
     	}
     	LFU.put(key, value);
     	LFUCount.put(key, 1);

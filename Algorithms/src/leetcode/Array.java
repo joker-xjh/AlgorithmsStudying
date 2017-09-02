@@ -88,7 +88,6 @@ public class Array {
         		
         }
         k--;
-        System.out.println("left:"+left +"  right:"+right);
         while(k > 0) {
         	if(left < 0) {
         		list.add(arr.get(right));
@@ -192,14 +191,29 @@ public class Array {
         return image;
     }
     
+    public int countDigitOne(int n) {
+    	if(n <= 0)
+    		return 0;
+        long ones = 0;
+        for(long i=1,k=n;i<=n;i*=10,k/=10) {
+        	long pre = n/(i*10);
+        	long cur = k %10;
+        	long next = n % i;
+        	ones += pre * i;
+        	ones += cur > 1 ? i:(cur == 1 ? next+1 : 0);
+        }
+        return (int) ones;
+    }
+    
+    
+    
+    
+    
+    
     
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		String aString = "";
-		for(char c:aString.toCharArray())
-			System.out.println(c);
-		System.out.println("ok");
+		
 
 	}
 
