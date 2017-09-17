@@ -1,9 +1,10 @@
 package leetcode;
 
 import java.util.Arrays;
-
 import java.util.LinkedList;
 import java.util.List;
+import java.util.PriorityQueue;
+import java.util.Queue;
 
 public class Array {
 	
@@ -204,6 +205,75 @@ public class Array {
         }
         return (int) ones;
     }
+    
+    
+   
+    
+    static int[][] dir = {{0,1}, {0, -1}, {1, 0}, {-1, 0}};
+    public int cutOffTree(List<List<Integer>> forest) {
+    	if(forest == null || forest.size() == 0)
+    		return 0;
+        PriorityQueue<int[]> queue = new PriorityQueue<>((a, b) -> a[2] - b[2]);
+        int X = forest.size();
+        int Y = forest.get(0).size();
+        int[][] map = new int[X][Y];
+        for(int i=0; i<forest.size(); i++) {
+        	List<Integer> list = forest.get(i);
+        	for(int j=0; j<list.size(); j++) {
+        		int num = list.get(j);
+        		map[i][j] = num;
+        		if(num > 1) {
+        			queue.add(new int[] {i,j,num});
+        		}
+        	}
+        }
+        
+        int step = 0;
+        int[] begin = {0,0};
+        while(queue.size() > 0) {
+        	int[] array = queue.poll();
+        	int temp = bfs(map, begin, array,X,Y);
+        	if(temp == -1)
+        		return -1;
+        	step += temp;
+        	begin[0] = array[0];
+        	begin[1] =array[1];
+        }
+        
+    	return step;
+    }
+    
+   
+    
+    
+    private int bfs(int[][] map, int[] start, int[] tree,int m, int n) {
+    	 int step = 0;
+         boolean[][] visited = new boolean[m][n];
+         Queue<int[]> queue = new LinkedList<>();
+         queue.add(start);
+         visited[start[0]][start[1]] = true;
+
+         while (!queue.isEmpty()) {
+             int size = queue.size();
+             for (int i = 0; i < size; i++) {
+                 int[] curr = queue.poll();
+                 if (curr[0] == tree[0] && curr[1] == tree[1]) return step;
+
+                 for (int[] d : dir) {
+                     int nr = curr[0] + d[0];
+                     int nc = curr[1] + d[1];
+                     if (nr < 0 || nr >= m || nc < 0 || nc >= n 
+                         || map[nr][nc] == 0 || visited[nr][nc]) continue;
+                     queue.add(new int[] {nr, nc});
+                     visited[nr][nc] = true;
+                 }
+             }
+             step++;
+         }
+
+         return -1;
+    }
+    
     
     
     
