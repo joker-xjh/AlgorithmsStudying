@@ -275,6 +275,17 @@ public class Array {
     }
     
     
+    boolean b = false;
+    public boolean judgePoint24(int[] nums) {
+        
+    	
+    	return b;
+    }
+    
+    
+    
+    
+    
     
     
     
