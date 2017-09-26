@@ -269,6 +269,7 @@ public class Tree {
 		   if(findRedundantConnection(tree, father, son) && findRedundantConnection(tree, son, father)) {
 			   return array;
 		   }
+		   
 	   }
 	   
        
