@@ -194,7 +194,104 @@ public class Tree {
        return width;
    }
    
+  static class Connection{
+	 
+	   int val;
+	   List<Integer> next;;
+	   
+	   public Connection(int val) {
+		  this.val = val;
+		  next = new ArrayList<>();
+	}
+	   
+	 
+	   
+	   public void addChildren(int child) {
+		   next.add(child);
+	   }
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + val;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Connection other = (Connection) obj;
+		if (val != other.val)
+			return false;
+		return true;
+	}
+
+
+
+	@Override
+	public String toString() {
+		return "Connection [val=" + val + ", next=" + next + "]";
+	}
+	
+	 
+   }
    
+   
+   public int[] findRedundantConnection(int[][] edges) {
+	   if(edges == null || edges.length ==0)
+		   return null;
+       Map<Integer, Connection> tree = new HashMap<>(); 
+	   for(int[] array : edges) {
+		   int root = array[0];
+		   if(!tree.containsKey(root)) {
+			   Connection connection = new Connection(root);
+			   tree.put(root, connection);
+		   }
+		   int next = array[1];
+		   if(!tree.containsKey(next)) {
+			   Connection connection = new Connection(next);
+			   tree.put(next, connection);
+		   }
+		   Connection connection = tree.get(root);
+		   connection.addChildren(next);
+	   }
+       
+	   for(int i=edges.length-1; i>=0; i--) {
+		   int[] array = edges[i];
+		   Connection father = tree.get(array[0]);
+		   Connection son = tree.get(array[1]);
+		   if(findRedundantConnection(tree, father, son) && findRedundantConnection(tree, son, father)) {
+			   return array;
+		   }
+	   }
+	   
+       
+	   return null;
+   }
+   
+   private boolean findRedundantConnection(Map<Integer, Connection> tree, Connection target,Connection connection) {
+	   if(connection.val == target.val) {
+		   System.out.println("11111111");
+		   return true;
+	   }
+		   
+	   List<Integer> next = connection.next;
+	   for(int i=0; i<next.size(); i++) {
+		   int child = next.get(i);
+		   Connection children = tree.get(child);
+		   boolean b = findRedundantConnection(tree, target, children);
+		   if(b)
+			   return true;
+	   }
+	   
+	   return false;
+   }
    
    
    

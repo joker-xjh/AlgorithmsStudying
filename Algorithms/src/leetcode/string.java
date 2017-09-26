@@ -1,5 +1,7 @@
 package leetcode;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 public class string {
@@ -189,14 +191,118 @@ public class string {
     }
     
     
+    private int max = Integer.MAX_VALUE;
+    private char[] result = new char[4];
+    public String nextClosestTime(String time) {
+        char[] array = new char[4];
+        array[0] = time.charAt(0);
+        array[1] = time.charAt(1);
+        array[2] = time.charAt(3);
+        array[3] = time.charAt(4);
+        List<Character> list = new ArrayList<>();
+        nextClosestTime(list, array);
+        StringBuilder sb = new StringBuilder();
+        sb.append(result[0]).append(result[1]).append(':').append(result[2]).append(result[3]);
+        max = Integer.MAX_VALUE;
+        result = new char[4];
+    	return sb.toString();
+    }
+    
+    private void nextClosestTime(List<Character> list, char[] array) {
+    	if(list.size() == 4) {
+    		if(judgeTime(list)) {
+    			char[] another = listToCharArray(list);
+    			int diff = getTimeDiff(array, another);
+    			System.out.println(list  +"  diff: "+diff);
+    			if(diff < max) {
+    				max = diff;
+    				for(int i=0; i<4; i++) {
+    					result[i] = another[i];
+    				}
+    			}
+    		}
+    	}
+    	else {
+    		for(int i=0; i<4; i++) {
+    			char c = array[i];
+    			list.add(c);
+    			nextClosestTime(list, array);
+    			list.remove(list.size()-1);
+    		}
+    	}
+    }
+    
+    private boolean judgeTime(List<Character> list) {
+    	char one = list.get(0);
+    	if(one >='3')
+    		return false;
+    	char two = list.get(1);
+    	if(one =='2' && two >= '4')
+    		return false;
+    	char three = list.get(2);
+    	if(three >= '6')
+    		return false;
+    	return true;
+    }
+    
+    private char[] listToCharArray(List<Character> list) {
+    	char[] array = new char[4];
+    	for(int i=0; i<4; i++) {
+    		array[i] = list.get(i);
+    	}
+    	return array;
+    }
     
     
     
+    public int getTimeDiff(char[] time1, char[] time2) {
+    	int diff = 0;
+    	boolean small = false;
+    	for(int i=0; i<4; i++) {
+    		char c1 = time1[i];
+    		char c2 = time2[i];
+    		if(c1 < c2) {
+    			small = true;
+    			break;
+    		}
+    		else if(c1 > c2) {
+    			break;
+    		}
+    	}
+    	if(small) {
+    		diff = getDiffToMidnight(time1) - getDiffToMidnight(time2);
+    	}
+    	else {
+    		diff = getDiffToMidnight(time1) + getDiffToZero(time2);
+    	}
+    	
+    	return diff;
+    }
     
     
+    private int getDiffToMidnight(char[] time) {
+    	int diff = 0;
+    	diff += 60 - Integer.parseInt((""+time[2]+time[3]));
+    	diff += (23 - Integer.parseInt((""+time[0]+time[1])))*60;
+    	return diff;
+    }
+    
+    private int getDiffToZero(char[] time) {
+    	int diff = 0;
+    	diff += Integer.parseInt((""+time[2]+time[3]));
+    	diff += (Integer.parseInt((""+time[0]+time[1]))) * 60; 
+    	return diff;
+    }
     
     
-    
+    public static void main(String[] args) {
+		string test = new string();
+		String time = "19:34";
+		System.out.println("1111111v    "+test.nextClosestTime(time));
+//		char [] time1 = {'1','9','3','4'};
+//		char [] time2 = {'1','9','3','9'};
+//		System.out.println(test.getTimeDiff(time1, time2));
+	}
     
     
     
