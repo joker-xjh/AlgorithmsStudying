@@ -1,7 +1,9 @@
 package leetcode;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.Stack;
 
 public class string {
@@ -295,6 +297,58 @@ public class string {
     }
     
     
+    public int repeatedStringMatch(String A, String B) {
+    	if(A== null || B== null || A.length()==0|| B.length() ==0)
+    		return -1;
+        Set<Character> set = new HashSet<>();
+        for(char c:A.toCharArray()) {
+        	set.add(c);
+        }
+        for(char c : B.toCharArray()) {
+        	if(!set.contains(c))
+        		return -1;
+        }
+        int lengthA = A.length();
+        int lengthB = B.length();
+        if(lengthB < lengthA) {
+        	 int first = A.indexOf(B);
+             if(first !=-1)
+             	return 1;
+        	String temp = A+A;
+        	int index = temp.indexOf(B);
+        	if(index<0)
+        		return -1;
+        	return 2;
+        }
+        int times = lengthB / lengthA;
+        StringBuilder sb = new StringBuilder();
+        for(int i=0; i<times; i++) {
+        	sb.append(A);
+        }
+        String temp = sb.toString();
+        int index = temp.indexOf(B);
+        if(index >=0) {
+        	return times;
+        }
+        temp += A;
+        index = temp.indexOf(B);
+        if(index >=0) {
+        	return times+1;
+        }
+        else {
+        	return -1;
+        }
+        
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
     public static void main(String[] args) {
 		string test = new string();
 		String time = "19:34";
@@ -303,6 +357,7 @@ public class string {
 //		char [] time2 = {'1','9','3','9'};
 //		System.out.println(test.getTimeDiff(time1, time2));
 	}
+    
     
     
     

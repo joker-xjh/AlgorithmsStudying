@@ -1,10 +1,16 @@
 package leetcode;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class Array {
 	
@@ -275,11 +281,53 @@ public class Array {
     }
     
     
-    boolean b = false;
     public boolean judgePoint24(int[] nums) {
-        
+        List<Double> list = new ArrayList<>();
+        for(int num : nums)
+        	list.add((double)num);
+    	return judgePoint24(list);
+    }
+    
+    private boolean judgePoint24(List<Double> num) {
+    	if(num.size() ==1) {
+    		return Math.abs(num.get(0) - 24) < 1e-6;
+    	}
+    	for(int i=0; i<num.size(); i++) {
+    		for(int j=0; j<num.size(); j++) {
+    			if(i==j)
+    				continue;
+    			List<Double> num2 = new ArrayList<>();
+    			for(int k=0; k<num.size(); k++) {
+    				if(k != i && k!= j)
+    					num2.add(num.get(k));
+    			}
+    			for(int k=0; k<4; k++) {
+    				if(k==0) {
+    					num2.add(num.get(i) + num.get(j));
+    				}
+    				else if(k==1) {
+    					num2.add(num.get(i) * num.get(j));
+    				}
+    				else if(k == 2) {
+    					num2.add(num.get(i) - num.get(j));
+    				}
+    				else {
+    					if(num.get(j)!=0) {
+    						num2.add(num.get(i) / num.get(j));
+    					}
+    					else {
+    						continue;
+    					}
+    				}
+    				if(judgePoint24(num2))
+    					return true;
+    				num2.remove(num2.size()-1);
+    			}
+    			
+    		}
+    	}
     	
-    	return b;
+    	return false;
     }
     
     
@@ -307,6 +355,84 @@ public class Array {
     }
     
     
+    class Employee {
+        // It's the unique id of each node;
+        // unique id of this employee
+        public int id;
+        // the importance value of this employee
+        public int importance;
+        // the id of direct subordinates
+        public List<Integer> subordinates;
+    };
+    
+    public int getImportance(List<Employee> employees, int id) {
+        int important = 0;
+        if(employees == null || employees.size() == 0)
+        	return important;
+        Map<Integer, Employee> map = new HashMap<>();
+        for(Employee employee: employees) {
+        	int index = employee.id;
+        	map.put(index, employee);
+        }
+        Set<Integer> set = new HashSet<>();
+        Employee root = map.get(id);
+        if(root == null)
+        	return important;
+        set.add(id);
+        Queue<Employee> queue = new LinkedList<>();
+        queue.add(root);
+        while(!queue.isEmpty()) {
+        	int size = queue.size();
+        	for(int i=0; i<size; i++) {
+        		Employee employee = queue.poll();
+        		important += employee.importance;
+        		List<Integer> next = employee.subordinates;
+        		for(Integer integer : next) {
+        			if(!set.contains(integer)) {
+        				set.add(integer);
+        				Employee employee2 = map.get(integer);
+        				if(employee2 != null) {
+        					queue.add(map.get(integer));
+        				}
+        				
+        			}
+        		}
+        	}
+        }
+        
+        return important;
+    }
+    
+    
+    public int maxSumSubmatrix(int[][] matrix, int k) {
+        if(matrix==null || matrix.length == 0)
+        	return 0;
+        int res = Integer.MIN_VALUE;
+        int row = matrix.length;
+        int col = matrix[0].length;
+        int m = Math.min(row, col);
+        int n = Math.max(col, row);
+        boolean colIsBig = col > row;
+        for(int i=0; i<m; i++) {
+        	int[] array = new int[n];
+        	for(int j=i; j>=0; j--) {
+        		TreeSet<Integer> set = new TreeSet<>();
+        		int val = 0;
+        		set.add(0);
+        		for(int x=0; x<n; x++) {
+        			array[x] += colIsBig ? matrix[j][x] : matrix[x][j];
+        			val += array[x];
+        			Integer sub = set.ceiling(val - k);
+        			if(sub != null) {
+        				res = Math.max(res, val - sub);
+        			}
+        			set.add(val);
+        		}
+        	}
+        }
+        
+        return res;
+    }
     
     
     
