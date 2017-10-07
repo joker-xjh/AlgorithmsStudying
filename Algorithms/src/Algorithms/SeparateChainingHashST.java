@@ -6,6 +6,7 @@ import java.util.List;
 public class SeparateChainingHashST<K, V> {
 	
 	private int N;
+	
 	private int size;
 	
 	private SequentialSearchST<K, V>[] st;
