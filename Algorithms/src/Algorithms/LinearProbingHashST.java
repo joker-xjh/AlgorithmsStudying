@@ -73,6 +73,18 @@ public class LinearProbingHashST <K, V>{
 		return get(key) != null;
 	}
 	
+	private void resize(int capacity) {
+		LinearProbingHashST<K,V> temp = new LinearProbingHashST<>(capacity);
+		for(int i=0; i<N; i++) {
+			if(keys[i] != null) {
+				temp.put(keys[i], values[i]);
+			}
+		}
+		this.keys = temp.keys;
+		this.values = temp.values;
+		this.N = temp.N;
+	}
+	
 	
 	
 
