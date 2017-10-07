@@ -59,4 +59,17 @@ public class MaxPQ <K extends Comparable<K>>{
 		}
 	}
 	
+	
+	
+	private void sort() {
+		int n = pq.length;
+		for(int k=n/2; k>=1; k--) {
+			sink(k);
+		}
+		while(n > 1) {
+			exch(1, n--);
+			sink(1);
+		}
+	}
+	
 }
