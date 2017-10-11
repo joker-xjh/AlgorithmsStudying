@@ -435,7 +435,35 @@ public class Array {
     }
     
     
+    public int maxAreaOfIsland(int[][] grid) {
+        if(grid == null || grid.length == 0)
+        	return 0;
+    	int X = grid.length;
+    	int Y = grid[0].length;
+    	boolean[][] used = new boolean[X][Y];
+    	int area = 0;
+    	for(int i=0; i<X; i++) {
+    		for(int j=0; j<Y; j++) {
+    			int num = grid[i][j];
+    			if(num == 1) {
+    				area = Math.max(area, maxAreaOfIsland(grid, used, i, j,0));
+    			}
+    		}
+    	}
+    	return area;
+    }
     
+    private int maxAreaOfIsland(int[][] grid, boolean[][] used, int x, int y, int count) {
+    	if(x<0 || x>=grid.length || y<0 || y>=grid[0].length || used[x][y] || grid[x][y] == 0)
+    		return count;
+    	count++;
+    	used[x][y] = true;
+    	count = Math.max(count, maxAreaOfIsland(grid, used, x-1,y,count));
+    	count = Math.max(count, maxAreaOfIsland(grid, used, x+1,y,count));
+    	count = Math.max(count, maxAreaOfIsland(grid, used, x,y+1,count));
+    	count = Math.max(count, maxAreaOfIsland(grid, used, x,y-1,count));
+    	return count;
+    }
     
     
     

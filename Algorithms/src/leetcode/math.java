@@ -13,6 +13,22 @@ public class math {
         
         return res;
     }
+    
+    
+    public boolean hasAlternatingBits(int n) {
+    	if(n <= 0)
+    		return false;
+        int mod = n % 2;
+        n /= 2;
+        while(n != 0) {
+        	int temp = n % 2;
+        	if(temp == mod)
+        		return false;
+        	mod = temp;
+        	n /= 2;
+        }
+    	return true;
+    }
 	
 	
 
