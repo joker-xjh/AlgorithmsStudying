@@ -1,8 +1,13 @@
 package leetcode;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.Stack;
 
@@ -342,6 +347,77 @@ public class string {
     }
     
     
+    static class Sorter implements Comparator<String> {
+    	private Map<String, Integer> map;
+    	
+    	public Sorter(Map<String, Integer> map) {
+			this.map = map;
+		}
+
+		@Override
+		public int compare(String o1, String o2) {
+			int count1 = map.get(o1);
+			int count2 = map.get(o2);
+			if(count1 > count2)
+				return 1;
+			else if(count1 < count2)
+				return -1;
+			else {
+				int cmp = o1.compareTo(o2);
+				if(cmp < 0)
+					return 1;
+				else if(cmp > 0)
+					return -1;
+				else
+					return 1;
+			}
+		}
+    	
+    }
+    
+    
+    public List<String> topKFrequent(String[] words, int k) {
+        List<String> list = new LinkedList<>();
+        Map<String, Integer> map = new HashMap<>();
+        for(String word : words)
+        	map.put(word, map.getOrDefault(word, 0)+1);
+        PriorityQueue<String> queue = new PriorityQueue<>(new Sorter(map));
+        Set<String> set = new HashSet<>();
+        int index = 0;
+        while(queue.size() < k) {
+        	String word = words[index++];
+        	if(!set.contains(word)) {
+        		queue.add(word);
+        		set.add(word);
+        	}
+        }
+        
+        for(int i=index; i<words.length; i++) {
+        	String word = words[i];
+        	if(set.contains(word))
+        		continue;
+        	set.add(word);
+        	int fre1 = map.get(word);
+        	String peek = queue.peek();
+        	int fre2 = map.get(peek);
+        	if(fre1 < fre2)
+        		continue;
+        	else if(fre1 > fre2) {
+        		queue.poll();
+        		queue.add(word);
+        	}
+        	else {
+        		int cmp = word.compareTo(peek);
+        		if(cmp <0) {
+        			queue.poll();
+            		queue.add(word);
+        		}
+        	}
+        }
+        while(!queue.isEmpty())
+        	list.add(0, queue.poll());
+        return list;
+    }
     
     
     
@@ -350,12 +426,7 @@ public class string {
     
     
     public static void main(String[] args) {
-		string test = new string();
-		String time = "19:34";
-		System.out.println("1111111v    "+test.nextClosestTime(time));
-//		char [] time1 = {'1','9','3','4'};
-//		char [] time2 = {'1','9','3','9'};
-//		System.out.println(test.getTimeDiff(time1, time2));
+		System.out.println("coding".compareTo("leetcode"));
 	}
     
     
