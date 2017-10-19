@@ -1,6 +1,7 @@
 package leetcode;
 
 import java.util.ArrayList;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -466,12 +467,79 @@ public class Array {
     }
     
     
+    public int findShortestSubArray(int[] nums) {
+        if(nums == null || nums.length == 0)
+        	return 0;
+        int shortest = Integer.MAX_VALUE;
+        Map<Integer, Integer> first = new HashMap<>();
+        Map<Integer, Integer> last = new HashMap<>();
+        Map<Integer, Integer> fre = new HashMap<>();
+        int count = 0;
+        for(int i=0; i<nums.length; i++) {
+        	int num = nums[i];
+        	if(!first.containsKey(num))
+        		first.put(num, i);
+        	last.put(num, i);
+        	fre.put(num, fre.getOrDefault(num, 0)+1);
+        	int temp = fre.get(num);
+        	if(temp > count)
+        		count = temp;
+        }
+        if(count == 1)
+        	return 1;
+        for(Integer integer : fre.keySet()) {
+        	if(fre.get(integer) == count) {
+        		shortest = Math.min(shortest, last.get(integer) - first.get(integer));
+        	}
+        }
+        
+        return shortest;
+    }
+    
+    
+    
+    public boolean canPartitionKSubsets(int[] nums, int k) {
+        if(nums == null || nums.length == 0)
+        	return false;
+        int sum = 0;
+        for(int i=0; i<nums.length; i++) {
+        	sum += nums[i];
+        }
+        if(sum % k != 0)
+        	return false;
+        int target = sum / k;
+        boolean[] used = new boolean[nums.length];
+    	return canPartitionKSubsets(nums, used, 0, target, k, 0);
+    }
+    
+    private boolean canPartitionKSubsets(int[] nums,boolean[] used, int count, int target, int k, int index) {
+    	if(k == 1)
+    		return true;
+    	if(count > target)
+    		return false;
+    	if(count == target)
+    		return canPartitionKSubsets(nums, used, 0, target, k-1, 0);
+    	for(int i=index; i<nums.length; i++) {
+    		if(used[i])
+    			continue;
+    		int num = nums[i];
+    		used[i] = true;
+    		if(canPartitionKSubsets(nums, used, count+num, target, k, i+1))
+    			return true;
+    		used[i] = false;
+    	}
+    	return false;
+    }
+    
+    
     
     
     
 
 	public static void main(String[] args) {
-		
+		Array test = new Array();
+		int[] array = {2,2,10,5,2,7,2,2,13};
+		test.canPartitionKSubsets(array, 3);
 
 	}
 
