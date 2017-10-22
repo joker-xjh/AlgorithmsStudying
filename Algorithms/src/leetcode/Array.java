@@ -531,7 +531,39 @@ public class Array {
     	return false;
     }
     
+    public int numSubarrayProductLessThanK(int[] nums, int k) {
+        int count = 0;
+        for(int i=0; i<nums.length; i++) {
+        	int product = 1;
+        	for(int j=i; j<nums.length; j++) {
+        		product *= nums[j];
+        		if(product < k)
+        			count++;
+        		else
+        			break;
+        	}
+        }
+        return count;
+    }
     
+    public int numSubarrayProductLessThanK2(int[] nums, int k) {
+    	int count = 0;
+    	int p =0;
+    	int product = 1;
+    	for(int i=0; i<nums.length; i++) {
+    		if(p<i)
+    			p=i;
+    		while(p < nums.length && nums[p] * product < k) {
+    			product *= nums[p];
+    			p++;
+    		}
+    		count += p-i;
+    		product /= nums[i];
+    	}
+    	
+    	
+    	return count;
+    }
     
     
     
