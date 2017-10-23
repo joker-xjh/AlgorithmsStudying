@@ -565,6 +565,49 @@ public class Array {
     	return count;
     }
     
+    public int countBinarySubstrings(String s) {
+    	if(s == null || s.length() < 2)
+    		return 0;
+        int count = 0;
+        int zero = 0;
+        int one = 0;
+        boolean change = s.charAt(0) == 1 ? true:false;
+        for(int i=0; i<s.length(); i++) {
+        	char c = s.charAt(i);
+        	if(c == '0') {
+        		if(!change) {
+        			if(one > zero)
+        				count++;
+        			zero++;
+        		}
+        		else {
+        			change = !change;
+        			zero = 0;
+        			if(one > zero)
+        				count++;
+        			zero++;
+        		}
+        	}
+        	else {
+        		if(change) {
+        			if(zero > one)
+        				count++;
+        			one++;
+        		}
+        		else {
+        			change = !change;
+        			one = 0;
+        			if(zero > one)
+        				count++;
+        			one++;
+        		}
+        	}
+        }
+        
+        
+        return count;
+    }
+    
     
     
 
