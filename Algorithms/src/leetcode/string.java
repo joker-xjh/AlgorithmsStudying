@@ -420,6 +420,38 @@ public class string {
     }
     
     
+    public int compress(char[] chars) {
+        int compress = 0;
+        if(chars == null || chars.length == 0)
+        	return compress;
+        StringBuilder sb = new StringBuilder();
+        char cmp = chars[0];
+        int count = 1;
+        for(int i=1; i<chars.length; i++) {
+        	char c = chars[i];
+        	if(c == cmp) {
+        		count++;
+        	}
+        	else {
+        		sb.append(cmp);
+        		if(count > 1)
+        			sb.append(count);
+        		cmp = c;
+        		count = 1;
+        	}
+        }
+        sb.append(cmp);
+		sb.append(count);
+		String temp = sb.toString();
+		int length = temp.length();
+		if(length > chars.length)
+			return chars.length;
+        compress = length;
+        for(int i=0; i<length; i++)
+        	chars[i] = temp.charAt(i);
+        return compress;
+    }
+    
     
     
     

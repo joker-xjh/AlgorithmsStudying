@@ -2,6 +2,7 @@ package leetcode;
 
 import java.util.ArrayList;
 
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -608,6 +609,45 @@ public class Array {
         return count;
     }
     
+    public boolean isOneBitCharacter(int[] bits) {
+        boolean b = false;
+        for(int i=0; i<bits.length; i++) {
+        	int bit = bits[i];
+        	if(bit == 1)
+        		i++;
+        	else {
+        		if(i == bits.length-1)
+        			b=true;
+        	}
+        }
+        return b;
+    }
+    
+    
+    
+    public int smallestDistancePair(int[] nums, int k) {
+        int n = nums.length;
+        int size = 1000000;
+        int[] dp = new int[size];
+        for(int i=0; i<n; i++) {
+        	int num1 = nums[i];
+        	for(int j=i+1; j<n; j++) {
+        		int num2 = nums[j];
+        		int distance = num1 - num2;
+        		if(distance < 0)
+        			distance = -distance;
+        		dp[distance]++;
+        	}
+        }
+        int sum = 0;
+        for(int i=0; i<dp.length; i++) {
+        	sum += dp[i];
+        	if(sum >= k)
+        		return i;
+        }
+    	
+    	return 0;
+    }
     
     
 
