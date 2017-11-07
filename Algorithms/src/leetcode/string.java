@@ -452,9 +452,68 @@ public class string {
         return compress;
     }
     
+    private static class Node{
+    	boolean b;
+    	Node[] next = new Node[26];
+    }
     
+    public String longestWord(String[] words) {
+        if(words == null || words.length == 0)
+        	return "";
+        Node root = new Node();
+        for(String word : words) {
+        	Node node = root;
+        	for(char c : word.toCharArray()) {
+        		int i = c - 'a';
+        		if(node.next[i] == null)
+        			node.next[i] = new Node();
+        		node = node.next[i];
+        	}
+        	node.b = true;
+        }
+        root.b = true;
+    	List<Character> list = new ArrayList<>();
+    	List<Character> target = new ArrayList<>();
+    	longestWord(root, list, target);
+    	StringBuilder sb = new StringBuilder();
+    	for(char c:target)
+    		sb.append(c);
+    	return sb.toString();
+    }
     
-    
+    private void longestWord(Node node, List<Character> list, List<Character> target) {
+    	for(int i=0; i<26; i++) {
+    		Node next = node.next[i];
+    		if(next == null || !next.b) {
+        		if(list.size() > target.size()) {
+        			target.clear();
+        			target.addAll(list);
+        		}
+        		else if(list.size() == target.size()) {
+        			for(int j=0; j<target.size(); j++) {
+        				char c1 = list.get(j);
+        				char c2 = target.get(j);
+        				if(c1 < c2) {
+        					target.clear();
+        					target.addAll(list);
+        					break;
+        				}
+        				else if(c1 > c2)
+        					break;
+        				
+        			}
+        		}
+        		System.out.println(target);
+        		return;
+        	}
+    		char c = (char)('a'+i);
+    		list.add(c);
+    		longestWord(node.next[i], list, target);
+    		list.remove(list.size()-1);
+    	}
+    		
+    	
+    }
     
     
     public static void main(String[] args) {
