@@ -516,6 +516,71 @@ public class string {
     }
     
     
+    public List<String> removeComments(String[] source) {
+        List<String> list = new ArrayList<>();
+        if(source == null || source.length == 0)
+        	return list;
+        StringBuilder sb = new StringBuilder();
+        boolean blocked = false;
+        for(String line : source) {
+        	char[] array = line.toCharArray();
+        	for(int i=0; i<array.length; i++) {
+        		char c = array[i];
+        		if(c == '/' && i<array.length-1 && !blocked) {
+        			char next = array[i+1];
+        			if(next == '/') {
+        				String temp = sb.toString();
+                		if(temp.length() > 0)
+                			list.add(temp);
+                		sb = new StringBuilder();
+        				break;
+        			}
+        			else if(next == '*') {
+        				blocked = true;
+        				i++;
+        			}
+        			else {
+        				sb.append(c);
+        			}
+        		}
+        		else if(c == '*' && blocked && i<array.length-1) {
+        			char next = array[i+1];
+        			if(next == '/') {
+        				blocked = false;
+        				i++;
+        			}
+        		}
+        		else {
+        			if(!blocked)
+        				sb.append(c);
+        		}
+        	}
+        	if(!blocked) {
+        		String temp = sb.toString();
+        		if(temp.length() > 0)
+        			list.add(temp);
+        		sb = new StringBuilder();
+        	}
+        }
+        
+        return list;
+    }
+    
+    
+    
+    
+   
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     public static void main(String[] args) {
 		System.out.println("coding".compareTo("leetcode"));
 	}
