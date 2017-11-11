@@ -650,6 +650,115 @@ public class Array {
     }
     
     
+    
+    public char[][] updateBoard(char[][] board, int[] click) {
+    	if(board[click[0]][click[1]] == 'M') {
+    		board[click[0]][click[1]] = 'X';
+    		return board;
+    	}
+    	boolean[][] used = new boolean[board.length][board[0].length];
+    	used[click[0]][click[1]] = true;
+    	int[][] around = new int[8][2];
+    	Queue<int[]> queue = new LinkedList<>();
+    	queue.add(new int[] {click[0], click[1]});
+    	while(!queue.isEmpty()) {
+    		int[] array = queue.poll();
+    		int X = array[0], Y = array[1];
+    		around[0][0] = X; around[0][1] =Y-1;
+    		around[1][0] = X; around[1][1] =Y+1;
+    		around[2][0] = X-1; around[2][1] =Y;
+    		around[3][0] = X+1; around[3][1] =Y;
+    		around[4][0] = X-1; around[4][1] =Y-1;
+    		around[5][0] = X-1; around[5][1] =Y+1;
+    		around[6][0] = X+1; around[6][1] =Y-1;
+    		around[7][0] = X+1; around[7][1] =Y+1;
+    		int bomb = 0;
+    		for(int[] temp : around) {
+    			int x = temp[0];
+    			int y = temp[1];
+    			if(x>=0 && x< board.length && y>=0 && y<board[0].length) {
+    				if(board[x][y] == 'M')
+    					bomb++;
+    			}
+    		}
+    		if(bomb != 0) {
+    			board[X][Y] = (char) (bomb + '0');
+    		}
+    		else {
+    			board[X][Y] = 'B';
+    			for(int[] temp : around) {
+    				int x = temp[0];
+        			int y = temp[1];
+        			if(x>=0 && x< board.length && y>=0 && y<board[0].length && !used[x][y]) {
+        				queue.add(new int[] {x, y});
+        				used[x][y] = true;
+        			}
+    			}
+    		}
+    	}
+    	return board;
+    }
+    
+    
+    
+    
+    public char[][] updateBoard2(char[][] board, int[] click) {
+    	if(board[click[0]][click[1]] == 'M') {
+    		board[click[0]][click[1]] = 'X';
+    		return board;
+    	}
+    	 int m = board.length, n = board[0].length;
+    	 boolean[][] used = new boolean[m][n];
+         Queue<int[]> queue = new LinkedList<>();
+         queue.add(click);
+         while (!queue.isEmpty()) {
+             int[] cell = queue.poll();
+             int row = cell[0], col = cell[1];
+             int count = 0;
+             for (int i = -1; i < 2; i++) {
+                 for (int j = -1; j < 2; j++) {
+                     if (i == 0 && j == 0) continue;
+                     int r = row + i, c = col + j;
+                     if (r < 0 || r >= m || c < 0 || c < 0 || c >= n) continue;
+                     if (board[r][c] == 'M' || board[r][c] == 'X') count++;
+                 }
+             }
+             
+             if (count > 0) { // If it is not a 'B', stop further BFS.
+                 board[row][col] = (char)(count + '0');
+             }
+             else { // Continue BFS to adjacent cells.
+                 board[row][col] = 'B';
+                 for (int i = -1; i < 2; i++) {
+                     for (int j = -1; j < 2; j++) {
+                         if (i == 0 && j == 0) continue;
+                         int r = row + i, c = col + j;
+                         if (r < 0 || r >= m || c < 0 || c < 0 || c >= n) continue;
+                         if(used[r][c])
+                        	 continue;
+                         if (board[r][c] == 'E') {
+                             queue.add(new int[] {r, c});
+                             used[r][c] = true; // Avoid to be added again.
+                         }
+                     }
+                 }
+             }
+             
+         }
+         
+         return board;
+    	
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
 	public static void main(String[] args) {
 		Array test = new Array();
