@@ -757,18 +757,15 @@ public class Array {
         int sum = 0;
         for(int num : nums)
         	sum += num;
-        if(sum - nums[0] == 0) {
-        	return 0;
-        }
-        if(sum - nums[nums.length-1] == 0) {
-        	return nums.length-1;
-        }
         int left = 0, right = sum - nums[0];
         for(int i=0; i<nums.length-1; i++) {
         	if(left == right)
         		return i;
         	left += nums[i];
         	right -= nums[i+1];
+        }
+        if(sum - nums[nums.length-1] == 0) {
+        	return nums.length-1;
         }
     	return -1;
     }
