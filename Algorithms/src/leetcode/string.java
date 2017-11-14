@@ -596,7 +596,40 @@ public class string {
     }
    
     
-    
+    public int findMinDifference2(List<String> timePoints) {
+    	boolean[] minutes = new boolean[24 * 60];
+    	for(String time : timePoints) {
+    		char[] array = time.toCharArray();
+    		int hour = (array[0] - '0') * 10 + array[1] -'0';
+    		int minute = (array[3] - '0') * 10 + array[4] - '0';
+    		int index = hour * 60 + minute;
+    		if(minutes[index])
+    			return 0;
+    		minutes[index] = true;
+    	}
+    	int min = Integer.MAX_VALUE;
+    	int pre = 0;
+    	for(int i=0; i<minutes.length; i++) {
+    		if(minutes[i]) {
+    			if(pre != 0) {
+    				min = Math.min(min, i-pre);
+    			}
+    			pre = i;
+    		}
+    	}
+    	int dist = 1;
+    	int first = 0;
+    	while(!minutes[first]) {
+    		first++;
+    		dist++;
+    	}
+    	int last = minutes.length-1;
+    	while(!minutes[last]) {
+    		last--;
+    		dist++;
+    	}
+    	return Math.min(min, dist);
+    }
     
     
     
