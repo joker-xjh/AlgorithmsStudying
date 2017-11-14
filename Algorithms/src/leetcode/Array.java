@@ -16,6 +16,12 @@ import java.util.TreeSet;
 
 public class Array {
 	
+	  public class ListNode {
+		      int val;
+		      ListNode next;
+		      ListNode(int x) { val = x; }
+		  }
+	
 	
     public void nextPermutation(int[] nums) {
     	if (nums == null || nums.length==0) {
@@ -771,7 +777,41 @@ public class Array {
     }
     
     
-    
+    public ListNode[] splitListToParts(ListNode root, int k) {
+        if(root == null)
+        	return new ListNode[] {};
+        ListNode[] res = new ListNode[k];
+        int length = 0;
+        ListNode node = root;
+        while(node != null) {
+        	length++;
+        	node = node.next;
+        }
+        int[] count = new int[k];
+        int segment = length / k;
+        int mod = length % k;
+        for(int i=0; i<k; i++) {
+        	count[i] = segment;
+        	if(i < mod)
+        		count[i]++;
+        }
+        int i = 0 , j = 0;
+        node = root;
+        ListNode pivot = root;
+        while(node != null) {
+        	ListNode next = node.next;
+        	count[j]--;
+        	if(count[j] == 0) {
+        		j++;
+        		res[i++] = pivot;
+        		node.next = null;
+        		pivot = next;
+        	}
+        	node = next;
+        }
+        
+        return res;
+    }
     
     
     
