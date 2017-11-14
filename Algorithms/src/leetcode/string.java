@@ -1,6 +1,7 @@
 package leetcode;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -566,9 +567,33 @@ public class string {
         return list;
     }
     
+    public int findMinDifference(List<String> timePoints) {
+        Collections.sort(timePoints);
+    	int diff = Integer.MAX_VALUE;
+    	for(int i=1; i<timePoints.size(); i++) {
+    		String before = timePoints.get(i-1);
+    		String after = timePoints.get(i);
+    		int temp = getTimeDiff(before, after);
+    		if(temp < diff)
+    			diff = temp;
+    	}
+    	int last = 1440 - getTimeDiff(timePoints.get(0), timePoints.get(timePoints.size()-1));
+    	if(last < diff)
+    		diff = last;
+    	return diff;
+    }
     
+    private int getTimeDiff(String before, String after) {
+    	int min1 = getMinutes(before);
+    	int min2 = getMinutes(after);
+    	return min2 - min1;
+    }
     
-    
+    private int getMinutes(String time) {
+    	int minutes = 0;
+    	minutes = time.charAt(4) + time.charAt(3) * 10 + time.charAt(1) * 60 + time.charAt(0) * 10 * 60;
+    	return minutes;
+    }
    
     
     
