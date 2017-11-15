@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.Stack;
+import java.util.TreeMap;
 
 public class string {
 	
@@ -632,15 +633,132 @@ public class string {
     }
     
     
+    public String countOfAtoms(String formula) {
+        Map<String, Integer> map = countOfAtomsHelp(formula);
+        StringBuilder sb = new StringBuilder();
+        for(Map.Entry<String, Integer> entry : map.entrySet()) {
+        	String atom = entry.getKey();
+        	Integer count = entry.getValue();
+        	sb.append(atom);
+        	if(count != 1)
+        		sb.append(count);
+        }
+    	return sb.toString();
+    }
     
-    
-    
-    
-    
-    
+    private Map<String, Integer> countOfAtomsHelp(String formula){
+    	Map<String, Integer> map = new TreeMap<>();
+    	StringBuilder sb = new StringBuilder();
+    	for(int i=0; i<formula.length(); i++) {
+    		char c = formula.charAt(i);
+    		if(c >= 'A' && c <= 'Z') {
+    			sb.append(c);
+    			if(i < formula.length() -1) {
+    				char next = formula.charAt(i+1);
+    				if(next>='A' && next<='Z') {
+        				String atom = sb.toString();
+        				sb = new StringBuilder();
+            			map.put(atom, map.getOrDefault(atom, 0) + 1);
+        			}
+    			}
+    			else if(i == formula.length() -1) {
+    				String atom = sb.toString();
+        			map.put(atom, map.getOrDefault(atom, 0) + 1);
+    			}
+    		}
+    		else if( c >= 'a' && c <= 'z') {
+    			sb.append(c);
+    			if(i <formula.length()-1) {
+    				char next = formula.charAt(i+1);
+    				if(next >= '0' && next <='9') {
+    					String atom = sb.toString();
+    					sb = new StringBuilder();
+    					i++;
+    					StringBuilder num = new StringBuilder();
+    	    			while( i < formula.length() && (formula.charAt(i) >= '0' && formula.charAt(i) <= '9')) {
+    	    				num.append(formula.charAt(i));
+    	    				i++;
+    	    			}
+    	    			if( i < formula.length() && !(formula.charAt(i) >= '0' && formula.charAt(i) <= '9')) {
+    	    				i--;
+    	    			}
+    	    			int count = Integer.parseInt(num.toString());
+    	    			
+    	    			map.put(atom, map.getOrDefault(atom, 0) + count);
+    				}
+    				
+    				else if(next >='A' && next <='Z') {
+    					String atom = sb.toString();
+    					sb = new StringBuilder();
+    					map.put(atom, map.getOrDefault(atom, 0) + 1);
+    				}
+    			}
+    			else if(i == formula.length() -1) {
+    				String atom = sb.toString();
+					sb = new StringBuilder();
+					map.put(atom, map.getOrDefault(atom, 0) + 1);
+    			}
+    		}
+    		else if(c == '(') {
+    			
+    			if(sb.length() > 0) {
+    				String atom = sb.toString();
+    				sb = new StringBuilder();
+        			map.put(atom, map.getOrDefault(atom, 0) + 1);
+    			}
+    			int parentheses = 1;
+    			int j = i+1;
+    			while( parentheses != 0) {
+    				char ch = formula.charAt(j);
+    				if(ch == '(')
+    					parentheses++;
+    				else if(ch == ')')
+    					parentheses--;
+    				if(parentheses == 0)
+    					break;
+    				j++;
+    			}
+    			
+    			String sub = formula.substring(i+1, j);
+    			i = j;
+    			int count = 1;
+    			i++;
+    			StringBuilder num = new StringBuilder();
+    			while( i < formula.length() && (formula.charAt(i) >= '0' && formula.charAt(i) <= '9')) {
+    				num.append(formula.charAt(i));
+    				i++;
+    			}
+    			if( i < formula.length() && !(formula.charAt(i) >= '0' && formula.charAt(i) <= '9')) {
+    				i--;
+    			}
+    			if(num.length() > 0)
+    				count = Integer.parseInt(num.toString());
+    			Map<String, Integer> subMap = countOfAtomsHelp(sub.toString());
+    			for(String atom : subMap.keySet()) {
+    				map.put(atom, map.getOrDefault(atom, 0) + subMap.get(atom) * count);
+    			}
+    		}
+    		else if(c >='0' && c <='9') {
+    			StringBuilder num = new StringBuilder();
+    			while( i < formula.length() && (formula.charAt(i) >= '0' && formula.charAt(i) <= '9')) {
+    				num.append(formula.charAt(i));
+    				i++;
+    			}
+    			if( i < formula.length() && !(formula.charAt(i) >= '0' && formula.charAt(i) <= '9')) {
+    				i--;
+    			}
+    			int count = Integer.parseInt(num.toString());
+    			String atom = sb.toString();
+    			sb = new StringBuilder();
+    			map.put(atom, map.getOrDefault(atom, 0) + count);
+    		}
+     	}
+    	return map;
+    }
+   
     
     public static void main(String[] args) {
-		System.out.println("coding".compareTo("leetcode"));
+		
 	}
     
     
