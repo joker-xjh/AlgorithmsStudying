@@ -755,6 +755,88 @@ public class string {
      	}
     	return map;
     }
+    
+    private static final String IPV4 = "IPv4"; 
+    private static final String IPV6 = "IPv6";
+    private static final String Neither = "Neither";
+    public String validIPAddress(String IP) {
+        if(IP == null || IP.length() == 0)
+        	return Neither;
+        if(IP.contains(".")) {
+        	return validIPv4Address(IP);
+        }
+        else if(IP.contains(":")) {
+        	return validIPv6Address(IP);
+        }
+    	return Neither;
+    }
+    
+    private String validIPv4Address(String ipv4) {
+    	int count = 0;
+    	for(char c:ipv4.toCharArray())
+    		if(c == '.')
+    			count++;
+    	if(count != 3)
+    		return Neither;
+    	String[] array = ipv4.split("\\.");
+    	if(array.length == 4) {
+    		for(int i=0; i<4; i++) {
+    			String temp = array[i];
+    			if(temp.length() == 0)
+    				return Neither;
+    			Integer num = null;
+    			try {
+					num = Integer.parseInt(temp);
+				} catch (Exception e) {
+					return Neither;
+				}
+    			if(!(num >=0 && num <=255))
+    				return Neither;
+    			char first = temp.charAt(0);
+    			if(first == '0' && temp.length() > 1)
+    				return Neither;
+    			for(char c : temp.toCharArray()) {
+    				if(!(c>='0' && c<='9'))
+    					return Neither;
+    			}
+    		}
+    		return IPV4;
+    	}
+    	return Neither;
+    }
+    
+    private String validIPv6Address(String ipv6) {
+    	int count = 0;
+    	for(char c : ipv6.toCharArray())
+    		if(c == ':')
+    			count++;
+    	if(count != 7)
+    		return Neither;
+    	String[] array = ipv6.split(":");
+		if(array.length == 8) {
+			for(int i=0; i<8; i++) {
+				String temp = array[i];
+				if(temp.length() == 0 || temp.length() > 4)
+					return Neither;
+				try {
+					 Integer.parseInt(temp, 16);
+				} catch (Exception e) {
+					return Neither;
+				}
+				for(char c:temp.toCharArray()) {
+					if(!((c>='a' && c<='z') || (c>='A' && c<='Z') || (c>='0' && c<='9')))
+						return Neither;
+				}
+			}
+			return IPV6;
+		}
+		return Neither;
+    }
+    
+    
+    
+    
+    
    
     
     public static void main(String[] args) {
