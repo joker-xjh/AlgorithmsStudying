@@ -813,6 +813,17 @@ public class Array {
         return res;
     }
     
+    public int leastInterval(char[] tasks, int n) {
+        int[] array = new int[26];
+        for(char c : tasks)
+        	array[c - 'A']++;
+        Arrays.sort(array);
+        int i = 25;
+        while(i >= 0 && array[i] == array[25])
+        	i--;
+        return Math.max(tasks.length, (array[25]-1) * (n+1) + 25 - i);
+    }
+    
     
     
 
