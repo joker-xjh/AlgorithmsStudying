@@ -824,6 +824,59 @@ public class Array {
         return Math.max(tasks.length, (array[25]-1) * (n+1) + 25 - i);
     }
     
+    class Child implements Comparable<Child>{
+    	int rating;
+    	int index;
+    	public Child(int rating, int index) {
+			this.rating = rating;
+			this.index = index;
+		}
+		@Override
+		public int compareTo(Child o) {
+			if(this.rating < o.rating)
+				return -1;
+			else if(this.rating > o.rating)
+				return 1;
+			return 0;
+		}
+    }
+    
+    public int candy(int[] ratings) {
+        if(ratings == null || ratings.length == 0)
+        	return 0;
+        int count = ratings.length;
+        int n = ratings.length;
+        Child[] childs = new Child[n];
+        int[] temp = new int[n];
+        for(int i=0; i<n; i++)
+        	childs[i] = new Child(ratings[i], i);
+        Arrays.sort(childs);
+        for(int i=0; i<n; i++) {
+        	Child child = childs[i];
+        	int index = child.index;
+        	int left = index - 1, right = index +1;
+        	boolean gt1 = false, gt2 = false;
+        	if(left >= 0) {
+        		if(ratings[index] > ratings[left])
+        			gt1 = true;
+        	}
+        	if(right < n) {
+        		if(ratings[index] > ratings[right])
+        			gt2 = true;
+        	}
+        	if(gt1 && gt2) {
+        		temp[index] = Math.max(temp[left], temp[right]) + 1;
+        	}
+        	else if(gt1) {
+        		temp[index] = temp[left] + 1;
+        	}
+        	else if(gt2){
+        		temp[index] = temp[right] + 1;
+        	}
+        	count += temp[index];
+        }
+        return count;
+    }
     
     
 
