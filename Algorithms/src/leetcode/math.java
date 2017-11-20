@@ -1,5 +1,8 @@
 package leetcode;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class math {
 	
     public int newInteger(int n) {
@@ -28,6 +31,26 @@ public class math {
         	n /= 2;
         }
     	return true;
+    }
+    
+    
+    public List<Integer> selfDividingNumbers(int left, int right) {
+        List<Integer> list = new ArrayList<>();
+        for(int i=left; i<=right; i++) {
+        	boolean add = true;
+        	int num = i;
+        	while( num > 0) {
+        		int mod = num % 10;
+        		if(mod == 0 || i % mod != 0) {
+        			add = false;
+        			break;
+        		}
+        		num /= 10;
+        	}
+        	if(add)
+        		list.add(i);
+        }
+        return list;
     }
 	
 	
