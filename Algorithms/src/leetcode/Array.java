@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 public class Array {
@@ -878,6 +879,38 @@ public class Array {
         return count;
     }
     
+    class CalendarNode {
+    	int left;
+    	int right;
+    	public CalendarNode(int left, int right) {
+			this.left = left;
+			this.right = right;
+		}
+    }
+    
+    private TreeMap<Integer, CalendarNode> map;
+    
+    public void MyCalendar() {
+        map = new TreeMap<>();
+    }
+    
+    public boolean book(int start, int end) {
+        Map.Entry<Integer, CalendarNode> pre = map.ceilingEntry(start);
+        Map.Entry<Integer, CalendarNode> after = map.floorEntry(start);
+        if(after != null) {
+        	int after_right = after.getValue().right;
+        	if(after_right > start)
+        		return false;
+        }
+        if(pre != null) {
+        	int pre_left = pre.getValue().left;
+        	if(pre_left < end)
+        		return false;
+        }
+    	CalendarNode event = new CalendarNode(start, end);
+    	map.put(start, event);
+    	return true;
+    }
     
 
 	public static void main(String[] args) {
