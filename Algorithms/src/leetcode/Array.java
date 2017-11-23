@@ -912,6 +912,127 @@ public class Array {
     	return true;
     }
     
+    class Calendar2Node {
+    	int left;
+    	int right;
+    	int count;
+    	public Calendar2Node(int left, int right, int count) {
+			this.left = left;
+			this.right = right;
+			this.count = count;
+		}
+    	
+    }
+    
+    private TreeMap<Integer, Calendar2Node> map2;
+    public boolean book2(int start, int end) {
+        Map.Entry<Integer, Calendar2Node> after = map2.floorEntry(start);
+        Map.Entry<Integer, Calendar2Node> next = map2.floorEntry(end);
+        if(after != null) {
+        	int after_right = after.getValue().right;
+        	if(after_right > start ) {
+        		if(after.getValue().count == 2)
+        			return false;
+        	}
+        }
+        if(next != null) {
+        	if(next.getValue().left != end) {
+        		int pre_right = next.getValue().right;
+            	if(pre_right > end) {
+            		if(next.getValue().count == 2)
+            			return false;
+            	}
+        	}
+        }
+        
+        
+        if(after != null) {
+        	int after_right = after.getValue().right;
+        	if(after_right > start ) {
+        		if(after.getValue().count == 2)
+        			return false;
+        		map2.remove(after.getValue().left);
+        		Calendar2Node node1 = new Calendar2Node(after.getValue().left, start, 1);
+        		map2.put(after.getValue().left, node1);
+        		if(after_right < end) {
+        			Calendar2Node node2 = new Calendar2Node(start, after.getValue().right, 2);
+        			map2.put(start, node2);
+        			start = after_right;
+        		}
+        		else if(after_right >= end) {
+        			Calendar2Node node2 = new Calendar2Node(start, end, 2);
+        			map2.put(start, node2);
+        			if(after_right != end) {
+        				Calendar2Node node3 = new Calendar2Node(end, after.getValue().right, 1);
+            			map2.put(end, node3);
+        			}
+        			return true;
+        		}
+        	}
+        }
+        Map.Entry<Integer, Calendar2Node> pre = map2.ceilingEntry(start);
+        if(pre != null) {
+        	int pre_left = pre.getValue().left;
+        	if(pre_left < end) {
+        		if(pre.getValue().count == 2)
+        			return false;
+        		map2.remove(pre.getValue().left);
+        		Calendar2Node node1 = new Calendar2Node(start, pre.getValue().left, 1);
+        		map2.put(start, node1);
+        		if(pre.getValue().right > end) {
+        			Calendar2Node node2 = new Calendar2Node(pre.getValue().left, end, 2);
+        			map2.put(pre.getValue().left, node2);
+        			Calendar2Node node3 = new Calendar2Node(end, pre.getValue().right, 1);
+        			map2.put(end, node3);
+        		}
+        		else {
+        			Calendar2Node node2 = new Calendar2Node(pre.getValue().left, pre.getValue().right, 2);
+        			map2.put(pre.getValue().left, node2);
+        			if(pre.getValue().right != end) {
+        				Calendar2Node node3 = new Calendar2Node(pre.getValue().right, end, 1);
+            			map2.put(end, node3);
+        			}
+        		}
+        		return true;
+        	}
+        		
+        }
+		Calendar2Node event = new Calendar2Node(start, end, 1);
+    	map2.put(start, event);
+    	return true;
+    }
+    
+    
+    private List<int[]> books = new ArrayList<>();
+    public boolean book3(int start, int end) {
+    	Mycalendar overlaps = new Mycalendar();
+    	for(int[] b : books) {
+    		if(Math.max(b[0], start) < Math.max(b[1], end)) {
+    			if(!overlaps.book(Math.max(b[0], start), Math.max(b[1], end)))
+    				return false;
+    		}
+    	}
+    	books.add(new int[] {start, end});
+    	return true;
+    }
+    
+    
+    private static class Mycalendar {
+    	List<int[]> books = new ArrayList<>();
+    	public boolean book(int start, int end) {
+    		for(int[] b : books) {
+    			if(Math.max(start, b[0]) < Math.min(b[1], end))
+    				return false;
+    		}
+    		books.add(new int[] {start, end});
+    		return true;
+    	}
+    }
+    
+    
+    
+    
+    
 
 	public static void main(String[] args) {
 		Array test = new Array();
