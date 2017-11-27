@@ -835,7 +835,31 @@ public class string {
     
     
     
-    
+    public boolean areSentencesSimilar(String[] words1, String[] words2, String[][] pairs) {
+        if(words1.length != words2.length)
+        	return false;
+        Map<String, Set<String>> map = new HashMap<>();
+        for(String[] pair : pairs) {
+        	if(map.get(pair[0]) == null)
+        		map.put(pair[0], new HashSet<>());
+        	map.get(pair[0]).add(pair[1]);
+        }
+        int len = words1.length;
+        for(int i=0; i<len; i++) {
+        	String item1 = words1[i];
+        	String item2 = words2[i];
+        	if(item1.equals(item2))
+        		continue;
+        	Set<String> another1 = map.get(item1);
+        	Set<String> another2 = map.get(item2);
+        	if(another1 != null && another1.contains(item2))
+        		continue;
+        	if(another2 != null && another2.contains(item1))
+        		continue;
+        	return false;
+        }
+    	return true;
+    }  
     
    
     
