@@ -1030,6 +1030,35 @@ public class Array {
     }
     
     
+    public int[][] floodFill(int[][] image, int sr, int sc, int newColor) {
+        if(image == null || image.length == 0 || image[0].length == 0)
+        	return image;
+        if(image[sr][sc] == newColor)
+        	return image;
+        floodFillDFS(image, sr, sc, newColor);
+    	return image;
+    }
+    
+    private void floodFillDFS(int[][] image, int x, int y, int newColor) {
+    	int color = image[x][y];
+    	image[x][y] = newColor;
+    	if(x-1 >= 0) {
+    		if(image[x-1][y] == color)
+    			floodFillDFS(image, x-1, y, newColor);
+    	}
+    	if(x+1 <image.length) {
+    		if(image[x+1][y] == color)
+    			floodFillDFS(image, x+1, y, newColor);
+    	}
+    	if(y-1 >= 0) {
+    		if(image[x][y-1] == color)
+    			floodFillDFS(image, x, y-1, newColor);
+    	}
+    	if(y+1 < image[0].length) {
+    		if(image[x][y+1] == color)
+    			floodFillDFS(image, x, y+1, newColor);
+    	}
+    }
     
     
     
