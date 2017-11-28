@@ -859,7 +859,46 @@ public class string {
         	return false;
         }
     	return true;
-    }  
+    }
+    
+    
+    public boolean areSentencesSimilarTwo(String[] words1, String[] words2, String[][] pairs) {
+        if(words1.length != words2.length)
+        	return false;
+        Map<String, Set<String>> map = new HashMap<>();
+        for(String[] pair : pairs) {
+        	if(!map.containsKey(pair[0]))
+        		map.put(pair[0], new HashSet<>());
+        	if(!map.containsKey(pair[1]))
+        		map.put(pair[1], new HashSet<>());
+        	map.get(pair[0]).add(pair[1]);
+        	map.get(pair[1]).add(pair[0]);
+        }
+    	for(int i=0, len=words1.length; i<len; i++) {
+    		if(words1[i].equals(words2[i]))
+    			continue;
+    		if(!map.containsKey(words1[i]))
+    			return false;
+    		if(!areSentencesSimilarTwoHelp(words1[i], words2[i], map, new HashSet<>()))
+    			return false;
+    	}
+        
+        
+    	return true;
+    }
+    
+    private boolean areSentencesSimilarTwoHelp(String source, String target, Map<String, Set<String>> map, Set<String> used) {
+    	if(map.get(source).contains(target))
+    		return true;
+    	used.add(source);
+    	for(String next : map.get(source)) {
+    		if(!used.contains(next) && areSentencesSimilarTwoHelp(next, target, map, used))
+    			return true;
+    	}
+    	return false;
+    }
+    
+    
     
    
     
