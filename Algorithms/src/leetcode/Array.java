@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
+import java.util.Stack;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -1058,6 +1059,59 @@ public class Array {
     		if(image[x][y+1] == color)
     			floodFillDFS(image, x, y+1, newColor);
     	}
+    }
+    
+    
+    public int[] asteroidCollision(int[] asteroids) {
+        if(asteroids == null || asteroids.length < 2)
+        	return asteroids;
+        Stack<Integer> stack = new Stack<>();
+        stack.push(asteroids[0]);
+        for(int i=1; i<asteroids.length; i++) {
+        	int cur = asteroids[i];
+        	if(stack.isEmpty()) {
+        		stack.push(cur);
+        		continue;
+        	}
+        	int peek = stack.peek();
+        	if(peek > 0 && cur < 0) {
+        		if(peek > -cur)
+        			continue;
+        		else if(peek == -cur) {
+        			stack.pop();
+        		}
+        		else {
+        			boolean add = true;
+        			while(!stack.isEmpty()) {
+        				int temp = stack.peek();
+        				if(temp < 0) {
+        					break;
+        				}
+        				if(temp < -cur)
+        					stack.pop();
+        				else if(temp == -cur) {
+        					stack.pop();
+        					add = false;
+        					break;
+        				}
+        				else {
+        					add = false;
+        					break;
+        				}
+        			}
+        			if(add)
+        				stack.push(cur);
+        		}
+        			
+        	}
+        	else
+        		stack.push(cur);
+        }
+        int size = stack.size();
+        int[] result = new int[size];
+        for(int i=size-1; i>=0; i--)
+        	result[i] = stack.pop();
+    	return result;
     }
     
     
