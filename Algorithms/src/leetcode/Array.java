@@ -1114,6 +1114,17 @@ public class Array {
     	return result;
     }
     
+    private Map<Integer, Integer> map3 = new HashMap<>();
+    
+    public int book4(int start, int end) {
+        map3.put(start, map3.getOrDefault(start, 0) + 1);
+        map3.put(end, map3.getOrDefault(end, 0) - 1);
+        int ongoing = 0, k = 0;
+        for(int val : map3.values())
+        	k = Math.max(k, ongoing += val);
+        return k;
+    }
+    
     
     
 
