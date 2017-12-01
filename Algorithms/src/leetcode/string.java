@@ -899,6 +899,58 @@ public class string {
     }
     
     
+    class Account {
+    	String email;
+    	String name;
+    	List<Account> neighbors;
+    	
+    	public Account(String email, String name) {
+			this.email = email;
+			this.name = name;
+			neighbors = new ArrayList<>();
+		}
+    }
+    
+    public List<List<String>> accountsMerge(List<List<String>> accounts) {
+        List<List<String>> result = new ArrayList<>();
+        Map<String, Account> map = new HashMap<>(); 
+        for(List<String> list : accounts) {
+        	String name = list.get(0);
+        	for(int i=1; i<list.size(); i++) {
+        		String email = list.get(i);
+        		if(!map.containsKey(email)) 
+        			map.put(email, new Account(email, name));
+        		if(i == 1)
+        			continue;
+        		String preEmail = list.get(i-1);
+        		map.get(preEmail).neighbors.add(map.get(email));
+        		map.get(email).neighbors.add(map.get(preEmail));
+        	}
+        }
+        
+        Set<String> visited = new HashSet<>();
+        for(String email : map.keySet()) {
+        	if(visited.add(email)) {
+        		List<String> list = new LinkedList<>();
+        		list.add(email);
+        		accountsMergeDFS(map.get(email), visited, list);
+        		Collections.sort(list);
+        		list.add(0, map.get(email).name);
+        		result.add(list);
+        	}
+        }
+        return result;
+    }
+    
+    private void accountsMergeDFS(Account root, Set<String> visited, List<String> list) {
+    	for(Account other : root.neighbors) {
+    		if(visited.add(other.email)) {
+    			list.add(other.email);
+    			accountsMergeDFS(other, visited, list);
+    		}
+    	}
+    }
+    
     
    
     
