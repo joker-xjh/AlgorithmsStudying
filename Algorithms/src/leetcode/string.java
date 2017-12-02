@@ -951,6 +951,24 @@ public class string {
     	}
     }
     
+    public String convert(String s, int numRows) {
+        char[] array = s.toCharArray();
+        StringBuilder[] sbs = new StringBuilder[numRows];
+        for(int i=0; i<numRows; i++)
+        	sbs[i] = new StringBuilder();
+        int index = 0;
+        int length = array.length;
+        while(index < length) {
+        	for(int i=0; i<numRows && index<length; i++)
+        		sbs[i].append(array[index++]);
+        	for(int i=numRows-2; i>=1 && index<length; i--)
+        		sbs[i].append(array[index++]);
+        }
+        for(int i=1; i<numRows; i++)
+        	sbs[0].append(sbs[i]);
+        return sbs[0].toString();
+    }
+    
     
    
     
