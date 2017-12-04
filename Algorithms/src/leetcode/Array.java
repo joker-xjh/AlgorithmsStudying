@@ -1125,6 +1125,25 @@ public class Array {
         return k;
     }
     
+    public int[] dailyTemperatures(int[] temperatures) {
+        int length = temperatures.length;
+        int[] array = new int[length];
+        Stack<Integer> stack = new Stack<>();
+        for(int i=0; i<length; i++) {
+        	if(stack.isEmpty() || temperatures[stack.peek()] >= temperatures[i]) {
+        		stack.push(i);
+        	}
+        	else {
+        		while(!stack.isEmpty() && temperatures[stack.peek()] < temperatures[i]) {
+        			int index = stack.pop();
+        			array[index] = i - index;
+        		}
+        		stack.push(i);
+        	}
+        }
+        return array;
+    }
+    
     
     
 
