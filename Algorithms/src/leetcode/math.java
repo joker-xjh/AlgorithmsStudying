@@ -52,6 +52,45 @@ public class math {
         }
         return list;
     }
+    
+    public int monotoneIncreasingDigits(int N) {
+    	if(N < 10)
+    		return N;
+        String num = String.valueOf(N);
+    	char[] array = num.toCharArray();
+    	if(monotoneIncreasingDigitsCheck(array))
+    		return N;
+		while(true) {
+			for(int i=1; i<array.length; i++) {
+				char c = array[i];
+				char pre = array[i-1];
+				if(c < pre) {
+					for(int j=i; j<array.length; j++)
+						array[j] = '9';
+					int index = i - 1;
+					while(index >=0 && array[index] == '0') {
+						array[index] = '9';
+						index-- ;
+					}
+					array[index]--;
+					if(monotoneIncreasingDigitsCheck(array))
+						return Integer.parseInt(new String(array));
+					break;
+				}
+			}
+		}
+    }
+    
+    private boolean monotoneIncreasingDigitsCheck(char[] array) {
+    	for(int i=1; i<array.length; i++) {
+    		char c = array[i];
+    		char pre = array[i-1];
+    		if(c < pre)
+    			return false;
+    	}
+    	
+    	return true;
+    }
 	
 	
 
