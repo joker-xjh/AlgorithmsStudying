@@ -261,7 +261,19 @@ public class DP {
     }
     
     
-    
+    public int deleteAndEarn(int[] nums) {
+        int n = 10001;
+        int[] values = new int[n];
+        for(int num : nums)
+        	values[num] += num;
+        int take = 0, skip = 0;
+        for(int i=0; i<n; i++) {
+        	int temp = skip + values[i];
+        	skip = Math.max(skip,  take);
+        	take = temp;
+        }
+        return Math.max(take, skip);
+    }
     
     
     
