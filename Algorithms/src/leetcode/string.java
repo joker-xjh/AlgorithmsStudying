@@ -970,6 +970,80 @@ public class string {
     }
     
     
+    String[] nums = {
+    		"","One","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten",
+    		"Eleven","Twelve","Thirteen","Fourteen","Fifteen","Sixteen","Seventeen","Eighteen","Ninetten",
+    		"Twenty"
+    };
+    String[] tens = {
+    		"","ten","Twenty","Thirty","Forty","Fifty","Sixty","Seventy","Eighty","Ninety"
+    };
+    
+    public String numberToWords(int num) {
+    	if(num == 0)
+    		return "Zero";
+        String str = String.valueOf(num);
+        while(str.length() < 10) {
+        	str = "0" + str;
+        }
+        char[] array = str.toCharArray();
+        StringBuilder sb = new StringBuilder();
+        if(array[0] != '0')
+        	sb.append(nums[array[0] - '0']).append(" ").append("Billion");
+        String temp = numberToWords(array, 1);
+        if(temp.length() != 0) {
+        	if(sb.length() != 0)
+        		sb.append(" ");
+        	sb.append(temp).append(" ").append("Million");
+        }
+        temp = numberToWords(array, 4);
+        if(temp.length() != 0) {
+        	if(sb.length() != 0)
+        		sb.append(" ");
+        	sb.append(temp).append(" ").append("Thousand");
+        }
+        temp = numberToWords(array, 7);
+        if(temp.length() != 0) {
+        	if(sb.length() != 0)
+        		sb.append(" ");
+        	sb.append(temp);
+        }
+    	return sb.toString();
+    }
+    
+    private String numberToWords(char[] array, int from) {
+    	StringBuilder sb = new StringBuilder();
+    	char one = array[from];
+    	char two = array[from+1];
+    	char three = array[from+2];
+    	if(one != '0') {
+    		sb.append(nums[one - '0']).append(" ").append("Hundred");
+    	}
+    	if(two != '0') {
+    		if(sb.length() > 0)
+    			sb.append(" ");
+    		if(three == '0') {
+    			sb.append(tens[two - '0']);
+    		}
+    		else {
+    			if(two == '1') {
+    				int temp = (two - '0') * 10 + (three - '0');
+    				sb.append(nums[temp]);
+    				return sb.toString();
+    			}
+    			else {
+    				sb.append(tens[two - '0']);
+    			}
+    		}
+    	}
+    	if(three != '0') {
+    		if(sb.length() > 0)
+    			sb.append(" ");
+    		sb.append(nums[three - '0']);
+    	}
+    	return sb.toString();
+    }
+    
    
     
     public static void main(String[] args) {
