@@ -1144,6 +1144,30 @@ public class Array {
         return array;
     }
     
+    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+    	int len = nums1.length + nums2.length;
+    	if((len & 1) == 0)
+    		return (findMedianSortedArraysHelp(nums1, 0, nums2, 0, len) + findMedianSortedArraysHelp(nums1, 0, nums2, 0, len/2+1)) / 2.0;
+    	
+    	return findMedianSortedArraysHelp(nums1, 0, nums2, 0, len/2);
+    }
+    
+    private int findMedianSortedArraysHelp(int[] nums1, int m, int[] nums2, int n, int k) {
+    	if(m >= nums1.length)
+    		return nums2[n + k - 1];
+    	if(n >= nums2.length)
+    		return nums1[m + k - 1];
+    	if(k == 1)
+    		return Math.min(nums1[m], nums2[n]);
+    	int p1 = m + k/2 - 1;
+    	int p2 = n + k/2 - 1;
+    	int mid1 = p1 >= nums1.length ? Integer.MAX_VALUE : nums1[p1];
+    	int mid2 = p2 >= nums2.length ? Integer.MAX_VALUE : nums2[p2];
+    	if(mid1 < mid2)
+    		return findMedianSortedArraysHelp(nums1, m + k/2 , nums2, n, k - k/2);
+    	return findMedianSortedArraysHelp(nums1, m, nums2, n+k/2, k-k/2);
+    }
+    
     
     
 
