@@ -2,10 +2,12 @@ package leetcode;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import java.util.Set;
 
 public class Tree {
 	
@@ -309,6 +311,76 @@ public class Tree {
 	   int resr = node.right != null && node.right.val == node.val ? r+1 : 0;
 	   res[0] = Math.max(res[0], resl + resr);
        return Math.max(resl, resr);
+   }
+   
+   
+   public int findClosestLeaf(TreeNode root, int k) {
+       Queue<TreeNode> queue = new LinkedList<>();
+       queue.add(root);
+       TreeNode targetNode = null;
+       while(!queue.isEmpty()) {
+    	   TreeNode node = queue.poll();
+    	   if(node.val == k) {
+    		   targetNode = node;
+    		   break;
+    	   }
+    	   if(node.left != null)
+    		   queue.offer(node.left);
+    	   if(node.right != null)
+    		   queue.offer(node.right);
+       }
+       queue.clear();
+       queue.offer(targetNode);
+       while(!queue.isEmpty()) {
+    	   TreeNode node = queue.poll();
+    	   if(node.left == null && node.right == null)
+    		   return node.val;
+    	   if(node.left != null)
+    		   queue.offer(node.left);
+    	   if(node.right != null)
+    		   queue.offer(node.right);
+       }
+	   return -1;
+   }
+   
+   public int findClosestLeaf2(TreeNode root, int k) {
+       List<TreeNode> list = new ArrayList<>();
+       Set<Integer> leaf = new HashSet<>();
+	   findClosestLeafHelp(root, list, leaf);
+	   if(leaf.contains(k))
+		   return k;
+	   int index = -1;
+	   for(int i=0; i<list.size(); i++) {
+		   TreeNode node = list.get(i);
+		   if(node.val == k) {
+			   index = i;
+			   break;
+		   }
+	   }
+	   int left = index-1, right = index+1;
+	   
+	   while(true) {
+		   TreeNode left_node = left >=0 ? list.get(left) : null;
+		   TreeNode right_node = right < list.size() ? list.get(right) : null;
+		   int left_val = left_node != null ? left_node.val : -1;
+		   int right_val = right_node != null ? right_node.val : -1;
+		   if(leaf.contains(left_val))
+			   return left_val;
+		   if(leaf.contains(right_val))
+			   return right_val;
+		   left--;
+		   right++;
+	   }
+   }
+   
+   private void findClosestLeafHelp(TreeNode node, List<TreeNode> list, Set<Integer> leaf) {
+	   if(node == null)
+		   return;
+	   findClosestLeafHelp(node.left, list, leaf);
+	   list.add(node);
+	   if(node.left == null && node.right == null)
+		   leaf.add(node.val);
+	   findClosestLeafHelp(node.right, list, leaf);
    }
    
    
