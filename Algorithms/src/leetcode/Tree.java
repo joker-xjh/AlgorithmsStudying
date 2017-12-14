@@ -383,6 +383,52 @@ public class Tree {
 	   findClosestLeafHelp(node.right, list, leaf);
    }
    
+   public int findClosestLeaf3(TreeNode root, int k) {
+	   Map<Integer, List<TreeNode>> graph = new HashMap<>();
+	   Set<Integer> leaf = new HashSet<>();
+	   findClosestLeafDFS(root, root, graph, leaf);
+	   if(leaf.contains(k))
+		   return k;
+	   Set<Integer> visited = new HashSet<>();
+	   visited.add(k);
+	   Queue<TreeNode> queue = new LinkedList<>();
+	   queue.addAll(graph.get(k));
+	   while(!queue.isEmpty()) {
+		   TreeNode node = queue.poll();
+		   int val = node.val;
+		   if(leaf.contains(val))
+			   return val;
+		   List<TreeNode> list = graph.get(val);
+		   for(TreeNode temp : list) {
+			   if(!visited.contains(temp.val)) {
+				   visited.add(temp.val);
+				   queue.offer(temp);
+			   }
+				 
+		   }
+	   }
+	   
+	   return -1;
+   }
+   
+   private void findClosestLeafDFS(TreeNode node, TreeNode parent, Map<Integer, List<TreeNode>> graph, Set<Integer> leaf) {
+	   if(node == null)
+		   return;
+	   List<TreeNode> list = new ArrayList<>();
+	   list.add(parent);
+	   if(node.left != null)
+		   list.add(node.left);
+	   if(node.right != null)
+		   list.add(node.right);
+	   graph.put(node.val, list);
+	   if(node.left == null && node.right == null)
+		   leaf.add(node.val);
+	   findClosestLeafDFS(node.left, node, graph, leaf);
+	  findClosestLeafDFS(node.right, node, graph, leaf);
+   }
+   
+   
+   
    
    
     
