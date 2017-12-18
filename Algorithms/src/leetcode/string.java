@@ -1,6 +1,7 @@
 package leetcode;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -1043,6 +1044,44 @@ public class string {
     	}
     	return sb.toString();
     }
+    
+    public String shortestCompletingWord(String licensePlate, String[] words) {
+        String answer = null;
+        licensePlate = licensePlate.toLowerCase();
+        int[] target = new int[26];
+        for(char c : licensePlate.toCharArray()) {
+        	if(c >= 'a' && c <= 'z') {
+        		target[c - 'a']++;
+        	}
+        }
+        int[] buf = new int[26];
+        for(int i=words.length-1; i>=0; i--) {
+        	String word = words[i];
+        	char[] array = word.toCharArray();
+        	for(char c:array) {
+        		buf[c - 'a']++;
+        	}
+        	if(shortestCompletingWord(target, buf)) {
+        		if(answer == null || word.length() <= answer.length())
+        			answer = word;
+        	}
+        	Arrays.fill(buf, 0);
+        }
+        return answer;
+    }
+    
+    private boolean shortestCompletingWord(int[] target, int[] buf) {
+    	for(int i=0; i<26; i++) {
+    		if(target[i] == 0)
+    			continue;
+    		if(target[i] > buf[i])
+    			return false;
+    	}
+    	
+    	return true;
+    }
+    
+    
     
    
     
