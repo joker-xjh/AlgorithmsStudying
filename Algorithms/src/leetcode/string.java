@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
 import java.util.TreeMap;
@@ -1080,6 +1081,72 @@ public class string {
     	
     	return true;
     }
+    
+    class Ladder {
+    	String word;
+    	Ladder[] next = new Ladder[26];
+    }
+    
+    
+    public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+        Ladder root = new Ladder();
+        for(String word : wordList) {
+        	Ladder node = root;
+        	for(char c : word.toCharArray()) {
+        		int i = c - 'a';
+        		if(node.next[i] == null)
+        			node.next[i] = new Ladder();
+        		node = node.next[i];
+        	}
+        	node.word = word;
+        }
+        if(ladderContains(root, endWord.toCharArray()) == null)
+        	return 0;
+        int length = 1;
+        Set<String> used = new HashSet<>();
+        used.add(beginWord);
+        Queue<String> queue = new LinkedList<>();
+        queue.add(beginWord);
+        while(!queue.isEmpty()) {
+        	int size = queue.size();
+        	length++;
+        	for(int i=0; i<size; i++) {
+        		String word = queue.poll();
+        		char[] array = word.toCharArray();
+        		for(int j=0; j<array.length; j++) {
+        			char old = array[j];
+        			for(char c='a'; c<='z'; c++) {
+        				array[j] = c;
+        				String next = ladderContains(root, array);
+        				if(next != null) {
+        					if(used.contains(next))
+        						continue;
+        					used.add(next);
+        					queue.add(next);
+        					if(endWord.equals(next))
+        						return length;
+        				}
+        			}
+        			array[j] = old;
+        		}
+        	}
+        }
+    	
+    	return 0;
+    }
+    
+    private String ladderContains(Ladder node, char[] word) {
+    	for(int i=0; i<word.length; i++) {
+    		if(node == null)
+    			return null;
+    		node = node.next[word[i] - 'a'];
+    	}
+    	if(node == null)
+    		return null;
+    	return node.word;
+    }
+    
+    
     
     
     
