@@ -1146,7 +1146,31 @@ public class string {
     	return node.word;
     }
     
-    
+    public String simplifyPath(String path) {
+        if(path == null || path.length() == 0)
+        	return "/";
+        String[] array = path.split("/");
+        LinkedList<String> list = new LinkedList<>();
+        for(int i=0; i<array.length; i++) {
+        	String item = array[i];
+        	if(item.equals("") || item.equals("."))
+        		continue;
+        	else if(item.equals("..")) {
+        		if(list.isEmpty())
+        			continue;
+        		list.pollLast();
+        		continue;
+        	}
+        	list.addLast(item);
+        }
+        if(list.isEmpty())
+        	return "/";
+        StringBuilder sb = new StringBuilder();
+        while(!list.isEmpty()) {
+        	sb.append('/').append(list.pollFirst());
+        }
+    	return sb.toString();
+    }
     
     
     
