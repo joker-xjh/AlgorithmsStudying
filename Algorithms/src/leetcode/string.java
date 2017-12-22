@@ -1172,6 +1172,81 @@ public class string {
     	return sb.toString();
     }
     
+    public double[] calcEquation(String[][] equations, double[] values, String[][] queries) {
+        Map<String, List<String>> graph = new HashMap<>();
+        Map<String, Double> map = new HashMap<>();
+        for(int i=0; i<equations.length; i++) {
+        	String[] equation = equations[i];
+        	String A = equation[0], B = equation[1];
+        	double value = values[i];
+        	List<String> list = graph.get(A);
+        	if(list == null) {
+        		list = new ArrayList<>();
+        		graph.put(A, list);
+        	}
+        	list.add(B);
+        	map.put(A+B, value);
+        	
+        	list = graph.get(B);
+        	if(list == null) {
+        		list = new ArrayList<>();
+        		graph.put(B, list);
+        	}
+        	list.add(A);
+        	map.put(B+A, 1/value);
+        }
+        int length = queries.length;
+        double[] answer = new double[length];
+        double[] val = new double[1];
+        boolean[] find = new boolean[1];
+        Set<String> visited = new HashSet<>();
+    	for(int i=0; i<length; i++) {
+    		String[] query = queries[i];
+    		String A = query[0] , B = query[1];
+    		if(!graph.containsKey(A) || !graph.containsKey(B)) {
+    			answer[i] = -1.0;
+    			continue;
+    		}
+    		if(A.equals(B)) {
+    			answer[i] = 1.0;
+    			continue;
+    		}
+    		calcEquationDFS(graph, A, B, 1, val, find, map, visited);
+    		if(find[0]) {
+    			answer[i] = val[0];
+    		}
+    		else {
+    			answer[i] = -1.0;
+    		}
+    		find[0] = false;
+			val[0] = 0.0;
+			visited.clear();
+    	}
+        
+    	return answer;
+    }
+    
+    private void calcEquationDFS(Map<String, List<String>> graph, String point,String target, double cur, double[] val, boolean[] find, Map<String, Double> map, Set<String> visited) {
+    	if(find[0])
+    		return;
+    	List<String> list = graph.get(point);
+    	for(String next : list) {
+    		if(visited.contains(next))
+    			continue;
+    		visited.add(next);
+    		double temp = map.get(point + next);
+    		if(next.equals(target)) {
+    			val[0] = cur * temp;
+    			find[0] = true;
+    			return;
+    		}
+    		else {
+    			calcEquationDFS(graph, next, target, cur * temp, val, find, map, visited);
+    		}
+    	}
+    	
+    }
+    
     
     
    
