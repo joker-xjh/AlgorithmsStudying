@@ -1247,6 +1247,31 @@ public class string {
     	
     }
     
+    public String licenseKeyFormatting(String S, int K) {
+        char[] array = S.toCharArray();
+        StringBuilder buffer = new StringBuilder(array.length);
+        int counter = 0;
+        for(int i=array.length-1; i>=0; i--) {
+        	char c = array[i];
+        	if(c == '-')
+        		continue;
+        	if(c >='a' && c <= 'z')
+        		c -= 32;
+        	buffer.append(c);
+        	counter++;
+        	if(counter == K && i != 0) {
+        		counter = 0;
+        		buffer.append('-');
+        	}
+        }
+        String answer = buffer.reverse().toString();
+        if(answer.length() == 0)
+        	return answer;
+        if(answer.charAt(0) == '-')
+        	answer = answer.substring(1);
+    	return answer;
+    }
+    
     
     
    
