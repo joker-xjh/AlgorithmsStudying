@@ -1,6 +1,7 @@
 package leetcode;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -424,9 +425,100 @@ public class Tree {
 	   if(node.left == null && node.right == null)
 		   leaf.add(node.val);
 	   findClosestLeafDFS(node.left, node, graph, leaf);
-	  findClosestLeafDFS(node.right, node, graph, leaf);
+	   findClosestLeafDFS(node.right, node, graph, leaf);
    }
    
+   //Time Limit Exceeded
+   public List<Integer> findMinHeightTrees(int n, int[][] edges) {
+	   if(edges.length == 0) {
+		   List<Integer> answer = new ArrayList<>();
+		   answer.add(0);
+		   return answer;
+	   }
+       Map<Integer, List<Integer>> graph = new HashMap<>();
+       for(int[] edge : edges) {
+    	   int a = edge[0], b = edge[1];
+    	   List<Integer> list = graph.get(a);
+    	   if(list == null) {
+    		   list = new ArrayList<>();
+    		   graph.put(a, list);
+    	   }
+    	   list.add(b);
+    	   
+    	   list = graph.get(b);
+    	   if(list == null) {
+    		   list = new ArrayList<>();
+    		   graph.put(b, list);
+    	   }
+    	   list.add(a);
+       }
+       int[] heights = new int[n];
+       int min = Integer.MAX_VALUE;
+       Queue<Integer> queue = new LinkedList<>();
+       Set<Integer> visited = new HashSet<>();
+       for(int i=0; i<n; i++) {
+    	   queue.add(i);
+    	   visited.add(i);
+    	   int temp = 0;
+    	   while(!queue.isEmpty()) {
+    		   int size = queue.size();
+    		   for(int j=0; j<size; j++) {
+    			   int point = queue.poll();
+    			   List<Integer> others = graph.get(point);
+    			   for(int other : others) {
+    				   if(visited.contains(other))
+    					   continue;
+    				   visited.add(other);
+    				   queue.offer(other);
+    			   }
+    		   }
+    		   temp++;
+    	   }
+    	   if(temp < min)
+    		   min = temp;
+    	   heights[i] = temp;
+    	   queue.clear();
+    	   visited.clear();
+       }
+       List<Integer> answer = new ArrayList<>();
+       for(int i=0; i<n; i++) {
+    	   int height = heights[i];
+    	   if(height == min)
+    		   answer.add(i);
+       }
+	   return answer;
+   }
+   
+   public List<Integer> findMinHeightTrees2(int n, int[][] edges) {
+	   if(n == 1)
+		   return Collections.singletonList(0);
+	   Map<Integer, Set<Integer>> graph = new HashMap<>();
+	   for(int i=0; i<n; i++)
+		   graph.put(i, new HashSet<>());
+	   for(int[] edge : edges) {
+		   graph.get(edge[0]).add(edge[1]);
+		   graph.get(edge[1]).add(edge[0]);
+	   }
+	   List<Integer> leaves = new ArrayList<>();
+	   for(int i=0; i<n; i++) {
+		   if(graph.get(i).size() == 1)
+			   leaves.add(i);
+	   }
+	   while(n > 2) {
+		   n -= leaves.size();
+		   List<Integer> newLeaves = new ArrayList<>();
+		   for(int leaf : leaves) {
+			   int adj = graph.get(leaf).iterator().next();
+			   graph.remove(leaf);
+			   graph.get(adj).remove(leaf);
+			   if(graph.get(adj).size() == 1)
+				   newLeaves.add(adj);
+		   }
+		   leaves = newLeaves;
+	   }
+	   
+	   return leaves;
+   }
    
    
    
