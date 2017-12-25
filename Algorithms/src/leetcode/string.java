@@ -1272,7 +1272,97 @@ public class string {
     	return answer;
     }
     
+    class Lock {
+    	String lock = null;
+    	Lock[] next = new Lock[10];
+    }
     
+    public int openLock(String[] deadends, String target) {
+        if(target == null || target.length() == 0)
+        	return -1;
+        Lock root = new Lock();
+        for(String deadend : deadends) {
+        	Lock lock = root;
+        	for(char c : deadend.toCharArray()) {
+        		int i = c - '0';
+        		if(lock.next[i] == null)
+        			lock.next[i] = new Lock();
+        		lock = lock.next[i];
+        	}
+        	lock.lock = deadend;
+        }
+        char[] start = "0000".toCharArray();
+        char[] end = target.toCharArray();
+        if(lockContains(root, start))
+        	return -1;
+        int step = 0;
+        Queue<char[]> queue = new LinkedList<>();
+        Lock used = new Lock();
+        queue.add(start);
+        used = addLock(used, start);
+        while(!queue.isEmpty()) {
+        	int size = queue.size();
+        	step++;
+        	for(int i=0; i<size; i++) {
+        		char[] lock = queue.poll();
+        		for(int j=0; j<4; j++) {
+        			char[] clone_add = lock.clone();
+        			char[] clone_sub = lock.clone();
+        			char c = lock[j];
+        			if(c == '0') {
+        				clone_add[j] = '1';
+        				clone_sub[j] = '9';
+        			}
+        			else if(c == '9') {
+        				clone_add[j] = '0';
+        				clone_sub[j] = '8';
+        			}
+        			else {
+        				clone_add[j] = (char) (c + 1);
+        				clone_sub[j] = (char) (c - 1);
+        			}
+        			if(Arrays.equals(clone_add, end))
+        				return step;
+        			if(Arrays.equals(clone_sub, end))
+        				return step;
+        			if(!lockContains(root, clone_add) && !lockContains(used, clone_add)) {
+        				queue.offer(clone_add);
+        				used = addLock(used, clone_add);
+        			}
+        			if(!lockContains(root, clone_sub) && !lockContains(used, clone_sub)) {
+        				queue.offer(clone_sub);
+        				used = addLock(used, clone_sub);
+        			}
+        		}
+        	}
+        }
+    	
+    	return -1;
+    }
+    
+    private boolean lockContains(Lock root, char[] lock) {
+    	for(char c : lock) {
+    		int i = c - '0';
+    		if(root.next[i] == null)
+    			return false;
+    		root = root.next[i];
+    	}
+    	if(root == null)
+    		return false;
+    	return root.lock != null;
+    }
+    
+    private Lock addLock(Lock root, char[] deadend) {
+    	Lock lock = root;
+    	for(char c : deadend) {
+    		int i = c - '0';
+    		if(lock.next[i] == null)
+    			lock.next[i] = new Lock();
+    		lock = lock.next[i];
+    	}
+    	lock.lock = new String(deadend);
+    	return root;
+    }
     
    
     
