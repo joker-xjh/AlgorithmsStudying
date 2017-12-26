@@ -1364,6 +1364,38 @@ public class string {
     	return root;
     }
     
+    
+    public String crackSafe(int n, int k) {
+        StringBuilder sb = new StringBuilder();
+        for(int i=0; i<n; i++)
+        	sb.append('0');
+    	int total = (int) Math.pow(k, n);
+    	Set<String> used = new HashSet<>();
+        used.add(sb.toString());
+    	crackSafeDFS(sb, used, n, k, total);
+    	return sb.toString();
+    }
+    
+    private boolean crackSafeDFS(StringBuilder sb, Set<String> used, int n, int k, int total) {
+    	if(used.size() == total)
+    		return true;
+    	String pre = sb.substring(sb.length()-n +1, sb.length());
+    	for(int i=0; i<k; i++) {
+    		String next = pre + i;
+    		if(used.contains(next))
+    			continue;
+    		used.add(next);
+    		sb.append(i);
+    		if(crackSafeDFS(sb, used, n, k, total))
+    			return true;
+    		else {
+    			sb.delete(sb.length()-1, sb.length());
+    			used.remove(next);
+    		}
+    	}
+    	return false;
+    }
+    
    
     
     public static void main(String[] args) {
