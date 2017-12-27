@@ -1190,6 +1190,49 @@ public class Array {
     }
     
     
+    public int networkDelayTime(int[][] times, int N, int K) {
+        @SuppressWarnings("unchecked")
+		List<Integer>[] graph = new List[N+1];
+        for(int i=0; i<=N; i++)
+        	graph[i] = new ArrayList<>();
+        for(int[] time : times) {
+        	int source = time[0], target = time[1], cost = time[2];
+        	graph[source].add(target);
+        	graph[source].add(cost);
+        }
+        boolean[] visited = new boolean[N+1];
+        int[] time = new int[N+1];
+        Arrays.fill(time, Integer.MAX_VALUE);
+        visited[K] = true;
+        time[0] = 0;
+        networkDelayTimeBacktrack(graph, K, visited, time, 0);
+        int answer = 0;
+        for(int t : time) {
+        	if(t== Integer.MAX_VALUE)
+        		return -1;
+        	answer = Math.max(answer, t);
+        }
+    	return answer;
+    }
+    
+    private void networkDelayTimeBacktrack(List<Integer>[] graph, int point, boolean[] visited, int[] time, int cost) {
+    	List<Integer> adj = graph[point];
+    	time[point] = Math.min(time[point],  cost);
+    	for(int i=0; i<adj.size(); i+=2) {
+    		int other = adj.get(i);
+    		int t = adj.get(i+1);
+    		if(visited[other]) {
+    			int temp = cost + t;
+    			if(temp >= time[other])
+    				continue;
+    		}
+    		visited[other] = true;
+    		networkDelayTimeBacktrack(graph, other, visited, time, cost + t);
+    	}
+    }
+    
+    
+    
     
     
 
