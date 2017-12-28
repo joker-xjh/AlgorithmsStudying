@@ -1231,6 +1231,28 @@ public class Array {
     	}
     }
     
+    public int dominantIndex(int[] nums) {
+    	if(nums == null || nums.length == 0)
+    		return -1;
+    	if(nums.length == 1)
+    		return 0;
+        int one = Integer.MIN_VALUE, two = Integer.MIN_VALUE;
+        int one_index = -1;
+        for(int i=0; i<nums.length; i++) {
+        	int num = nums[i];
+        	if(num > one) {
+        		two = one;
+        		one = num;
+        		one_index = i;
+        	}
+        	else if(num > two) {
+        		two = num;
+        	}
+        }
+        if(one >= two * 2)
+        	return one_index;
+    	return -1;
+    }
     
     
     
