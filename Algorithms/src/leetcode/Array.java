@@ -1255,6 +1255,42 @@ public class Array {
     }
     
     
+    public int[] findRedundantConnection(int[][] edges) {
+        int N = edges.length;
+        int[] answer = null;
+        @SuppressWarnings("unchecked")
+		ArrayList<Integer>[] graph = new ArrayList[N+1];
+        for(int i=1; i<=N; i++)
+        	graph[i] = new ArrayList<>();
+        Set<Integer> visited = new HashSet<>();
+        for(int[] edge : edges) {
+        	int source = edge[0], target = edge[1];
+        	visited.add(source);
+        	if(findRedundantConnectionDFS(graph, source, target, visited))
+        		answer = edge;
+        	else {
+        		graph[source].add(target);
+        		graph[target].add(source);
+        	}
+        	visited.clear();
+        }
+    	return answer;
+    }
+    
+    private boolean findRedundantConnectionDFS(ArrayList<Integer>[] graph, int source, int target, Set<Integer> visited) {
+    	if(source == target)
+    		return true;
+    	for(int adj : graph[source]) {
+    		if(visited.contains(adj))
+    			continue;
+    		visited.add(adj);
+    		if(findRedundantConnectionDFS(graph, adj, target, visited))
+    			return true;
+    	}
+    	return false;
+    }
+    
+    
     
     
 
