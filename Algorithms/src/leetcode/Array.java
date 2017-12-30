@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -1307,6 +1308,38 @@ public class Array {
     			size++;
     	}
     	return size;
+    }
+    
+    
+    public int maxEnvelopes(int[][] envelopes) {
+    	 if(envelopes.length < 2) return envelopes.length;
+    	 Arrays.sort(envelopes, new EnvelopeComparator());
+    	 int[] dp = new int[envelopes.length];
+    	 int size = 0;
+    	 for(int[] envelope : envelopes) {
+    		 int num = envelope[1];
+    		 int i=0, j = size;
+    		 while(i < j) {
+    			 int mid = i + (j - i) / 2;
+    			 if(dp[mid] < num)
+    				 i = mid + 1;
+    			 else
+    				 j = mid;
+    		 }
+    		 dp[i] = num;
+    		 if(i == size)
+    			 size++;
+    	 }
+    	 return size;
+    }
+    
+    class EnvelopeComparator implements Comparator<int[]> {
+
+		@Override
+		public int compare(int[] o1, int[] o2) {
+			return o1[0] == o2[0] ? o2[1] - o1[1] : o1[0] - o2[0];
+		}
+    	
     }
     
     
