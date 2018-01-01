@@ -91,6 +91,22 @@ public class math {
     	
     	return true;
     }
+    
+    public int reachNumber(int target) {
+    	if(target < 0)
+    		target = -target;
+        int step = 0;
+        int sum = 0;
+        while(sum < target) {
+        	step++;
+        	sum += step;
+        }
+        while(((sum - target) & 1) != 0) {
+        	step++;
+        	sum += step;
+        }
+        return step;
+    }
 	
 	
 
