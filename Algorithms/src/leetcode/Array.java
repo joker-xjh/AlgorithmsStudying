@@ -1358,6 +1358,19 @@ public class Array {
         return answer;
     }
     
+    public int[] anagramMappings(int[] A, int[] B) {
+        int n = A.length;
+        int[] answer = new int[n];
+        Map<Integer, Integer> map = new HashMap<>();
+        for(int i=0; i<n; i++) {
+        	map.put(B[i], i);
+        }
+        for(int i=0; i<n; i++) {
+        	answer[i] = map.get(A[i]);
+        }
+    	return answer;
+    }
+    
     
 
 
