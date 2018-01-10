@@ -1,9 +1,6 @@
 package leetcode;
 
 import java.util.ArrayList;
-
-
-
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -1370,6 +1367,143 @@ public class Array {
         }
     	return answer;
     }
+    
+    
+    
+     public class Interval {
+    	      int start;
+    	      int end;
+    	      Interval() { start = 0; end = 0; }
+    	      Interval(int s, int e) { start = s; end = e; }
+    	  }
+    
+    
+     public List<Interval> employeeFreeTime(List<List<Interval>> schedule) {
+    	 if(schedule == null || schedule.size() == 0)
+    		 return null;
+         List<Interval> freeTime = new ArrayList<>();
+         List<Interval> first = schedule.get(0);
+         for(int i=0; i<first.size(); i++) {
+        	 Interval interval = first.get(i);
+        	 if(i == 0) {
+        		 freeTime.add(new Interval(Integer.MIN_VALUE, interval.start));
+        	 }
+        	 if(i == first.size() -1) {
+        		 freeTime.add(new Interval(interval.end, Integer.MAX_VALUE));
+        	 }
+        	 if(i<first.size() - 1) {
+        		 freeTime.add(new Interval(interval.end, first.get(i+1).start));
+        	 }
+         }
+         for(int i=0; i<freeTime.size(); i++) {
+        	 System.out.println("start: "+freeTime.get(i).start + "end: "+freeTime.get(i).end);
+         }
+         if(schedule.size() == 1) {
+        	 List<Interval> answer = new ArrayList<>();
+        	 for(int i=1; i<freeTime.size()-1; i++){
+        		 answer.add(freeTime.get(i));
+        	 }
+        	 return answer;
+         }
+         for(int i=1; i<schedule.size(); i++) {
+        	 List<Interval> another = new ArrayList<>();
+             List<Interval> list = schedule.get(i);
+             for(int j=0; j<list.size(); j++) {
+            	 Interval interval = list.get(j);
+            	 if(j == 0) {
+            		 another.add(new Interval(Integer.MIN_VALUE, interval.start));
+            	 }
+            	 if(j == list.size() -1) {
+            		 another.add(new Interval(interval.end, Integer.MAX_VALUE));
+            	 }
+            	 if(j<list.size() - 1) {
+            		 another.add(new Interval(interval.end, list.get(j+1).start));
+            	 }
+             }
+             System.out.println("***********another**************");
+             for(int x=0; x<another.size(); x++) {
+            	 System.out.println("start: "+another.get(x).start + "end: "+another.get(x).end);
+             }
+             System.out.println("-----------another--------------");
+             List<Interval> newFT = new ArrayList<>();
+             int index1 = 0, index2 = 0;
+             while(index1 < freeTime.size() && index2 < another.size()) {
+            	 Interval interval1 = freeTime.get(index1);
+            	 Interval interval2 = another.get(index2);
+            	 if(interval2.start < interval1.start) {
+            		 if(interval2.end <= interval1.start) {
+            			 index2++;
+            		 }
+            		 else if(interval2.end > interval1.start && interval2.end <= interval1.end) {
+            			 newFT.add(new Interval(interval1.start, interval2.end));
+            			 interval1.start = interval2.end;
+            			 index2++;
+            		 }
+            		 else {
+            			 newFT.add(interval1);
+            			 index1++;
+            			 interval2.start = interval1.end;
+            		 }
+            	 }
+            	 else if(interval2.start == interval1.start) {
+            		 if(interval2.end == interval1.end) {
+            			 newFT.add(interval1);
+            			 index1++;
+            			 index2++;
+            		 }
+            		 else if(interval2.end < interval1.end) {
+            			 newFT.add(interval2);
+            			 index2++;
+            			 interval1.start = interval2.end;
+            		 }
+            		 else {
+            			 newFT.add(interval1);
+            			 index1++;
+            			 interval2.start = interval1.end;
+            		 }
+            	 }
+            	 else if(interval2.start > interval1.start && interval2.start < interval1.end) {
+            		 if(interval2.end < interval1.end) {
+            			 newFT.add(interval2);
+            			 index2++;
+            			 interval1.start = interval2.end;
+            		 }
+            		 else if(interval2.end == interval1.end) {
+            			 newFT.add(interval2);
+            			 index1++;
+            			 index2++;
+            		 }
+            		 else {
+            			 newFT.add(new Interval(interval2.start, interval1.end));
+            			 interval2.start = interval1.end;
+            			 index1++;
+            		 }
+            	 }
+            	 else if(interval2.start >= interval1.end) {
+            		 index1++;
+            	 }
+             }
+             freeTime = newFT;
+             System.out.println("***********newFT**************");
+             for(int x=0; x<freeTime.size(); x++) {
+            	 System.out.println("start: "+newFT.get(x).start + "end: "+newFT.get(x).end);
+             }
+             System.out.println("-----------newFT--------------");
+         }
+         List<Interval> answer = new ArrayList<>();
+    	 for(int i=1; i<freeTime.size()-1; i++){
+    		 answer.add(freeTime.get(i));
+    	 }
+    	 return answer;
+    	 
+    	 
+     }
+    
+    
+    
+    
+    
+    
     
     
 
