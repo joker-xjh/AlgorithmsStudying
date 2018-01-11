@@ -1396,6 +1396,41 @@ public class string {
     	return false;
     }
     
+    public int[] exclusiveTime(int n, List<String> logs) {
+        int[] times = new int[n];
+        Stack<Integer> ids = new Stack<>();
+        Stack<Integer> timestamp = new Stack<>();
+        for(int i=0, size = logs.size(); i<size; i++) {
+        	String log = logs.get(i);
+        	int index = log.indexOf(":");
+        	int id = Integer.parseInt(log.substring(0, index));
+        	int ts = Integer.parseInt(log.substring(log.lastIndexOf(":")+1, log.length()));
+        	char c = log.charAt(index+1);
+        	if(ids.isEmpty()) {
+        		ids.push(id);
+        		timestamp.push(ts);
+        		continue;
+        	}
+        	if(c == 's') {
+        		int pre_id = ids.peek();
+        		times[pre_id] += ts - timestamp.peek();
+        		ids.push(id);
+        		timestamp.push(ts);
+        	}
+        	else {
+        		int pre_id = ids.pop();
+        		times[pre_id] += ts - timestamp.pop() + 1;
+        		if(!ids.isEmpty()) {
+        			timestamp.pop();
+        			timestamp.push(ts+1);
+        		}
+        	}
+        	
+        }
+        
+        return times;
+    }
+    
    
     
     public static void main(String[] args) {
