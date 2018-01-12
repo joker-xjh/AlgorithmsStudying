@@ -2,10 +2,13 @@ package leetcode;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.Stack;
 import java.util.TreeMap;
 
 public class Design {
@@ -373,6 +376,94 @@ public class Design {
 		for (int i = 0; i < 26; i++)
 			suffix(node.next[i], set, res);
 	}
+	
+	
+	
+	 interface NestedInteger {
+		 
+		      // @return true if this NestedInteger holds a single integer, rather than a nested list.
+		      public boolean isInteger();
+		 
+		      // @return the single integer that this NestedInteger holds, if it holds a single integer
+		      // Return null if this NestedInteger holds a nested list
+		      public Integer getInteger();
+		 
+		      // @return the nested list that this NestedInteger holds, if it holds a nested list
+		      // Return null if this NestedInteger holds a single integer
+		      public List<NestedInteger> getList();
+		  }
+	
+	
+	
+	 class NestedIterator implements Iterator<Integer> {
+
+		 	private Stack<List<NestedInteger>> stack;
+		 	private Stack<Integer> indexStack;
+		 	private int index;
+		    public NestedIterator(List<NestedInteger> nestedList) {
+		        stack = new Stack<>();
+		        indexStack = new Stack<>();
+		        index = 0;
+		        if(nestedList != null && nestedList.size() > 0) {
+		        	stack.push(nestedList);
+			        indexStack.push(index);
+		        }
+		    }
+
+		    @Override
+		    public Integer next() {
+		        while(!stack.peek().get(index).isInteger()) {
+		        	List<NestedInteger> list = stack.peek().get(index).getList();
+		        	indexStack.push(index);
+		        	index = 0;
+		        	stack.push(list);
+		        }
+		        
+		        
+		        int next = stack.peek().get(index).getInteger();
+		    	index++;
+		    	while(!stack.isEmpty() && index >= stack.peek().size()) {
+		    		index = indexStack.pop();
+		    		stack.pop();
+		    		index++;
+		    	}
+		    	return next;
+		    }
+
+		    @Override
+		    public boolean hasNext() {
+		    	while(!stack.isEmpty()  && !stack.peek().get(index).isInteger()) {
+		        	List<NestedInteger> list = stack.peek().get(index).getList();
+		        	if(list.size() == 0) {
+		        		index++;
+		        		while( !stack.isEmpty() && index >= stack.peek().size()) {
+		        			stack.pop();
+		        			index = indexStack.pop();
+		        			index++;
+		        		}
+		        	}
+		        	else {
+		        		indexStack.push(index);
+			        	index = 0;
+			        	stack.push(list);
+		        	}
+		        	
+		        }
+		    	
+		    	return !stack.isEmpty();
+		    }
+	
+	
+	 }
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 	public static void main(String[] args) {
 		Design cache = new Design();
