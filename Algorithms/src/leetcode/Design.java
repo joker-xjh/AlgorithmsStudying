@@ -1,12 +1,16 @@
 package leetcode;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.Stack;
 import java.util.TreeMap;
@@ -456,7 +460,139 @@ public class Design {
 	
 	 }
 	
-	
+	 class Twitter {
+		 private long timestamp;
+		 class Tweet {
+			 long timestamp;
+			 int tweetId;
+			 int userId;
+			 public Tweet(long timestamp, int tweetId, int userId) {
+				this.timestamp = timestamp;
+				this.userId = userId;
+				this.tweetId = tweetId;
+			}
+		 }
+		 
+		 private final Sorter sorter = new Sorter();
+		 private final PriorityQueue<Tweet> priorityQueue = new PriorityQueue<>(sorter);
+		 
+	     private final Map<Integer, Integer> indexs = new HashMap<>();
+
+		 
+		 class Sorter implements Comparator<Tweet> {
+
+			@Override
+			public int compare(Tweet o1, Tweet o2) {
+				if(o1.timestamp > o2.timestamp)
+					return -1;
+				else if(o1.timestamp < o2.timestamp)
+					return 1;
+				return 0;
+			}
+			 
+		 }
+		 
+		 
+		 private Map<Integer, LinkedList<Tweet>> users;
+		 private Map<Integer, Set<Integer>> follows;
+		 
+	    /** Initialize your data structure here. */
+	    public Twitter() {
+	        timestamp = 0;
+	        users = new HashMap<>();
+	        follows = new HashMap<>();
+	    }
+	    
+	    /** Compose a new tweet. */
+	    public void postTweet(int userId, int tweetId) {
+	        LinkedList<Tweet> list = users.get(userId);
+	        if(list == null) {
+	        	list = new LinkedList<>();
+	        	users.put(userId, list);
+	        	follows.put(userId, new HashSet<>());
+	        	follows.get(userId).add(userId);
+	        }
+	        Tweet tweet = new Tweet(timestamp++, tweetId, userId);
+	        list.addFirst(tweet);
+	    }
+	    
+	    /** Retrieve the 10 most recent tweet ids in the user's news feed. Each item in the news feed must be posted by users who the user followed or by the user herself. Tweets must be ordered from most recent to least recent. */
+	    public List<Integer> getNewsFeed(int userId) {
+	        List<Integer> feeds = new ArrayList<>();
+	        if(!users.containsKey(userId))
+	        	return feeds;
+	        Set<Integer> set = follows.get(userId);
+	    	int size = set.size();
+	    	for(int id : set) {
+	    		LinkedList<Tweet> tweets = users.get(id);
+	    		if(tweets.size() > 0) {
+		    		priorityQueue.offer(tweets.getFirst());
+	    		}
+	    		else {
+	    			size--;
+	    		}
+	    	}
+	    	while(!priorityQueue.isEmpty() && size > 0 && feeds.size() < 10) {
+	    		Tweet tweet = priorityQueue.poll();
+	    		feeds.add(tweet.tweetId);
+	    		int uId = tweet.userId;
+	    		int index = indexs.getOrDefault(uId, 0);
+	    		index++;
+	    		if(index >= users.get(uId).size())
+	    			size--;
+	    		else {
+	    			indexs.put(uId, index);
+	    			priorityQueue.offer(users.get(uId).get(index));
+	    		}
+	    			
+	    	}
+	        priorityQueue.clear();
+	        indexs.clear();
+	    	return feeds;
+	    }
+	    
+	    /** Follower follows a followee. If the operation is invalid, it should be a no-op. */
+	    public void follow(int followerId, int followeeId) {
+	    	if(followerId == followeeId)
+	    		return;
+	    	LinkedList<Tweet> list = users.get(followerId);
+	        if(list == null) {
+	        	list = new LinkedList<>();
+	        	users.put(followerId, list);
+	        	follows.put(followerId, new HashSet<>());
+	        	follows.get(followerId).add(followerId);
+	        }
+	        list = users.get(followeeId);
+	        if(list == null) {
+	        	list = new LinkedList<>();
+	        	users.put(followeeId, list);
+	        	follows.put(followeeId, new HashSet<>());
+	        	follows.get(followeeId).add(followeeId);
+	        }
+	        follows.get(followerId).add(followeeId);
+	    }
+	    
+	    /** Follower unfollows a followee. If the operation is invalid, it should be a no-op. */
+	    public void unfollow(int followerId, int followeeId) {
+	    	if(followerId == followeeId)
+	    		return;
+	    	LinkedList<Tweet> list = users.get(followerId);
+	        if(list == null) {
+	        	list = new LinkedList<>();
+	        	users.put(followerId, list);
+	        	follows.put(followerId, new HashSet<>());
+	        	follows.get(followerId).add(followerId);
+	        }
+	        list = users.get(followeeId);
+	        if(list == null) {
+	        	list = new LinkedList<>();
+	        	users.put(followeeId, list);
+	        	follows.put(followeeId, new HashSet<>());
+	        	follows.get(followeeId).add(followeeId);
+	        }
+	    	follows.get(followerId).remove(followeeId);
+	    }
+	}
 	
 	
 	
