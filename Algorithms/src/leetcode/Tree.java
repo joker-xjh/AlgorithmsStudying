@@ -520,14 +520,58 @@ public class Tree {
 	   return leaves;
    }
    
+    static class UndirectedGraphNode {
+	        int label;
+	        List<UndirectedGraphNode> neighbors;
+	        UndirectedGraphNode(int x) { label = x; neighbors = new ArrayList<UndirectedGraphNode>(); }
+	        @Override
+	        public String toString() {
+	        	return "label:"+label +" neighbors:"+neighbors;
+	        }
+	}
    
-   
+    
+    public UndirectedGraphNode cloneGraph(UndirectedGraphNode node) {
+        if(node == null)
+        	return null;
+    	Set<Integer> visited = new HashSet<>();
+    	Map<Integer, UndirectedGraphNode> map = new HashMap<>();
+    	UndirectedGraphNode graph = cloneGraphHelp(node, visited, map);
+    	return graph;
+    }
+    
+    private UndirectedGraphNode cloneGraphHelp(UndirectedGraphNode node, Set<Integer> visited, Map<Integer, UndirectedGraphNode> map) {
+    	if(map.containsKey(node.label))
+    		return map.get(node.label);
+    	UndirectedGraphNode copy = new UndirectedGraphNode(node.label);
+    	map.put(node.label, copy);
+    	visited.add(node.label);
+    	for(UndirectedGraphNode adj : node.neighbors) {
+    		if(adj.label == copy.label) {
+    			copy.neighbors.add(copy);
+    			continue;
+    		}
+    		if(visited.contains(adj.label))
+    			continue;
+    		visited.add(adj.label);
+    		UndirectedGraphNode temp = cloneGraphHelp(adj, visited, map);
+    		visited.remove(adj.label);
+    		copy.neighbors.add(temp);
+    	}
+    	visited.remove(node.label);
+    	return copy;
+    }
+    
    
     
     
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		Tree test = new Tree();
+		UndirectedGraphNode node = new UndirectedGraphNode(0);
+		node.neighbors.add(new UndirectedGraphNode(0));
+		node.neighbors.add(new UndirectedGraphNode(0));
+		test.cloneGraph(node);
 
 	}
 
