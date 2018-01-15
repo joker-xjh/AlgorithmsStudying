@@ -107,6 +107,40 @@ public class math {
         }
         return step;
     }
+    
+    private boolean[] primeTable = {false, false, true, true, false, true, false, true, false,
+    		                        false, false, true, false, true, false, false, false, true, 
+    		                        false, true, false, false, false, true, false, false, false,
+    		                        false, false, true, false, true};
+    
+    public int countPrimeSetBits(int L, int R) {
+        int count = 0;
+        for(int i=L; i<=R; i++) {
+        	int bits = Integer.bitCount(i);
+        	if(primeTable[bits])
+        		count++;
+        }
+        return count;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 	
 	
 
