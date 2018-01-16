@@ -1431,6 +1431,89 @@ public class string {
         return times;
     }
     
+    
+    public List<Integer> partitionLabels(String S) {
+        List<Integer> list = new ArrayList<>();
+        if(S == null || S.length() == 0)
+        	return list;
+        char[] array = S.toCharArray();
+        partitionLabelsHelp(array, 0, array.length-1, list);
+        return list;
+    }
+    
+    private void partitionLabelsHelp(char[] str, int begin, int end, List<Integer> list) {
+    	int[] fre = new int[26];
+    	int[] index_left = new int[26];
+    	int[] index_right = new int[26];
+    	Arrays.fill(index_left, -1);
+    	for(int i=begin; i<=end; i++) {
+    		char c = str[i];
+    		fre[c - 'a']++;
+    		index_right[c - 'a'] = i;
+    		if(index_left[c - 'a'] == -1) {
+    			index_left[c - 'a'] = i;
+    		}
+    	}
+    	int max = -1;
+    	char max_c = '\0';
+    	for(int i=0; i<26; i++) {
+    		int num = fre[i];
+    		if(num > max) {
+    			max = num;
+    			max_c = (char) ('a' + i);
+    		}
+    	}
+    	int left = index_left[max_c - 'a'];
+    	int right = index_right[max_c - 'a'];
+    	int left_copy = left, right_copy = right;
+    	for(int i=left_copy; i<=right_copy; i++) {
+    		left = Math.min(left, index_left[str[i]-'a']);
+    		right = Math.max(right, index_right[str[i] - 'a']);
+    	}
+    	
+    	if(left == begin && right == end) {
+    		list.add(right - left + 1);
+    	}
+    	else if(left == begin) {
+    		list.add(right - left + 1);
+    		partitionLabelsHelp(str, right+1, end, list);
+    	}
+    	else if(right == end) {
+    		partitionLabelsHelp(str, begin, left-1, list);
+    		list.add(right - left + 1);
+    	}
+    	else {
+    		partitionLabelsHelp(str, begin, left-1, list);
+    		list.add(right - left + 1);
+    		partitionLabelsHelp(str, right+1, end, list);
+    	}
+    }
+    
+    
+    public List<Integer> partitionLabels2(String S) {
+        List<Integer> list = new ArrayList<>();
+        if(S == null || S.length() == 0)
+        	return list;
+        char[] array = S.toCharArray();
+        int[] map = new int[26];
+        for(int i=0; i<array.length; i++)
+        	map[array[i] - 'a'] = i;
+        int start = 0, end = 0;
+        for(int i=0; i<array.length; i++) {
+        	end = Math.max(end, map[array[i] - 'a']);
+        	if(end == i) {
+        		list.add(end - start + 1);
+        		start = end + 1;
+        	}
+        }
+        return list;
+    }
+    
+    
+    
+    
+    
+    
    
     
     public static void main(String[] args) {
