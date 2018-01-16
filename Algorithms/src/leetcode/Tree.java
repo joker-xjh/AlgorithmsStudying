@@ -562,16 +562,128 @@ public class Tree {
     	return copy;
     }
     
+    
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+    	if(numCourses == 0 || prerequisites == null || prerequisites.length == 0)
+    		return true;
+        int[][] matrix = new int[numCourses][numCourses];
+        int[] indegree = new int[numCourses];
+        int count = 0;
+        Queue<Integer> queue = new LinkedList<>();
+        
+        for(int i=0; i<prerequisites.length; i++) {
+        	int cur = prerequisites[i][0];
+        	int pre = prerequisites[i][1];
+        	matrix[pre][cur] = 1;
+        	indegree[cur]++;
+        }
+    	for(int i=0; i<numCourses; i++)
+    		if(indegree[i] == 0)
+    			queue.offer(i);
+    	while(!queue.isEmpty()) {
+    		int course = queue.poll();
+    		count++;
+    		for(int i=0; i<numCourses; i++) {
+    			if(matrix[course][i] > 0) {
+    				if(--indegree[i] == 0){
+    					queue.offer(i);
+    				}
+    			}
+    		}
+    	}
+        
+    	return count == numCourses;
+    }
+    
+    public boolean findCycle(int numCourses, int[][] prerequisites) {
+    	if(numCourses == 0 || prerequisites == null || prerequisites.length == 0)
+    		return false;
+    	Map<Integer, List<Integer>> graph = new HashMap<>();
+    	Set<Integer> visited = new HashSet<>();
+    	
+    	for(int i=0; i<numCourses; i++)
+    		graph.put(i, new ArrayList<>());
+    	for(int i=0; i<prerequisites.length; i++) {
+    		int pre = prerequisites[i][1];
+    		int cur = prerequisites[i][0];
+    		graph.get(pre).add(cur);
+    	}
+    	for(int i=0; i<numCourses; i++) {
+    		visited.add(i);
+    		if(findCycle(graph, i, visited))
+    			return true;
+    		visited.remove(i);
+    	}
+    	return false;
+    }
+    
+    private boolean findCycle(Map<Integer, List<Integer>> graph, int cur, Set<Integer> visited) {
+    	List<Integer> adj = graph.get(cur);
+    	for(int point : adj) {
+    		if(visited.contains(point))
+    			return true;
+    		visited.add(point);
+    		if(findCycle(graph, point, visited))
+    			return true;
+    		visited.remove(point);
+    	}
+    	return false;
+    }
+    
+    
+    
+    
+    public int[] findOrder(int numCourses, int[][] prerequisites) {
+        if(numCourses == 0 || prerequisites == null )
+        	return new int[] {};
+        if(prerequisites.length == 0) {
+        	int[] order = new int[numCourses];
+        	for(int i=0; i<numCourses; i++)
+        		order[i] = i;
+        	return order;
+        }
+        int[] order = new int[numCourses];
+        boolean[][] matrix = new boolean[numCourses][numCourses];
+        int[] indegree = new int[numCourses];
+        Queue<Integer> queue = new LinkedList<>();
+        int index = 0;
+        
+        for(int i=0; i<prerequisites.length; i++) {
+        	int pre = prerequisites[i][1];
+        	int cur = prerequisites[i][0];
+        	if(matrix[pre][cur])
+        		continue;
+        	matrix[pre][cur] = true;
+        	indegree[cur]++;
+        }
+        
+        for(int i=0; i<numCourses; i++)
+        	if(indegree[i] == 0)
+        		queue.offer(i);
+        
+        while(!queue.isEmpty()) {
+        	int course = queue.poll();
+        	order[index++] = course;
+        	for(int i=0; i<numCourses; i++) {
+        		if(matrix[course][i]) {
+        			if(--indegree[i] == 0) {
+        				queue.offer(i);
+        			}
+        		}
+        	}
+        }
+        if(index != numCourses)
+        	return new int[] {};
+        return order;
+    }
+    
+    
    
     
     
 
 	public static void main(String[] args) {
-		Tree test = new Tree();
-		UndirectedGraphNode node = new UndirectedGraphNode(0);
-		node.neighbors.add(new UndirectedGraphNode(0));
-		node.neighbors.add(new UndirectedGraphNode(0));
-		test.cloneGraph(node);
+		
 
 	}
 
