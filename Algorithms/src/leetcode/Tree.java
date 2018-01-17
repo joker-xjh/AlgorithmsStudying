@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
+import java.util.TreeSet;
 
 public class Tree {
 	
@@ -675,6 +676,53 @@ public class Tree {
         if(index != numCourses)
         	return new int[] {};
         return order;
+    }
+    
+    
+    public List<String> findItinerary(String[][] tickets) {
+        List<String> itinerary = new ArrayList<>();
+        if(tickets == null || tickets.length == 0)
+        	return itinerary;
+        Map<String, TreeSet<String>> graph = new HashMap<>();
+        Map<String, Map<String, Integer>> visited = new HashMap<>();
+        for(String[] ticket : tickets) {
+        	String from = ticket[0] , to = ticket[1];
+        	if(!graph.containsKey(from)) {
+        		graph.put(from, new TreeSet<>());
+        		visited.put(from, new HashMap<>());
+        	}
+        	graph.get(from).add(to);
+        	visited.get(from).put(to, visited.get(from).getOrDefault(to, 0)+1);
+        }
+        int end = tickets.length;
+        itinerary.add("JFK");
+        findItinerary(graph, visited, "JFK", itinerary, end);
+    	return itinerary;
+    }
+    
+    private boolean findItinerary(Map<String, TreeSet<String>> graph, Map<String, Map<String, Integer>> visited, String from, List<String> itinerary, int end) {
+    	TreeSet<String> adjs = graph.get(from);
+    	if(adjs == null) {
+    		if(end == 0)
+    			return true;
+    		return false;
+    	}
+    	for(String adj : adjs) {
+    		Integer counter = visited.get(from).get(adj);
+    		if(counter == 0)
+    			continue;
+    		visited.get(from).put(adj, counter-1);
+    		itinerary.add(adj);
+        	end--;
+    		if(findItinerary(graph, visited, adj, itinerary, end))
+    			return true;
+    		visited.get(from).put(adj, counter);
+    		itinerary.remove(itinerary.size()-1);
+    		end++;
+    	}
+    	if(end == 0)
+			return true;
+    	return false;
     }
     
     
