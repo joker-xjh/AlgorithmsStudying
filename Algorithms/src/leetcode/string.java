@@ -1,6 +1,7 @@
 package leetcode;
 
 import java.util.ArrayList;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -1590,8 +1591,118 @@ public class string {
     	 
     	 return cur;
      }
-    
-   
+     
+     
+     class LadderNode {
+    	 String word;
+    	 LadderNode[] next = new LadderNode[26];
+     }
+     
+     
+     private LadderNode buildLadderNode(List<String> wordList) {
+    	 LadderNode root = new LadderNode();
+    	 for(String word : wordList) {
+    		 LadderNode node = root;
+    		 for(char c : word.toCharArray()) {
+    			 int i = c - 'a';
+    			 if(node.next[i] == null)
+    				 node.next[i] = new LadderNode();
+    			 node = node.next[i];
+    		 }
+    		 node.word = word;
+    	 }
+    	 return root;
+     }
+     
+     private String getWord(char[] word, LadderNode root) {
+    	 for(int i=0; i<word.length; i++) {
+    		 if(root == null)
+    			 return null;
+    		 char c = word[i];
+    		 root = root.next[c - 'a'];
+    	 }
+    	 if(root == null)
+    		 return null;
+    	 return root.word;
+     }
+     
+     
+     
+     public List<List<String>> findLadders(String beginWord, String endWord, List<String> wordList) {
+    	 List<List<String>> ladders = new ArrayList<>();
+    	 if(wordList == null || wordList.isEmpty())
+    		 return ladders;
+    	 wordList.add(beginWord);
+    	 LadderNode root = buildLadderNode(wordList);
+    	 char[] begin = beginWord.toCharArray();
+    	 char[] end = endWord.toCharArray();
+    	 if(getWord(end, root) == null)
+    		 return ladders;
+    	 Set<String> used = new HashSet<>();
+    	 used.add(beginWord);
+    	 Queue<char[]> queue = new LinkedList<>();
+    	 Map<String, Set<String>> graph = new HashMap<>();
+    	 queue.add(begin);
+    	 int length = 0;
+    	 boolean stop = false;
+    	 while(!queue.isEmpty() && !stop) {
+    		 int size = queue.size();
+    		 Set<String> cur = new HashSet<>();
+    		 length++;
+    		 for(int i=0; i<size; i++) {
+    			 char[] word = queue.poll();
+    			 String oldWord = getWord(word, root);
+    			 if(!graph.containsKey(oldWord))
+    				 graph.put(oldWord, new HashSet<>());
+    			 for(int j=0; j<word.length; j++) {
+    				 char c = word[j];
+    				 for(char ch = 'a'; ch <='z'; ch++) {
+    					 word[j] = ch;
+    					 String newWord = getWord(word, root);
+    					 if(oldWord.equals("sane")) {
+    						 System.out.println(oldWord+" -> "+newWord);
+    					 }
+    					 if(newWord == null || used.contains(newWord)) {
+    						 word[j] = c;
+    						 continue;
+    					 }
+    					 queue.add(word.clone());
+    					 cur.add(newWord);
+    					 graph.get(oldWord).add(newWord);
+    					 if(newWord.equals(endWord))
+    						 stop = true;
+    					 word[j] = c;
+    				 }
+    			 }
+    		 }
+    		 if(!stop)
+    			 used.addAll(cur);
+    	 }
+    	 List<String> buffer = new ArrayList<>();
+    	 buffer.add(beginWord);
+    	 findLaddersHelp(graph, beginWord, endWord, buffer, ladders, length);
+    	 return ladders;
+     }
+     
+     private void findLaddersHelp(Map<String, Set<String>> graph, String word, String target, List<String> list, List<List<String>> ladders, int length) {
+    	 if(length == 0) {
+    		 if(!word.equals(target))
+    			 return;
+    		 ladders.add(new ArrayList<>(list));
+    	 }
+    	 else {
+    		 Set<String> subs = graph.get(word);
+    		 if(subs == null)
+    			 return;
+    		 for(String sub : subs) {
+    			 list.add(sub);
+    			 findLaddersHelp(graph, sub, target, list, ladders, length-1);
+    			 list.remove(list.size() - 1);
+    		 }
+    	 }
+    	 
+     }
+     
     
     public static void main(String[] args) {
 		
