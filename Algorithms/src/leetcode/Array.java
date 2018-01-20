@@ -1513,6 +1513,26 @@ public class Array {
          return h;
      }
      
+     public int hIndex2(int[] citations) {
+    	 int[] bucket = new int[citations.length+1];
+    	 for(int citation : citations) {
+    		 if(citation >= citations.length) {
+    			 bucket[citations.length]++;
+    		 }
+    		 else {
+    			 bucket[citation]++;
+    		 }
+    	 }
+    	 int count = 0;
+    	 for(int i=citations.length; i>=0; i--) {
+    		 count += bucket[i];
+    		 if(count >= i)
+    			 return count;
+    	 }
+    	 
+    	 return 0;
+     }
+     
      
 
 
