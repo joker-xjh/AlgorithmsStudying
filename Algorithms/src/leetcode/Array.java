@@ -1534,6 +1534,60 @@ public class Array {
      }
      
      
+     public List<List<String>> solveNQueens(int n) {
+         List<List<String>> solve = new ArrayList<>();
+    	 if(n <= 0)
+    		 return solve;
+    	 char[][] chessboard = new char[n][n];
+    	 for(int i=0; i<n; i++)
+    		 for(int j=0; j<n; j++)
+    			 chessboard[i][j] = '.';
+    	 int[][] used = new int[n][n];
+    	 solveNQueensBacktrack(solve, chessboard, 0, used);
+    	 return solve;
+     }
+     
+     private void solveNQueensBacktrack(List<List<String>> solve, char[][] chessboard, int level, int[][] used) {
+    	 if(level == chessboard.length) {
+    		 List<String> buf = new ArrayList<>();
+    		 for(char[] array:chessboard)
+    			 buf.add(new String(array));
+    		 solve.add(buf);
+    	 }
+    	 else {
+    		 for(int i=0; i<chessboard.length; i++) {
+    			 if(used[level][i] > 0)
+    				 continue;
+    			 chessboard[level][i] = 'Q';
+    			 NQueensUsed(level, i, used, 1);
+    			 solveNQueensBacktrack(solve, chessboard, level+1, used);
+    			 chessboard[level][i] = '.';
+    			 NQueensUsed(level, i, used, -1);
+    		 }
+    	 }
+     }
+     
+     private void NQueensUsed(int x, int y, int[][] used, int num) {
+    	 int n = used.length;
+    	 for(int i=0; i<n; i++) {
+    		 used[x][i] = used[x][i] + num;
+    		 used[i][y] = used[i][y] + num;
+    		 if(x-i >= 0 && y - i >= 0)
+    			 used[x-i][y-i] = used[x-i][y-i] + num;
+    		 if(x+i < n && y+i < n)
+    			 used[x+i][y+i] = used[x+i][y+i] + num;
+    		 if(x-i >= 0 && y+i < n)
+    			 used[x-i][y+i] = used[x-i][y+i] + num;
+    		 if(x+i < n && y-i >= 0)
+    			 used[x+i][y-i] = used[x+i][y-i] + num;
+    	 }
+     }
+     
+     
+     
+     
+     
+     
 
 
 	public static void main(String[] args) {
