@@ -1703,12 +1703,259 @@ public class string {
     	 
      }
      
+     public int minStickers(String[] stickers, String target) {
+         int N = stickers.length;
+    	 int cutdown = target.length();
+    	 int times = 0;
+    	 char[] targetArray = target.toCharArray();
+    	 StickersBuffer = stickers;
+    	 
+    	 int[][] map = new int[N][26];
+    	 for(int i=0; i<N; i++) {
+    		 int[] array = new int[26];
+    		 String sticker = stickers[i];
+    		 for(char c : sticker.toCharArray())
+    			 array[c-'a']++;
+    		 map[i] = array;
+    	 }
+    	 int[] target_array = new int[26];
+    	 for(char c : targetArray)
+    		 target_array[c-'a']++;
+    	 while(cutdown > 0) {
+    		 times++;
+    		 int counter = 0;
+    		 int index = -1;
+    		 for(int i=0; i<N; i++) {
+    			 int[] array = map[i];
+    			 int temp = 0;
+    			 for(int j=0; j<26; j++) {
+    				 int min = Math.min(target_array[j], array[j]);
+    				// System.out.println("target_array[c-'a']:"+target_array[j]+" array[c-'a']:"+array[j]+"  min:"+min);
+    				 temp += min;
+    			 }
+    			 System.out.println("temp : "+temp +" "+stickers[i]);
+    			 if(temp > counter) {
+    				 counter = temp;
+    				 index = i;
+    			 }
+    		 }
+    		 
+    		 if(index == -1)
+    			 return -1;
+    		 System.out.println(stickers[index]+" : "+counter);
+    		 cutdown -= counter;
+    		 int[] chosen = map[index];
+    		 for(int i=0; i<26; i++) {
+    			 target_array[i] -= Math.min(target_array[i], chosen[i]);
+    		 }
+    		 System.out.println(Arrays.toString(target_array));
+    	 }
+    	 
+    	 
+    	 return times;
+     }
+     
+     private int minStickers = 100;
+     private boolean stickerimpossible = false;
+     private String[] StickersBuffer;
+     
+     private void minStickersBT(int cutdown, int[][] map, int[] target_array, int times) {
+    	 StringBuilder sb = new StringBuilder();
+    	 for(int i=0; i<26; i++) {
+    		 for(int j=0; j<target_array[i];j++) {
+    			 sb.append((char)('a'+i));
+    		 }
+    	 }
+    	 System.out.println("target:"+sb);
+    	 
+    	 if(stickerimpossible)
+    		 return;
+    	 if(cutdown == 0) {
+    		 minStickers = Math.min(times, minStickers);
+    		 System.out.println("min:"+minStickers);
+    		 return;
+    	 }
+    	 times++;
+    	 int counter = 0;
+		// int index = -1;
+		 int[] fre = new int[map.length];
+		 for(int i=0; i<map.length; i++) {
+			 int[] array = map[i];
+			 int temp = 0;
+			 for(int j=0; j<26; j++) {
+				 int min = Math.min(target_array[j], array[j]);
+				 temp += min;
+			 }
+			 fre[i] = temp;
+			// System.out.println(StickersBuffer[i]+":"+fre[i]);
+		 }
+		 
+		 if(counter == 0) {
+			 stickerimpossible = true;
+			 return;
+		 }
+		 for(int x=0; x<map.length; x++) {
+			// if(fre[x] == counter) {
+				 System.out.println("target: "+sb +   "   选:"+StickersBuffer[x]);
+				 int[] clone = target_array.clone();
+				 int[] chosen = map[x];
+	    		 for(int i=0; i<26; i++) {
+	    			 clone[i] -= Math.min(target_array[i], chosen[i]);
+	    		 }
+	    		 minStickersBT(cutdown - counter, map, clone, times);
+	    		 
+			// }
+		 }
+		 
+		 
+     }
+     
+     public int minStickers3(String[] stickers, String target) {
+    	 int N = stickers.length;
+    	 int cutdown = target.length();
+    	 char[] targetArray = target.toCharArray();
+    	 Set<Character> set = new HashSet<>();
+    	 StickersBuffer = stickers;
+    	 
+    	 int[][] map = new int[N][26];
+    	 for(int i=0; i<N; i++) {
+    		 int[] array = new int[26];
+    		 String sticker = stickers[i];
+    		 for(char c : sticker.toCharArray()) {
+    			 array[c-'a']++;
+    			 set.add(c);
+    		 }
+    		 map[i] = array;
+    	 }
+    	 int[] target_array = new int[26];
+    	 for(char c : targetArray) {
+    		 target_array[c-'a']++;
+    		 if(!set.contains(c))
+    			 return -1;
+    	 }
+    	 StickerMemoization.put(Arrays.toString(new int[26]), 0);
+    	 int answer = minStickersMemoization(cutdown, map, target_array);
+    	 //System.out.println(StickerMemoization);
+    	 return answer;
+     }
+     private Map<String, Integer> StickerMemoization = new HashMap<>();
+     
+     private int minStickersMemoization(int cutdown, int[][] map, int[] target_array) {
+    	 StringBuilder sb = new StringBuilder();
+    	 for(int i=0; i<26; i++) {
+    		 for(int j=0; j<target_array[i];j++) {
+    			 sb.append((char)('a'+i));
+    		 }
+    	 }
+    	 System.out.println("***********************");  
+    	 String memory = Arrays.toString(target_array);
+    	 if(StickerMemoization.containsKey(memory))
+    		 return StickerMemoization.get(memory);
+    	 
+    	 int[] fre = new int[map.length];
+		 for(int i=0; i<map.length; i++) {
+			 int[] array = map[i];
+			 int temp = 0;
+			 for(int j=0; j<26; j++) {
+				 temp += Math.min(target_array[j], array[j]);
+			 }
+			 fre[i] = temp;
+			 System.out.println(StickersBuffer[i] + ":"+temp);
+		 }
+    	 
+    	 int min = Integer.MAX_VALUE;
+		 for(int x=0; x<map.length; x++) {
+			 if(fre[x] == 0)
+				 continue;
+			 int[] clone = target_array.clone();
+			 int[] chosen = map[x];
+    		 for(int i=0; i<26; i++) {
+    			 clone[i] -= Math.min(target_array[i], chosen[i]);
+    		 }
+    		 min = Math.min(min, 1+minStickersMemoization(cutdown - fre[x], map, clone));
+		 }
+    	 StickerMemoization.put(memory, min);
+    	 return min;
+     }
+     
+     
+     
+     public int minStickers2(String[] stickers, String target) {
+    	 int N = stickers.length;
+    	 int cutdown = target.length();
+    	 char[] targetArray = target.toCharArray();
+    	 StickersBuffer = stickers;
+    	 
+    	 int[][] map = new int[N][26];
+    	 for(int i=0; i<N; i++) {
+    		 int[] array = new int[26];
+    		 String sticker = stickers[i];
+    		 for(char c : sticker.toCharArray())
+    			 array[c-'a']++;
+    		 map[i] = array;
+    	 }
+    	 int[] target_array = new int[26];
+    	 for(char c : targetArray)
+    		 target_array[c-'a']++;
+    	 minStickersBT(cutdown, map, target_array, 0);
+    	 if(stickerimpossible)
+    		 return -1;
+    	 return minStickers;
+     }
+     
+     //final version
+     public int minStickers4(String[] stickers, String target) {
+    	 int N = stickers.length;
+    	 int[][] map = new int[N][26];
+    	 Set<Character> set = new HashSet<>();
+    	 for(int i=0; i<N; i++) {
+    		 for(char c : stickers[i].toCharArray()) {
+    			 map[i][c-'a']++;
+    			 set.add(c);
+    		 }
+    	 }
+    	 for(char c : target.toCharArray())
+    		 if(!set.contains(c))
+    			 return -1;
+    	 Map<String, Integer> memoization = new HashMap<>();
+    	 memoization.put("", 0);
+    	 return minStickersMemoization(memoization, target, map);
+     }
+     
+     private int minStickersMemoization(Map<String, Integer> memoization, String target, int[][] map) {
+    	 if(memoization.containsKey(target))
+    		 return memoization.get(target);
+    	 int answer = Integer.MAX_VALUE;
+    	 int[] array = new int[26];
+    	 for(char c : target.toCharArray())
+    		 array[c - 'a']++;
+    	 int n = map.length;
+    	 for(int i=0; i<n; i++) {
+    		 StringBuilder sb = new StringBuilder();
+    		 for(int j=0; j<26; j++) {
+    			if(array[j] > 0) {
+    				for(int k=0; k<Math.max(0, array[j]-map[i][j]); k++)
+       				 sb.append((char)(j+'a'));
+    			}
+    		 }
+    		 String temp = sb.toString();
+    		 if(temp.equals(target))
+    			 continue;
+    		 answer = Math.min(answer, minStickersMemoization(memoization, temp, map) + 1);
+    	 }
+    	 memoization.put(target, answer);
+    	 return answer;
+     }
+     
+     
+     
+     
     
     public static void main(String[] args) {
 		
 	}
     
-    
+
     
     
     
