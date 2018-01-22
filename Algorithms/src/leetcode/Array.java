@@ -1584,7 +1584,27 @@ public class Array {
      }
      
      
-     
+     public boolean isToeplitzMatrix(int[][] matrix) {
+         int M = matrix.length;
+         int N = matrix[0].length;
+         for(int i=0; i<M; i++) {
+        	 int num = matrix[i][0];
+        	 for(int j=1; i+j < M && j<N; j++) {
+        		 if(matrix[i+j][j] != num)
+        			 return false;
+        	 }
+         }
+         
+         for(int i=1; i<N; i++) {
+        	 int num = matrix[0][i];
+        	 for(int j=1; i< M && i+j<N; j++) {
+        		 if(matrix[i][i+j] != num)
+        			 return false;
+        	 }
+         }
+    	 
+    	 return true;
+     }
      
      
      
