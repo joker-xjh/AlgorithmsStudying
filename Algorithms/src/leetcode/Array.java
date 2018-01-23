@@ -1606,6 +1606,68 @@ public class Array {
     	 return true;
      }
      
+     public List<int[]> pacificAtlantic(int[][] matrix) {
+         List<int[]> answers = new ArrayList<>();
+         if(matrix == null || matrix.length == 0)
+        	 return answers;
+         int m = matrix.length, n = matrix[0].length;
+         boolean[][] Pacific = new boolean[m][n];
+         boolean[][] Atlantic = new boolean[m][n];
+         
+         for(int i=0; i<m; i++) {
+        	 if(Pacific[i][0])
+        		 continue;
+        	 Pacific[i][0] = true;
+        	 pacificAtlanticDFS(Pacific, i, 0, matrix);
+         }
+         
+         for(int i=0; i<n; i++) {
+        	 if(Pacific[0][i])
+        		 continue;
+        	 Pacific[0][i] = true;
+        	 pacificAtlanticDFS(Pacific, 0, i, matrix);
+         }
+         
+         for(int i=0; i<m; i++) {
+        	 if(Atlantic[i][n-1])
+        		 continue;
+        	 Atlantic[i][n-1] = true;
+        	 pacificAtlanticDFS(Atlantic, i, n-1, matrix);
+         }
+         
+         for(int i=0; i<n; i++) {
+        	 if(Atlantic[m-1][i])
+        		 continue;
+        	 Atlantic[m-1][i] = true;
+        	 pacificAtlanticDFS(Atlantic, m-1, i, matrix);
+         }
+         
+         for(int i=0; i<m; i++)
+        	 for(int j=0; j<n; j++)
+        		 if(Pacific[i][j] && Atlantic[i][j])
+        			 answers.add(new int[] {i, j});
+         
+         return answers;
+     }
+     
+     private int[][] directions = {{-1,0}, {1,0}, {0,-1}, {0,1}};
+     
+     private void pacificAtlanticDFS(boolean[][] ocean, int x, int y, int[][] matrix) {
+    	 int m = matrix.length, n = matrix[0].length;
+    	 int height = matrix[x][y];
+    	 for(int[] direction : directions) {
+    		 int nextX = x + direction[0], nextY = y + direction[1];
+    		 if(nextX < 0 || nextX >= m || nextY < 0 || nextY >= n)
+    			 continue;
+    		 if(ocean[nextX][nextY])
+    			 continue;
+    		 if(height > matrix[nextX][nextY])
+    			 continue;
+    		 ocean[nextX][nextY] = true;
+    		 pacificAtlanticDFS(ocean, nextX, nextY, matrix);
+    	 }
+     }
+     
      
      
 
