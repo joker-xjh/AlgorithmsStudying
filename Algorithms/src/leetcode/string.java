@@ -1947,6 +1947,90 @@ public class string {
     	 return answer;
      }
      
+     class reorganizeStringSorter implements Comparator<Character>{
+    	 
+    	 int[] map;
+    	 
+    	 public reorganizeStringSorter(int[] map) {
+			this.map = map;
+		}
+
+		@Override
+		public int compare(Character o1, Character o2) {
+			return map[o2 - 'a'] - map[o1 - 'a'];
+		}
+    	 
+     }
+     
+     public String reorganizeString(String S) {
+         String EMPTY = "";
+    	 StringBuilder sb = new StringBuilder();
+         int[] map = new int[26];
+         
+         for(char c : S.toCharArray()) {
+        	 map[c - 'a']++;
+         }
+         reorganizeStringSorter sorter = new reorganizeStringSorter(map);
+         PriorityQueue<Character> priorityQueue = new PriorityQueue<>(sorter);
+         for(int i=0; i<26; i++) {
+        	 if(map[i] == 0)
+        		 continue;
+        	 char c = (char) ('a' + i);
+        	 priorityQueue.offer(c);
+         }
+         if(priorityQueue.size() == 1)
+        	 return EMPTY;
+         char A = priorityQueue.poll();
+         int ACounter = map[A - 'a'];
+         while(!priorityQueue.isEmpty()) {
+        	 char B = priorityQueue.poll();
+        	 int BCounter = map[B - 'a'];
+        	 if(ACounter < BCounter) {
+        		 int temp = ACounter;
+        		 ACounter = BCounter;
+        		 BCounter = temp;
+        		 
+        		 char c = A;
+        		 A = B;
+        		 B = c;
+        	 }
+        	 
+        	 if(priorityQueue.isEmpty()) {
+        		 int remainACounter = ACounter - BCounter;
+        		 if(remainACounter > 1) {
+        			 int size = sb.length();
+        			 if(remainACounter > size + 1)
+        				 return EMPTY;
+        			 StringBuilder buffer = new StringBuilder();
+        			 if(remainACounter > size) {
+        				 for(int j=0; j<size; j++)
+        					 buffer.append(A).append(sb.charAt(j));
+        				 buffer.append(A);
+        				 char c = A;
+                		 A = B;
+                		 B = c;
+        			 }
+        			 else {
+        				 for(int j=0; j<remainACounter; j++)
+        					 buffer.append(A).append(sb.charAt(j));
+        				 for(int j=remainACounter; j<size; j++)
+        					 buffer.append(sb.charAt(j));
+        			 }
+            		 sb = buffer;
+            		 ACounter -= remainACounter;
+        		 }
+        	 }
+        	 
+        	 
+        	 for(int j=0; j<BCounter; j++)
+        		 sb.append(A).append(B);
+        	 ACounter -= BCounter;
+         }
+         for(int i=0; i<ACounter; i++)
+        	 sb.append(A);
+    	 return sb.toString();
+     }
+     
      
      
      
