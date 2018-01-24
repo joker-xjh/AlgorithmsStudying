@@ -2032,11 +2032,177 @@ public class string {
      }
      
      
+     class Zuma {
+    	 int[] counter = new int[5];
+    	 int size;
+    	 public Zuma(String str) {
+			for(char c : str.toCharArray()) {
+				int i = index(c);
+				counter[i]++;
+			}
+			size = str.length();
+		}
+    	 
+    	public void change(char c, int num) {
+    		int i = index(c);
+    		counter[i] += num;
+    	}
+    	 
+    	 public int index(char c) {
+    		 switch (c) {
+			case 'R':
+				return 0;
+			case 'Y':
+				return 1;
+			case 'B':
+				return 2;
+			case 'G':
+				return 3;
+			case 'W':
+				return 4;
+			}
+    		 return -1;
+    	 }
+    	 
+    	 public int getCharCount(char c) {
+    		 int i = index(c);
+    		 return counter[i];
+    	 }
+    	 
+    	 public boolean isEmpty() {
+    		 return size == 0;
+    	 }
+    	 
+    	 @Override
+    	public String toString() {
+    		StringBuilder sb = new StringBuilder();
+    		for(int i=0; i<counter[0]; i++)
+    			sb.append('R');
+    		for(int i=0; i<counter[1]; i++)
+    			sb.append('Y');
+    		for(int i=0; i<counter[2]; i++)
+    			sb.append('B');
+    		for(int i=0; i<counter[3]; i++)
+    			sb.append('G');
+    		for(int i=0; i<counter[4]; i++)
+    			sb.append('W');
+    		return sb.toString();
+    	}
+     }
+     
+     
+     
+     char[] zumaChar = {'R','Y','B','G','W'};
+     public int findMinStep(String board, String hand) {
+         Map<String, Zuma> map = new HashMap<>();
+         map.put(board, new Zuma(hand));
+    	 Queue<String> queue = new LinkedList<>();
+    	 queue.add(board);
+    	 int step = 0;
+    	 while(!queue.isEmpty()) {
+    		 int size = queue.size();
+    		 step++;
+    		 for(int i=0; i<size; i++) {
+    			 String zummaStr = queue.poll();
+        		 Zuma node = map.get(zummaStr);
+        		 String handString = node.toString();
+        		 if(node.isEmpty())
+        			 continue;
+        		 if(!zumaPossibleContinue(zummaStr, handString, node))
+        			 continue;
+        		 for(char c : zumaChar) {
+        			 int count = node.getCharCount(c);
+        			 if(count == 0)
+        				 continue;
+        			 for(int j=0; j<=zummaStr.length(); j++) {
+        				 if(j < zummaStr.length() && zummaStr.charAt(j) != c)
+        					 continue;
+        				 String insertStr = zummaStr.substring(0, j) + c + zummaStr.substring(j);
+        				 String changeStr = removeZumaString(insertStr);
+        				 if(changeStr.length() == 0)
+        					 return step;
+        				 queue.add(changeStr);
+        				 node.change(c, -1);
+        				 map.put(changeStr, new Zuma(node.toString()));
+        				 node.change(c, 1);
+        			 }
+        		 }
+    		 }
+    	 }
+    	 
+    	 return -1;
+     }
+     
+     private boolean zumaPossibleContinue(String board, String hand, Zuma zuma) {
+    	 int[] counter = new int[5];
+    	 for(char c : board.toCharArray()) {
+    		 int i = zuma.index(c);
+    		 counter[i]++;
+    	 }
+    	 for(char c : hand.toCharArray()) {
+    		 int i = zuma.index(c);
+    		 if(counter[i] == 0)
+    			 continue;
+    		 counter[i]++;
+    	 }
+    	 for(int i=0; i<5; i++) {
+    		 if(counter[i] < 3 && counter[i] != 0)
+    			 return false;
+    	 }
+    	 return true;
+     }
+     
+     
+     private String removeZumaString(String str) {
+    	 String result = str;
+    	 boolean end = false;
+    	 while(!end) {
+    		 if(str.length() == 0)
+    			 return "";
+    		 boolean temp = true;
+    		 char target = str.charAt(0);
+    		 int count = 1;
+    		 int index = str.length() - 1;
+    		 for(int i=1; i<str.length(); i++) {
+    			 char c = str.charAt(i);
+    			 if(c == target)
+    				 count++;
+    			 else {
+    				 if(count >= 3) {
+    					 index = i-1;
+    					 break;
+    				 }
+    				 else {
+    					 count = 1;
+    					 target = c;
+    				 }
+    			 }
+    		 }
+    		 if(count >= 3) {
+    			 if(index == str.length() - 1) {
+    				 str = str.substring(0, index-count+1);
+    			 }
+    			 else {
+        			 str = str.substring(0, index-count+1) + str.substring(index+1); 
+    			 }
+				 temp = false;
+    		 }
+    		 end = temp;
+    		 result = str;
+    	 }
+    	 
+    	 return result;
+     }
+     
      
      
     
     public static void main(String[] args) {
-		
+    	string test = new string();
+    	String board = "GGYYBRGGRYBYG";
+    	String hand = "RYYBG";
+    	System.out.println(test.findMinStep(board, hand));
+    	
 	}
     
 
