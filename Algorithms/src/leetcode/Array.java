@@ -1670,6 +1670,33 @@ public class Array {
      
      
      
+     public int maxChunksToSorted(int[] arr) {
+         int chunks = 1;
+         int length = arr.length;
+         boolean[] used = new boolean[length];
+         int start = 0;
+         for(int i=0; i<length; i++) {
+        	 int num = arr[i];
+        	 used[num] = true;
+        	 boolean split = true;
+        	 for(int j=start; j<=i; j++) {
+        		 if(!used[j]) {
+        			 split = false;
+        			 break;
+        		 }
+        	 }
+        	 if(split) {
+        		 chunks++;
+        		 start = i+1;
+        	 }
+         }
+         if(chunks > 1)
+        	 chunks--;
+         
+         return chunks;
+     }
+     
+     
 
 
 	public static void main(String[] args) {
