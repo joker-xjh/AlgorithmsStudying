@@ -2195,6 +2195,38 @@ public class string {
      }
      
      
+     public boolean pyramidTransition(String bottom, List<String> allowed) {
+         Map<String, List<Character>> map = new HashMap<>();
+         for(String triple : allowed) {
+        	 String key = "" + triple.charAt(0) + triple.charAt(1);
+        	 char c = triple.charAt(2);
+        	 if(!map.containsKey(key))
+        		 map.put(key, new ArrayList<>());
+        	 map.get(key).add(c);
+         }
+    	 return pyramidTransitionDFS(bottom, new StringBuilder(), bottom.length()-1, map);
+     }
+     
+     private boolean pyramidTransitionDFS(String bottom, StringBuilder rowNow, int length, Map<String, List<Character>> allowed) {
+    	 if(length == 0)
+    		 return true;
+    	 if(rowNow.length() == length)
+    		 return pyramidTransitionDFS(rowNow.toString(), new StringBuilder(), length - 1, allowed);
+    	 int len = rowNow.length();
+    	 String key = "" + bottom.charAt(len) + bottom.charAt(len+1);
+    	 List<Character> list = allowed.get(key);
+    	 if(list == null)
+    		 return false;
+    	 for(Character c : list) {
+    		 rowNow.append(c);
+    		 if(pyramidTransitionDFS(bottom, rowNow, length, allowed))
+    			 return true;
+    		 rowNow.deleteCharAt(rowNow.length()-1);
+    	 }
+    	 return false;
+     }
+     
+     
      
     
     public static void main(String[] args) {
