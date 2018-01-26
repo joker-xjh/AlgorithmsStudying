@@ -1752,7 +1752,36 @@ public class Array {
      }
      
      
-     
+     public int maxChunksToSortedHard(int[] arr) {
+         int chunks = 1;
+         Stack<Integer> stack = new Stack<>();
+         int small = Integer.MAX_VALUE;
+         int target = arr[0];
+         for(int i=1; i<arr.length; i++) {
+        	 if(arr[i] < target) {
+        		 small = Math.min(small, arr[i]);
+        		 continue;
+        	 }
+        	 while(!stack.isEmpty() && stack.peek() > small) {
+        		 chunks--;
+        		 stack.pop();
+        	 }
+        	 stack.push(target);
+        	 chunks++;
+        	 target = arr[i];
+        	 small = Integer.MAX_VALUE;
+         }
+         while(!stack.isEmpty() && stack.peek() > small) {
+    		 chunks--;
+    		 stack.pop();
+    	 }
+    	 stack.push(target);
+    	 chunks++;
+         
+         if(chunks > 1)
+        	 chunks--;
+         return chunks;
+     }
      
      
      
