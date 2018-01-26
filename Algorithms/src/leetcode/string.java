@@ -2226,14 +2226,105 @@ public class string {
     	 return false;
      }
      
+     public int calculate(String s) {
+    	 List<String> list = toPostfix(s);
+    	 System.out.println(list);
+    	 return getPostfixValue(list);
+     }
+     
+     private List<String> toPostfix(String s){
+    	 List<String> list = new ArrayList<>();
+    	 StringBuilder sb = new StringBuilder();
+    	 Stack<Character> stack = new Stack<>();
+    	 for(int i=0; i<s.length(); i++) {
+    		 char c = s.charAt(i);
+    		 if(c >='0' && c <= '9') {
+    			 sb.append(c);
+    			 continue;
+    		 }
+    		 if(sb.length() > 0) {
+				 list.add(sb.toString());
+				 sb = new StringBuilder();
+			 }
+    		 if(c == ' ') {
+    			 continue;
+    		 }
+    		 if(c == '(') {
+    			 stack.push(c);
+    			 continue;
+    		 }
+    		 if(c == '+' || c == '-' || c =='*' || c == '/') {
+    			 int priority = getExpressionPriority(c);
+				 while(!stack.isEmpty() && priority >= getExpressionPriority(stack.peek())) {
+					 list.add(String.valueOf(stack.pop()));
+				 }
+				 stack.push(c);
+    			 continue;
+    		 }
+    		 if(c == ')') {
+    			 while(stack.peek() != '(') {
+    				 list.add(String.valueOf(stack.pop()));
+    			 }
+    			 stack.pop();
+    		 }
+    		 
+    	 }
+    	 if(sb.length() > 0) {
+    		 list.add(sb.toString());
+    	 }
+    	 while(!stack.isEmpty()) {
+    		 list.add(String.valueOf(stack.pop()));
+    	 }
+    	 return list;
+     }
+     
+     private int getPostfixValue(List<String> list) {
+    	 Stack<Long> stack = new Stack<>();
+    	 for(int i=0; i<list.size(); i++) {
+    		 String str = list.get(i);
+    		 if(str.equals("+")) {
+    			 long a = stack.pop();
+    			 long b = stack.pop();
+    			 stack.push(a+b);
+    		 }
+    		 else if(str.equals("-")) {
+    			 long a = stack.pop();
+    			 long b = stack.pop();
+    			 stack.push(b-a);
+    		 }
+    		 else if(str.equals("*")) {
+    			 long a = stack.pop();
+    			 long b = stack.pop();
+    			 stack.push(a*b);
+    		 }
+    		 else if(str.equals("/")) {
+    			 long a = stack.pop();
+    			 long b = stack.pop();
+    			 stack.push(b/a);
+    		 }
+    		 else {
+    			 long num = Long.parseLong(str);
+    			 stack.push(num);
+    		 }
+    	 }
+    	 
+    	 return stack.pop().intValue();
+     }
+     
+     
+     
+     private int getExpressionPriority(char c) {
+    	 if(c == '*' || c == '/')
+    		 return 1;
+    	 if(c == '+' || c == '-')
+    		 return 2;
+    	 return 3;
+     }
      
      
     
     public static void main(String[] args) {
-    	string test = new string();
-    	String board = "GGYYBRGGRYBYG";
-    	String hand = "RYYBG";
-    	System.out.println(test.findMinStep(board, hand));
+    	
     	
 	}
     
