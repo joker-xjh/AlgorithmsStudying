@@ -1783,7 +1783,30 @@ public class Array {
          return chunks;
      }
      
+     public int minSwapsCouples(int[] row) {
+         int answer = 0;
+         int n = row.length;
+         int[] pos = new int[n];
+         for(int i=0; i<n; i++)
+        	 pos[row[i]] = i;
+         for(int i=0; i<n; i+=2) {
+        	 int j = (row[i] & 1 ) == 0 ? row[i] + 1 : row[i] - 1;
+        	 if(row[i+1] != j) {
+        		 answer++;
+        		 SwapsCouples(row, pos, i+1, pos[j]);
+        	 }
+         }
+         
+         return answer;
+     }
      
+     private void SwapsCouples(int[] row, int[] pos, int x, int y) {
+    	 pos[row[x]] = y;
+    	 pos[row[y]] = x;
+    	 int temp = row[x];
+    	 row[x] = row[y];
+    	 row[y] = temp;
+     }
      
      
 
