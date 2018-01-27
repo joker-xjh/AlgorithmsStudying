@@ -1809,6 +1809,68 @@ public class Array {
      }
      
      
+     public int shoppingOffers(List<Integer> price, List<List<Integer>> special, List<Integer> needs) {
+         if(needs == null || needs.size() == 0)
+        	 return 0;
+         int n = needs.size();
+         List<Integer> temp = new ArrayList<>();
+         for(int i=0; i<n; i++)
+        	 temp.add(0);
+         Map<String, Integer> memorization = new HashMap<>();
+         memorization.put(temp.toString(), 0);
+    	 return shoppingOffersMemorization(price, special, needs, memorization);
+     }
+     
+     private int shoppingOffersMemorization(List<Integer> price, List<List<Integer>> special, List<Integer> needs, Map<String, Integer> memorization) {
+    	 String key = needs.toString();
+    	 if(memorization.containsKey(key))
+    		 return memorization.get(key);
+    	 
+    	 int min  = Integer.MAX_VALUE;
+    	 int n = price.size();
+    	 
+    	 int local = 0;
+    	 for(int i=0; i<n; i++) {
+    		 int p = price.get(i);
+    		 int need = needs.get(i);
+    		 local += p * need;
+    	 }
+    	 
+    	 min = Math.min(min, local);
+    	 
+    	 for(List<Integer> list : special) {
+    		 int total = list.get(n);
+    		 boolean zero = true;
+    		 boolean canBuy = true;
+    		 for(int i=0; i<n; i++) {
+    			 if(list.get(i) > 0)
+    				 zero = false;
+    			 if(needs.get(i) < list.get(i)) {
+    				 canBuy = false;
+    				 break;
+    			 }
+    		 }
+    		 if(canBuy && !zero) {
+    			 for(int i=0; i<n; i++) {
+    				 int need = needs.get(i);
+    				 needs.set(i, need - list.get(i));
+    			 }
+    			 min = Math.min(min, total + shoppingOffersMemorization(price, special, needs, memorization));
+    			 for(int i=0; i<n; i++) {
+    				 int need = needs.get(i);
+    				 needs.set(i, need + list.get(i));
+    			 }
+    		 }
+    	 }
+    	 
+    	 
+    	 
+    	 
+    	 memorization.put(key, min);
+    	 return min;
+     }
+     
+     
 
 
 	public static void main(String[] args) {
