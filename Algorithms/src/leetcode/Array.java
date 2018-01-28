@@ -1871,6 +1871,38 @@ public class Array {
      }
      
      
+     public boolean canIWin(int maxChoosableInteger, int desiredTotal) {
+    	 if(desiredTotal <= 0)
+    		 return true;
+    	 if (maxChoosableInteger*(maxChoosableInteger+1)/2<desiredTotal) 
+    		 return false;
+    	 boolean[] used = new boolean[maxChoosableInteger+1];
+    	 return canIWin(used, desiredTotal, new HashMap<>());
+     }
+     
+     private boolean canIWin(boolean[] used, int total, Map<String, Boolean> memorization) {
+    	 String key = Arrays.toString(used);
+    	 if(memorization.containsKey(key))
+    		 return memorization.get(key);
+    	 for(int i=1; i<used.length; i++) {
+    		 if(used[i])
+    			 continue;
+    		 used[i] = true;
+    		 if(i >= total || !canIWin(used, total - i, memorization)) {
+    			 used[i] = false;
+    			 memorization.put(key, true);
+    			 return true;
+    		 }
+    		 used[i] = false;
+    	 }
+    	 
+    	 memorization.put(key, false);
+    	 return false;
+     }
+     
+     
+     
+     
 
 
 	public static void main(String[] args) {
