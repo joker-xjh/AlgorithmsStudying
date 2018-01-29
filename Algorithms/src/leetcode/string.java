@@ -2322,6 +2322,93 @@ public class string {
      }
      
      
+     
+     public int findRotateSteps(String ring, String key) {
+         Map<Character, List<Integer>> map = new HashMap<>();
+         char[] key_array = key.toCharArray();
+         char[] ring_array = ring.toCharArray();
+         for(char c : key_array) {
+        	 if(!map.containsKey(c))
+        		 map.put(c, new ArrayList<>());
+         }
+         for(int i=0; i<ring_array.length; i++) {
+        	 char c = ring_array[i];
+        	 if(map.containsKey(c)) {
+        		 map.get(c).add(i);
+        	 }
+         }
+    	 return findRotateSteps(key_array, ring_array, 0, 0, map) + key_array.length;
+     }
+     
+     private int findRotateSteps(char[] key, char[] ring, int index, int lastPos, Map<Character, List<Integer>> posMap) {
+    	 if(index == key.length)
+    		 return 0;
+    	 char c = key[index];
+    	 List<Integer> list = posMap.get(c);
+    	 int steps = Integer.MAX_VALUE;
+    	 
+    	 if(list.size() == 1) {
+    		 int pos = list.get(0);
+    		 
+    		 if(pos > lastPos) {
+    			 if(pos - lastPos > lastPos - 0 + ring.length - pos) {
+    				 steps = Math.min(steps, lastPos - 0 + ring.length - pos + findRotateSteps(key, ring, index + 1, pos, posMap));
+    			 }
+    			 else {
+    				 steps = Math.min(steps, pos - lastPos + findRotateSteps(key, ring, index + 1, pos, posMap));
+    			 }
+    		 }
+    		 else if(pos < lastPos) {
+    			 if(lastPos - pos > pos - 0 + ring.length - lastPos) {
+    				 steps = Math.min(steps, pos - 0 + ring.length - lastPos + findRotateSteps(key, ring, index + 1, pos, posMap));
+    			 }
+    			 else {
+    				 steps = Math.min(steps, lastPos - pos + findRotateSteps(key, ring, index + 1, pos, posMap));
+    			 }
+    		 }
+    		 else {
+    			 steps = Math.min(steps, findRotateSteps(key, ring, index + 1, pos, posMap));
+    		 }
+    	 }
+    	 else {
+    		 for(int i=0; i<list.size(); i++) {
+        		 int pos = list.get(i);
+        		 
+        		 if(pos > lastPos) {
+        			 steps = Math.min(steps, pos - lastPos + findRotateSteps(key, ring, index + 1, pos, posMap));
+        			 steps = Math.min(steps, lastPos - 0 + ring.length - pos + findRotateSteps(key, ring, index + 1, pos, posMap));
+        		 }
+        		 else if(pos < lastPos) {
+        			 steps = Math.min(steps, lastPos - pos + findRotateSteps(key, ring, index + 1, pos, posMap));
+        			 steps = Math.min(steps, pos - 0 + ring.length - lastPos + findRotateSteps(key, ring, index + 1, pos, posMap));
+        		 }
+        		 else {
+        			 steps = Math.min(steps, findRotateSteps(key, ring, index + 1, pos, posMap));
+        		 }
+        		 
+        	 }
+    	 }
+    	 
+    	 return steps;
+     }
+     
+     
+     public int numJewelsInStones(String J, String S) {
+    	 if(J == null || J.length() == 0 || S == null || S.length() == 0)
+    		 return 0;
+         int jewels = 0;
+         boolean[] table = new boolean[128];
+         for(char c : J.toCharArray())
+        	 table[c] = true;
+         for(char c : S.toCharArray())
+        	 if(table[c])
+        		 jewels++;
+         return jewels;
+     }
+     
+     
+     
+     
     
     public static void main(String[] args) {
     	
