@@ -1901,14 +1901,77 @@ public class Array {
      }
      
      
+     public int slidingPuzzle(int[][] board) {
+         int steps = 0;
+         int[][] target = {{1,2,3}, {4,5,0}};
+         String goal = Arrays.deepToString(target);
+         int[][] dirs = {{-1,0}, {1,0}, {0,-1}, {0,1}};
+         Map<String, int[][]> map = new HashMap<>();
+         String start = Arrays.deepToString(board);
+         if(start.equals(goal))
+        	 return 0;
+         map.put(start, board);
+         
+         Queue<String> queue = new LinkedList<>();
+         queue.add(start);
+         
+         Queue<int[]> position = new LinkedList<>();
+         for(int i=0; i<2; i++)
+        	 for(int j=0; j<3; j++)
+        		 if(board[i][j] == 0) {
+        			 position.add(new int[] {i, j});
+        			 break;
+        		 }
+         
+         while(!queue.isEmpty()) {
+        	 int size = queue.size();
+        	 steps++;
+        	 for(int i=0; i<size; i++) {
+        		 String state = queue.poll();
+        		 int[][] matrix = map.get(state);
+        		 int[] pos = position.poll();
+        		 for(int[] dir : dirs) {
+        			 int x = pos[0] + dir[0];
+        			 int y = pos[1] + dir[1];
+        			 if(x < 0 || x >= 2 || y < 0 || y >= 3)
+        				 continue;
+        			 slidingPuzzleSwap(matrix, pos[0], pos[1], x, y);
+        			 String newState = Arrays.deepToString(matrix);
+        			 if(newState.equals(goal))
+        				 return steps;
+        			 if(map.containsKey(newState)) {
+        				 slidingPuzzleSwap(matrix, pos[0], pos[1], x, y);
+        				 continue;
+        			 }
+        			 int[][] clone = new int[2][3];
+        			 for(int a=0; a<2; a++)
+        				 for(int b=0; b<3; b++)
+        					 clone[a][b] = matrix[a][b];
+        			 map.put(newState, clone);
+        			 queue.offer(newState);
+        			 position.offer(new int[] {x, y});
+        			 slidingPuzzleSwap(matrix, pos[0], pos[1], x, y);
+        		 }
+        	 }
+         }
+         
+         return -1;
+     }
+     
+     private void slidingPuzzleSwap(int[][] board, int i, int j, int x, int y) {
+    	 int temp = board[i][j];
+    	 board[i][j] = board[x][y];
+    	 board[x][y] = temp;
+     }
+     
      
      
 
 
 	public static void main(String[] args) {
-		Array test = new Array();
-		int[] array = {2,2,10,5,2,7,2,2,13};
-		test.canPartitionKSubsets(array, 3);
+		 int[][] target = {{1,2,4}, {4,5,0}};
+         String goal = Arrays.deepToString(target);
+         System.out.println(goal);
 
 	}
 
