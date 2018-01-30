@@ -1965,6 +1965,49 @@ public class Array {
      }
      
      
+     class isIdealPermutationNode {
+    	 int val;
+    	 isIdealPermutationNode left, right;
+    	 int bigger; 
+     }
+     
+     public boolean isIdealPermutation(int[] A) {
+    	 int length = A.length;
+    	 int[] index = new int[length];
+    	 for(int i=0; i<length; i++)
+    		 index[A[i]] = i;
+    	 int local = 0;
+    	 for(int i=0; i<length-1; i++) {
+    		 if(A[i] > A[i+1])
+    			 local++;
+    	 }
+    	 int global = 0;
+    	 int[] result = new int[1];
+    	 isIdealPermutationNode root = null;
+    	 for(int i=0; i<length; i++) {
+    		 root = isIdealPermutationHelp(root, index[i], result);
+    		 global += result[0];
+    		 result[0] = 0;
+    	 }
+    	 return global == local;
+     }
+     
+     private isIdealPermutationNode isIdealPermutationHelp(isIdealPermutationNode node, int value, int[] reslut) {
+    	 if(node == null) {
+    		 node = new isIdealPermutationNode();
+    		 node.val = value;
+    		 return node;
+    	 }
+    	 if(node.val > value) {
+    		 reslut[0] += node.bigger + 1;
+    		 node.left = isIdealPermutationHelp(node.left, value, reslut);
+    	 }
+    	 else if(node.val < value) {
+    		 node.bigger++;
+    		 node.right = isIdealPermutationHelp(node.right, value, reslut);
+    	 }
+    	 return node;
+     }
      
 
 
