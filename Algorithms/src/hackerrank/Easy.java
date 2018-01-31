@@ -34,7 +34,15 @@ public class Easy {
 	
 	
 	
-	
+	static int diagonalDifference(int[][] a) {
+        long sum1 = 0, sum2 = 0;
+        int n = a.length;
+        for(int i=0, j= n-1; i<n; i++, j--) {
+        	sum1 += a[i][i];
+        	sum2 += a[i][j];
+        }
+        return (int) Math.abs(sum1 - sum2);
+    }
 	
 	
 	
