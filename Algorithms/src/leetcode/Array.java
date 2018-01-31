@@ -2009,6 +2009,23 @@ public class Array {
     	 return node;
      }
      
+     
+     public int findMinArrowShots(int[][] points) {
+         int arrows = 0;
+         long end = Long.MIN_VALUE;
+         
+         Arrays.sort(points, (a, b) -> (a[1]-b[1]));
+         
+         for(int[] point : points) {
+        	 if(point[0] > end) {
+        		 arrows++;
+        		 end = point[1];
+        	 }
+         }
+         
+         return arrows;
+     }
+     
 
 
 	public static void main(String[] args) {
