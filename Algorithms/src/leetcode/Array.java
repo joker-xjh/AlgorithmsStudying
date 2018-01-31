@@ -2026,6 +2026,37 @@ public class Array {
          return arrows;
      }
      
+     
+     public int eraseOverlapIntervals(Interval[] intervals) {
+    	 int count = 0;
+    	 if(intervals == null || intervals.length < 2)
+    		 return count;
+    	 
+    	 Arrays.sort(intervals, new Comparator<Interval>() {
+             @Override
+             public int compare(Interval o1, Interval o2) {
+                 if (o1.end != o2.end) return o1.end - o2.end;  //first sort by end
+                 return o2.start - o1.start;  //second sort by start
+             }
+         });
+    	 
+    	 
+    	 int end = intervals[0].end;
+    	 for(int i=1; i<intervals.length; i++) {
+    		 if(end > intervals[i].start){
+    			 count++;
+    		 }
+    		 else {
+    			 end = intervals[i].end;
+    		 }
+    	 }
+
+    	 
+    	 
+    	 return count;
+    	 
+     }
+     
 
 
 	public static void main(String[] args) {
