@@ -104,7 +104,6 @@ public class Medium {
 	
 	
 	public int kthLargestElement(int k, int[] nums) {
-        // write your code here
 		k = nums.length - k;
 		int left = 0, right = nums.length - 1;
 		while(left < right) {

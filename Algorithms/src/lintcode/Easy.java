@@ -16,5 +16,27 @@ public class Easy {
        }
        return count;
     }
+	
+	public int[] mergeSortedArray(int[] A, int[] B) {
+        int n = A.length + B.length;
+        int[] array = new int[n];
+        int indexA = 0, indexB = 0, index = 0;
+        while(indexA < A.length || indexB < B.length) {
+        	if(indexA == A.length)
+        		array[index++] = B[indexB++];
+        	else if(indexB == B.length)
+        		array[index++] = A[indexA++];
+        	else {
+        		if(A[indexA] < B[indexB]) {
+        			array[index++] = A[indexA++];
+        		}
+        		else {
+        			array[index++] = B[indexB++];
+        		}
+        	}
+        }
+        
+        return array;
+    }
 
 }
