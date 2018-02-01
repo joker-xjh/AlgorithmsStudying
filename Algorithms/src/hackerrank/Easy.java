@@ -1,5 +1,7 @@
 package hackerrank;
 
+import java.util.Arrays;
+
 public class Easy {
 	
 	static int[] CompareTheTriplets(int a0, int a1, int a2, int b0, int b1, int b2){
@@ -46,15 +48,79 @@ public class Easy {
 	
 	
 	
+	static void plusMinus(int[] arr) {
+        int n = arr.length;
+        double positive = 0, negative = 0, zero = 0;
+        for(int num : arr) {
+        	if(num > 0)
+        		positive++;
+        	else if(num < 0)
+        		negative++;
+        	else 
+        		zero++;
+        }
+        System.out.println(positive / n);
+        System.out.println(negative / n);
+        System.out.println(zero / n);
+    }
+	
+	
+	static void staircase(int n) {
+        int space = n-1;
+        for(int i=0; i<n; i++) {
+        	for(int j=0; j<space; j++)
+        		System.out.print(' ');
+        	for(int j=0; j<n-space; j++)
+        		System.out.print('#');
+        	space--;
+        	System.out.println();
+        }
+    }
 	
 	
 	
+	static void miniMaxSum(int[] arr) {
+        Arrays.sort(arr);
+        long min = 0;
+        long max = 0;
+        for(int i=0; i<4; i++)
+        	min += arr[i];
+        for(int i=4; i>0; i--)
+        	max += arr[i];
+        System.out.println(min +" "+ max);
+    }
+	
+	static int birthdayCakeCandles(int n, int[] ar) {
+        int candles = 0;
+        int max = -1;
+        for(int i=0; i<n; i++)
+        	if(ar[i] > max)
+        		max = ar[i];
+        for(int i=0; i<n; i++)
+        	if(ar[i] == max)
+        		candles++;
+        return candles;
+    }
 	
 	
-	
-	
-	
-	
+	static String timeConversion(String s) {
+        String time = "";
+        String head = s.substring(0, 2);
+        if(s.charAt(s.length()-2) == 'A') {
+        	if(head.equals("12")) {
+            	return "00" + s.substring(2, s.length()-2);
+            }
+        	return s.substring(0, s.length()-2);
+        }
+        
+        if(head.equals("12")) {
+        	return s.substring(0, s.length()-2);
+        }
+        
+        String trans = String.valueOf(Integer.parseInt(head) + 12);
+        time = trans + s.substring(2, s.length()-2);
+        return time;
+    }
 	
 	
 	
