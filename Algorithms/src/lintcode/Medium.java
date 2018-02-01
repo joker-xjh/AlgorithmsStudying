@@ -103,7 +103,36 @@ public class Medium {
     }
 	
 	
+	public int kthLargestElement(int k, int[] nums) {
+        // write your code here
+		k = nums.length - k;
+		int left = 0, right = nums.length - 1;
+		while(left < right) {
+			int index = kthLargestElementPartition(nums, left, right);
+			if(index == k)
+				break;
+			else if(index < k)
+				left = index + 1;
+			else
+				right = index - 1;
+		}
+		return nums[k];
+    }
 	
+	private int kthLargestElementPartition(int[] array, int left, int right) {
+		int cmp = array[left];
+		int i = left, j = right;
+		while(i < j) {
+			while(i < j && array[j] > cmp)
+				j--;
+			array[i] = array[j];
+			while(i < j && array[i] <= cmp)
+				i++;
+			array[j] = array[i];
+		}
+		array[i] = cmp;
+		return i;
+	}
 	
 	
 	
