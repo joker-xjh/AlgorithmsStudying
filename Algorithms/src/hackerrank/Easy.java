@@ -123,6 +123,103 @@ public class Easy {
     }
 	
 	
+	static int[] solve(int[] grades){
+        int[] helper = new int[20];
+        int begin = 5;
+        for(int i=0; i<20; i++) {
+        	helper[i] = begin;
+        	begin += 5;
+        }
+        for(int i=0; i<grades.length; i++) {
+        	if(grades[i] < 38)
+        		continue;
+        	for(int j=0; j<20; j++) {
+        		if(helper[j] <= grades[i])
+        			continue;
+        		if(helper[j] - grades[i] < 3)
+        			grades[i] = helper[j];
+        		break;
+        	}
+        }
+		
+		return grades;
+    }
+	
+	
+	static void countApplesAndOranges(int s, int t, int a, int b, int[] apples, int[] oranges) {
+        int lary = 0, rob = 0;
+        for(int apple : apples) {
+        	int point = a + apple;
+        	if(point >= s && point <= t)
+        		lary++;
+        }
+        for(int orange : oranges) {
+        	int point = b + orange;
+        	if(point >= s && point <= t)
+        		rob++;
+        }
+        System.out.println(lary);
+        System.out.println(rob);
+    }
+	
+	
+	static String kangaroo(int x1, int v1, int x2, int v2) {
+		if(x1 == x2)
+			return "YES";
+		if(x1 < x2) {
+			if(v1 > v2) {
+				if((x2 - x1) % (v1 - v2) == 0)
+					return "YES";
+			}
+		}
+		else{
+			if(v2 > v1) {
+				if((x1 - x2) % (v2 - v1) == 0)
+					return "YES";
+			}
+		}
+		return "NO";
+    }
+	
+	
+	
+	static int getTotalX(int[] a, int[] b) {
+        int X = 0;
+        int LCM = a[0];
+        for(int i=0; i<a.length; i++) {
+        	LCM = lcm(LCM, a[i]);
+        }
+        int GCD = b[0];
+        for(int i=0; i<b.length; i++) {
+        	GCD = gcd(GCD, b[i]);
+        }
+        int temp = LCM;
+        while(temp <= GCD) {
+        	if(GCD % temp == 0)
+        		X++;
+        	temp += LCM;
+        }
+        
+        return X;
+    }
+	
+	static int gcd(int x, int y)  
+	 {
+	  int temp;
+	  
+	  do{
+	  temp = x % y;
+	  x = y;
+	  y = temp;
+	  }while(temp != 0); 
+	  
+	  return x;
+	 }
+	
+	static int lcm(int a, int b) {
+		return a * b / gcd(a, b);
+	}
+	
 	
 
 	public static void main(String[] args) {
