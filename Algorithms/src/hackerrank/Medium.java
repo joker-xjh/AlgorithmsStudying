@@ -94,23 +94,6 @@ public class Medium {
 		return answer;
     }
 	
-	static int crosswordPuzzleCountSlot(char[][] board, int x, int y) {
-		int row = 0;
-		for(int i=y+1; i<10; i++) {
-			if(board[x][i] == '-')
-				row++;
-			else
-				break;
-		}
-		int col = 0;
-		for(int i=x+1; i<10; i++) {
-			if(board[i][y] == '-')
-				col++;
-			else
-				break;
-		}
-		return Math.max(row, col) + 1;
-	}
 	
 	static boolean crosswordPuzzleHelp(char[][] board,int x, int y, int count, String[] hints, boolean[] hints_used, String hint, int length, Set<String> steps, int[] slots) {
 		char c = hint.charAt(length);
@@ -161,37 +144,23 @@ public class Medium {
 	
 	
 	
-	
 	static String[] crosswordPuzzle2(String[] crossword, String hints) {
-        char[][] board = new char[10][10];
+		char[][] board = new char[10][10];
+		int[][] boardCounter = new int[10][10];
         for(int i=0; i<10; i++)
         	board[i] = crossword[i].toCharArray();
         String[] hints_array = hints.split(";");
-        int count = 0;
-        int[] slots = new int[1];
-        for(String word : hints_array)
-        	count += word.length();
-        for(int i=0; i<10; i++)
-        	for(int j=0; j<10; j++)
-        		if(board[i][j] == '-')
-        			slots[0]++;
+        int count = hints_array.length;
         boolean[] used = new boolean[hints_array.length];
-        Set<String> steps = new HashSet<>();
         for(int i=0; i<10; i++) {
         	for(int j=0; j<10; j++) {
         		if(board[i][j] == '-') {
-        			int max = crosswordPuzzleCountSlot(board, i, j);
         			for(int x =0; x<hints_array.length; x++) {
-        				String word = hints_array[x];
-        				if(word.length() != max)
-        					continue;
         				used[x] = true;
-        				String str = ""+i+j;
-        				steps.add(str);
-        			if(crosswordPuzzleHelp(board, i, j, count, hints_array, used, word, 0, steps, slots))
+        				String word = hints_array[x];
+        				if(crosswordPuzzle2Help(board, i, j, count, word, hints_array, used, boardCounter))
         					break;
         				used[x] = false;
-        				steps.remove(str);
         			}
         			break;
         		}
@@ -201,65 +170,98 @@ public class Medium {
         String[] answer = new String[10];
         for(int i=0; i<10; i++)
         	answer[i] = new String(board[i]);
-		
 		return answer;
-    }
+	}
 	
 	
-	
-	static boolean crosswordPuzzleHelp2(char[][] board,int x, int y, int count, String[] hints, boolean[] hints_used, String hint, int length, Set<String> steps, int[] slots) {
-		char c = hint.charAt(length);
-		char old = board[x][y];
-		if(old != '-' && old != c)
-			return false;
-		if(old == '-')
-			slots[0]--;
-		board[x][y] = c;
-		if(count - 1 == 0 && slots[0] == 0)
-			return true;
-		if(length == hint.length() - 1) {
-			for(int i=0; i<hints.length; i++) {
-				if(hints_used[i])
-					continue;
-				hints_used[i] = true;
-				loop:
-				for(int a=0; a<10; a++) {
-					for(int b=0; b<10; b++) {
-						if(board[a][b] == '-' || board[a][b] == hints[i].charAt(0)) {
-							int max = crosswordPuzzleCountSlot(board, a, b);
-							if(max != hints[i].length())
-								break loop;
-							Set<String> temp = new HashSet<>();
-							temp.add(""+a+b);
-							if(crosswordPuzzleHelp2(board, a, b, count - 1, hints, hints_used, hints[i], 0, temp, slots))
-								return true;
+	static boolean crosswordPuzzle2Help(char[][] board,int x, int y, int count, String word,String[] words, boolean[] used, int[][] boardCounter) {
+		for(int t=0; t<2; t++) {
+			boolean rightOrDown = t == 0 ? true : false;
+			if(crosswordPuzzleCanUsed(board, x, y, word, rightOrDown)) {
+				crosswordPuzzleUsed(board, x, y, rightOrDown, word, boardCounter);
+				if(count - 1 == 0)
+					return true;
+				for(int i=0; i<used.length; i++) {
+					if(used[i])
+						continue;
+					used[i] = true;
+					String nextWord = words[i];
+					for(int a=0; a<10; a++) {
+						for(int b=0; b<10; b++) {
+							if(board[a][b] == '-' || board[a][b] == nextWord.charAt(0)) {
+								if(crosswordPuzzle2Help(board, a, b, count - 1, nextWord, words, used, boardCounter))
+									return true;
+							}
 						}
 					}
+					used[i] = false;
 				}
-				hints_used[i] = false;
+				crosswordPuzzleUnused(board, x, y, rightOrDown, word, boardCounter);
 			}
 		}
-		else {
-			for(int[] dir : dirs) {
-				int a = x + dir[0];
-				int b = y + dir[1];
-				String str = ""+a+b;
-				if(a < 0 || a >= 10 || b < 0 || b >= 10 || board[a][b] == '+' || steps.contains(str))
-					continue;
-				steps.add(str);
-				if(crosswordPuzzleHelp2(board, a, b, count - 1, hints, hints_used, hint, length + 1, steps, slots))
-					return true;
-				 steps.remove(str);
-			}
-		}
-		board[x][y] = old;
-		if(old == '-')
-			slots[0]++;
 		return false;
 	}
 	
 	
+	static boolean crosswordPuzzleCanUsed(char[][] board, int x, int y, String word, boolean rightOrDown) {
+		int length = word.length();
+		int count = length;
+		if(rightOrDown) {
+			if(y + length > 10)
+				return false;
+			for(int i=y; i<y+length; i++) {
+				if(board[x][i] == '-' || board[x][i] == word.charAt(i-y))
+					count--;
+				else
+					break;
+			}
+		}
+		else {
+			if(x + length > 10)
+				return false;
+			for(int i=x; i<x+length; i++) {
+				if(board[i][y] =='-' || board[i][y] == word.charAt(i-x))
+					count--;
+				else
+					break;
+			}
+		}
+		return count == 0;
+	}
 	
+	static void crosswordPuzzleUsed(char[][] board, int x, int y, boolean rightOrDown, String word, int[][] boardCounter) {
+		int length = word.length();
+		if(rightOrDown) {
+			for(int i=y; i<y+length; i++) {
+				board[x][i] = word.charAt(i-y);
+				boardCounter[x][i]++;
+			}
+		}
+		else {
+			for(int i=x; i<x+length; i++) {
+				board[i][y] = word.charAt(i-x);
+				boardCounter[i][y]++;
+			}
+		}
+	}
+	
+	static void crosswordPuzzleUnused(char[][] board, int x, int y, boolean rightOrDown, String word, int[][] boardCounter) {
+		int length = word.length();
+		if(rightOrDown) {
+			for(int i=y; i<y+length; i++) {
+				boardCounter[x][i]--;
+				if(boardCounter[x][i] == 0)
+					board[x][i] = '-';
+			}
+		}
+		else {
+			for(int i=x; i<x+length; i++) {
+				boardCounter[i][y]--;
+				if(boardCounter[i][y] == 0)
+					board[i][y] = '-';
+			}
+		}
+	}
 	
 	
 	
