@@ -2406,7 +2406,29 @@ public class string {
          return jewels;
      }
      
+     public boolean wordBreak(String s, List<String> wordDict) {
+    	 Set<String> directory = new HashSet<>();
+    	 for(String word : wordDict)
+    		 directory.add(word);
+    	 Map<String, Boolean> memorization = new HashMap<>();
+    	 memorization.put("", true);
+    	 return wordBreakMemorization(s, directory, memorization);
+     }
      
+     private boolean wordBreakMemorization(String s, Set<String> directory, Map<String, Boolean> memorization) {
+    	 if(memorization.containsKey(s))
+    		 return memorization.get(s);
+    	 for(String word : directory) {
+    		 if(!s.startsWith(word))
+    			 continue;
+    		 if(wordBreakMemorization(s.substring(word.length()), directory, memorization)) {
+    			 memorization.put(s, true);
+    			 return true;
+    		 }
+    	 }
+    	 memorization.put(s, false);
+    	 return false;
+     }
      
      
     
