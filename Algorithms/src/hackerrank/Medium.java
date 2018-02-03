@@ -1,8 +1,10 @@
 package hackerrank;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 
@@ -280,7 +282,111 @@ public class Medium {
 		return (int) sum;
     }
 	
+	static class Trie {
+		boolean word;
+		String str;
+		Trie[] next = new Trie[26];
+	}
 	
+	static String passwordCracker(String[] pass, String attempt) {
+		Trie root = new Trie();
+		boolean[] preCheck = new boolean[26];
+		for(String password : pass) {
+			Trie node = root;
+			for(char c : password.toCharArray()) {
+				int i = c - 'a';
+				preCheck[i] = true;
+				if(node.next[i] == null)
+					node.next[i] = new Trie();
+				node = node.next[i];
+			}
+			node.word = true;
+			node.str = password;
+		}
+		for(char c : attempt.toCharArray()) {
+			if(!preCheck[c-'a'])
+				return "WRONG PASSWORD";
+		}
+		StringBuilder sb = new StringBuilder();
+		if(!passwordCrackerHelp2(root, attempt.toCharArray(), 0, sb))
+			return "WRONG PASSWORD";
+        return sb.toString();
+    }
+	
+	static boolean passwordCrackerHelp(List<String> list, StringBuilder sb, Trie node, Trie root, char[] attempt, int index) {
+		char c = attempt[index];
+		int i = c - 'a';
+		Trie nextNode = node.next[i];
+		if(nextNode == null)
+			return false;
+		sb.append(c);
+		if(index == attempt.length - 1) {
+			if(!nextNode.word)
+				return false;
+			list.add(sb.toString());
+			return true;
+		}
+		else {
+			if(nextNode.word) {
+				list.add(sb.toString());
+				if(passwordCrackerHelp(list, new StringBuilder(), root, root, attempt, index + 1))
+					return true;
+				list.remove(list.size() - 1);
+			}
+			return passwordCrackerHelp(list, sb, nextNode, root, attempt, index + 1);
+		}
+	}
+	
+	static boolean passwordCrackerHelp2(Trie root, char[] attempt, int index, StringBuilder sb) {
+		Trie node = root;
+		for(int i=index; i<attempt.length; i++) {
+			char c = attempt[i];
+			if(node.next[c-'a'] == null)
+				return false;
+			node = node.next[c-'a'];
+			if(node.word) {
+				int length = sb.length();
+				sb.append(node.str).append(' ');
+				if(passwordCrackerHelp2(root, attempt, i+1, sb))
+					return true;
+				sb.delete(length, sb.length());
+				if(i == attempt.length - 1) {
+					sb.append(node.str);
+					return true;
+				}
+				
+			}
+		}
+		return false;
+	}
+	
+	
+	static void passwordCrackerFinal(String[] pass, String attempt) {
+		Set<String> directory = new HashSet<>();
+		for(String word : pass)
+			directory.add(word);
+		if(!passwordCrackerFinalHelp(attempt, directory, "", new HashMap<>()))
+			System.out.println("WRONG PASSWORD");
+	}
+	
+	static boolean passwordCrackerFinalHelp(String s, Set<String> directory, String path, Map<String, Boolean> memorization) {
+		if(s.length() == 0) {
+			System.out.println(path.trim());
+			return true;
+		}
+		if(memorization.containsKey(s))
+			return memorization.get(s);
+		for(String word : directory) {
+			if(!s.startsWith(word))
+				continue;
+			if(passwordCrackerFinalHelp(s.substring(word.length()), directory, path+word+" ", memorization)) {
+				memorization.put(s, true);
+				return true;
+			}
+		}
+		memorization.put(s, false);
+		return false;
+	}
 	
 	
 	
