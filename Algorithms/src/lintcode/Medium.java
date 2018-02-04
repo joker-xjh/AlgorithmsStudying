@@ -1,6 +1,7 @@
 package lintcode;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -245,7 +246,39 @@ public class Medium {
 		    }
 		}
 	
-	
+	  public List<List<Integer>> subsetsWithDup(int[] nums) {
+	        List<List<Integer>> subsets = new ArrayList<>();
+	        if(nums == null) {
+	        	subsets.add(new ArrayList<>());
+	        	return subsets;
+	        }
+	        boolean[] used = new boolean[nums.length];
+	        List<Integer> list = new ArrayList<>();
+	        Arrays.sort(nums);
+	        for(int i=0; i<=nums.length; i++) {
+	        	subsetsWithDupHelp(subsets, list, used, 0, i, nums);
+	        }
+	        return subsets;
+	  }
+	  
+	  private void subsetsWithDupHelp(List<List<Integer>> subset, List<Integer> list, boolean[] used, int start, int count, int[] array) {
+		  if(count == 0) {
+			  subset.add(new ArrayList<>(list));
+		  }
+		  else {
+			  for(int i=start; i<array.length; i++) {
+				  if(used[i])
+					  continue;
+				  if(i > 0 && !used[i-1] && array[i] == array[i-1])
+					  continue;
+				  used[i] = true;
+				  list.add(array[i]);
+				  subsetsWithDupHelp(subset, list, used, i+1, count-1, array);
+				  used[i] = false;
+				  list.remove(list.size()-1);
+			  }
+		  }
+	  }
 	
 	
 

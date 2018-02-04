@@ -6,6 +6,7 @@ import java.util.List;
 
 public class Easy {
 	
+
 	public int aplusb(int a, int b) {
 	       return a + b;
 	}
@@ -194,6 +195,89 @@ public class Easy {
 			}
 		}
 	}
+	
+	
+	public interface NestedInteger {
+		 
+		      // @return true if this NestedInteger holds a single integer,
+		      // rather than a nested list.
+		      public boolean isInteger();
+		 
+		      // @return the single integer that this NestedInteger holds,
+		      // if it holds a single integer
+		      // Return null if this NestedInteger holds a nested list
+		      public Integer getInteger();
+		 
+		      // @return the nested list that this NestedInteger holds,
+		      // if it holds a nested list
+		      // Return null if this NestedInteger holds a single integer
+		      public List<NestedInteger> getList();
+		  }
+	public List<Integer> flatten(List<NestedInteger> nestedList) {
+        List<Integer> answer = new ArrayList<>();
+        flattenHelp(answer, nestedList);
+        return answer;
+    }
+	
+	private void flattenHelp(List<Integer> list, List<NestedInteger> nestedList) {
+		for(NestedInteger nestedInteger : nestedList) {
+			if(nestedInteger.isInteger())
+				list.add(nestedInteger.getInteger());
+			else
+				flattenHelp(list, nestedInteger.getList());
+		}
+	}
+	
+	
+	public boolean searchMatrix(int[][] matrix, int target) {
+		if(matrix == null || matrix.length == 0)
+			return false;
+        int M = matrix.length, N = matrix[0].length;
+		if(N == 0)
+			return false;
+		if(target < matrix[0][0])
+			return false;
+		for(int i=0; i<M; i++) {
+			if(i == M-1) {
+				return binarySearchHelp(matrix[i], target);
+			}
+			else {
+				int cur = matrix[i][0];
+				int next = matrix[i+1][0];
+				if(cur == target || next == target)
+					return true;
+				if(cur < target && target < next)
+					return binarySearchHelp(matrix[i], target);
+			}
+		}
+		
+		
+		return false;
+    }
+	
+	
+	private boolean binarySearchHelp(int[] array, int target) {
+		int left = 0, right = array.length - 1;
+		while(left <= right) {
+			int mid = left + (right - left) / 2;
+			if(array[mid] == target)
+				return true;
+			else if(array[mid] < target)
+				left = mid + 1;
+			else
+				right = mid - 1;
+		}
+		
+		return false;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
