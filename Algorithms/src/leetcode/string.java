@@ -2430,6 +2430,55 @@ public class string {
     	 return false;
      }
      
+     public int kthGrammar(int N, int K) {
+         String grammar = generateGrammar(N, "0");
+         if(grammar.charAt(K-1) == '1')
+        	 return 1;
+    	 return 0;
+     }
+     
+     private String generateGrammar(int n, String s) {
+    	 if(n == 0)
+    		 return s;
+    	 StringBuilder sb = new StringBuilder();
+    	 for(int i=0; i<s.length(); i++) {
+    		 char c = s.charAt(i);
+    		 if(c == '0') {
+    			 sb.append('0').append('1');
+    		 }
+    		 else {
+    			 sb.append('1').append('0');
+    		 }
+    	 }
+    	 return generateGrammar(n-1, sb.toString());
+     }
+     
+     public int kthGrammar2(int N, int K) {
+    	 StringBuilder sb = new StringBuilder();
+    	 sb.append('0');
+    	 for(int n=0; n<N; n++) {
+    		 int length = sb.length();
+    		 System.out.println(sb.toString());
+    		 if(length >= K) {
+    			 if(sb.charAt(K-1) == '1')
+    				 return 1;
+    			 return 0;
+    		 }
+    		 for(int i=0; i<length; i++) {
+    			 char c = sb.charAt(i);
+    			 if(c == '0') {
+    				 sb.append('1');
+    			 }
+    			 else {
+    				 sb.append('0');
+    			 }
+    		 }
+    	 }
+    	 if(sb.charAt(K-1) == '1')
+			 return 1;
+    	 return 0;
+     }
+     
      
     
     public static void main(String[] args) {
