@@ -2,8 +2,11 @@ package lintcode;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class Hard {
 	
@@ -39,5 +42,89 @@ public class Hard {
         }
         return list;
     }
+	
+	
+	class LFUCache {
+		
+		private int capacity;
+		private Map<Integer, Integer> content;
+		private Map<Integer, Integer> counter;
+		private Map<Integer, Set<Integer>> frequent;
+		private int minFre;
+	    /*
+	    * @param capacity: An integer
+	    */public LFUCache(int capacity) {
+	        this.capacity = capacity;
+	        content = new HashMap<>();
+	        counter = new HashMap<>();
+	        frequent = new HashMap<>();
+	        minFre = 1;
+	        frequent.put(minFre, new LinkedHashSet<>());
+	    }
+
+	    /*
+	     * @param key: An integer
+	     * @param value: An integer
+	     * @return: nothing
+	     */
+	    public void set(int key, int value) {
+	    	if(content.containsKey(key)) {
+	        	content.put(key, value);
+	        	get(key);
+	        	return;
+	        }
+	        
+	    	if(content.size() >= capacity) {
+	    		int deleteKey = frequent.get(minFre).iterator().next();
+	        	frequent.get(minFre).remove(deleteKey);
+	        	counter.remove(deleteKey);
+	        	content.remove(deleteKey);
+	    	}
+	        content.put(key, value);
+        	counter.put(key, 1);
+        	minFre = 1;
+        	frequent.get(minFre).add(key);
+	    }
+
+	    /*
+	     * @param key: An integer
+	     * @return: An integer
+	     */
+	    public int get(int key) {
+	        if(!content.containsKey(key))
+	        	return -1;
+	        int value = content.get(key);
+	    	int counter_num = counter.get(key);
+	    	counter.put(key, counter_num+1);
+	    	frequent.get(counter_num).remove(key);
+	    	if(!frequent.containsKey(counter_num+1))
+	    		frequent.put(counter_num+1, new LinkedHashSet<>());
+	    	frequent.get(counter_num+1).add(key);
+	        frequent.get(counter_num).remove(key);
+	        if(frequent.get(counter_num).isEmpty() && counter_num == minFre)
+	        	minFre++;
+	    	return value;
+	    }
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }
