@@ -2057,6 +2057,51 @@ public class Array {
     	 
      }
      
+     
+     public int intersectionSizeTwo(int[][] intervals) {
+         int size = 0;
+    	 Arrays.sort(intervals, new Comparator<int[]>() {
+			@Override
+			public int compare(int[] o1, int[] o2) {
+				if(o1[1] < o2[1])
+					return -1;
+				else if(o1[1] > o2[1])
+					return 1;
+				return o1[0] - o2[0];
+			}
+    		 
+		});
+    	int max1 = -1, max2 = -1;
+    	for(int[] interval : intervals) {
+    		int start = interval[0];
+    		int end = interval[1];
+    		if(start > max1) {
+    			size += 2;
+    			max1 = end;
+    			max2 = end - 1;
+    		}
+    		else if(start > max2) {
+    			size++;
+    			max2 = max1 == end ? end - 1 : max1;
+    			max1 = end;
+    		}
+    	}
+    	 return size;
+     }
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
 
 
 	public static void main(String[] args) {
