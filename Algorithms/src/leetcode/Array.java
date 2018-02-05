@@ -2090,7 +2090,94 @@ public class Array {
      }
      
      
+     public int swimInWater(int[][] grid) {
+         int[] result = new int[1];
+         result[0] = 100;
+         int n = grid.length;
+         boolean[][] visited = new boolean[n][n];
+    	 swimInWaterHelp(grid, visited, 0, 0, 0, result);
+    	 return result[0];
+     }
      
+     
+     private void swimInWaterHelp(int[][] grid, boolean[][] visited, int time, int x, int y, int[] result) {
+    	 if(time > result[0])
+    		 return;
+    	 int n = grid.length;
+    	 if(x == n-1 && y == n-1) {
+    		 result[0] = Math.min(result[0], time);
+    	 }
+    	 else {
+    		 for(int[] dir : directions) {
+    			 int a = dir[0] + x;
+    			 int b = dir[1] + y;
+    			 if(a < 0 || a >= n || b < 0 || b >= n || visited[a][b])
+    				 continue;
+    			 visited[a][b] = true;
+    			 int adjacent = grid[a][b];
+    			 int max = Math.max(adjacent, grid[x][y]);
+    			 int nextTime = max > time ? max : time;
+    			 swimInWaterHelp(grid, visited, nextTime, a, b, result);
+    			 visited[a][b] = false;
+    		 }
+    	 }
+     }
+     
+     
+     public int swimInWater2(int[][] grid) {
+    	 int n = grid.length;
+    	 boolean[][] visited = new boolean[n][n];
+    	 Map<String, Integer> memorization = new HashMap<>();
+    	 return swimInWater2Help(grid, visited, 0, 0, 0, memorization);
+     }
+     
+     private int swimInWater2Help(int[][] grid, boolean[][] visited, int time, int x, int y, Map<String, Integer> memorization) {
+    	 int n = grid.length;
+    	 if(x == n-1 && y == n-1)
+    		 return time;
+    	 String key = ""+x+","+y+","+time;
+    	 if(memorization.containsKey(key))
+    		 return memorization.get(key);
+    	 int result = Integer.MAX_VALUE;
+		 for(int[] dir : directions) {
+			 int a = dir[0] + x;
+			 int b = dir[1] + y;
+			 if(a < 0 || a >= n || b < 0 || b >= n || visited[a][b])
+				 continue;
+			 visited[a][b] = true;
+			 int adjacent = grid[a][b];
+			 int max = Math.max(adjacent, grid[x][y]);
+			 int nextTime = max > time ? max : time;
+			 result = Math.min(result, swimInWater2Help(grid, visited, nextTime, a, b, memorization));
+			 visited[a][b] = false;
+		 }
+		 memorization.put(key, result);
+         return result;
+     }
+     
+     
+     public int swimInWater3(int[][] grid) {
+    	 int time = 0;
+    	 int n = grid.length;
+    	 PriorityQueue<int[]> queue = new PriorityQueue<>(Comparator.comparingInt(o -> o[2]));
+    	 queue.add(new int[] {0,0,grid[0][0]});
+    	 grid[0][0] = -1;
+    	 while(!queue.isEmpty()) {
+    		 int[] array = queue.poll();
+    		 time = Math.max(time, array[2]);
+    		 if(array[0] == n-1 && array[1] == n-1)
+    			 return time;
+    		 for(int[] dir:directions) {
+    			 int x = array[0] + dir[0];
+    			 int y = array[1] + dir[1];
+    			 if(x < 0 || x >= n || y < 0 || y >= n || grid[x][y] == -1)
+    				 continue;
+    			 queue.add(new int[] {x, y, grid[x][y]});
+    			 grid[x][y] = -1;
+    		 }
+    	 }
+    	 return time;
+     }
      
      
      
