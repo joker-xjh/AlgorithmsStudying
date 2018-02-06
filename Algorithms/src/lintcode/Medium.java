@@ -337,7 +337,26 @@ public class Medium {
 	  }
 	  
 	  
-	  
+	  public String minWindow(String source , String target) {
+	      int[] hash = new int[128];
+	      for(char c : target.toCharArray())
+	    	  hash[c]++;
+	      int counter = target.length(), end = 0, start = 0, distance = source.length()+1, head = 0;
+	      while(end < source.length()) {
+	    	  if(hash[source.charAt(end++)]-- > 0)
+	    		  counter--;
+	    	  while(counter == 0) {
+	    		  if(distance > end - start) {
+	    			  distance = end - start;
+	    			  head = start;
+	    		  }
+	    		  if(hash[source.charAt(start++)]++ ==0)
+	    			  counter++;
+	    	  }
+	      }
+		  
+		  return distance == source.length() + 1  ? "" : source.substring(head, distance);
+	  }
 	  
 	  
 	  
