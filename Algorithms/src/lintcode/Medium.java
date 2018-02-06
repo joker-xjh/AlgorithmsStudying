@@ -279,6 +279,55 @@ public class Medium {
 			  }
 		  }
 	  }
+	  
+	  
+	  public boolean isInterleave(String s1, String s2, String s3) {
+		  if(s3.length() != s1.length() + s2.length())
+			  return false;
+		  Map<String, Boolean> memorization = new HashMap<>();
+		  return isInterleaveMemorization(s3, s1, s2, 0, 0, memorization);
+	  }
+	  
+	  private boolean isInterleaveMemorization(String s, String s1, String s2, int index1, int index2, Map<String, Boolean> memorization) {
+		  if(index1 == s1.length() && index2 == s2.length())
+			  return true;
+		  String key = "" + index1 +","+index2;
+		  if(memorization.containsKey(key))
+			  return memorization.get(key);
+		  
+		  char c1 = index1 == s1.length() ? '\0' : s1.charAt(index1);
+		  char c2 = index2 == s2.length() ? '\0' : s2.charAt(index2);
+		  char c = s.charAt(index1 + index2);
+		  if(c == c1) {
+			  if(isInterleaveMemorization(s, s1, s2, index1 + 1, index2, memorization)) {
+				  memorization.put(key, true);
+				  return true;
+			  }
+		  }
+		  if(c == c2) {
+			  if(isInterleaveMemorization(s, s1, s2, index1, index2 + 1, memorization)) {
+				  memorization.put(key, true);
+				  return true;
+			  }
+		  }
+		  
+		  memorization.put(key, false);		  
+		  return false;
+	  }
+	  
+
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+		  
+	  
 	
 	
 
