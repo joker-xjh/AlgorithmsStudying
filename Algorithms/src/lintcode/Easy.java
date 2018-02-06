@@ -1,8 +1,11 @@
 package lintcode;
 
 import java.util.ArrayList;
+
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
+
 
 public class Easy {
 	
@@ -271,8 +274,53 @@ public class Easy {
 		return false;
 	}
 	
+	public class Interval {
+		      int start, end;
+		      Interval(int start, int end) {
+		          this.start = start;
+		          this.end = end;
+		      }
+	}
 	
 	
+	public List<Interval> insert(List<Interval> intervals, Interval newInterval) {
+        boolean needAdded = true;
+        int index = 0;
+        Iterator<Interval> iterator = intervals.iterator();
+        while(iterator.hasNext()) {
+        	Interval interval = iterator.next();
+        	
+        	if(interval.end < newInterval.start) {
+        		index++;
+        	}
+        	else if(interval.end == newInterval.start) {
+        		newInterval.start = interval.start;
+        		iterator.remove();
+        	}
+        	else if(interval.end > newInterval.start && interval.end <= newInterval.end) {
+        		if(interval.start < newInterval.start)
+        			newInterval.start = interval.start;
+        		iterator.remove();
+        	}
+        	else if(interval.end > newInterval.end) {
+        		if(interval.start <= newInterval.start) {
+        			needAdded = false;
+        			break;
+        		}
+        		else if(interval.start > newInterval.start && interval.start <= newInterval.end) {
+        			newInterval.end = interval.end;
+        			iterator.remove();
+        		}
+        		else if(interval.start > newInterval.end) {
+        			break;
+        		}
+        	}
+        }
+        
+        if(needAdded)
+        	intervals.add(index, newInterval);
+		return intervals;
+    }
 	
 	
 	
