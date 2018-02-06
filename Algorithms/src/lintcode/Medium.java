@@ -317,6 +317,25 @@ public class Medium {
 	  
 
 	  
+	  public int partitionArray(int[] nums, int k) {
+		   int n = nums.length;
+	       int left = 0, right = nums.length - 1;
+	       while(left < right) {
+	    	   while(left < n && nums[left] < k)
+	    		   left++;
+	    	   while(right >= 0 && nums[right] >= k)
+	    		   right--;
+	    	   if(left < right) {
+	    		   int temp = nums[left];
+	    		   nums[left] = nums[right];
+	    		   nums[right] = temp;
+	    		   left++;
+	    		   right--;
+	    	   }
+	       }
+	       return left;
+	  }
+	  
 	  
 	  
 	  
