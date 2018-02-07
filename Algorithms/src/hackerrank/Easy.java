@@ -1,6 +1,13 @@
 package hackerrank;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class Easy {
 	
@@ -304,6 +311,240 @@ public class Easy {
         }
         return size;
     }
+	
+	static String appendAndDelete(String s, String t, int k) {
+        Map<String, Boolean> memorization = new HashMap<>();
+		if(appendAndDeleteHelp(new StringBuilder(s), t, k, memorization))
+			return "Yes";
+		return "No";
+    }
+	
+	static boolean appendAndDeleteHelp(StringBuilder sb, String target, int k, Map<String, Boolean> memorization) {
+		if(k == 0)
+			return sb.toString().equals(target);
+		String key = sb.toString()+","+k;
+		for(char c='a'; c<='z'; c++) {
+			sb.append(c);
+			if(appendAndDeleteHelp(sb, target, k-1, memorization)) {
+				memorization.put(key, true);
+				return true;
+			}
+			sb.deleteCharAt(sb.length()-1);
+		}
+		if(sb.length() > 0) {
+			char last = sb.charAt(sb.length()-1);
+			sb.deleteCharAt(sb.length()-1);
+			if(appendAndDeleteHelp(sb, target, k-1, memorization)) {
+				memorization.put(key, true);
+				return true;
+			}
+			sb.append(last);
+		}
+		memorization.put(key, false);
+		return false;
+	}
+	
+	
+	static String appendAndDelete2(String s, String t, int k) {
+		int len1 = s.length();
+		int len2 = t.length();
+		if(Math.abs(len1-len2) > k)
+			return "No";
+		if(len1 > len2) {
+			String temp = s;
+			s = t;
+			t = temp;
+			
+			int f = len1;
+			len1 = len2;
+			len2 = f;
+		}
+		int index = -1;
+		for(int i=0; i<len1; i++) {
+			char c1 = s.charAt(i);
+			char c2 = t.charAt(i);
+			if(c1 == c2)
+				continue;
+			index = i;
+			break;
+		}
+		if(index == -1) {
+			if(len1 != len2) {
+				k -= len2 - len1;
+				if(k < 0)
+					return "No";
+			}
+			
+			if((k & 1) == 0 || k >= len1 * 2)
+				return "Yes";
+			else
+				return "No";
+		}
+		
+		k -= len1 - index  + len2 - index;
+		System.out.println(k);
+		if(k < 0)
+			return "No";
+		if((k & 1) == 0 || k >= len1 * 2)
+			return "Yes";
+		if(index == 0)
+			return "Yes";
+		return "No";
+	}
+	
+	
+	static int squares(int a, int b) {
+		if(a == b) {
+			int one = (int)Math.sqrt(a);
+			if(one * one == a)
+				return 1;
+			return 0;
+		}
+		int one = (int)Math.sqrt(a);
+		int two = (int) Math.sqrt(b);
+		boolean x = one * one == a;
+		boolean y = two * two == b;
+		if(x && y) {
+			return two - one + 1;
+		}
+		if(x) {
+			return two - one + 1;
+		}
+		if(y) {
+			return two - one;
+		}
+		return two - one; 
+    }
+	
+	
+	static int libraryFine(int d1, int m1, int y1, int d2, int m2, int y2) {
+        if(y1 < y2) {
+        	return 0;
+        }
+        else if(y1 == y2) {
+        	if(m1 < m2) {
+        		return 0;
+        	}
+        	else if(m1 == m2) {
+        		if(d1 < d2) {
+        			return 0;
+        		}
+        		else if(d1 == d2) {
+        			return 0;
+        		}
+        		else {
+        			return (d1 - d2 ) * 15; 
+        		}
+        	}
+        	else {
+        		return 500 * (m1 - m2);
+        	}
+        }
+        
+		return 10000;
+    }
+	
+	static int[] cutTheSticks(int[] arr) {
+        List<Integer> list = new ArrayList<>();
+        int n = arr.length;
+		int[] bucket = new int[1001];
+		for(int num : arr)
+			bucket[num]++;
+		for(int i=1; i<1001; i++) {
+			if(bucket[i] > 0) {
+				list.add(n);
+				n -= bucket[i];
+			}
+		}
+		int[] answer = new int[list.size()];
+		for(int i=0; i<answer.length; i++) {
+			answer[i] = list.get(i);
+		}
+		return answer;
+    }
+	
+	
+	static String[] cavityMap(String[] grid) {
+        int n = grid.length;
+        if(n < 3)
+        	return grid;
+		char[][] board = new char[n][n];
+		boolean[][] used = new boolean[n][n];
+		
+		int[][] dirs = {{-1,0}, {1,0}, {0,-1}, {0,1}};
+		
+		for(int i=0; i<n; i++)
+			board[i] = grid[i].toCharArray();
+		
+		for(int i=1; i<n-1; i++) {
+			for(int j=1; j<n-1; j++) {
+				if(used[i][j])
+					continue;
+				boolean isslot = true;
+				char num = board[i][j];
+				for(int[] d : dirs) {
+					int x = d[0] + i;
+					int y = d[1] + j;
+					if(num <= board[x][y]) {
+						isslot = false;
+						break;
+					}
+				}
+				if(isslot) {
+					board[i][j] = 'X';
+					used[i][j+1] = true;
+					used[i+1][j] = true;
+				}
+			}
+		}
+		
+		String[] answer = new String[n];
+		for(int i=0; i<n; i++)
+			answer[i] = new String(board[i]);
+		return answer;
+    }
+	
+	
+	static int[] stones(int n, int a, int b) {
+        List<Integer> list = new ArrayList<>();
+        Set<String> memorization = new HashSet<>();
+        stonesHelp(n-1, a, b, 0, list, memorization);
+		Collections.sort(list);
+		int size = list.size();
+		int[] answer = new int[size];
+		for(int i=0; i<size; i++)
+			answer[i] = list.get(i);
+		return answer;
+    }
+	
+	static void stonesHelp(int n, int a, int b, int sum, List<Integer> list, Set<String> memorization) {
+		String key = ""+n+","+sum;
+		if(memorization.contains(key))
+			return;
+		memorization.add(key);
+		if(n == 0) {
+			list.add(sum);
+			return;
+		}
+		stonesHelp(n-1, a, b, sum+a, list, memorization);
+		stonesHelp(n-1, a, b, sum+b, list, memorization);
+	}
+	
+	static int[] permutationEquation(int[] p) {
+        int n = p.length;
+        int[] map = new int[n+1];
+        int[] answer = new int[n];
+        for(int i=0; i<n; i++)
+        	map[p[i]] = i+1;
+        for(int i=1; i<=n; i++) {
+        	answer[i-1] = map[map[i]];
+        }
+        return answer;
+    }
+	
+	
+	
+	
 	
 	
 	
