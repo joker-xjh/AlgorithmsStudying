@@ -2,9 +2,11 @@ package lintcode;
 
 import java.util.ArrayList;
 
+
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+
 
 
 public class Easy {
@@ -321,6 +323,45 @@ public class Easy {
         	intervals.add(index, newInterval);
 		return intervals;
     }
+	
+	
+	public class ListNode {
+		      int val;
+		      ListNode next;
+		      ListNode(int val) {
+		          this.val = val;
+		          this.next = null;
+		      }
+		  }
+	
+	public ListNode reverse(ListNode head) {
+        if(head == null)
+        	return null;
+        ListNode node = head, pre = null;
+        while(node != null) {
+        	ListNode temp = node.next;
+        	node.next = pre;
+        	pre = node;
+        	node = temp;
+        }
+        head = pre;
+        return head;
+    }
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	

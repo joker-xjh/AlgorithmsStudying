@@ -1,5 +1,6 @@
 package hackerrank;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -468,9 +469,25 @@ public class Medium {
 		return true;
 	}
 	
+	static void extraLongFactorials(int n) {
+        if(n <= 20) {
+        	System.out.println(extraLongFactorialsLessThan20(n));
+        	return;
+        }
+        long lessthan20 = extraLongFactorialsLessThan20(20);
+        BigInteger num = new BigInteger(String.valueOf(lessthan20));
+        for(int i=21; i<=n; i++) {
+        	num = num.multiply(new BigInteger(String.valueOf(i)));
+        }
+        System.out.println(num);
+    }
 	
-	
-	
+	static long extraLongFactorialsLessThan20(int n) {
+		long num = 1;
+		for(int i=1; i<=n; i++)
+			num *= i;
+		return num;
+	}
 	
 	
 	
