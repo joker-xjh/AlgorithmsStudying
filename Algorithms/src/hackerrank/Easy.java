@@ -220,6 +220,98 @@ public class Easy {
 		return a * b / gcd(a, b);
 	}
 	
+	static int[] breakingRecords(int[] score) {
+        int[] answer = new int[2];
+        int highest =score[0], lowest = score[0]; 
+        for(int i=1; i<score.length; i++) {
+        	int s = score[i];
+        	if(s > highest) {
+        		highest = s;
+        		answer[0]++;
+        	}
+        	else if(s < lowest) {
+        		lowest = s;
+        		answer[1]++;
+        	}
+        }
+        return answer;
+    }
+	
+	
+	static int solve(int n, int[] s, int d, int m) {
+        int answer = 0;
+        if(m > n)
+        	return answer;
+        int sum = 0;
+        for(int i=0; i<m; i++)
+        	sum += s[i];
+        if(sum == d)
+        	answer++;
+        sum -= s[0];
+        for(int i=m; i<s.length; i++) {
+        	sum += s[i];
+        	if(sum == d)
+        		answer++;
+        	sum -= s[i-m+1];
+        }
+        return answer;
+    }
+	
+	
+	static int divisibleSumPairs(int n, int k, int[] ar) {
+        int pairs = 0;
+        for(int i=0; i<n; i++) {
+        	int one = ar[i];
+        	for(int j=i+1; j<n; j++) {
+        		int two = ar[j];
+        		if((one + two) % k == 0)
+        			pairs++;
+        	}
+        }
+        
+        return pairs;
+    }
+	
+	
+	
+	static int migratoryBirds(int n, int[] ar) {
+        int type = -1;
+        int[] counter = new int[6];
+        for(int num : ar)
+        	counter[num]++;
+        int max = 0;
+        for(int c : counter)
+        	if(c > max)
+        		max = c;
+        for(int i=1; i<=5; i++) {
+        	if(counter[i] == max) {
+        		type = i;
+        		break;
+        	}
+        }
+        return type;
+    }
+	
+	
+	static int pickingNumbers(int[] a) {
+        int size = 0;
+        int[] bucket = new int[100];
+        for(int i=0; i<a.length; i++) {
+        	bucket[a[i]]++;
+        }
+        for(int i=2; i<100; i++) {
+        	size = Math.max(size, bucket[i] + bucket[i-1]);
+        }
+        return size;
+    }
+	
+	
+	
+	
+	
+	
+	
+	
 	
 
 	public static void main(String[] args) {
