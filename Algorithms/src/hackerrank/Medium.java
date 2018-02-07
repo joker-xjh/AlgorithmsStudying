@@ -1,6 +1,7 @@
 package hackerrank;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -389,9 +390,100 @@ public class Medium {
 	}
 	
 	
+	static int[][][] magicSquares = {{{2, 7, 6}, {9, 5, 1}, {4, 3, 8}},
+			{{2, 9, 4}, {7, 5, 3}, {6, 1, 8}},
+					{{4, 3, 8}, {9, 5, 1}, {2, 7, 6}},
+					{{4, 9, 2}, {3, 5, 7}, {8, 1, 6}},
+					{{6, 1, 8}, {7, 5, 3}, {2, 9, 4}},
+					{{6, 7, 2}, {1, 5, 9}, {8, 3, 4}},
+					{{8, 1, 6}, {3, 5, 7}, {4, 9, 2}},
+					{{8, 3, 4}, {1, 5, 9}, {6, 7, 2}}};
+	
+	static int formingMagicSquare(int[][] s) {
+        int min = Integer.MAX_VALUE;
+        
+        for(int[][] magicSquare : magicSquares) {
+        	int counter = 0;
+        	for(int i=0; i<3; i++) {
+        		for(int j=0; j<3; j++) {
+        			counter += Math.abs(s[i][j] - magicSquare[i][j]);
+        		}
+        	}
+        	min = Math.min(min, counter);
+        }
+        
+		return min;
+    }
+	
+	static void generateMagicSquare(int[][] array, boolean[] used, boolean[][] board, int counter, Set<String> set) {
+		if(counter == 9) {
+			if(checkMagicSquare(array)) {
+				String key = Arrays.deepToString(array);
+				if(set.contains(key))
+					return;
+				set.add(key);
+				System.out.println(key);
+			}
+		}
+		else {
+			for(int i=0; i<3; i++) {
+				for(int j=0; j<3; j++) {
+					if(board[i][j])
+						continue;
+					board[i][j] = true;
+					for(int x=1; x<10; x++) {
+						if(used[x])
+							continue;
+						used[x] = true;
+						array[i][j] = x;
+						generateMagicSquare(array, used, board, counter+1, set);
+						array[i][j] = 0;
+						used[x] = false;
+					}
+					board[i][j] = false;
+				}
+			}
+		}
+	}
+	
+	
+	static boolean checkMagicSquare(int[][] array) {
+		if(array[0][0] + array[0][1] + array[0][2] != 15)
+			return false;
+		if(array[0][0] + array[1][0] + array[2][0] != 15)
+			return false;
+		if(array[2][0] + array[2][1] + array[2][2] != 15)
+			return false;
+		if(array[0][2] + array[1][2] + array[2][2] != 15)
+			return false;
+		if(array[0][0] + array[1][1] + array[2][2] != 15)
+			return false;
+		if(array[0][2] + array[1][1] + array[2][0] != 15)
+			return false;
+		if(array[0][1] + array[1][1] + array[2][1] != 15)
+			return false;
+		if(array[1][0] + array[1][1] + array[1][2] != 15)
+			return false;
+		
+		return true;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	public static void main(String[] args) {
-		
+		formingMagicSquare(null);
 	}
 
 }
