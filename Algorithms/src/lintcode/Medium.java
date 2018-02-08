@@ -1,7 +1,9 @@
 package lintcode;
 
 import java.util.ArrayList;
+
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -11,6 +13,7 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
+
 
 public class Medium {
 	
@@ -357,6 +360,118 @@ public class Medium {
 		  
 		  return distance == source.length() + 1  ? "" : source.substring(head, distance);
 	  }
+	  
+	  
+	  public class ListNode {
+	      int val;
+	      ListNode next;
+	      ListNode(int val) {
+	          this.val = val;
+	          this.next = null;
+	      }
+	  }
+	  
+	  
+	  public ListNode reverseBetween(ListNode head, int m, int n) {
+	      if(head == null)
+	    	  return null;
+	      if(m == n)
+	    	  return head;
+	      ListNode node = head;
+	      ListNode pre = null;
+	      ListNode first = null;
+	      while(m > 1) {
+	    	  pre = node;
+	    	  node = node.next;
+	    	  m--;
+	    	  n--;
+	      }
+	      first = node;
+	      System.out.println(first.val);
+	      ListNode next = null;
+	      ListNode last = null;
+	      while(n > 1) {
+	    	  node = node.next;
+	    	  n--;
+	      }
+	      last = node;
+	      next = node.next;
+	      last.next = null;
+	      
+		  first = reverse(first);
+		  if(pre != null)
+			  pre.next = first;
+		  node = first;
+		  while(node.next != null) {
+			  node = node.next;
+		  }
+		  node.next = next;
+		  return pre == null ? first : head;
+	  }
+	  
+	  
+	  
+	  public ListNode reverse(ListNode head) {
+	        if(head == null)
+	        	return null;
+	        ListNode node = head, pre = null;
+	        while(node != null) {
+	        	ListNode temp = node.next;
+	        	node.next = pre;
+	        	pre = node;
+	        	node = temp;
+	        }
+	        head = pre;
+	        return head;
+	    }
+	  
+	  
+	  public int searchMatrix(int[][] matrix, int target) {
+		  if(matrix == null || matrix.length == 0)
+			  return 0;
+		  int m = matrix.length, n = matrix[0].length;
+	      PriorityQueue<int[]> queue = new PriorityQueue<>(new searchMatrix());
+		  for(int i=0; i<n; i++) {
+			  queue.add(new int[] {matrix[0][i], 0, i});
+		  }
+		  int counter = 0;
+		  while(!queue.isEmpty()) {
+			  int[] array = queue.poll();
+			  int val = array[0];
+			  int index = array[1];
+			  int num = array[2];
+			  if(val > target)
+				  break;
+			  if(val == target)
+				  counter++;
+			  index++;
+			  if(index < m)
+				  queue.add(new int[] {matrix[index][num], index, num});
+		  }
+		  
+		  return counter;
+	  }
+	  
+	  class searchMatrix implements Comparator<int[]> {
+
+		@Override
+		public int compare(int[] o1, int[] o2) {
+			return o1[0] - o2[0];
+		}
+		  
+	  }
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
 	  
 	  
 	  
