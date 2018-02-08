@@ -463,10 +463,98 @@ public class Medium {
 	  
 	  
 	  
+	  public class MyQueue {
+		  	
+		    Stack<Integer> left;
+		    Stack<Integer> right;
+		  	
+		    public MyQueue() {
+		        // do intialization if necessary
+		    	left = new Stack<>();
+		    	right = new Stack<>();
+		    }
+
+		    /*
+		     * @param element: An integer
+		     * @return: nothing
+		     */
+		    public void push(int element) {
+		        // write your code here
+		    	left.push(element);
+		    }
+
+		    /*
+		     * @return: An integer
+		     */
+		    public int pop() {
+		        // write your code here
+		    	if(!right.isEmpty())
+		    		return right.pop();
+		    	while(!left.isEmpty())
+		    		right.push(left.pop());
+		    	return right.pop();
+		    }
+
+		    /*
+		     * @return: An integer
+		     */
+		    public int top() {
+		        // write your code here
+		    	if(!right.isEmpty())
+		    		return right.peek();
+		    	while(!left.isEmpty())
+		    		right.push(left.pop());
+		    	return right.peek();
+		    }
+		}
 	  
 	  
-	  
-	  
+	 
+	  public int maxDiffSubArrays(int[] nums) {
+	      int n = nums.length;
+	      int[] left_max = new int[n];
+	      int[] left_min = new int[n];
+	      int sum_max = 0, sum_min = 0;
+	      
+	      int max = Integer.MIN_VALUE, min = Integer.MAX_VALUE;
+	      for(int i=0; i<n; i++) {
+	    	  sum_max += nums[i];
+	    	  sum_min += nums[i];
+	    	  max = Math.max(max, sum_max);
+	    	  if(sum_max < 0)
+	    		  sum_max = 0;
+	    	  min = Math.min(min, sum_min);
+	    	  if(sum_min > 0)
+	    		  sum_min = 0;
+	    	  left_max[i] = max;
+	    	  left_min[i] = min;
+	      }
+	      
+	      int[] right_max = new int[n];
+	      int[] right_min = new int[n];
+	      sum_max = 0; sum_min = 0;
+	      max = Integer.MIN_VALUE; min = Integer.MAX_VALUE;
+	      
+	      for(int i=n-1; i>=0; i--) {
+	    	  sum_max += nums[i];
+	    	  sum_min += nums[i];
+	    	  max = Math.max(max, sum_max);
+	    	  min = Math.min(min, sum_min);
+	    	  if(sum_max < 0)
+	    		  sum_max = 0;
+	    	  if(sum_min > 0)
+	    		  sum_min = 0;
+	    	  right_max[i] = max;
+	    	  right_min[i] = min;
+	      }
+	      
+	      max = Integer.MIN_VALUE;
+	      for(int i=0; i<n-1; i++) {
+	    	  max = Math.max(max, Math.abs(left_max[i] - right_min[i+1]));
+	    	  max = Math.max(max, Math.abs(right_max[i+1] - left_min[i]));
+	      }
+	      return max;
+	  }
 	  
 	  
 	  
