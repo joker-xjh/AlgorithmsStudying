@@ -2480,6 +2480,49 @@ public class string {
      }
      
      
+     public boolean canTransform(String start, String end) {
+         int len1 = start.length();
+         int len2 = end.length();
+         if(len1 != len2)
+        	 return false;
+         if (!start.replace("X", "").equals(end.replace("X", "")))
+             return false;
+         char[] from = start.toCharArray();
+         char[] to = end.toCharArray();
+         int p1 = 0, p2 = 0;
+         while(p1 < len1 && p2 < len2) {
+        	 while(p1 < len1 && from[p1] == 'X')
+        		 p1++;
+        	 while(p2 < len1 && to[p2] == 'X')
+        		 p2++;
+        	 if(p1 == len1 && p2 == len1)
+        		 return true;
+        	 if(p1 == len1 || p2 == len1)
+        		 return false;
+        	 if(from[p1] != to[p2])
+        		 return false;
+        	 
+        	 if(from[p1] == 'L' && p2 > p1)
+        		 return false;
+        	 if(from[p1] == 'R' && p1 > p2)
+        		 return false;
+        	 p1++;
+        	 p2++;
+         }
+    	 
+    	 return true;
+     }
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
     
     public static void main(String[] args) {
     	
