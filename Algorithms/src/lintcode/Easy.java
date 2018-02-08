@@ -349,6 +349,93 @@ public class Easy {
     }
 	
 	
+	public void recoverRotatedSortedArray(List<Integer> nums) {
+        if(nums == null || nums.size() < 2)
+        	return;
+        int index = -1;
+        for(int i=0; i<nums.size()-1; i++) {
+        	if(nums.get(i) > nums.get(i+1)) {
+        		index = i;
+        		break;
+        	}
+        }
+        if(index == -1)
+        	return;
+        reverseArray(nums, 0, index);
+        System.out.println(nums);
+        reverseArray(nums, index+1, nums.size()-1);
+        System.out.println(nums);
+        reverseArray(nums, 0, nums.size()-1);
+    }
+	
+	
+	private void reverseArray(List<Integer> array, int left, int right) {
+		int mid = left + (right - left) / 2;
+		for(int i=left; i<mid; i++) {
+			int c = array.get(i);
+			array.set(i, array.get(right - 1 - i + left));
+			array.set(right - 1 - i + left, c);
+		}
+	}
+	
+	
+	
+	public int maxSubArray(int[] nums) {
+        int max = Integer.MIN_VALUE;
+        int sum = 0;
+        for(int i=0; i<nums.length; i++) {
+        	sum += nums[i];
+        	max = Math.max(max, sum);
+        	if(sum < 0)
+        		sum = 0;
+        }
+        
+        return max;
+    }
+	
+	
+	public int maxTwoSubArrays(List<Integer> nums) {
+        int max = Integer.MIN_VALUE;
+        int n = nums.size();
+        int sum = 0;
+        int[] left = new int[n];
+        int[] right = new int[n];
+        for(int i=0; i<n; i++) {
+        	sum += nums.get(i);
+        	max = Math.max(max, sum);
+        	if(sum < 0)
+        		sum = 0;
+        	left[i] = max;
+        }
+        sum = 0;
+        max = Integer.MIN_VALUE;
+        for(int i=n-1; i>=0; i--) {
+        	sum += nums.get(i);
+        	max = Math.max(max, sum);
+        	right[i] = max;
+        	if(sum < 0)
+        		sum = 0;
+        }
+        max = Integer.MIN_VALUE;
+        for(int i=0; i<n-1; i++) {
+        	max = Math.max(max, left[i] + right[i+1]);
+        }
+        
+        return max;
+    }
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
