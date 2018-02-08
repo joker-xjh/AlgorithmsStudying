@@ -543,6 +543,21 @@ public class Easy {
     }
 	
 	
+	static int utopianTree(int n) {
+        boolean flag = true;
+        int tree = 1;
+        while(n > 0) {
+        	if(flag)
+        		tree *= 2;
+        	else
+        		tree += 1;
+        	flag = !flag;
+        	n--;
+        }
+        return tree;
+    }
+	
+	
 	
 	
 	
