@@ -548,7 +548,42 @@ public class Medium {
 	
 	
 	
+	static int cutTheTree(int[] data, int[][] edges) {
+        Map<Integer, List<Integer>> tree = new HashMap<>();
+        int n = data.length;
+        int[] treeSum = new int[n+1];
+        for(int[] edge : edges) {
+        	int v1 = edge[0], v2 = edge[1];
+        	if(!tree.containsKey(v1))
+        		tree.put(v1, new ArrayList<>());
+        	if(!tree.containsKey(v2))
+        		tree.put(v2, new ArrayList<>());
+        	tree.get(v1).add(v2);
+        	tree.get(v2).add(v1);
+        }
+		Set<Integer> visited = new HashSet<>();
+		visited.add(1);
+		int total = cutTheTreeSum(tree, treeSum, 1, visited, data);
+		int min = Integer.MAX_VALUE;
+		for(int i=2; i<=n; i++) {
+			int one = treeSum[i];
+			int other = total - one;
+			min = Math.min(min, Math.abs(one - other));
+		}
+		return min;
+    }
 	
+	static int cutTheTreeSum(Map<Integer, List<Integer>> tree, int[] treeSum, int v, Set<Integer> visited, int[] data) {
+		int sum = data[v-1];
+		for(int other : tree.get(v)) {
+			if(visited.contains(other))
+				continue;
+			visited.add(other);
+			sum += cutTheTreeSum(tree, treeSum, other, visited, data);
+		}
+		treeSum[v] = sum;
+		return sum;
+	}
 	
 	
 	
