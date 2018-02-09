@@ -490,6 +490,72 @@ public class Medium {
 	}
 	
 	
+	static String countLuck(String[] matrix, int k) {
+        char[][] board = new char[matrix.length][matrix[0].length()];
+        for(int i=0; i<matrix.length; i++)
+        	board[i] = matrix[i].toCharArray();
+        int[] ways = new int[1];
+        for(int i=0; i<matrix.length; i++) {
+        	for(int j=0; j<matrix[0].length(); j++) {
+        		if(board[i][j] == 'M') {
+        			countLuckHelp(board, i, j, ways);
+        			break;
+        		}
+        	}
+        }
+        System.out.println(ways[0]);
+        System.out.println(k);
+		if(ways[0] == k)
+			return "Impressed";
+		return "Oops!";
+    }
+	
+	static int [][] directions = {{-1,0}, {1,0}, {0,-1}, {0,1}};
+	
+	static boolean countLuckHelp(char[][] matrix, int x, int y, int[] ways) {
+		System.out.println("x:"+x +" y:"+y+" 岔口:"+ways[0]);
+		if(matrix[x][y] == '*')
+			return true;
+		int added = 0;
+		for(int[] dir:directions) {
+			int a = x + dir[0];
+			int b = y + dir[1];
+			if(a < 0 || a >= matrix.length || b < 0 || b >= matrix[0].length || matrix[a][b] == 'X' || matrix[a][b] == 'M')
+				continue;
+			added++;
+		}
+		
+		for(int[] dir:directions) {
+			int a = x + dir[0];
+			int b = y + dir[1];
+			if(a < 0 || a >= matrix.length || b < 0 || b >= matrix[0].length || matrix[a][b] == 'X' || matrix[a][b] == 'M')
+				continue;
+			if(matrix[a][b] !='*')
+				matrix[a][b] = 'M';
+			if(added > 1) {
+				System.out.println("x:"+x+" y:"+y+" 岔口:"+added);
+			}
+			int temp = added > 1 ? 1 : 0;
+			ways[0] += temp;
+			if(countLuckHelp(matrix, a, b, ways))
+				return true;
+			ways[0] -= temp;
+			
+		}
+		
+		return false;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
@@ -500,7 +566,7 @@ public class Medium {
 	
 	
 	public static void main(String[] args) {
-		formingMagicSquare(null);
+		
 	}
 
 }
