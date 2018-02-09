@@ -558,11 +558,121 @@ public class Easy {
     }
 	
 	
+	static String angryProfessor(int k, int[] a) {
+		int counter = 0;
+		for(int p : a) {
+			if(p <= 0)
+				counter++;
+		}
+		if(counter >= k)
+			return "NO";
+		return "YES";
+    }
+	
+	
+	static int beautifulDays(int i, int j, int k) {
+        int beautifulDays = 0;
+        for(int num =i; num <= j; num++) {
+        	int reverse = reverseInteger(num);
+        	int abs = Math.abs(reverse - num);
+        	if(abs % k == 0)
+        		beautifulDays++;
+        }
+        return beautifulDays;
+    }
+	
+	static int reverseInteger(int num) {
+		int reverse = 0;
+		while(num != 0) {
+			int temp = num % 10;
+			reverse = reverse * 10 + temp;
+			num /= 10;
+		}
+		return reverse;
+	}
+	
+	static int viralAdvertising(int n) {
+        int like = 0;
+        int people = 5;
+        for(int i=1; i<=n; i++) {
+        	int half = people/2;
+        	like += half;
+        	people = half * 3;
+        }
+        return like;
+    }
+	
+	static int saveThePrisoner(int n, int m, int s){
+		int answer = (int) (((long)s + (long)m-1) % n);
+        return answer == 0 ? n : answer;
+    }
+	
+	static int hurdleRace(int k, int[] height) {
+        int max = -1;
+        for(int h : height)
+        	if(h > max)
+        		max = h;
+        if(max <= k)
+        	return 0;
+        return max - k;
+    }
 	
 	
 	
 	
+	static int[] kaprekarNumbers(int p, int q) {
+        List<Integer> list = new ArrayList<>();
+		
+        for(int i=p; i<=q; i++) {
+        	if(isKaprekarNumber(i, getNumberLength(i)))
+        		list.add(i);
+        }
+        
+		int[] array = new int[list.size()];
+		for(int i=0; i<list.size();i++)
+			array[i] = list.get(i);
+		return array;
+    }
 	
+	static int[] numberLengthHelp = {9, 99, 999, 9999, 99999, 999999, 9999999};
+	
+	static int getNumberLength(int num) {
+		for(int i=0; i<numberLengthHelp.length; i++) {
+			if(num <= numberLengthHelp[i])
+				return i+1;
+		}
+		return -1;
+	}
+	
+	static boolean isKaprekarNumber(long num, int length) {
+		long power = num * num;
+		long left = power, right = 0;
+		long ten = 1;
+		while(length > 0) {
+			long digit = left % 10;
+			right = digit * ten + right;
+			left /= 10;
+			length--;
+			ten *= 10;
+		}
+		return left + right == num;
+	}
+	
+	static int beautifulTriplets(int d, int[] arr) {
+        int beautifulTriplets = 0;
+        if(arr.length < 3)
+        	return beautifulTriplets;
+        Set<Integer> set = new HashSet<>();
+        for(int num : arr)
+        	set.add(num);
+        for(int num : arr) {
+        	int two = num + d;
+        	int three = num + d * 2;
+        	if(set.contains(two) && set.contains(three))
+        		beautifulTriplets++;
+        }
+        return beautifulTriplets;
+    }
 	
 	
 	
@@ -571,7 +681,7 @@ public class Easy {
 	
 
 	public static void main(String[] args) {
-		
+		System.out.println(isKaprekarNumber(77778, 5));
 
 	}
 
