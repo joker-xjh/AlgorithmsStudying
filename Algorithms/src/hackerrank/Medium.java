@@ -586,10 +586,48 @@ public class Medium {
 	}
 	
 	
+	static String encryption(String s) {
+        int L = s.length();
+        double sqrt = Math.sqrt(L);
+		int floor = (int) Math.floor(sqrt);
+		int ceil = (int) Math.ceil(sqrt);
+		System.out.println(floor  +" "+ceil);
+		if(floor * ceil < L)
+			floor++;
+		StringBuilder sb = new StringBuilder();
+		for(int i=0; i<ceil; i++) {
+			for(int j=0; j<floor; j++) {
+				int index = i + j * ceil;
+				if(index >= L)
+					continue;
+				sb.append(s.charAt(index));
+			}
+			if(i != ceil-1)
+				sb.append(' ');
+		}
+		return sb.toString();
+    }
 	
 	
-	
-	
+	static String biggerIsGreater(String w) {
+		if(w.length() < 2)
+			return "no answer";
+        char[] array = w.toCharArray();
+		int i = array.length - 2;
+		while(i >= 0 && array[i] >= array[i+1])
+			i--;
+		if(i < 0)
+			return "no answer";
+		int j = array.length-1;
+		while(array[j] <= array[i])
+			j--;
+		char c = array[i];
+		array[i] = array[j];
+		array[j] = c;
+		Arrays.sort(array, i+1, array.length);
+		String s = new String(array);
+		return s;
+    }
 	
 	
 	
