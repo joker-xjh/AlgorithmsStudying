@@ -728,9 +728,49 @@ public class Medium {
     }
 	
 	
+	static void separateNumbers(String s) {
+        if(s.length() < 2) {
+        	System.out.println("NO");
+        	return;
+        }
+        String[] first = new String[1];
+        if(separateNumbersHelp(s, true, first, 0)) {
+        	System.out.println("YES "+first[0]);
+        }
+        else {
+        	System.out.println("NO");
+        }
+    }
 	
+	static boolean separateNumbersHelp(String s, boolean isFirst, String[] first, long num) {
+		if(s.length() == 0)
+			return true;
+		if(isFirst) {
+			for(int i=0; i<s.length()/2; i++) {
+				String sub = s.substring(0, i+1);
+				long number = strToLong(sub);
+				first[0] = sub;
+				if(separateNumbersHelp(s.substring(sub.length()), false, first, number+1))
+					return true;
+			}
+		}
+		else {
+			String value = String.valueOf(num);
+			if(s.startsWith(value)) {
+				if(separateNumbersHelp(s.substring(value.length()), false, first, num+1))
+					return true;
+			}
+		}
+		return false;
+	}
 	
-	
+	static long strToLong(String s) {
+		long num = 0;
+		for(int i=0; i<s.length(); i++) {
+			num = num * 10 + s.charAt(i) - '0';
+		}
+		return num;
+	}
 	
 	
 	
