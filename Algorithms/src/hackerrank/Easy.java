@@ -735,7 +735,19 @@ public class Easy {
 	
 	
 	
-	
+	static String hackerrankInString(String s) {
+        String word = "hackerrank";
+		if(s.length() < word.length())
+			return "NO";
+		int j = 0;
+		for(int i=0; i<s.length(); i++) {
+			if(j < word.length() && s.charAt(i) == word.charAt(j))
+				j++;
+		}
+		if(j != word.length())
+			return "NO";
+		return "YES";
+    }
 	
 	
 	
