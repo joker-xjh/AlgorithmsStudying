@@ -674,6 +674,80 @@ public class Easy {
         return beautifulTriplets;
     }
 	
+	static int minimumDistances(int[] a) {
+		int distance = Integer.MAX_VALUE;
+		Map<Integer, List<Integer>> map = new HashMap<>();
+		for(int i=0; i<a.length; i++) {
+			int num = a[i];
+			if(!map.containsKey(num))
+				map.put(num, new ArrayList<>());
+			map.get(num).add(i);
+		}
+		for(int num : map.keySet()) {
+			List<Integer> list = map.get(num);
+			for(int i=1; i<list.size(); i++) {
+				int cur = list.get(i);
+				int pre = list.get(i-1);
+				distance = Math.min(distance, Math.abs(cur - pre));
+			}
+		}
+		if(distance == Integer.MAX_VALUE)
+			return -1;
+		return distance;
+    }
+	
+	
+	static int findDigits(int n) {
+        int digits = 0;
+        int original = n;
+        while(n != 0) {
+        	int a = n % 10;
+        	if(a != 0) {
+        		if(original % a == 0)
+        			digits++;
+        	}
+        	n /= 10;
+        }
+        return digits;
+    }
+	
+	
+	
+	static int nonDivisibleSubset(int k, int[] arr) {
+        int subset = 0;
+        int[] bucket = new int[k];
+        for(int num : arr) {
+        	bucket[num % k]++;
+        }
+        int end = k / 2;
+        for(int i=1; i<=end; i++) {
+        	if(i != k-i) {
+        		subset += Math.max(bucket[i], bucket[k-i]);
+        	}
+        	else {
+        		if(bucket[i] > 0)
+        			subset++;
+        	}
+        }
+        subset += Math.min(bucket[0], 1);
+        return subset;
+    }
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
