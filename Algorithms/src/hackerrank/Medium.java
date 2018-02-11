@@ -630,6 +630,108 @@ public class Medium {
     }
 	
 	
+	static int connectedCell(int[][] matrix) {
+        int answer = 0;
+        int[] counter = new int[1];
+        for(int i=0; i<matrix.length; i++) {
+        	for(int j=0; j<matrix[0].length; j++) {
+        		if(matrix[i][j] == 1) {
+        			matrix[i][j] = 0;
+        			counter[0] = 1;
+        			connectedCellSearch(matrix, i, j, counter);
+        			answer = Math.max(answer, counter[0]);
+        		}
+        	}
+        }
+        
+        return answer;
+    }
+	
+	static int [][] dir = {{-1,0}, {1,0}, {0,1}, {0,-1}, {-1,-1}, {-1,1}, {1,-1},{1,1}};
+	
+	static void connectedCellSearch(int[][] matrix, int x, int y, int[] counter) {
+		int n = matrix.length, m = matrix[0].length;
+		for(int[] d : dir) {
+			int a = d[0] + x;
+			int b = d[1] + y;
+			if(a < 0 || a >= n || b < 0 || b >= m || matrix[a][b] == 0)
+				continue;
+			counter[0]++;
+			matrix[a][b] = 0;
+			connectedCellSearch(matrix, a, b, counter);
+		}
+	}
+	
+	
+	static int pairs(int k, int[] arr) {
+        int pairs = 0;
+        Set<Long> set = new HashSet<>();
+        for(int num : arr)
+        	set.add(new Long(num));
+        Set<String> used = new HashSet<>();
+        for(int i=0; i<arr.length; i++) {
+        	long num = arr[i];
+        	for(int j=0; j<2; j++) {
+        		long other = j == 0 ? num - k : num + k;
+        		if(set.contains(other)) {
+            		String key = num + "," + other;
+            		String otherKey = other + ","+ num;
+            		if(!used.contains(key) && !used.contains(otherKey)) {
+            			used.add(key);
+            			used.add(otherKey);
+            			pairs++;
+            		}
+            	}
+        	}
+        }
+        return pairs;
+    }
+	
+	
+	
+	static String isValid(String s){
+        int[] map = new int[26];
+		for(char c : s.toCharArray())
+			map[c-'a']++;
+		Arrays.sort(map);
+		int index = -1;
+		for(int i=0; i<26; i++) {
+			if(map[i] != 0) {
+				index = i;
+				break;
+			}
+		}
+		boolean valid = true;
+		for(int i=index+1; i<26; i++) {
+			if(map[i] != map[i-1]) {
+				valid = false;
+				break;
+			}
+		}
+		if(valid)
+			return "YES";
+		for(char c='a'; c<='z'; c++) {
+			map[c-'a']--;
+			valid = true;
+			int temp = map[index] == 0 ? index+1 : index;
+			for(int i=temp+1; i<26; i++) {
+				if(map[i] != map[i-1]) {
+					valid = false;
+					break;
+				}
+			}
+			map[c-'a']++;
+			if(valid)
+				return "YES";
+		}
+		return "NO";
+    }
+	
+	
+	
+	
+	
+	
 	
 	
 	
