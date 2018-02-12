@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 
 public class Medium {
@@ -772,7 +773,88 @@ public class Medium {
 		return num;
 	}
 	
+	static int queensAttack(int n, int k, int r_q, int c_q, int[][] obstacles) {
+        int attack = 0;
+        Set<String> obs = new HashSet<>();
+        for(int[] obstacle : obstacles) {
+        	String pos = obstacle[0] + ","+obstacle[1];
+        	obs.add(pos);
+        }
+        for(int i=r_q-1; i>0; i--) {
+        	String ops = i+","+c_q;
+        	if(obs.contains(ops))
+        		break;
+        	attack++;
+        }
+        for(int i=r_q+1; i<=n; i++) {
+        	String ops = i+","+c_q;
+        	if(obs.contains(ops))
+        		break;
+        	attack++;
+        }
+        for(int i=c_q-1; i>0; i--) {
+        	String ops = r_q +","+i;
+        	if(obs.contains(ops))
+        		break;
+        	attack++;
+        }
+        for(int i=c_q+1; i<=n; i++) {
+        	String ops = r_q +","+i;
+        	if(obs.contains(ops))
+        		break;
+        	attack++;
+        }
+        for(int i=r_q-1, j=c_q-1; i>0 && j >0; i--,j--) {
+        	String ops = i+","+j;
+        	if(obs.contains(ops))
+        		break;
+        	attack++;
+        }
+        for(int i=r_q+1, j=c_q+1; i<=n && j<=n; i++,j++) {
+        	String ops = i+","+j;
+        	if(obs.contains(ops))
+        		break;
+        	attack++;
+        }
+        for(int i=r_q-1,j=c_q+1; i>0 && j<=n; i--,j++) {
+        	String ops = i+","+j;
+        	if(obs.contains(ops))
+        		break;
+        	attack++;
+        }
+        for(int i=r_q+1,j=c_q-1; i<=n && j>0; i++,j--) {
+        	String ops = i+","+j;
+        	if(obs.contains(ops))
+        		break;
+        	attack++;
+        }
+        
+        return attack;
+    }
 	
+	static int getMoneySpent(int[] keyboards, int[] drives, int s){
+        int money = -1;
+        if(keyboards.length < drives.length) {
+        	int[] temp = keyboards;
+        	keyboards = drives;
+        	drives = temp;
+        }
+        TreeSet<Integer> bst = new TreeSet<>();
+        for(int price : drives)
+        	bst.add(price);
+        
+        for(int i=0; i<keyboards.length; i++) {
+        	int price = keyboards[i];
+        	int other = s - price;
+        	if(other < 0)
+        		continue;
+        	Integer num = bst.floor(other);
+        	if(num == null)
+        		continue;
+        	money = Math.max(money, price + num);
+        }
+        return money;
+    }
 	
 	
 	
