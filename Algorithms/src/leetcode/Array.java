@@ -2223,7 +2223,127 @@ public class Array {
      
      
      
+     public int movesToChessboard(int[][] board) {
+         int moves = 0;
+         int n = board.length;
+         if(!movesToChessboardPreCheck(board))
+        	 return -1;
+         Set<String> used = new HashSet<>();
+         String goal1 = movesToChessboardGoal(n, true);
+         String goal2 = movesToChessboardGoal(n, false);
+         String start = Arrays.deepToString(board);
+         if(start.equals(goal1) || start.equals(goal2))
+        	 return 0;
+         used.add(start);
+         Queue<int[][]> queue = new LinkedList<>();
+         queue.add(board);
+         while(!queue.isEmpty()) {
+        	 int size = queue.size();
+        	 moves++;
+        	 for(int i=0; i<size; i++) {
+        		 int[][] matrix = queue.poll();
+        		 for(int x=0; x<n; x++) {
+        			 for(int y=x+1; y<n; y++) {
+        				 if(movesToChessboardOptimized(board, x, y, true)) {
+        					 movesToChessboardSwap(matrix, x, y, true);
+            				 String temp = Arrays.deepToString(matrix);
+            				 if(temp.equals(goal1) || temp.equals(goal2))
+            					 return moves;
+            				 if(!used.contains(temp)) {
+            					 used.add(temp);
+            					 queue.add(movesToChessboardClone(matrix));
+            				 }
+            				 movesToChessboardSwap(matrix, x, y, true);
+        				 }
+        				 
+        				 if(movesToChessboardOptimized(board, x, y, false)) {
+        					 movesToChessboardSwap(matrix, x, y, false);
+            				 String temp = Arrays.deepToString(matrix);
+            				 if(temp.equals(goal1) || temp.equals(goal2))
+            					 return moves;
+            				 if(!used.contains(temp)) {
+            					 used.add(temp);
+            					 queue.add(movesToChessboardClone(matrix));
+            				 }
+            				 movesToChessboardSwap(matrix, x, y, false);
+        				 }
+        			 }
+        		 }
+        	 }
+         }
+         
+         
+         return -1;
+     }
      
+     private boolean movesToChessboardOptimized(int[][] board, int x, int y, boolean row) {
+    	 int n = board.length;
+    	 for(int i=0; i<n; i++) {
+			 int one = row ? board[x][i] : board[i][x];
+			 int other = row ? board[y][i] : board[i][y];
+			 if(one != (other ^ 1))
+				 return false;
+		 }
+    	 return true;
+     }
+     
+     private int[][] movesToChessboardClone(int[][] board){
+    	 int n = board.length;
+    	 int[][] matrix = new int[n][n];
+    	 for(int i=0; i<n; i++) {
+    		 for(int j=0; j<n; j++) {
+    			 matrix[i][j] = board[i][j];
+    		 }
+    	 }
+    	 return matrix;
+     }
+     
+     private void movesToChessboardSwap(int[][] board, int i, int j, boolean row) {
+    	 if(row) {
+    		 for(int a=0; a<board.length; a++) {
+        		 int temp = board[i][a];
+        		 board[i][a] = board[j][a];
+        		 board[j][a] = temp;
+        	 }
+    	 }
+    	 else {
+    		 for(int a=0; a<board.length; a++) {
+    			 int temp = board[a][i];
+    			 board[a][i] = board[a][j];
+    			 board[a][j] = temp;
+    		 }
+    	 }
+     }
+     
+     private String movesToChessboardGoal(int n, boolean b) {
+    	 int[][] board = new int[n][n];
+    	 for(int i=0; i<n; i++) {
+    		 for(int j=0; j<n; j++) {
+    			 if(b)
+    				 board[i][j] = 1;
+    			 else
+    				 board[i][j] = 0;
+    			 b = !b;
+    		 }
+    		 if((n & 1) == 0)
+    			 b = !b;
+    	 }
+    	 return Arrays.deepToString(board);
+     }
+     
+     private boolean  movesToChessboardPreCheck(int[][] board) {
+    	 int n = board.length;
+    	 int one = 0;
+    	 int zero = 0;
+    	 for(int i=0; i<n; i++)
+    		 for(int j=0; j<n; j++) {
+    			 if(board[i][j] == 0)
+    				 zero++;
+    			 else
+    				 one++;
+    		 }
+    	 return Math.abs(one - zero) <= 1;
+     }
      
      
      
