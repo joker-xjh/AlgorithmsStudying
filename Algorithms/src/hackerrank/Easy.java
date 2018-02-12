@@ -1,6 +1,7 @@
 package hackerrank;
 
 import java.util.ArrayList;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -750,10 +751,115 @@ public class Easy {
     }
 	
 	
+	static String pangram(String str) {
+		boolean[] map = new boolean[26];
+		for(char c : str.toCharArray()) {
+			if(c == ' ')
+				continue;
+			if(c >= 'A' && c <= 'Z')
+				c += 32;
+			map[c-'a'] = true;
+		}
+		for(boolean b : map)
+			if(!b)
+				return "not pangram";
+		return "pangram";
+	}
 	
 	
+	static void WeightedUniformStrings(Set<Integer> set, String str) {
+		int weight = 0;
+		char c = str.charAt(0);
+		weight += c - 'a' + 1;
+		set.add(weight);
+		for(int i=1; i<str.length(); i++) {
+			c = str.charAt(i);
+			char pre = str.charAt(i-1); 
+			if(c != pre) {
+				weight = 0;
+			}
+			weight += c - 'a'+1;
+			set.add(weight);
+		}
+	}
 	
 	
+	static int stringConstruction(String s) {
+        Set<Character> set = new HashSet<>();
+        for(char c : s.toCharArray())
+        	set.add(c);
+        return set.size();
+    }
+	
+	
+	static String funnyString(String s){
+        for(int i=1,j=s.length()-1; i<s.length(); i++,j--) {
+        	int one = Math.abs(s.charAt(i) - s.charAt(i-1));
+        	int two = Math.abs(s.charAt(j) - s.charAt(j-1));
+        	if(one != two)
+        		return "Not Funny";
+        }
+		return "Funny";
+    }
+	
+	static int gemstones(String[] arr){
+        int values = 0;
+        int[] counter = new int[26];
+        boolean[] used = new boolean[26];
+        for(String s : arr) {
+        	Arrays.fill(used, false);
+        	for(char c : s.toCharArray()) {
+        		if(!used[c-'a']) {
+        			counter[c-'a']++;
+        		}
+        		used[c-'a'] = true;
+        	}
+        }
+        for(int i=0; i<26; i++) {
+        	if(counter[i] == arr.length)
+        		values++;
+        }
+        return values;
+    }
+	
+	
+	static int sockMerchant(int n, int[] ar) {
+        int pairs = 0;
+        int[] bucket = new int[101];
+        for(int i=0; i<n; i++)
+        	bucket[ar[i]]++;
+        for(int i=1; i<=100; i++)
+        	pairs += bucket[i] / 2;
+        return pairs;
+    }
+
+	static long repeatedString(String s, long n) {
+        long counter = 0;
+        long temp = 0;
+        int length = s.length();
+        for(char c : s.toCharArray())
+        	if(c == 'a')
+        		temp++;
+        counter += temp * (n / length);
+        int mod = (int) (n % length);
+        for(int i=0; i<mod; i++)
+        	if(s.charAt(i) == 'a')
+        		counter++;
+        return counter;
+    }
+	
+	
+	static int jumpingOnClouds(int[] c) {
+        int n = c.length;
+		int[] dp = new int[n];
+		dp[1] = c[1] == 1 ? 10000 : 1;
+		for(int i=2; i<n; i++) {
+			dp[i] = Math.min(dp[i-1]+1, dp[i-2]+1);
+			if(c[i] == 1)
+				dp[i] += 10000;
+		}
+		return dp[n-1];
+    }
 	
 	
 	
@@ -767,8 +873,7 @@ public class Easy {
 	
 
 	public static void main(String[] args) {
-		System.out.println(isKaprekarNumber(77778, 5));
-
+		
 	}
 
 }
