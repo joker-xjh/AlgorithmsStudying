@@ -726,6 +726,45 @@ public class Tree {
     }
     
     
+    
+    public int minDiffInBST(TreeNode root) {
+        minDiffInBSTHelp(root);
+    	return minDiff;
+    }
+    
+    private int minDiff = Integer.MAX_VALUE;
+    private TreeNode minDiffPre = null;
+    
+    private void minDiffInBSTHelp(TreeNode node) {
+    	if(node == null)
+    		return;
+    	minDiffInBSTHelp(node.left);
+    	System.out.println(node.val);
+    	if(minDiffPre == null)
+    		minDiffPre = node;
+    	else {
+    		minDiff = Math.min(minDiff, node.val - minDiffPre.val);
+    	}
+    	minDiffPre = node;
+    	minDiffInBSTHelp(node.right);
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
    
     
     
