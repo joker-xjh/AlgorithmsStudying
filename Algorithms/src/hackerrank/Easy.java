@@ -862,12 +862,80 @@ public class Easy {
     }
 	
 	
+	static int equalizeArray(int[] arr) {
+        int options = 0;
+        int[] bucket = new int[101];
+        for(int num : arr)
+        	bucket[num]++;
+        Arrays.sort(bucket);
+        for(int i=0; i<100; i++)
+        	options += bucket[i];
+        return options;
+    }
+	
+	 static int[] circularArrayRotation(int[] a, int[] m, int k) {
+	        int[] answer = new int[m.length];
+	        flipArray(a, k, a.length);
+	        System.out.println(Arrays.toString(a));
+	        flipArray(a, 0, k);
+	        System.out.println(Arrays.toString(a));
+	        flipArray(a, 0, a.length);
+	        System.out.println(Arrays.toString(a));
+	        for(int i=0; i<m.length; i++) {
+	        	answer[i] = a[m[i]];
+	        }
+	        return answer;
+	 }
+	
+	 static void flipArray(int[] array, int left, int right) {
+			int mid = left + (right - left) / 2;
+			for(int i=left; i<mid; i++) {
+				int c = array[i];
+				array[i] = array[right - 1 - i + left];
+				array[right - 1 - i + left] = c;
+			}
+		}
 	
 	
-	
-	
-	
-	
+	 static int jumpingOnClouds(int[] c, int k) {
+	        int energe = 100;
+	        int index = 0;
+	        int n = c.length;
+	        do {
+				energe -= 1;
+				index = (index + k) % n;
+				if(c[index] == 1)
+					energe -= 2;
+			} while (index != 0);
+	        
+	        return energe;
+	 }
+	 
+	 static int[] acmTeam(String[] topic, int m) {
+	       int[] answer = new int[2];
+	       int[] bucket = new int[m+1];
+	       int n = topic.length;
+	       int max = -1;
+	       for(int i=0; i<n; i++) {
+	    	   String one = topic[i];
+	    	   for(int j=i+1; j<n; j++) {
+	    		   String other = topic[j];
+	    		   int counter = 0;
+	    		   for(int k=0; k<m; k++) {
+	    			   char c1 = one.charAt(k);
+	    			   char c2 = other.charAt(k);
+	    			   if(c1 == '1' || c2 =='1' )
+	    				   counter++;
+	    		   }
+	    		   bucket[counter]++;
+	    		   if(counter > max)
+	    			   max = counter;
+	    	   }
+	       }
+	       answer[0] = max;
+	       answer[1] = bucket[max];
+	       return answer;
+	 }
 	
 	
 	
