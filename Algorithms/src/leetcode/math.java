@@ -1,7 +1,9 @@
 package leetcode;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class math {
 	
@@ -125,14 +127,53 @@ public class math {
     
     
     
+    public boolean reachingPoints(int sx, int sy, int tx, int ty) {
+    	return reachingPointsHelp(sx, sy, tx, ty);
+    }
     
+    private boolean reachingPointsHelp(long x, long y, long a, long b) {
+    	if(x > a || y > b)
+    		return false;
+    	if(x == a)
+    		return (b - y) % x == 0;
+    	if(y == b)
+    		return (a - x) % y == 0;
+    	return reachingPointsHelp(2*x+y, x+y, a, b) ||
+    		   reachingPointsHelp(x+y, x+2*y, a, b) ||
+    		   reachingPointsHelp(3*x+y, 2*x+y, a, b) ||
+    		   reachingPointsHelp(x+2*y, x+3*y, a, b);
+    }
+    public boolean reachingPoints2(int sx, int sy, int tx, int ty) {
+    	return reachingPointsHelp2(sx, sy, tx, ty, new HashMap<>());
+    }
     
+    private boolean reachingPointsHelp2(long x, long y, long a, long b, Map<String, Boolean> memorization) {
+    	if(x > a || y > b)
+    		return false;
+    	if(x == a)
+    		return (b - y) % x == 0;
+    	if(y == b)
+    		return (a - x) % y == 0;
+    	String key = x+","+y;
+    	if(memorization.containsKey(key))
+    		return memorization.get(key);
+    	boolean result = reachingPointsHelp2(2*x+y, x+y, a, b, memorization) ||
+     		   reachingPointsHelp2(x+y, x+2*y, a, b, memorization) ||
+     		   reachingPointsHelp2(3*x+y, 2*x+y, a, b, memorization) ||
+     		   reachingPointsHelp2(x+2*y, x+3*y, a, b, memorization);
+    	memorization.put(key, result);
+    	return result;
+    }
     
-    
-    
-    
-    
-    
+    public boolean reachingPoints3(int sx, int sy, int tx, int ty) {
+    	while(sx < tx && sy < ty) {
+    		if(tx > ty)
+    			tx %= ty;
+    		else
+    			ty %= tx;
+    	}
+    	return (sx == tx && (ty-sy) % sx == 0) || (sy == ty && (tx - sx) % sy == 0);
+    }
     
     
     
