@@ -2345,7 +2345,25 @@ public class Array {
     	 return Math.abs(one - zero) <= 1;
      }
      
-     
+     public int numRabbits(int[] answers) {
+         int[] bucket = new int[1000];
+         for(int i=0; i<answers.length; i++) {
+        	 bucket[answers[i]]++;
+         }
+         int rabbits = 0;
+         for(int i=0; i<1000; i++) {
+        	int counter = bucket[i];
+        	int mod = counter % (i+1);
+        	int div = counter / (i+1);
+        	if(mod == 0) {
+        		rabbits += counter;
+        	}
+        	else {
+        		rabbits += (div + 1) * (i+1);
+        	}
+         }
+    	 return rabbits;
+     }
      
      
      
