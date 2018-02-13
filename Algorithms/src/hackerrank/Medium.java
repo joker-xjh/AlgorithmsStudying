@@ -856,7 +856,19 @@ public class Medium {
         return money;
     }
 	
-	
+	static String larrysArray(int[] A) {
+        int inversions = 0;
+		for(int i=0; i<A.length; i++) {
+			int num = A[i];
+			for(int j=i+1; j<A.length; j++) {
+				if(A[j] < num)
+					inversions++;
+			}
+		}
+		if(inversions % 2 == 0)
+			return "YES";
+		return "NO";
+    }
 	
 	
 	
