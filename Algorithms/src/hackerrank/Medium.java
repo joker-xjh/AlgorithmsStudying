@@ -871,6 +871,41 @@ public class Medium {
     }
 	
 	
+	static int[] climbingLeaderboard(int[] scores, int[] alice) {
+        int m = alice.length;
+        int[] answer = new int[m];
+        int[] temp = new int[scores.length];
+        int index = 0;
+        Set<Integer> set = new HashSet<>();
+        for(int score : scores) {
+        	if(set.contains(score))
+        		continue;
+        	set.add(score);
+        	temp[index++] = score;
+        }
+        for(int i=0; i<m; i++) {
+        	int level = climbingLeaderboardHelp(temp, 0, index-1, alice[i]);
+            answer[i] = level+1;
+        }
+        
+        return answer;
+    }
+	
+	static int climbingLeaderboardHelp(int[] scores, int left, int right, int target) {
+		while(left <= right) {
+			int mid = left + (right - left) / 2;
+			if(target == scores[mid])
+				return mid;
+			else if(target < scores[mid])
+				left = mid + 1;
+			else
+				right = mid - 1;
+		}
+		
+		return left;
+	}
+	
+	
 	
 	
 	
