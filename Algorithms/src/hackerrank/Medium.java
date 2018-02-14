@@ -906,6 +906,49 @@ public class Medium {
 	}
 	
 	
+	static long getWays(long n, long[] c){
+        return getWaysHelp(n, c, c.length, new HashMap<>());
+    }
+	
+	static long getWaysHelp(long n, long[] coins, int m, Map<String, Long> memorization) {
+		if(n == 0)
+			return 1;
+		if(n < 0)
+			return -0;
+		if(m <= 0 && n > 0)
+			return 0;
+		String key = "" + n+","+m;
+		if(memorization.containsKey(key))
+			return memorization.get(key);
+		long sum = 0;
+		sum = getWaysHelp(n, coins, m-1, memorization) + getWaysHelp(n - coins[m-1], coins, m, memorization);
+		memorization.put(key, sum);
+		return sum;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
