@@ -936,6 +936,129 @@ public class Easy {
 	       answer[1] = bucket[max];
 	       return answer;
 	 }
+	 
+	 
+	 
+	 static int designerPdfViewer(int[] h, String word) {
+	        int area = 0;
+	        int width = word.length();
+	        int height = 0;
+	        for(char c : word.toCharArray()) {
+	        	height = Math.max(height, h[c-'a']);
+	        }
+	        area = width * height;
+	        return area;
+	 }
+	 
+	 static long taumBday(long b, long w, long x, long y, long z) {
+	        long cost = 0;
+	        if(x+z-y < 0) {
+	        	cost += b * x + w * (x+z);
+	        }
+	        else if(y+z-x < 0) {
+	        	cost += b * (y+z) + w * y;
+	        }
+	        else {
+	        	cost += b * x + w * y;
+	        }
+	        return cost;
+	 }
+	 
+	 
+	 static int[] closestNumbers(int[] arr) {
+	     Map<Integer, Integer> negative = new HashMap<>();
+	     for(int i=0; i<arr.length; i++) {
+	    	 int num = arr[i];
+	    	 if(num <0) {
+	    		 negative.put(-num, num);
+	    		 arr[i] = -arr[i];
+	    	 }
+	     }
+	     Arrays.sort(arr);
+	     int diff = Integer.MAX_VALUE;
+	     for(int i=1; i<arr.length; i++) {
+	    	 diff = Math.min(diff, arr[i] - arr[i-1]);
+	     }
+	     List<Integer> list = new ArrayList<>();
+	     for(int i=1; i<arr.length; i++) {
+	    	 int pre = arr[i-1];
+	    	 int cur = arr[i];
+	    	 if(cur - pre != diff)
+	    		 continue;
+	    	 if(pre == cur) {
+	    		 list.add(-pre);
+	    		 list.add(cur);
+	    		 continue;
+	    	 }
+	    	 
+	    	 Integer reverse = negative.get(pre);
+	    	 if(reverse == null)
+	    		 list.add(pre);
+	    	 else
+	    		 list.add(-pre);
+	    	 
+	    	 reverse = negative.get(cur);
+	    	 if(reverse == null)
+	    		 list.add(cur);
+	    	 else
+	    		 list.add(-cur);
+	     }
+		 int[] answer = new int[list.size()];
+	     for(int i=0; i<answer.length; i++)
+	    	 answer[i] = list.get(i);
+	     Arrays.sort(answer);
+		 return answer;
+	 }
+	 
+	 
+	 static int[] closestNumbers2(int[] arr) {
+		 Arrays.sort(arr);
+		 int diff = Integer.MAX_VALUE;
+		 for(int i=1; i<arr.length; i++) {
+			 diff = Math.min(diff, arr[i] - arr[i-1]);
+		 }
+		 List<Integer> list = new ArrayList<>();
+		 for(int i=1; i<arr.length; i++) {
+			 int cur = arr[i];
+			 int pre = arr[i-1];
+			 if(cur - pre == diff) {
+				 list.add(pre);
+				 list.add(cur);
+			 }
+		 }
+		 int[] answer = new int[list.size()];
+		 for(int i=0; i<answer.length; i++) {
+			 answer[i] = list.get(i);
+		 }
+		 return answer;
+	 }
+	 
+	 
+	 static int theLoveLetterMystery(String s){
+	      int steps = 0;
+	      int length = s.length();
+	      for(int i=0; i<length/2; i++) {
+	    	  char left = s.charAt(i);
+	    	  char right = s.charAt(length - 1 - i);
+	    	  steps += Math.abs(left - right);
+	      }
+	      return steps;
+	 }
+	 
+	 static long strangeCode(long t) {
+	      long demo = 3;
+	      while(t > demo) {
+	    	  t -= demo;
+	    	  demo *= 2;
+	      }
+	      return demo - t + 1;
+	 }
+	 
+	 
+	 
+	 
+	 
+	 
 	
 	
 	
