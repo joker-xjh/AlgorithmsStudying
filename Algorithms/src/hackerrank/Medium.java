@@ -1004,7 +1004,17 @@ public class Medium {
     }
 	
 	
-	
+	static long substrings(String balls) {
+        int mod = 1000000007;
+		long f = 1;
+		long answer = 0;
+		int length = balls.length();
+		for(int i=length-1; i>=0; i--) {
+			answer = (answer + (balls.charAt(i) - '0') * (i+1) * f ) % mod;
+			f = (f*10 + 1) % mod;
+		}
+		return answer;
+    }
 	
 	
 	
