@@ -985,7 +985,23 @@ public class Medium {
     }
 	
 	
-	
+	static int candies(int n, int[] arr) {
+        int sum = 0;
+        int[] candies = new int[n];
+        Arrays.fill(candies, 1);
+        for(int i=1; i<n; i++) {
+        	if(arr[i] > arr[i-1])
+        		candies[i] = candies[i-1] + 1;
+        }
+        for(int j=n-2; j>=0; j--) {
+        	if(arr[j] > arr[j+1])
+        		candies[j] = Math.max(candies[j], (candies[j + 1] + 1));
+        }
+        for(int candy : candies)
+        	sum += candy;
+        
+        return sum;
+    }
 	
 	
 	
