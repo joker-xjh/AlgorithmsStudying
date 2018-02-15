@@ -927,6 +927,76 @@ public class Medium {
 	}
 	
 	
+	static void fibonacciModified(int t1, int t2, int n) {
+        BigInteger one = new BigInteger(String.valueOf(t1));
+        BigInteger two = new BigInteger(String.valueOf(t2));
+        for(int i=3; i<=n; i++) {
+        	BigInteger next = one.add(two.pow(2));
+        	one = two;
+        	two = next;
+        }
+        System.out.println(two);
+    }
+	
+	
+	static String abbreviation(String a, String b) {
+        int lengthA = a.length();
+        int lengthB = b.length();
+        if(lengthB > lengthA)
+        	return "NO";
+        boolean[][] dp = new boolean[lengthB+1][lengthA+1];
+        dp[0][0] = true;
+        for(int i=1; i<=lengthA; i++) {
+        	char c = a.charAt(i-1);
+        	if(c >= 'a' && c <= 'z')
+        		dp[0][i] = true;
+        	else
+        		break;
+        }
+        
+        for(int i=1; i<=lengthA; i++) {
+        	char A = a.charAt(i-1);
+        	for(int j=1; j<=lengthB; j++) {
+        		char B = b.charAt(j-1);
+        		if(A >= 'a' && A <= 'z') {
+        			if(A == B) {
+        				dp[j][i] = dp[j-1][i-1]; 
+        			}
+        			else {
+        				dp[j][i] = dp[j][i-1];
+        			}
+        			if(B + 32 == A)
+        				dp[j][i] = dp[j-1][i-1] || dp[j][i-1]; 
+        		}
+        		else {
+        			if(A == B) {
+        				dp[j][i] = dp[j-1][i-1]; 
+        			}
+        			else {
+        				dp[j][i] = false;
+        			}
+        		}
+        	}
+        }
+        
+        if(dp[lengthB][lengthA])
+        	return "YES";
+		return "NO";
+    }
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
