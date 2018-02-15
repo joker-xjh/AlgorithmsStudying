@@ -1118,6 +1118,50 @@ public class Easy {
 	     System.out.println(breads);
 	 }
 	
+	 
+	 static void happyLadybugs(String s) {
+		 int letters = 0;
+		 int underscores = 0;
+		 char[] array = s.toCharArray();
+		 for(char c : array)
+			 if(c >= 'A' && c <= 'Z')
+				 letters++;
+			 else
+				 underscores++;
+		 if(letters == 0) {
+			 System.out.println("YES");
+			 return;
+		 }
+		 if(underscores != 0)
+			 Arrays.sort(array);
+		 for(int i=0; i<array.length; i++) {
+			 char c = array[i];
+			 if(c == '_')
+				 continue;
+			 char pre = i > 0 ? array[i-1] : '\0';
+			 char next = i < array.length-1 ? array[i+1] : '\0';
+			 if(!(c == pre || c == next)) {
+				 System.out.println("NO");
+				 return;
+			 }
+		 }
+		 System.out.println("YES");
+	 }
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
 	
 	
 
