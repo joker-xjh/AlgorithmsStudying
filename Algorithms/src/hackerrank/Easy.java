@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 public class Easy {
 	
@@ -1055,10 +1056,67 @@ public class Easy {
 	 }
 	 
 	 
+	 static int workbook(int n, int k, int[] arr) {
+	     int special = 0;
+	     int page = 1;
+	     int index = 0;
+	     int num = 1;
+	     while(index < arr.length) {
+	    	 if(num + k-1 >= arr[index] ) {
+	    		 if(num <= page && page <= arr[index])
+	    			 special++;
+	    		 num = 1;
+	    		 index++;
+	    	 }
+	    	 else {
+	    		 if(num<= page && page <= num + k - 1)
+	    			 special++;
+	    		 num += k;
+	    	 }
+	    	 page++;
+	     }
+	     
+	     return special;
+	 }
+	 
+	 
+	 static int flatlandSpaceStations(int n, int[] c) {
+	       int max = 0;
+	       TreeSet<Integer> set = new TreeSet<>();
+	       for(int index : c)
+	    	   set.add(index);
+	       for(int i=0; i<n; i++) {
+	    	   Integer pre = set.floor(i);
+	    	   int temp = Integer.MAX_VALUE;
+	    	   if(pre != null)
+	    		   temp = Math.min(temp, i - pre);
+	    	   Integer next = set.ceiling(i);
+	    	   if(next != null)
+	    		   temp = Math.min(temp, next - i);
+	    	   max = Math.max(max, temp);
+	       }
+	       return max;
+	 }
 	 
 	 
 	 
-	 
+	 static void fairRations(int[] B) {
+	     int breads = 0;
+	     for(int i=0; i<B.length; i++) {
+	    	 int num = B[i];
+	    	 if((num & 1) == 0)
+	    		 continue;
+	    	 if(i == B.length-1) {
+	    		 System.out.println("NO");
+	    		 return;
+	    	 }
+	    	 B[i] += 1;
+	    	 B[i+1] += 1;
+	    	 breads += 2;
+	     }
+	     
+	     System.out.println(breads);
+	 }
 	
 	
 	
