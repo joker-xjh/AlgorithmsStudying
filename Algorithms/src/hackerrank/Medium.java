@@ -1017,10 +1017,90 @@ public class Medium {
     }
 	
 	
+	static void AbsolutePermutation(int n, int k) {
+		Set<Integer> used = new HashSet<>();
+		List<Integer> head = new ArrayList<>(n);
+		List<Integer> tail = new ArrayList<>();
+		int[] help = {-k, k};
+		int left = 1, right = n;
+		for(;left-k<1; left++) {
+			int num = left + k;
+			if(num > n) {
+				System.out.println(-1);
+				return;
+			}
+			head.add(num);
+			used.add(num);
+		}
+		for(; right+k>n && right>left; right--) {
+			int num = right - k;
+			if(num < 1 || used.contains(num)) {
+				System.out.println(-1);
+				return;
+			}
+			tail.add(num);
+			used.add(num);
+		}
+		
+		for(int i=left; i<=right; i++) {
+			boolean end = true;
+			for(int j : help) {
+				int num = i + j;
+				if(num >= 1 && num <= n) {
+					if(!used.contains(num)) {
+						used.add(num);
+						head.add(num);
+						end = false;
+					}
+				}
+			}
+			if(end) {
+				System.out.println(-1);
+				return;
+			}
+		}
+		
+		for(int i=tail.size()-1; i>=0; i--)
+			head.add(tail.get(i));
+		
+		for(int i=0; i<head.size(); i++) {
+			if(i == head.size()-1) {
+				System.out.println(head.get(i));
+			}
+			else {
+				System.out.print(head.get(i)+" ");
+			}
+		}
+	}
 	
 	
-	
-	
+	static void AbsolutePermutation2(int n, int k) {
+		List<Integer> list = new ArrayList<>();
+		boolean flag = true;
+		int counter = 0;
+		for(int i=1; i<=n; i++) {
+			int num = flag ? i + k : i - k;
+			if(!(num >= 1 && num <= n)) {
+				System.out.println(-1);
+				return;
+			}
+			list.add(num);
+			counter++;
+			if(counter == k) {
+				counter = 0;
+				flag = !flag;
+			}
+		}
+		
+		for(int i=0; i<n; i++) {
+			if(i == list.size()-1) {
+				System.out.println(list.get(i));
+			}
+			else {
+				System.out.print(list.get(i)+" ");
+			}
+		}
+	}
 	
 	
 	
