@@ -1203,9 +1203,121 @@ public class Easy {
 	 }
 	 
 	 
+	 static int camelcase(String s) {
+	     int words = 1;
+	     for(char c : s.toCharArray())
+	    	 if(c >= 'A' && c <= 'Z')
+	    		 words++;
+	     return words;
+	 }
 	 
+	 static int twoCharaters(String s) {
+	     boolean[] used = new boolean[26];
+	     int count = 0;
+	     for(char c : s.toCharArray()) {
+	    	 int i = c - 'a';
+	    	 if(!used[i]) {
+	    		 count++;
+	    	 }
+	    	 used[i] = true;
+	     }
+	     if(count < 2)
+	    	 return 0;
+		 return twoCharatersHelp(s, used, new HashMap<>(), count);
+	 }
 	 
+	 static int twoCharatersHelp(String s, boolean[] used, Map<String, Integer> memoization, int count) {
+		 if(count == 2) {
+			 if(twoCharatersCheck(s))
+				 return s.length();
+			 return 0;
+		 }
+		 if(memoization.containsKey(s))
+			 return memoization.get(s);
+		 int max = 0;
+		 for(int i=0; i<26; i++) {
+			 if(!used[i])
+				 continue;
+			 used[i] = false;
+			 max = Math.max(max, twoCharatersHelp(twoCharatersCreateStr(s, (char)('a'+i)), used, memoization, count-1));
+			 used[i] = true;
+		 }
+		 
+		 memoization.put(s, max);
+		 return max;
+	 }
 	 
+	 static String twoCharatersCreateStr(String s, char c) {
+		 StringBuilder sb = new StringBuilder();
+		 for(char ch : s.toCharArray()) {
+			 if(ch != c)
+				 sb.append(ch);
+		 }
+		 return sb.toString();
+	 }
+	 
+	 static boolean twoCharatersCheck(String s) {
+		 for(int i=1; i<s.length(); i++) {
+			 char c = s.charAt(i);
+			 char pre = s.charAt(i-1);
+			 if(pre == c)
+				 return false;
+		 }
+		 return true;
+	 }
+	 
+	 static int twoCharaters2(String s) {
+		 int max = 0;
+		 int[] counter = new int[26];
+		 for(char c : s.toCharArray()) {
+			 int i = c - 'a';
+			 counter[i]++;
+		 }
+		 for(int i=0; i<26; i++) {
+			 for(int j=i+1; j<26; j++) {
+				 if(Math.abs(counter[i] - counter[j]) > 1)
+					 continue;
+				 char a = '\0';
+				 char b = '\0';
+				 if(counter[i] > counter[j]) {
+					 a = (char) ('a' + i);
+					 b = (char) ('a' + j);
+				 }
+				 else if(counter[i] < counter[j]) {
+					 b = (char) ('a' + i);
+					 a = (char) ('a' + j);
+				 }
+				 else {
+					 a = (char) ('a' + i);
+					 b = (char) ('a' + j);
+				 }
+				 
+				 max = Math.max(max, twoCharatersLength(s, a, b));
+			 }
+		 }
+		 if(max == 1)
+			 return 0;
+		 
+		 return max;
+	 }
+	 
+	 static int twoCharatersLength(String s, char a, char b) {
+		 int max = 0;
+		 char temp = '\0';
+		 for(int i=0; i<s.length(); i++) {
+			 char c = s.charAt(i);
+			 if(c == a || c == b) {
+				 if(temp == c) {
+					 max = 0;
+					 return max;
+				 }
+				 temp = c;
+				 max++;
+			 }
+		 }
+		 
+		 return max;
+	 }
 	 
 	 
 	 
