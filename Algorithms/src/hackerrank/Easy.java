@@ -1320,6 +1320,41 @@ public class Easy {
 	 }
 	 
 	 
+	 static String caesarCipher(String s, int k) {
+	      StringBuilder sb = new StringBuilder();
+	      k = k % 26;
+	      for(char c : s.toCharArray()) {
+	    	  if((c >= 'a' && c <= 'z') ) {
+	    		  c += k;
+	    		  if(c > 'z') {
+	    			  c = (char) ('a' + c - 'z'-1);
+	    		  }
+	    	  }
+	    	  if(c >= 'A' && c <= 'Z') {
+	    		  c += k;
+	    		  if(c > 'Z') {
+	    			  c = (char) ('A' + c - 'Z'-1);
+	    		  }
+	    	  }
+	    	  sb.append(c);
+	      }
+	      return sb.toString();
+	 }
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
 	 
 	 
 	
