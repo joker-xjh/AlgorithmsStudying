@@ -1177,7 +1177,30 @@ public class Easy {
 	 }
 	 
 	 
-	 
+	 static String super_reduced_string(String s){
+	     int length = s.length();
+	     while(length > 0) {
+	    	 for(int i=0; i<length; i++) {
+	    		 char c = s.charAt(i);
+	    		 if(i < length - 1) {
+	    			 char next = s.charAt(i+1);
+	    			 if(c == next) {
+	    				 String sub = s.substring(0, i) + s.substring(i+2);
+	    				 s = sub;
+	    				 break;
+	    			 }
+	    		 }
+	    	 }
+	    	 
+	    	 if(s.length() == length) {
+	    		 System.out.println(s);
+	    		 return s;
+	    	 }
+	    	 length = s.length();
+	     }
+		 
+		 return "Empty String";
+	 }
 	 
 	 
 	 
