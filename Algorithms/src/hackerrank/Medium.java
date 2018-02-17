@@ -1151,11 +1151,165 @@ public class Medium {
     }
 	
 	
+	static int twoPluses(String[] grid) {
+        int N = grid.length, M = grid[0].length();
+        char[][] board = new char[N][M];
+        for(int i=0; i<N; i++)
+        	board[i] = grid[i].toCharArray();
+        int[][] up = new int[N][M];
+        int[][] down = new int[N][M];
+        int[][] left = new int[N][M];
+        int[][] right = new int[N][M];
+        twoPlusesHelp(board, up, down, left, right);
+        int area1 = twoPlusesArea(board, up, down, left, right);
+        print(board);
+        for(int i=0; i<N; i++) {
+        	Arrays.fill(up[i], 0);
+        	Arrays.fill(down[i], 0);
+        	Arrays.fill(left[i], 0);
+        	Arrays.fill(right[i], 0);
+        }
+        twoPlusesHelp(board, up, down, left, right);
+        int area2 = twoPlusesArea(board, up, down, left, right);
+        print(board);
+		return area1 * area2;
+    }
 	
+	static int twoPluses2(String[] grid) {
+		int N = grid.length, M = grid[0].length();
+        char[][] board = new char[N][M];
+        for(int i=0; i<N; i++)
+        	board[i] = grid[i].toCharArray();
+        int[][] up = new int[N][M];
+        int[][] down = new int[N][M];
+        int[][] left = new int[N][M];
+        int[][] right = new int[N][M];
+		int area = twoPlusesSearch(board, up, down, left, right);
+		return area;
+	}
 	
+	static int twoPlusesSearch(char[][] board, int[][] up, int[][] down, int[][] left, int[][] right) {
+		int N = board.length, M = board[0].length;
+		int maxArea = -1;
+		int[] pos = new int[2];
+		for(int i=0; i<N; i++) {
+			for(int j=0; j<M; j++) {
+				if(board[i][j] == 'B')
+					continue;
+				twoPlusesHelp(board, up, down, left, right);
+				int temp = Math.min(up[i][j], Math.min(down[i][j], Math.min(left[i][j], right[i][j])));
+				int area1 = temp * 4 + 1;
+				System.out.println("x:"+i +" y:"+j+" area:"+area1+" len:"+temp);
+				pos[0] = i; pos[1] = j;
+				fillBlank(board, pos, temp, 'B');
+				fillZero(up, down, left, right);
+				twoPlusesHelp(board, up, down, left, right);
+				int area2 = twoPlusesArea(board, up, down, left, right);
+				int area = area1 * area2;
+				maxArea = Math.max(maxArea, area);
+				fillBlank(board, pos, temp, 'G');
+				fillZero(up, down, left, right);
+				
+				while(temp > 0) {
+					temp--;
+					area1 = temp * 4 + 1;
+					pos[0] = i; pos[1] = j;
+					fillBlank(board, pos, temp, 'B');
+					fillZero(up, down, left, right);
+					twoPlusesHelp(board, up, down, left, right);
+					area2 = twoPlusesArea(board, up, down, left, right);
+					area = area1 * area2;
+					maxArea = Math.max(maxArea, area);
+					fillBlank(board, pos, temp, 'G');
+					fillZero(up, down, left, right);
+					
+				}
+				
+			}
+		}
+		
+		return maxArea;
+	}
 	
+	static void fillBlank(char[][] board, int[] pos, int len, char c) {
+		for(int i=pos[0]; i>=pos[0]-len; i--) {
+			board[i][pos[1]] = c;
+		}
+		for(int i=pos[0]; i<=pos[0]+len; i++) {
+			board[i][pos[1]] = c;
+		}
+		for(int i=pos[1]; i>=pos[1]-len; i--) {
+			board[pos[0]][i] = c;
+		}
+		for(int i=pos[1]; i<=pos[1]+len; i++) {
+			board[pos[0]][i] = c;
+		}
+	}
 	
+	static void fillZero(int[][] up, int[][] down, int[][] left, int[][] right) {
+		int N = up.length;
+		for(int i=0; i<N; i++) {
+        	Arrays.fill(up[i], 0);
+        	Arrays.fill(down[i], 0);
+        	Arrays.fill(left[i], 0);
+        	Arrays.fill(right[i], 0);
+        }
+	}
 	
+	static int twoPlusesArea(char[][] board, int[][] up, int[][] down, int[][] left, int[][] right) {
+		int area = 0;
+		int N = board.length, M = board[0].length;
+		int max = -1;
+		for(int i=0; i<N; i++) {
+			for(int j=0; j<M; j++) {
+				if(board[i][j] == 'B')
+					continue;
+				int temp = Math.min(up[i][j], Math.min(down[i][j], Math.min(left[i][j], right[i][j])));
+				max = Math.max(max, temp);
+			}
+		}
+		area = max * 4 + 1;
+		return area;
+	}
+	
+	static void twoPlusesHelp(char[][] board, int[][] up, int[][] down, int[][] left, int[][] right) {
+		int N = board.length, M = board[0].length;
+		for(int i=0; i<M; i++) {
+			for(int j=0; j<N-1; j++) {
+				if(board[j][i] == 'B')
+					continue;
+				up[j+1][i] += up[j][i] + 1;
+			}
+		}
+		for(int i=0; i<M; i++) {
+			for(int j=N-1; j>0; j--) {
+				if(board[j][i] == 'B')
+					continue;
+				down[j-1][i] += down[j][i] + 1;
+			}
+		}
+		for(int i=0; i<N; i++) {
+			for(int j=0; j<M-1; j++) {
+				if(board[i][j] == 'B')
+					continue;
+				left[i][j+1] += left[i][j] + 1;
+			}
+		}
+		for(int i=0; i<N; i++) {
+			for(int j=M-1; j>0; j--) {
+				if(board[i][j] == 'B')
+					continue;
+				right[i][j-1] += right[i][j] + 1;
+			}
+		}
+	}
+	
+	static void print(char[][] board) {
+		System.out.println();
+		for(int i=0; i<board.length; i++) {
+			System.out.println(Arrays.toString(board[i]));
+		}
+	}
 	
 	
 	
