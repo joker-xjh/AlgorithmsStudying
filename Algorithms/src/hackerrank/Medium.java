@@ -1103,10 +1103,52 @@ public class Medium {
 	}
 	
 	
+	static long sherlockAndAnagrams(String s){
+        long anagrams = 0;
+        int length = s.length();
+        Map<String, Integer> counter = new HashMap<>();
+        for(int j=0; j<length; j++) {
+        	for(int i=j; i<length; i++) {
+            	String sub = s.substring(j, i+1);
+            	char[] array = sub.toCharArray();
+            	Arrays.sort(array);
+            	String key = new String(array);
+            	counter.put(key, counter.getOrDefault(key, 0)+1);
+            }
+        }
+        for(String key : counter.keySet()) {
+        	int fre = counter.get(key);
+        	if(fre > 1) {
+        		System.out.println(key + " : "+ fre );
+        		anagrams += fre;
+        	}
+        	anagrams += sherlockAndAnagramsHelp(fre);
+        }
+        
+        return anagrams;
+    }
+	
+	static long sherlockAndAnagramsHelp(int num) {
+		long result = 1;
+		for(int i=1; i<=num; i++) {
+			result *= i;
+		}
+		return result / 2;
+	}
 	
 	
-	
-	
+	static int cost(int[] arr) {
+		int n = arr.length;
+		int[] low = new int[n];
+		int[] high = new int[n];
+		int[] dp = new int[n];
+		for(int i=1; i<n; i++) {
+			low[i] = Math.max(low[i-1], high[i-1] + Math.abs(arr[i-1] - 1));
+			high[i] = Math.max(high[i-1] + Math.abs(arr[i] - arr[i-1]),  low[i-1] + Math.abs(arr[i] - 1));
+			dp[i] = Math.max(low[i], high[i]);
+		}
+		return dp[n-1];
+    }
 	
 	
 	
