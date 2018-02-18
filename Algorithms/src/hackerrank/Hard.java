@@ -126,8 +126,77 @@ public class Hard {
 	}
 	
 	
+	static void matrixRotation(int[][] matrix, int R) {
+        int M = matrix.length, N = matrix[0].length;
+        List<Integer> list = new ArrayList<>();
+        for(int i=0; M-i*2>0 && N-i*2>0; i++) {
+        	matrixRotationCollect(matrix, i, i, M-i*2, N-i*2, list);
+        	matrixRotationHelp(list, R);
+        	matrixRotationSet(matrix, i, i, M-i*2, N-i*2, list);
+        	list.clear();
+        }
+    }
 	
+	static void matrixRotationPrint(int[][] matrix) {
+		int M = matrix.length, N = matrix[0].length;
+		for(int i=0; i<M; i++) {
+			for(int j=0; j<N; j++) {
+				if(j == N-1)
+					System.out.println(matrix[i][j]);
+				else
+					System.out.print(matrix[i][j]+" ");
+			}
+		}
+	}
 	
+	static void matrixRotationCollect(int[][] matrix, int i, int j, int M, int N, List<Integer> list) {
+		for(int a=j; a<j+N; a++) {
+			list.add(matrix[i][a]);
+		}
+		for(int a=i+1; a<i+M; a++) {
+			list.add(matrix[a][N-1+j]);
+		}
+		for(int a=N-2+j; a>=j; a--) {
+			list.add(matrix[M-1+i][a]);
+		}
+		for(int a=M-2+i; a>i; a--) {
+			list.add(matrix[a][j]);
+		}
+	}
+	
+	static void matrixRotationSet(int[][] matrix, int i, int j, int M, int N, List<Integer> list) {
+		int index = 0;
+		for(int a=j; a<j+N; a++) {
+			matrix[i][a] = list.get(index++);
+		}
+		for(int a=i+1; a<i+M; a++) {
+			matrix[a][N-1+j] = list.get(index++);
+		}
+		for(int a=N-2+j; a>=j; a--) {
+			matrix[M-1+i][a] = list.get(index++);
+		}
+		for(int a=M-2+i; a>i; a--) {
+			matrix[a][j] = list.get(index++);
+		}
+	}
+	
+	static void matrixRotationHelp(List<Integer> list, int R) {
+		int n = list.size();
+		R = R % n;
+		matrixRotationReverse(list, 0, R-1);
+		matrixRotationReverse(list, R, n-1);
+		matrixRotationReverse(list, 0, n-1);
+	}
+	
+	static void matrixRotationReverse(List<Integer> list, int left, int right) {
+		while(left < right) {
+			int temp = list.get(left);
+			list.set(left, list.get(right));
+			list.set(right, temp);
+			left++;
+			right--;
+		}
+	} 
 	
 	
 	
