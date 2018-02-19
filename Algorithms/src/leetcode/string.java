@@ -2513,7 +2513,41 @@ public class string {
     	 return true;
      }
      
+     public List<String> letterCasePermutation(String S) {
+         List<String> permutation = new ArrayList<>();
+         letterCasePermutationHelp(S.toCharArray(), 0, new StringBuilder(), permutation);
+         return permutation;
+     }
      
+     private void letterCasePermutationHelp(char[] array, int index, StringBuilder sb, List<String> list) {
+    	 if(index == array.length) {
+    		 list.add(sb.toString());
+    		 return;
+    	 }
+    	 char c = array[index];
+    	 if(c >= 'a' && c <= 'z') {
+    		 sb.append(c);
+    		 letterCasePermutationHelp(array, index+1, sb, list);
+    		 sb.deleteCharAt(sb.length()-1);
+    		 sb.append((char)(c-32));
+    		 letterCasePermutationHelp(array, index+1, sb, list);
+    		 sb.deleteCharAt(sb.length()-1);
+    	 }
+    	 else if(c >= 'A' && c <= 'Z') {
+    		 sb.append(c);
+    		 letterCasePermutationHelp(array, index+1, sb, list);
+    		 sb.deleteCharAt(sb.length()-1);
+    		 sb.append((char)(c+32));
+    		 letterCasePermutationHelp(array, index+1, sb, list);
+    		 sb.deleteCharAt(sb.length()-1);
+    	 }
+    	 else {
+    		 sb.append(c);
+    		 letterCasePermutationHelp(array, index+1, sb, list);
+    		 sb.deleteCharAt(sb.length()-1);
+    	 }
+    	 
+     }
      
      
      
