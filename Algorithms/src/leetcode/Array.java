@@ -2367,6 +2367,172 @@ public class Array {
      
      
      
+     public int orderOfLargestPlusSign(int N, int[][] mines) {
+         int[][] grid = new int[N][N];
+         for(int[] mine : mines)
+        	 grid[mine[0]][mine[1]] = 1;
+         
+         int[][] up = new int[N][N];
+         int[][] down = new int[N][N];
+         int[][] left = new int[N][N];
+         int[][] right = new int[N][N];
+         
+         for(int i=0; i<N; i++) {
+        	 for(int j=0; j<N-1; j++) {
+        		 if(grid[j][i] == 1)
+        			 continue;
+        		 up[j+1][i] += 1 + up[j][i];
+        	 }
+         }
+         for(int i=0; i<N; i++) {
+        	 for(int j=N-1; j>0; j--) {
+        		 if(grid[j][i] == 1)
+        			 continue;
+        		 down[j-1][i] += 1 + down[j][i];
+        	 }
+         }
+         
+         for(int i=0; i<N; i++) {
+        	 for(int j=0; j<N-1; j++) {
+        		 if(grid[i][j] == 1)
+        			 continue;
+        		 left[i][j+1] += 1 + left[i][j];
+        	 }
+         }
+         for(int i=0; i<N; i++) {
+        	 for(int j=N-1; j>0; j--) {
+        		 if(grid[i][j] == 1)
+        			 continue;
+        		 right[i][j-1] += 1 + right[i][j];
+        	 }
+         }
+         int length = 0;
+         
+         for(int i=0; i<N; i++) {
+        	 for(int j=0; j<N; j++) {
+        		 if(grid[i][j] == 1)
+        			 continue;
+        		 int temp = Math.min(left[i][j], Math.min(right[i][j], Math.min(up[i][j], down[i][j])));
+        		 length = Math.max(length, temp+1);
+        	 }
+         }
+         
+    	 return length;
+     }
+     
+     
+     public int findCheapestPrice(int n, int[][] flights, int src, int dst, int K) {
+         Map<Integer, List<int[]>> graph = new HashMap<>();
+         for(int[] flight : flights) {
+        	 int s = flight[0];
+        	 int d = flight[1];
+        	 int p = flight[2];
+        	 if(!graph.containsKey(s))
+        		 graph.put(s, new ArrayList<>());
+        	 graph.get(s).add(new int[] {d, p});
+         }
+         int[] min = new int[1];
+         min[0] = Integer.MAX_VALUE;
+    	 int ans = findCheapestPriceHelp(graph, K+1, src, dst, 0, new HashMap<>(), min);
+    	 if(ans == Integer.MAX_VALUE)
+    		 return -1;
+    	 return ans;
+     }
+     
+     private int findCheapestPriceHelp(Map<Integer, List<int[]>> graph, int stop, int point, int dst, int total, Map<String, Integer> memoization, int[] min) {
+    	 if(point == dst) {
+    		 min[0] = Math.min(total, min[0]);
+    		 return total;
+    	 }
+    	 if(stop == 0)
+    		 return Integer.MAX_VALUE;
+    	 if(total > min[0])
+    		 return Integer.MAX_VALUE;
+    	 int price = Integer.MAX_VALUE;
+    	 List<int[]> list = graph.get(point);
+    	 if(list == null)
+    		 return price;
+    	 String key = point+","+stop;
+    	 if(memoization.containsKey(key)) {
+    		 int temp = memoization.get(key);
+    		 if(total >= temp)
+    		 return price;
+    	 }
+    	 memoization.put(key, total);
+    	 for(int[] adj : list) {
+    		 int v = adj[0];
+    		 int p = adj[1];
+    		 price = Math.min(price, findCheapestPriceHelp(graph, stop-1, v, dst, total+p, memoization, min));
+    	 }
+    	 return price;
+     }
+     
+     
+     
+     public int findCheapestPrice2(int n, int[][] flights, int src, int dst, int K) {
+    	 if(src == dst)
+    		 return 0;
+    	 Map<Integer, List<int[]>> graph = new HashMap<>();
+    	 Map<String, Integer> map = new HashMap<>();
+         for(int[] flight : flights) {
+        	 int s = flight[0];
+        	 int d = flight[1];
+        	 int p = flight[2];
+        	 if(!graph.containsKey(s))
+        		 graph.put(s, new ArrayList<>());
+        	 graph.get(s).add(new int[] {d, p});
+         }
+         map.put(src+","+K, 0);
+    	 Queue<int[]> queue = new LinkedList<>();
+    	 int ans = Integer.MAX_VALUE;
+    	 queue.add(new int[] {src, 0});
+    	 while(!queue.isEmpty() && K>=0) {
+    		int size = queue.size();
+    		K--;
+    		for(int i=0; i<size; i++) {
+    			int[] array = queue.poll();
+    			int point = array[0];
+    			int price = array[1];
+    			List<int[]> list = graph.get(point);
+    			if(list == null)
+    				continue;
+    			for(int[] adj : list) {
+    				int another = adj[0];
+    				int p = adj[1];
+    				int total = p + price;
+    				if(another == dst) {
+    					ans = Math.min(ans, total);
+    					continue;
+    				}
+    				String key = another+","+K;
+    				if(map.containsKey(key)) {
+    					int temp = map.get(key);
+    					if(total >= temp)
+    						continue;
+    				}
+    				map.put(key, total);
+    				queue.add(new int[] {another, total});
+    			}
+    		}
+    		
+    	 }
+    	 if(ans == Integer.MAX_VALUE)
+    		 return -1;
+    	 return ans;
+     }
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
 
 
 	public static void main(String[] args) {
