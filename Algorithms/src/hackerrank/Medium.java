@@ -1448,10 +1448,75 @@ public class Medium {
 		return count;
 	}
 	
+	static int lilysHomework(int[] arr) {
+        int swap = 0;
+        int n = arr.length;
+        for(int i=0; i<n; i++) {
+        	int min = arr[i];
+        	int index = -1;
+        	for(int j=i+1; j<n; j++) {
+        		if(arr[j] < min) {
+        			min = arr[j];
+        			index = j;
+        		}
+        	}
+        	if(index != -1) {
+        		swap++;
+        		int temp = arr[i];
+        		arr[i] = arr[index];
+        		arr[index] = temp;
+        	}
+        }
+        
+        return swap;
+    }
 	
 	
-	
-	
+	static int lilysHomework2(int[] arr) {
+		int swap = 0;
+		int swap2 = 0;
+		int n = arr.length;
+		Map<Integer, Integer> map = new HashMap<>();
+		Map<Integer, Integer> map2 = new HashMap<>();
+		for(int i=0; i<arr.length; i++) {
+			map.put(arr[i], i);
+			map2.put(arr[i], i);
+		}
+		int[] copy = new int[n];
+		int[] copy2 = arr.clone();
+		for(int i=0; i<n; i++)
+			copy[i] = arr[i];		
+		Arrays.sort(arr);
+		for(int i=0; i<arr.length; i++) {
+			int num1 = arr[i];
+			int num2 = copy[i];
+			if(num1 != num2) {
+				swap++;
+				System.out.println("num1 : "+num1+" num2:"+num2+" i:"+i);
+				int index = map.get(num1);
+				int temp = copy[index];
+				copy[index] = copy[i];
+				copy[i] = temp;
+				map.put(num2, map.get(num1));
+			}
+		}
+		
+		for(int i=n-1, j=0; i>=0; i--,j++) {
+			int num1 = arr[j];
+			int num2 = copy2[i];
+			if(num1 != num2) {
+				swap2++;
+				int index = map2.get(num1);
+				int temp = copy2[index];
+				copy2[index] = copy2[i];
+				copy2[i] = temp;
+				map2.put(num2, map2.get(num1));
+			}
+		}
+		
+		
+		return Math.min(swap, swap2);
+	}
 	
 	
 	
