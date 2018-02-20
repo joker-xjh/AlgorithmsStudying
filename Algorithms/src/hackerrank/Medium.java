@@ -1312,6 +1312,147 @@ public class Medium {
 	}
 	
 	
+	static void almostSorted(int[] arr) {
+		int n = arr.length;
+		int index = isSorted(arr);
+        if(index == n) {
+        	System.out.println("yes");
+        	return;
+        }
+        int swapIndex = getSwapNextIndex(arr, index);
+        swap(arr, index, swapIndex);
+        if(isSorted(arr) == n) {
+        	System.out.println("yes");
+        	System.out.println("swap "+(index+1)+" "+(swapIndex+1));
+        	return;
+        }
+        swap(arr, index, swapIndex);
+        reverse(arr, index, swapIndex);
+        if(isSorted(arr) == n) {
+        	System.out.println("yes");
+        	System.out.println("reverse "+(index+1)+" "+(swapIndex+1));
+        	return;
+        }
+        System.out.println("no");
+    }
+	
+	static void reverse(int[] array, int left, int right) {
+		while(left < right) {
+			int temp = array[left];
+			array[left] = array[right];
+			array[right] = temp;
+			left++;
+			right--;
+		}
+	}
+	
+	static void swap(int[] array, int i, int j) {
+		int temp = array[i];
+		array[i] = array[j];
+		array[j] = temp;
+	}
+	
+	static int getSwapNextIndex(int[] array, int index) {
+		int n = array.length;
+		for(int i=index+1; i<n; i++) {
+			if(array[i] > array[index])
+				return i-1;
+		}
+		return n-1;
+	}
+	
+	static int isSorted(int[] array) {
+		int n = array.length;
+		for(int i=1; i<n; i++) {
+			int pre = array[i-1];
+			int cur = array[i];
+			if(pre > cur)
+				return i-1;
+		}
+		return n;
+	}
+	
+	
+	static String richieRich(String s, int n, int k){
+		char[] array = s.toCharArray();
+		int count = richieRichHelp(array, 0, array.length-1);
+		if(count > k)
+			return "-1";
+		Set<String> set = new HashSet<>();
+		richieRichChange(array, 0, array.length-1, set);
+		k -= count;
+		int left = 0, right = array.length-1;
+		while(left <= right && k > 0) {
+			char c1 = array[left];
+			if(c1 != '9') {
+				String key = left+","+right;
+				if(set.contains(key)) {
+					array[left] = '9';
+					array[right] = '9';
+					k--;
+				}
+				else {
+					if(left == right) {
+						array[left] = '9';
+						k--;
+					}
+					else {
+						if(k > 1) {
+							array[left] = '9';
+							array[right] = '9';
+							k -= 2;
+						}
+					}
+				}
+			}
+			
+			left++;
+			right--;
+		}
+		
+		return new String(array);
+    }
+	
+	static void richieRichChange(char[] array, int left, int right, Set<String> set) {
+		while(left < right) {
+			char c1 = array[left];
+			char c2 = array[right];
+			if(c1 == c2) {
+				left++;
+				right--;
+				continue;
+			}
+			if(c1 < c2) {
+				char temp = c1;
+				c1 = c2;
+				c2 = temp;
+			}
+			array[left] = c1;
+			array[right] = c1;
+			set.add(left+","+right);
+			left++;
+			right--;
+		}
+	}
+	
+	static int richieRichHelp(char[] array, int left, int right) {
+		int count = 0;
+		while(left < right) {
+			char c1 = array[left];
+			char c2 = array[right];
+			if(c1 != c2)
+				count++;
+			left++;
+			right--;
+		}
+		return count;
+	}
+	
+	
+	
+	
+	
+	
 	
 	
 	
