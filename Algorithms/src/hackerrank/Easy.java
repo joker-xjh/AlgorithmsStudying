@@ -1480,12 +1480,54 @@ public class Easy {
 	 }
 	 
 	 
+	 static int minimumAbsoluteDifference(int n, int[] arr) {
+	      int min = Integer.MAX_VALUE;
+	      Arrays.sort(arr);
+	      for(int i=1; i<n; i++) {
+	    	  min = Math.min(min, arr[i]-arr[i-1]);
+	      }
+	      return min;
+	 }
+	 
+	 static String chessboardGame(int x, int y) {
+	    if(chessboardGameHelp(x, y))
+	    	return "Second";
+	    return "First";
+	 }
+	 
+	 static boolean chessboardGameHelp(int x, int y) {
+		 boolean lose = true;
+		 for(int[] dir : chessboardGameDir) {
+			 int a = x + dir[0];
+			 int b = y + dir[1];
+			 if(a > 0 && a < 16 && b > 0 && b < 16) {
+				 lose = false;
+				 break;
+			 }
+		 }
+		 if(lose) {
+			 return true;
+		 }
+		 for(int[] dir : chessboardGameDir) {
+			 int a = x + dir[0];
+			 int b = y + dir[1];
+			 if(a > 0 && a < 16 && b > 0 && b < 16) {
+				 lose = lose | !chessboardGameHelp(a, b);
+			 }
+		 }
+		 return lose;
+	 }
+	 
+	 static int[][] chessboardGameDir = {{-2,1}, {-2,-1}, {1,-2}, {-1,-2}};
 	 
 	 
-	 
-	 
-	 
-	 
+	 static long flippingBits(long N) {
+	     long num =  N;
+	     num = -num - 1;
+	     long answer = num;
+	     answer &= 0x00000000FFFFFFFFL;
+		 return answer;
+	 }
 	 
 	 
 	 
