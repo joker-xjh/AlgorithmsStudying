@@ -1570,6 +1570,42 @@ public class Easy {
 	 }
 	 
 	 
+	 static int[] missingNumbers(int[] arr, int[] brr) {
+	     Arrays.sort(arr);
+	     Arrays.sort(brr);
+	     int n = arr.length, m = brr.length;
+	     List<Integer> missing = new ArrayList<>();
+	     int i=0, j=0;
+	     while(i<n && j < m) {
+	    	 int a = arr[i];
+	    	 int b = brr[j];
+	    	 if(a == b) {
+	    		 i++;
+	    		 j++;
+	    	 }
+	    	 else {
+	    		 if(missing.isEmpty() || missing.get(missing.size()-1) != b)
+	    			 missing.add(b);
+	    		 j++;
+	    	 }
+	     }
+	     while(j < m)
+	    	 missing.add(brr[j++]);
+	     int[] answer = new int[missing.size()];
+	     for(int x=0; x<answer.length; x++) {
+	    	 answer[x] = missing.get(x);
+	     }
+	     
+		 return answer;
+	 }
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
 	 
 	 
 	 
