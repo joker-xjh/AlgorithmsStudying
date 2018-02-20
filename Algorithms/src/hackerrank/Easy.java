@@ -1529,7 +1529,45 @@ public class Easy {
 		 return answer;
 	 }
 	 
+	 static String gridChallenge(String[] grid) {
+	     int n = grid.length;
+	     char[][] board = new char[n][];
+		 for(int i=0; i<n; i++) {
+			 board[i] = grid[i].toCharArray();
+			 Arrays.sort(board[i]);
+		 }
+		 for(int i=0; i<n; i++) {
+			 for(int j=1; j<n; j++) {
+				 if(board[i][j-1] > board[i][j])
+					 return "NO";
+			 }
+		 }
+		 for(int i=0; i<n; i++) {
+			 for(int j=1; j<n; j++) {
+				 if(board[j-1][i] > board[j][i])
+					 return "NO";
+			 }
+		 }
+		 
+		 return "YES";
+	 }
 	 
+	 static int luckBalance(int n, int k, int[][] contests) {
+	       int luck = 0;
+	       List<Integer> important = new ArrayList<>();
+	       for(int[] contest : contests) {
+	    	   if(contest[1] == 0) 
+	    		   luck += contest[0];
+	    	   else
+	    		   important.add(contest[0]);
+	       }
+	       Collections.sort(important);
+	       for(int i=important.size()-1; i>=important.size()-k && i>=0; i--)
+	    	  luck += important.get(i);
+	       for(int i=0; i<important.size()-k; i++)
+	    	   luck -= important.get(i);
+	       return luck;
+	 }
 	 
 	 
 	 
