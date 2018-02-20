@@ -1342,6 +1342,142 @@ public class Easy {
 	 }
 	 
 	 
+	 static int marsExploration(String s) {
+	     int change = 0;
+	     for(int i=0; i<s.length(); i+=3) {
+	    	 char c1 = s.charAt(i);
+	    	 char c2 = s.charAt(i+1);
+	    	 char c3 = s.charAt(i+2);
+	    	 if(c1 != 'S')
+	    		 change++;
+	    	 if(c2 != 'O')
+	    		 change++;
+	    	 if(c3 != 'S')
+	    		 change++;
+	     }
+	     return change;
+	 }
+	 
+	 static int alternatingCharacters(String s){
+	      int delete = 0;
+	      for(int i=1; i<s.length(); i++) {
+	    	  char c = s.charAt(i);
+	    	  char pre = s.charAt(i-1);
+	    	  if(c == pre)
+	    		  delete++;
+	      }
+	      
+	      return delete;
+	 }
+	 
+	 
+	 static int beautifulBinaryString(String b) {
+	      int steps = 0;
+	      char[] array = b.toCharArray();
+	      for(int i=2; i<array.length; i++) {
+	    	  char c1 = array[i];
+	    	  char c2 = array[i-1];
+	    	  char c3 = array[i-2];
+	    	  if(c3 == '0' && c2 == '1' && c1 == '0') {
+	    		  steps++;
+	    		  array[i] = '1';
+	    	  }
+	      }
+	      return steps;
+	 }
+	 
+	 
+	 static int makingAnagrams(String s1, String s2){
+	      int steps = 0;
+	      int[] map = new int[26];
+	      for(char c : s1.toCharArray())
+	    	  map[c-'a']++;
+	      for(char c : s2.toCharArray())
+	    	  map[c-'a']--;
+	      for(int i=0; i<26; i++) {
+	    	  steps += Math.abs(map[i]);
+	      }
+	      return steps;
+	 }
+	 
+	 static String gameOfThrones(String s){
+	     int[] counter = new int[26];
+		 for(char c : s.toCharArray())
+			 counter[c-'a']++;
+		 int odds = 0;
+		 for(int i=0; i<26; i++) {
+			 if((counter[i] & 1) == 1)
+				 odds++;
+		 }
+		 if(odds > 1)
+			 return "NO";
+		 return "YES";
+	 }
+	 
+	 
+	 static String twoStrings(String s1, String s2){
+	       boolean[] map = new boolean[26];
+	       for(char c : s1.toCharArray())
+	    	   map[c - 'a'] = true;
+	       for(char c : s2.toCharArray()) {
+	    	   if(map[c - 'a'])
+	    		   return "YES";
+	       }
+	       return "NO";
+	 }
+	 
+	 
+	 
+	 static int anagram(String s){
+	     int length = s.length();
+	     if((length&1) == 1)
+	    	 return -1;
+	     int half = length / 2;
+	     int steps = 0;
+	     String s1 = s.substring(0, half);
+	     String s2 = s.substring(half);
+	     int[] counter = new int[26];
+		 for(int i=0; i<half; i++) {
+			 char c1 = s1.charAt(i);
+			 char c2 = s2.charAt(i);
+			 counter[c1-'a']--;
+			 counter[c2-'a']++;
+		 }
+		 for(int i=0; i<26; i++) {
+			 if(counter[i] > 0)
+				 steps += counter[i];
+		 }
+		 return steps;
+	 }
+	 
+	 
+	 static int palindromeIndex(String s){
+	     int[] index = palindromeIndexHelp(s, 0, s.length()-1);
+		 if(index == null)
+			 return -1;
+		 int left = index[0], right = index[1];
+		 index = palindromeIndexHelp(s, left+1, right);
+		 if(index == null)
+			 return left;
+		 return right;
+	 }
+	 
+	 static int[] palindromeIndexHelp(String s, int left, int right) {
+		 int[] index = new int[2];
+		 while(left < right) {
+			 char c1 = s.charAt(left);
+			 char c2 = s.charAt(right);
+			 if(c1 != c2) {
+				 index[0] = left;
+				 index[1] = right;
+				 return index;
+			 }
+			 left++;
+			 right--;
+		 }
+		 
+		 return null;
+	 }
 	 
 	 
 	 
