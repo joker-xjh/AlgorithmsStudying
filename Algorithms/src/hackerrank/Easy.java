@@ -1714,6 +1714,28 @@ public class Easy {
 	 }
 	 
 	 
+	 static int[] largestPermutation(int k, int[] arr) {
+		 int n = arr.length;
+	     Map<Integer, Integer> map = new HashMap<>();
+	     for(int i=0; i<n; i++)
+	    	 map.put(arr[i], i);
+		 for(int i=0; i<n; i++) {
+			 int cur = arr[i];
+			 if(cur != n-i) {
+				 int index = map.get(n-i);
+				 int temp = arr[index];
+				 arr[index] = cur;
+				 arr[i] = temp;
+				 map.put(cur, index);
+				 map.put(temp, i);
+				 k--;
+				 if(k == 0)
+					 break;
+			 }
+		 }
+		 return arr;
+	 }
+	 
 	 
 	
 	
