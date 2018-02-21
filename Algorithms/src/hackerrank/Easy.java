@@ -1600,12 +1600,118 @@ public class Easy {
 	 }
 	 
 	 
+	 static String solve2(int[] a){
+	     int n = a.length;
+	     int[] left = new int[n];
+	     int[] right = new int[n];
+	     int sum = 0;
+	     for(int i=0; i<n; i++) {
+	    	 sum += a[i];
+	    	 left[i] = sum;
+	     }
+	     sum = 0;
+	     for(int i=n-1; i>=0; i--) {
+	    	 sum += a[i];
+	    	 right[i] = sum;
+	     }
+	     for(int i=0; i<n; i++) {
+	    	 if(left[i] == right[i])
+	    		 return "YES";
+	     }
+		 return "NO";
+	 }
+	 
+	 static String solve2OP(int[] a){
+		 int n = a.length;
+	     int[] left = new int[n];
+	     int sum = 0;
+	     for(int i=0; i<n; i++) {
+	    	 sum += a[i];
+	    	 left[i] = sum;
+	     }
+	     sum = 0;
+	     for(int i=n-1; i>=0; i--) {
+	    	 sum += a[i];
+	    	 if(sum == left[i])
+	    		 return "YES";
+	     }
+		 return "NO";
+	 }
+	 
+	 static long marcsCakewalk(int[] calorie) {
+	     long miles = 0;
+	     long two = 1;
+	     Arrays.sort(calorie);
+	     int n = calorie.length;
+	     for(int i=n-1; i>=0; i--) {
+	    	 miles += calorie[i] * two;
+	    	 two *= 2;
+	     }
+	     return miles;
+	 }
+	 
+	 static void maximumPerimeterTriangle(int[] l) {
+	     Arrays.sort(l);
+	     int n =l.length;
+	     for(int i=n-3; i>=0; i--) {
+	    	 int one = l[i];
+	    	 int two = l[i+1];
+	    	 int three = l[i+2];
+	    	 if(one + two > three) {
+	    		 System.out.println(one+" "+two+" "+three);
+	    		 return;
+	    	 }
+	     }
+		 
+		 System.out.println(-1);
+	 }
 	 
 	 
-	 
-	 
-	 
-	 
+	 static void SherlockandTheBeast(int n){
+	       int count3_1 = 0;
+	       int count5_1 = 0;
+	       int count3_2 = 0;
+	       int count5_2 = 0;
+	       int temp = n;
+	       while(temp > 0) {
+	    	   if(temp % 3 == 0) {
+	    		   count3_1 = temp;
+	    		   break;
+	    	   }
+	    	   temp -= 5;
+	    	   count5_1 += 5;
+	       }
+	       temp = n;
+	       while(temp > 0) {
+	    	   if(temp % 5 == 0) {
+	    		   count5_2 = temp;
+	    		   break;
+	    	   }
+	    	   temp -= 3;
+	    	   count3_2 += 3;
+	       }
+	       
+	       if(count3_1 == 0 && count5_2 == 0) {
+	    	   System.out.println(-1);
+	    	   return;
+	       }
+    	   StringBuilder sb = new StringBuilder();
+	       if(count3_1 > count3_2) {
+	    	   for(int i=0; i<count3_1; i++)
+	    		   sb.append(5);
+	    	   for(int i=0; i<count5_1; i++)
+	    		   sb.append(3);
+	       }
+	       else {
+	    	   for(int i=0; i<count3_2; i++)
+	    		   sb.append(5);
+	    	   for(int i=0; i<count5_2; i++)
+	    		   sb.append(3);
+	       }
+	       
+    	   System.out.println(sb);
+
+	 }
 	 
 	 
 	 
