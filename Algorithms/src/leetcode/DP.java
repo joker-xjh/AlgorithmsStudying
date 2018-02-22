@@ -359,7 +359,44 @@ public class DP {
         return dp[cost.length];
     }
  
- 
+    
+    public int maxProfit(int[] prices) {
+    	if(prices == null || prices.length < 2)
+    		return 0;
+        int profit = 0;
+        int n = prices.length;
+        int[] buy = new int[n];
+        int[] sell = new int[n];
+        buy[0] = -prices[0];
+        buy[1] = -Math.min(prices[0], prices[1]);
+        sell[1] = Math.max(sell[0], buy[0] + prices[1]);
+        profit = Math.max(buy[1], sell[1]);
+        for(int i=2; i<n; i++) {
+        	int price = prices[i];
+        	buy[i] = Math.max(buy[i-1], sell[i-2] - price);
+        	sell[i] = Math.max(sell[i-1], buy[i-1] + price);
+        	profit = Math.max(buy[i], sell[i]);
+        }
+        
+        return profit;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
  
  
  
