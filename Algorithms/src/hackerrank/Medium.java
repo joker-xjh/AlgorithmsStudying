@@ -1536,9 +1536,30 @@ public class Medium {
     }
 	
 	
+	static int angryChildren(int k, int[] arr) {
+        int min = Integer.MAX_VALUE;
+        Arrays.sort(arr);
+        for(int i=k-1; i<arr.length; i++) {
+        	int right = arr[i];
+        	int left = arr[i-k-1];
+        	min = Math.min(min, right - left);
+        }
+        return min;
+    }
 	
-	
-	
+	static int hackerlandRadioTransmitters(int[] x, int k) {
+        int transmitters = 0;
+        TreeSet<Integer> set = new TreeSet<>();
+        for(int hourse : x)
+        	set.add(hourse);
+        Integer base = set.first();
+        while(base != null) {
+        	transmitters++;
+        	Integer mid = set.floor(base + k);
+        	base = set.higher(mid + k);
+        }
+        return transmitters;
+    }
 	
 	
 	
