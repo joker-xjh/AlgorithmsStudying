@@ -2467,59 +2467,39 @@ public class Array {
     	 return price;
      }
      
-     
-     
-     public int findCheapestPrice2(int n, int[][] flights, int src, int dst, int K) {
-    	 if(src == dst)
-    		 return 0;
-    	 Map<Integer, List<int[]>> graph = new HashMap<>();
-    	 Map<String, Integer> map = new HashMap<>();
-         for(int[] flight : flights) {
-        	 int s = flight[0];
-        	 int d = flight[1];
-        	 int p = flight[2];
-        	 if(!graph.containsKey(s))
-        		 graph.put(s, new ArrayList<>());
-        	 graph.get(s).add(new int[] {d, p});
-         }
-         map.put(src+","+K, 0);
-    	 Queue<int[]> queue = new LinkedList<>();
-    	 int ans = Integer.MAX_VALUE;
-    	 queue.add(new int[] {src, 0});
-    	 while(!queue.isEmpty() && K>=0) {
-    		int size = queue.size();
-    		K--;
-    		for(int i=0; i<size; i++) {
-    			int[] array = queue.poll();
-    			int point = array[0];
-    			int price = array[1];
-    			List<int[]> list = graph.get(point);
-    			if(list == null)
-    				continue;
-    			for(int[] adj : list) {
-    				int another = adj[0];
-    				int p = adj[1];
-    				int total = p + price;
-    				if(another == dst) {
-    					ans = Math.min(ans, total);
-    					continue;
-    				}
-    				String key = another+","+K;
-    				if(map.containsKey(key)) {
-    					int temp = map.get(key);
-    					if(total >= temp)
-    						continue;
-    				}
-    				map.put(key, total);
-    				queue.add(new int[] {another, total});
-    			}
-    		}
-    		
+     public int[] kthSmallestPrimeFraction(int[] A, int K) {
+         PriorityQueue<int[]> queue = new PriorityQueue<>(new kthSmallestPrimeFractionSorter());
+         int n = A.length;
+    	 for(int i=0; i<n; i++) {
+    		 int son = A[i];
+    		 int mon = A[n-1];
+    		 queue.add(new int[] {son, mon, i, n-1});
     	 }
-    	 if(ans == Integer.MAX_VALUE)
-    		 return -1;
-    	 return ans;
+    	 int[] answer = new int[2];
+    	 while(!queue.isEmpty() && K > 0) {
+    		 int[] array = queue.poll();
+    		 answer[0] = array[0];
+    		 answer[1] = array[1];
+    		 int left = array[2];
+    		 int right = array[3];
+    		 if(right > left) {
+    			 queue.add(new int[] {array[0], A[right-1], left, right-1});
+    		 }
+    		 K--;
+    	 }
+    	 
+    	 return answer;
      }
+     
+     class kthSmallestPrimeFractionSorter implements Comparator<int[]> {
+		@Override
+		public int compare(int[] o1, int[] o2) {
+			return o1[0] * o2[1] - o1[1] * o2[0];
+		}
+    	 
+     }
+     
+     
      
      
      
