@@ -1736,12 +1736,141 @@ public class Easy {
 		 return arr;
 	 }
 	 
+	 static String twoArrays(int k, int[] A, int[] B) {
+	     int n = A.length;
+		 Arrays.sort(A);
+		 Arrays.sort(B);
+		 for(int i=0; i<n; i++) {
+			 int sum = A[i] + B[n-1-i];
+			 if(sum < k)
+				 return "NO";
+		 }
+		 return "YES";
+	 }
+	 
+	 static long solve4(long n) {
+	       long count = 0;
+	       int zero = getZero(n);
+	       if(zero == 0)
+	    	   return 1;
+    	   int half = zero / 2;
+	       if(zero % 2 == 0) {
+	    	   for(int i=1; i<half; i++)
+	    		   count += countC(zero, i);
+	    	   count *= 2;
+	    	   count += countC(zero, half);
+	       }
+	       else {
+	    	   for(int i=1; i<=half; i++)
+	    		   count += countC(zero, i);
+	    	   count *= 2;
+	       }
+	       count += 2;
+	       return count;
+	 }
+	 
+	 static long countC(long down, long up) {
+		 long count = 1;
+		 int temp = (int) up;
+		 while(temp > 0) {
+			 count *= down;
+			 if(count % up == 0) {
+				 count /= up;
+				 up--;
+			 }
+			 down--;
+			 temp--;
+		 }
+		 while(up > 0) {
+			 count /= up;
+			 up--;
+		 }
+		 return count;
+	 }
+	 
+	 static int getZero(long n) {
+		 int count = 0;
+		 String binary = Long.toBinaryString(n);
+		 for(char c : binary.toCharArray())
+			 if(c == '0')
+				 count++;
+		 return count;
+	 }
+	 
+	 
+	 
+	 static void icecreamParlor(int m, int[] arr) {
+	     int n = arr.length;
+	     Map<Integer, Integer> map = new HashMap<>();
+	     for(int i=0; i<n; i++) {
+	    	 int other = m - arr[i];
+	    	 if(map.containsKey(other)) {
+	    		 int left = Math.min(i, map.get(other)) + 1;
+	    		 int right = Math.max(i, map.get(other)) + 1;
+	    		 System.out.println(left+" "+right);
+	    	 }
+	    	 map.put(arr[i], i);
+	     }
+	     
+	 }
+	 
+	 static int toys(int[] w) {
+		 int money = 0;
+		 Arrays.sort(w);
+		 int base = -10000;
+		 for(int i=0; i<w.length; i++) {
+			 int weight = w[i];
+			 if(weight > base + 4) {
+				 money++;
+				 base = weight;
+			 }
+		 }
+		 return money;
+	 }
+	 
+	 
+	 static int maximizingXor(int l, int r) {
+		 String right = Integer.toBinaryString(r);
+		 String left = Integer.toBinaryString(l);
+		 while(left.length() < right.length()) {
+			 left = "0" + left;
+		 }
+		 int length = right.length();
+		 for(int i=0; i<length; i++) {
+			char c1 = right.charAt(i);
+			char c2 = left.charAt(i);
+			if(c1 != c2) {
+				StringBuilder sb = new StringBuilder();
+				for(int j=i; j<length; j++) {
+					sb.append('1');
+				}
+				int xor = Integer.parseInt(sb.toString(), 2);
+				return xor;
+			}
+		 }
+		 return 0;
+	 }
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
 	 
 	
 	
 
 	public static void main(String[] args) {
-		
+		System.out.println(countC(30, 14));
 	}
 
 }
