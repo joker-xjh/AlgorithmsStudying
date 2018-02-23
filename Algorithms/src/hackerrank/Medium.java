@@ -1607,7 +1607,36 @@ public class Medium {
 		
 	}
 	
-	
+	static void minimumBribes(int[] q) {
+       int n = q.length;
+       int bribes = 0;
+       for(int i=n-1; i>=0; i--) {
+    	   int num = q[i];
+    	   if(num == i + 1)
+    		   continue;
+    	   if(i > 0 && q[i-1] == i+1) {
+    		   int temp = q[i-1];
+    		   q[i-1] = q[i];
+    		   q[i] = temp;
+    		   bribes++;
+    		   i++;
+    		   continue;
+    	   }
+    	   
+    	   if(i > 1 && q[i-2] == i+1) {
+    		   int temp = q[i-2];
+    		   q[i-2] = q[i-1];
+    		   q[i-1] = q[i];
+    		   q[i] = temp;
+    		   bribes += 2;
+    		   i++;
+    		   continue;
+    	   }
+    	   System.out.println("Too chaotic");
+    	   return;
+       }
+       System.out.println(bribes);
+    }
 	
 	
 	
