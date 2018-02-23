@@ -3,6 +3,8 @@ package hackerrank;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -1560,6 +1562,51 @@ public class Medium {
         }
         return transmitters;
     }
+	
+	
+	static void gridlandMetro(int n, int m, int k, int[][] track) {
+        long total = (long)n * (long)m;
+        Map<Integer, List<int[]>> map = new HashMap<>();
+        for(int i=0; i<k; i++) {
+        	int row = track[i][0];
+        	if(!map.containsKey(row))
+        		map.put(row, new ArrayList<>());
+        	map.get(row).add(track[i]);
+        }
+        gridlandMetroSorter sorter = new gridlandMetroSorter();
+        for(int key : map.keySet()) {
+        	List<int[]> list = map.get(key);
+        	Collections.sort(list, sorter);
+        	long temp = 0;
+        	int left = list.get(0)[1], right = list.get(0)[2];
+        	for(int i=1; i<list.size(); i++) {
+        		int[] array = list.get(i);
+        		if(right < array[1]) {
+        			temp += right - left + 1;
+        			left = array[1];
+        			right = array[2];
+        			continue;
+        		}
+        		right = array[2];
+        		if(array[1] < left)
+        			left = array[1];
+        	}
+        	temp += right - left + 1;
+        	total -= temp;
+        }
+        System.out.println(total);
+    }
+	
+	static class gridlandMetroSorter implements Comparator<int[]> {
+
+		@Override
+		public int compare(int[] o1, int[] o2) {
+			int temp = o1[2] - o2[2];
+			return temp != 0 ? temp : o1[1] - o2[1];
+		}
+		
+	}
+	
 	
 	
 	
