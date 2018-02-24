@@ -1639,23 +1639,89 @@ public class Medium {
     }
 	
 	
+	static void summingPieces(int[] array) {
+		long[] sum = new long[1];
+		summingPiecesHelp(array, 0, 0, sum);
+		System.out.println(sum[0]);
+	}
+	
+	static void summingPiecesHelp(int[] array, int index, long sum, long[] answer) {
+		if(index == array.length) {
+			answer[0] = (answer[0] + sum) % 1000000007;
+			return;
+		}
+		long temp = 0;
+		for(int i=index; i<array.length; i++) {
+			temp = (temp + array[i])  % 1000000007;
+			summingPiecesHelp(array, i+1, (sum+temp * (i-index + 1) %  1000000007)%1000000007, answer);
+		}
+	}
 	
 	
+	static void summingPieces2(int[] array) {
+		Map<Integer, Long> memoization = new HashMap<>();
+		long answer = summingPieces(array, 0, 0, memoization);
+		System.out.println(memoization);
+		System.out.println(answer);
+	}
 	
+	static long summingPieces(int[] array,int index, long sum, Map<Integer, Long> memoization) {
+		if(index == array.length)
+			return sum % 1000000007;
+		long answer = 0, temp = 0;
+		long right = sum*superPower(2, array.length - index - 1);
+		if(memoization.containsKey(index))
+			return (memoization.get(index) + right) % 1000000007;
+		for(int i=index; i<array.length; i++) {
+			temp = (temp + array[i])  % 1000000007;
+			answer = (answer + summingPieces(array, i+1, (temp * (i-index + 1) %  1000000007), memoization)) % 1000000007;
+		}
+		memoization.put(index, answer);
+		return (answer + right) % 1000000007;
+	}
 	
+	static long superPower(long a,int n) {
+		if(n == 0)
+			return 1;
+		if(n == 1)
+			return a;
+		if((n&1) == 1)
+			return a * superPower(a*a % 1000000007,n/2) % 1000000007;
+		return superPower(a*a % 1000000007, n/2) % 1000000007;
+	}
 	
-	
-	
-	
-	
-	
-	
+	static void summingPiecesDP(int[] array) {
+		int n = array.length;
+		if(n == 1) {
+			System.out.println(array[0]);
+			return;
+		}
+		long[] dp = new long[n+1];
+		long[] powerTwo = new long[n+1];
+		dp[n] = 0;
+		powerTwo[n] = 1;
+		dp[n-1] = array[n-1];
+		powerTwo[n-1] = 1;
+		for(int i=n-2; i>=0; i--) {
+			long sum = 0;
+			long local = 0;
+			for(int j=i; j<n; j++) {
+				sum = (sum + array[j])  % 1000000007 ;
+				local =((local + (sum* (j-i+1) % 1000000007) * powerTwo[j+1] % 1000000007) % 1000000007 + dp[j+1]) % 1000000007;
+			}
+			powerTwo[i] = (powerTwo[i+1] * 2) % 1000000007;
+			dp[i] = local;
+		}
+		System.out.println(dp[0]);
+	}
 	
 	
 	
 	
 	
 	public static void main(String[] args) {
+		int[] array = {4,2,9,10, 1};
+		summingPiecesDP(array);
 		
 	}
 
