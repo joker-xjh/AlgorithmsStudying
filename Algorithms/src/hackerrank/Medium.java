@@ -1854,7 +1854,20 @@ public class Medium {
 	}
 	
 	
-	
+	static String cipher(int k, String s) {
+        int length = s.length();
+        int len = length - k + 1;
+        char[] array = new char[len];
+        array[0] = s.charAt(0);
+        array[len-1] = s.charAt(length-1);
+        for(int i=1; i<len-1; i++) {
+        	if(i < k)
+        		array[i] = (char) ((s.charAt(i-1) - '0') ^ (s.charAt(i) - '0') + '0');
+        	else
+        		array[i] = (char) ((s.charAt(i-1) - '0') ^ (s.charAt(i) - '0') ^ (array[i-k] - '0')+ '0');
+        }
+        return new String(array);
+    }
 	
 	
 	
