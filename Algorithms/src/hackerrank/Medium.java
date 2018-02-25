@@ -1745,12 +1745,128 @@ public class Medium {
 	}
 	
 	
+	static int substringDiff(String s1, String s2, int k) {
+		int diff = 0;
+		int n = s1.length();
+		int[][] dp = new int[n+1][n+1];
+		int[][] reverse = new int[n+1][n+1];
+		int max = 0;
+		int[] index = new int[2];
+		for(int i=1; i<=n; i++) {
+			for(int j=1; j<=n; j++) {
+				if(s1.charAt(i-1) == s2.charAt(j-1))
+					dp[i][j] = dp[i-1][j-1] + 1;
+				if(dp[i][j] > max) {
+					max = dp[i][j];
+					index[0] = i;
+					index[1] = j;
+				}
+			}
+		}
+		
+		for(int i=n-1; i>=0; i--) {
+			for(int j=n-1; j>=0; j--) {
+				if(s1.charAt(i) == s2.charAt(j))
+					reverse[i][j] = reverse[i+1][j+1] + 1;
+			}
+		}
+		
+		diff = substringDiffHelp(dp, reverse, new int[] {index[0] - max, index[1] - max},  new int[] {index[0]+1, index[1]+1}, k, max);
+		
+		return diff;
+	}
+	
+	static int substringDiffHelp(int[][] dp,int[][] Rdp, int[]leftTop, int[] rightDown, int k, int diff) {
+		int n = dp.length;
+		int x = leftTop[0], y = leftTop[1];
+		int copy = k;
+		int max1 = diff;
+		int max2 = diff;
+		while(x > 0 && y > 0 && copy > 0) {
+			int val = dp[x][y];
+			if(val == 0)
+				copy--;
+			else {
+				max1 = substringDiffHelp(dp, Rdp,new int[] {leftTop[0] - val, leftTop[1] - val}, new int[] {rightDown[0], rightDown[1]}, copy, max1+val);
+				break;
+			}
+			x--;y--;
+			max1++;
+		}
+		copy = k;
+		x = rightDown[0];
+		y = rightDown[1];
+		while(x < n && y < n && copy > 0) {
+			int val = Rdp[x-1][y-1];
+			if(val == 0)
+				copy--;
+			else {
+				max2 = substringDiffHelp(dp,Rdp, new int[] {leftTop[0], leftTop[1]}, new int[] {rightDown[0]+val, rightDown[1] + val}, copy, max2+val);
+				break;
+			}
+			x++; y++;
+			max2++;
+		}
+		System.out.println("max1:"+max1+" max2:"+max2+" S:"+k);
+		diff = Math.max(max1, max2);
+		return diff;
+	}
+	
+	
+	
+	
+	static String counterGame(long n) {
+        List<Long> powerTwo = new ArrayList<>();
+		powerTwo.add(1L);
+		Set<Long> set = new HashSet<>();
+		set.add(1L);
+		for(int i=1; i<= 62; i++) {
+			long pre = powerTwo.get(i-1);
+			long num = pre * 2;
+			powerTwo.add(num);
+			set.add(num);
+		}
+		System.out.println(powerTwo);
+		boolean turn = true;
+		while(n != 1) {
+			if(set.contains(n)) {
+				n /= 2;
+				turn = !turn;
+				continue;
+			}
+			long decrease = counterGameHelp(n, powerTwo);
+			n -= decrease;
+			turn = !turn;
+		}
+		if(turn)
+			return "Richard";
+		return "Louise";
+    }
+	
+	static long counterGameHelp(long n, List<Long> power) {
+		int size = power.size();
+		for(int i=0; i<size; i++) {
+			long num = power.get(i);
+			if(num > n)
+				return power.get(i-1);
+		}
+		return power.get(size-1);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
 	public static void main(String[] args) {
-		int[] array = {4,2,9,10, 1};
-		summingPiecesDP(array);
+		substringDiff("helloworld", "yellomarin", 3);
 		
 	}
 
