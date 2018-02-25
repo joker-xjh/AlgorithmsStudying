@@ -1,6 +1,7 @@
 package hackerrank;
 
 import java.math.BigInteger;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+
 
 
 public class Medium {
@@ -1684,7 +1686,7 @@ public class Medium {
 		if(n == 0)
 			return 1;
 		if(n == 1)
-			return a;
+			return a % 1000000007;
 		if((n&1) == 1)
 			return a * superPower(a*a % 1000000007,n/2) % 1000000007;
 		return superPower(a*a % 1000000007, n/2) % 1000000007;
@@ -1713,6 +1715,33 @@ public class Medium {
 			dp[i] = local;
 		}
 		System.out.println(dp[0]);
+	}
+	
+	static void summingPiecesDP2(int[] array) {
+		int n = array.length;
+		if(n == 1) {
+			System.out.println(array[0]);
+			return;
+		}
+		long[] times = new long[n];
+		times[0] = superPower(2, n)-1;
+		int y = n-2;
+		long two = 1;
+		int end = n % 2 == 0 ? n/2-1 : n/2;
+		for(int i=1; i<=end; i++) {
+			long pre = times[i-1];
+			times[i] = ((pre + superPower(2, y) % 1000000007) - two) % 1000000007;
+			two = (two * 2) % 1000000007;
+			y--;
+			times[n-1-i] = times[i];
+		}
+		times[n-1] = times[0];
+		long sum = 0;
+		for(int i=0; i<n; i++) {
+			sum = (sum + times[i] * array[i] % 1000000007) % 1000000007;
+		}
+		System.out.println(Arrays.toString(times));
+		System.out.println(sum);
 	}
 	
 	
