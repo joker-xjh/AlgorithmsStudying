@@ -1869,7 +1869,15 @@ public class Medium {
         return new String(array);
     }
 	
-	
+	static int sansaXor(int[] arr) {
+        int xor = 0;
+        if(arr.length % 2 == 0)
+        	return 0;
+        for(int i=0; i<arr.length; i+=2) {
+        	xor ^= arr[i];
+        }
+        return xor;
+    }
 	
 	
 	
