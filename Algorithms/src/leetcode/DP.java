@@ -382,7 +382,23 @@ public class DP {
     }
     
     
-    
+    public int maxProfit(int[] prices, int fee) {
+        int profit= 0;
+        int n = prices.length;
+        if(n < 2)
+        	return profit;
+        int[] buy = new int[n];
+        int[] sell = new int[n];
+        buy[0] = -prices[0];
+        
+        for(int i=1; i<n; i++) {
+        	int price = prices[i];
+        	buy[i] = Math.max(buy[i-1], sell[i-1] - price);
+        	sell[i] = Math.max(sell[i-1], buy[i-1] + price - fee);
+        	profit = Math.max(buy[i], sell[i]);
+        }
+        return profit;
+    }
     
     
     
