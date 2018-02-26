@@ -2500,10 +2500,45 @@ public class Array {
      }
      
      
+     public int rotatedDigits(int N) {
+         Set<Integer> used = new HashSet<>();
+    	 Queue<Integer> queue = new LinkedList<>();
+    	 int[] numbers = {0,1,2,5,6,8,9};
+    	 queue.add(0);
+    	 used.add(0);
+    	 int counter = 0;
+    	 while(!queue.isEmpty()) {
+    		 int size = queue.size();
+    		 for(int i=0; i<size; i++) {
+    			 int cur = queue.poll();
+    			 for(int factor : numbers) {
+    				 int rotate = cur * 10 + factor;
+    				 if(rotate > N)
+    					 continue;
+    				 if(used.contains(rotate))
+    					 continue;
+    				 boolean valid = rotatedDigitsValid(rotate);
+    				 used.add(rotate);
+    				 if(valid)
+    					 counter++;
+    				 queue.add(rotate);
+    				 System.out.println(rotate);
+    			 }
+    		 }
+    	 }
+    	 return counter;
+     }
      
      
-     
-     
+     private boolean rotatedDigitsValid(int num) {
+    	 while(num != 0) {
+    		 int digit = num % 10;
+    		 if(!(digit == 0 || digit == 1 || digit == 8))
+    			 return true;
+    		 num /= 10;
+    	 }
+    	 return false;
+     }
      
      
      
@@ -2516,10 +2551,8 @@ public class Array {
 
 
 	public static void main(String[] args) {
-		 int[][] target = {{1,2,4}, {4,5,0}};
-         String goal = Arrays.deepToString(target);
-         System.out.println(goal);
-
+		 Array test = new Array();
+		 test.rotatedDigits(100);
 	}
 
 }
