@@ -2542,7 +2542,15 @@ public class Array {
      
      
      
-     
+     public boolean escapeGhosts(int[][] ghosts, int[] target) {
+    	 int man_path = Math.abs(target[0]) + Math.abs(target[1]);
+    	 for(int[] pos : ghosts) {
+    		 int ghost_path = Math.abs(target[0] - pos[0]) + Math.abs(target[1] - pos[1]);
+    		 if(ghost_path <= man_path)
+    			 return false;
+    	 }
+    	 return true;
+     }
      
      
      
