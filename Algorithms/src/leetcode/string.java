@@ -2549,7 +2549,38 @@ public class string {
     	 
      }
      
+     public String customSortString(String S, String T) {
+         int[] index = new int[26];
+         Arrays.fill(index, 100);
+         Character[] temp = new Character[T.length()];
+         char[] array = new char[T.length()];
+         for(int i=0; i<T.length(); i++)
+        	 temp[i] = T.charAt(i);
+    	 for(int i=0; i<S.length(); i++) {
+    		 char c = S.charAt(i);
+    		 index[c-'a'] = i;
+    	 }
+    	 Arrays.sort(temp, new customSortStringSorter(index));
+         for(int i=0; i<array.length; i++)
+        	 array[i] = temp[i];
+    	 return new String(array);
+     }
      
+     class customSortStringSorter implements Comparator<Character> {
+    	 
+    	 int[] index;
+    	public customSortStringSorter(int[] index) {
+			this.index = index;
+		}
+    	 
+		@Override
+		public int compare(Character o1, Character o2) {
+			char c1 = o1.charValue();
+			char c2 = o2.charValue();
+			return index[c1-'a'] - index[c2-'a'];
+		}
+    	 
+     }
      
      
      
