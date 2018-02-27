@@ -1,5 +1,6 @@
 package leetcode;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -173,16 +174,7 @@ public class DP {
     
     
     
-    
-    
-    
-    
-    
-    public static void main(String[] args) {
-		DP test = new DP();
-		int[] array= {4,2,3,0,3};
-		System.out.println(test.maxCoins2(array));
-	}
+  
     
     
     public int findLength(int[] A, int[] B) {
@@ -402,13 +394,55 @@ public class DP {
     
     
     
+    public double knightProbability(int N, int K, int r, int c) {
+        double[][] dp = new double[N][N];
+        double[][] next = new double[N][N];
+        dp[r][c] = 1;
+        int[][] dirs = {{-2,-1},{-1,-2},{1,-2},{2,-1},{2,1},{1,2},{-1,2},{-2,1}};
+        for(int a=0; a<K; a++) {
+        	for(int i=0; i<N; i++) {
+        		for(int j=0; j<N; j++) {
+        			for(int[] dir : dirs) {
+        				int x = i + dir[0];
+        				int y = j + dir[1];
+        				if(x<0 || x>=N || y<0 || y>=N)
+        					continue;
+        				next[i][j] += dp[x][y] ;
+        			}
+        		}
+        	}
+        	knightProbabilityFillZero(dp);
+        	double[][] temp = next;
+        	next = dp;
+        	dp = temp;
+        }
+        double counter = 0;
+        for(int i=0; i<N; i++) {
+        	for(int j=0; j<N; j++) {
+        		counter += dp[i][j];
+        	}
+        }
+        double total = Math.pow(8, K);
+    	return counter / total;
+    }
+    
+    private void knightProbabilityFillZero(double[][] array) {
+    	for(int i=0; i<array.length; i++)
+    		for(int j=0; j<array.length; j++)
+    			array[i][j] = 0;
+    }
+    
+    static void print(double[][] array) {
+    	for(double[] temp : array)
+    		System.out.println(Arrays.toString(temp));
+    }
     
     
     
-    
-    
-    
-    
+    public static void main(String[] args) {
+		DP test = new DP();
+		System.out.println(test.knightProbability(8, 30, 6, 4));
+	}
     
     
     
