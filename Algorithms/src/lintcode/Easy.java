@@ -4,8 +4,10 @@ import java.util.ArrayList;
 
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 
@@ -570,7 +572,21 @@ public class Easy {
 		return true;
     }
 	
-	
+	public int[] twoSum(int[] numbers, int target) {
+        int[] index = new int[2];
+		Map<Integer, Integer> map = new HashMap<>();
+		for(int i=0; i<numbers.length; i++) {
+			int num = numbers[i];
+			int other = target - num;
+			if(map.containsKey(other)) {
+				index[1] = i;
+				index[0] = map.get(other);
+				return index;
+			}
+			map.put(num, i);
+		}
+        return index;
+    }
 	
 	
 	
