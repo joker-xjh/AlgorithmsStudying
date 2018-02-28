@@ -556,7 +556,19 @@ public class Easy {
         return answer.trim();
     }
 	
-	
+	public boolean compareStrings(String A, String B) {
+        int[] counter = new int[26];
+		if(A.length() < B.length())
+			return false;
+		for(char c : A.toCharArray())
+			counter[c-'A']++;
+		for(char c : B.toCharArray()) {
+			counter[c-'A']--;
+			if(counter[c-'A'] < 0)
+				return false;
+		}
+		return true;
+    }
 	
 	
 	
