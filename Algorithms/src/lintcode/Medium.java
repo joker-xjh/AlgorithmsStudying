@@ -3,6 +3,7 @@ package lintcode;
 import java.util.ArrayList;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -558,11 +559,177 @@ public class Medium {
 	  
 	  
 	  
+	  public int majorityNumber(List<Integer> nums) {
+		  int num1 = 0, num2 = 0, time1 = 0, time2 = 0;
+		  for(int i=0; i<nums.size(); i++) {
+			  int n = nums.get(i);
+			  if(n == num1) {
+				  time1++;
+			  }
+			  else if(n == num2) {
+				  time2++;
+			  }
+			  
+			  else if(time1 == 0) {
+				  time1 = 1;
+				  num1 = n;
+			  }
+			  else if(time2 == 0) {
+				  time2 = 1;
+				  num2 = n;
+			  }
+			  else {
+				  time1--;
+				  time2--;
+			  }
+		  }
+		  
+		  time1 = 0; time2 = 0;
+		  for(int i=0; i<nums.size(); i++) {
+			  int a = nums.get(i);
+			  if(a == num1)
+				  time1++;
+			  else if(a == num2)
+				  time2++;
+		  }
+		  if(time1 > time2)
+			  return num1;
+		  return num2;
+	  }
 	  
 	  
+	  public int majorityNumber(List<Integer> nums, int k) {
+		  int size = nums.size() / k;
+		  Map<Integer, Integer> counter = new HashMap<>();
+		  for(int num : nums) {
+			  counter.put(num, counter.getOrDefault(num, 0)+1);
+			  if(counter.get(num) > size)
+				  return num;
+		  }
+		  
+		  return -1;
+	  }
 	  
 	  
+	  public void sortLetters(char[] chars) {
+	      if(chars == null || chars.length < 2)
+	    	  return;
+	      int n = chars.length;
+	      char[] array1 = new char[n];
+	      char[] array2 = new char[n];
+	      
+	      int index1 = 0, index2 = 0;
+	      
+	      for(int i=0; i<n; i++) {
+	    	  char c = chars[i];
+	    	  if(c >= 'a' && c <= 'z')
+	    		  array1[index1++] = c;
+	    	  else
+	    		  array2[index2++] = c;
+	      }
+	      Arrays.sort(array1, 0, index1);
+	      Arrays.sort(array2, 0, index2);
+	      int index = 0;
+	      for(int i=0; i<index1; i++) {
+	    	  chars[index++] = array1[i];
+	      }
+	      for(int i=0; i<index2; i++) {
+	    	  chars[index++] = array2[i];
+	      }
+	      
+	  }
 	  
+	 
+	  
+	  public boolean wordBreak(String s, Set<String> dict) {
+	       Map<String, Boolean> memorization = new HashMap<>();
+	       memorization.put("", true);
+		  return wordBreakMemorization(s, dict, memorization);
+	  }
+	  
+	  private boolean wordBreakMemorization(String s, Set<String> dict, Map<String, Boolean> memorization) {
+		  if(memorization.containsKey(s))
+			  return memorization.get(s);
+		  for(String word:dict) {
+			  if(s.startsWith(word)) {
+				  if(wordBreakMemorization(s.substring(word.length()), dict, memorization)) {
+					  memorization.put(s, true);
+					  return true;
+				  }
+			  }
+		  }
+		  return false;
+	  }
+	  
+	  
+	  public long houseRobber(int[] A) {
+	      int n = A.length;
+	      long[] rob = new long[n];
+	      long[] no = new long[n];
+	      rob[0] = A[0];
+	      long profit = A[0];
+	      for(int i=1; i<n; i++) {
+	    	  int money = A[i];
+	    	  if(i < 2)
+	    		  rob[i] = no[i-1] + money;
+	    	  else
+	    		  rob[i] = Math.max(rob[i-2], no[i-1]) + money;
+	    	  no[i] = Math.max(rob[i-1], no[i-1]);
+	    	  profit = Math.max(rob[i], no[i]);
+	      }
+	      return profit;
+	  }
+	  
+	  
+	  public List<Integer> previousPermuation(List<Integer> nums) {
+	      if(nums == null || nums.size() < 2)
+	    	  return nums;
+	      int size = nums.size();
+	      Integer[] array = new Integer[size];
+	      nums.toArray(array);
+	      for(int i=size-1; i>0; i--) {
+	    	  int cur = array[i];
+	    	  int pre = array[i-1];
+	    	  if(pre > cur) {
+	    		  int index = -1;
+	    		  int last = -1;
+	    		  for(int j=size-1; j>=i; j--) {
+	    			  if(array[j] < pre) {
+	    				  if(array[j] > last) {
+	    					  last = array[j];
+	    					  index = j;
+	    				  }
+	    			  }
+	    		  }
+	    		  swap(array, index, i-1);
+	    		  Arrays.sort(array, i, size, new reverseCom());
+	    		  fill(nums, array);
+	    		  return nums;
+	    	  }
+	      }
+	      Collections.sort(nums, Collections.reverseOrder());
+		  return nums;
+	  }
+	  
+	  private void fill(List<Integer> list, Integer[] array) {
+		  for(int i=0; i<list.size(); i++)
+			  list.set(i, array[i]);
+	  }
+	  
+	  class reverseCom implements Comparator<Integer> {
+
+		@Override
+		public int compare(Integer o1, Integer o2) {
+			return o2 - o1;
+		}
+		  
+	  }
+	  
+	  private void swap(Integer[] array, int i, int j) {
+		  int temp = array[i];
+	      array[i] = array[j];
+	      array[j] = temp;
+	  }
 	  
 	  
 	  
