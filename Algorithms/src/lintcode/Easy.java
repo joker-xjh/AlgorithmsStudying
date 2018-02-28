@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Scanner;
 
 
 
@@ -425,23 +426,135 @@ public class Easy {
     }
 	
 	
+	public int minSubArray(List<Integer> nums) {
+        int min = Integer.MAX_VALUE;
+        int sum = 0;
+        for(int num : nums) {
+        	sum += num;
+        	min = Math.min(min, sum);
+        	if(sum > 0)
+        		sum = 0;
+        }
+        return min;
+    }
 	
 	
+	public int majorityNumber(List<Integer> nums) {
+        int majory = nums.get(0);
+        int counter = 1;
+        for(int i=1; i<nums.size(); i++) {
+        	int num = nums.get(i);
+        	if(num == majory) {
+        		counter++;
+        	}
+        	else {
+        		counter--;
+        		if(counter == 0) {
+        			majory = num;
+        			counter=1;
+        		}
+        	}
+        }
+        
+        return majory;
+    }
 	
 	
+	public List<Long> productExcludeItself(List<Integer> nums) {
+        List<Long> B = new ArrayList<>(nums.size());
+        int zero = 0;
+        int index = -1;
+        long sum = 1;
+        for(int i=0; i<nums.size(); i++) {
+        	int num = nums.get(i);
+        	if(num == 0) {
+        		zero++;
+        		index = i;
+        		if(zero>1)
+        			break;
+        	}
+        }
+        if(zero > 1) {
+        	for(int i=0; i<nums.size(); i++)
+        		B.add(0L);
+        	return B;
+        }
+        if(zero == 1) {
+        	for(int i=0; i<nums.size(); i++) {
+        		if(i == index)
+        			continue;
+        		sum *= nums.get(i);
+        	}
+        	for(int i=0; i<nums.size(); i++) {
+        		if(i == index) {
+        			B.add(sum);
+        		}
+        		else {
+        			B.add(0L);
+        		}
+        	}
+        	return B;
+        }
+        for(int num : nums)
+        	sum *= num;
+        for(int i=0; i<nums.size(); i++) {
+        	B.add(sum / nums.get(i));
+        }
+        return B;
+    }
 	
 	
+	public int climbStairs(int n) {
+		if(n == 1)
+			return 1;
+		if(n == 2)
+			return 2;
+        int[] dp = new int[n+1];
+		dp[1] = 1;
+		dp[2] = 2;
+		for(int i=3; i<=n; i++)
+			dp[i] += dp[i-1] + dp[i-2];
+		return dp[n];
+    }
 	
 	
+	public int numWays(int n, int k) {
+		if(n == 0)
+			return 0;
+		if(n == 1)
+			return k;
+		if(n == 2)
+			return k * k;
+        int[] dp = new int[n+1];
+        dp[1] = k;
+        dp[2] = k * k;
+        for(int i=3; i<=n; i++) {
+        	dp[i] = dp[i-2] * (k-1) + dp[i-1] * (k - 1);
+        }
+        return dp[n];
+    }
 	
+	public int reverseInteger(int number) {
+        int reverse = 0;
+        while(number > 0) {
+        	int mod = number % 10;
+        	reverse = reverse * 10 + mod;
+        	number /= 10;
+        }
+        
+        return reverse;
+    }
 	
-	
-	
-	
-	
-	
-	
-	
+	public String reverseWords(String s) {
+        String answer = "";
+        Scanner scanner = new Scanner(s);
+        while(scanner.hasNext()) {
+        	String word = scanner.next();
+        	answer = word+" "+ answer;
+        }
+        scanner.close();
+        return answer.trim();
+    }
 	
 	
 	
