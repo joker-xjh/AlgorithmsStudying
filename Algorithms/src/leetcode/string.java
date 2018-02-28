@@ -2582,7 +2582,19 @@ public class string {
     	 
      }
      
-     
+     public int characterReplacement(String s, int k) {
+         int[] counter = new int[26];
+         int start = 0, end = 0, maxCount = 0, maxLength = 0;
+         for(; end<s.length(); end++) {
+        	 maxCount = Math.max(maxCount, ++counter[s.charAt(end)-'A']);
+        	 while(end - start + 1 - maxCount > k) {
+        		 counter[s.charAt(start)-'A']--;
+        		 start++;
+        	 }
+        	 maxLength = Math.max(maxLength, end-start+1);
+         }
+    	 return maxLength;
+     }
      
      
      
