@@ -732,7 +732,31 @@ public class Medium {
 	  }
 	  
 	  
-	  
+	  public int[] nextPermutation(int[] nums) {
+	      for(int i=nums.length-1; i>0; i--) {
+	    	  int cur = nums[i];
+	    	  int pre = nums[i-1];
+	    	  if(cur > pre) {
+	    		  int big = Integer.MAX_VALUE;
+	    		  int index = -1;
+	    		  for(int j=nums.length-1; j>=i; j--) {
+	    			  if(nums[j] > pre) {
+	    				  if(nums[j] < big) {
+	    					  big = nums[j];
+	    					  index = j;
+	    				  }
+	    			  }
+	    		  }
+	    		  nums[i-1] = big;
+	    		  nums[index] = pre;
+	    		  Arrays.sort(nums, i, nums.length);
+	    		  return nums;
+	    	  }
+	      }
+		  
+		  Arrays.sort(nums);
+		  return nums;
+	  }
 	  
 		  
 	  
