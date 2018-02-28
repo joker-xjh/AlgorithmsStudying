@@ -758,6 +758,74 @@ public class Medium {
 		  return nums;
 	  }
 	  
+	  
+	  public List<List<Integer>> threeSum(int[] numbers) {
+		  List<List<Integer>> list = new ArrayList<>();
+		  if(numbers.length < 3)
+			  return list;
+	      Arrays.sort(numbers);
+	      Set<String> used = new HashSet<>();
+	      for(int i=numbers.length-1; i>1; i--) {
+	    	  int target = -numbers[i];
+	    	  twoSum(numbers, 0, i-1, target, used, list);
+	      }
+		  
+		  return list;
+	  }
+	  
+	  private void twoSum(int[] array, int start, int end, int target, Set<String> used, List<List<Integer>> list) {
+		  while(start < end) {
+			  int left = array[start];
+			  int right = array[end];
+			  int sum = left + right;
+			  if(sum < target) {
+				  start++;
+			  }
+			  else if(sum > target) {
+				  end--;
+			  }
+			  else {
+				  String key = left+","+right+","+(-target);
+				  if(!used.contains(key)) {
+					  used.add(key);
+					  List<Integer> temp = new ArrayList<>();
+					  temp.add(left);
+					  temp.add(right);
+					  temp.add(-target);
+					  list.add(temp);
+				  }
+				  start++;
+				  end--;
+			  }
+		  }
+	  }
+	  
+	  
+	  public static void main(String[] args) {
+		  Medium test = new Medium();
+		 int[] array = {-1, 0 ,1 ,2, -1 ,-4};
+		 System.out.println(test.threeSum(array));;
+	}
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
 		  
 	  
 	
