@@ -801,11 +801,75 @@ public class Medium {
 	  }
 	  
 	  
+	  public List<List<Integer>> fourSum(int[] numbers, int target) {
+	      List<List<Integer>> list = new ArrayList<>();
+	      if(numbers == null || numbers.length < 4)
+	    	  return list;
+	      Set<String> set = new HashSet<>();
+	      Arrays.sort(numbers);
+	      for(int i=numbers.length-1; i>2; i--) {
+	    	  threeSum(numbers, i-1, target-numbers[i], list, set, numbers[i]);
+	      }
+		  return list;
+	  }
+	  
+	  public void threeSum(int[] numbers, int start, int target, List<List<Integer>> list, Set<String> used, int four) {
+	      for(int i=start; i>1; i--) {
+	    	  int temp = target - numbers[i];
+	    	  twoSum(numbers, 0, i-1, temp, used, list, four, numbers[i]);
+	      }
+		  
+	  }
+	  
+	  private void twoSum(int[] array, int start, int end, int target, Set<String> used, List<List<Integer>> list, int four, int three) {
+		  while(start < end) {
+			  int left = array[start];
+			  int right = array[end];
+			  int sum = left + right;
+			  if(sum < target) {
+				  start++;
+			  }
+			  else if(sum > target) {
+				  end--;
+			  }
+			  else {
+				  String key = left+","+right+","+three +","+four;
+				  if(!used.contains(key)) {
+					  used.add(key);
+					  List<Integer> temp = new ArrayList<>();
+					  temp.add(left);
+					  temp.add(right);
+					  temp.add(three);
+					  temp.add(four);
+					  Collections.sort(temp);
+					  list.add(temp);
+				  }
+				  start++;
+				  end--;
+			  }
+		  }
+	  }
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
 	  public static void main(String[] args) {
-		  Medium test = new Medium();
-		 int[] array = {-1, 0 ,1 ,2, -1 ,-4};
-		 System.out.println(test.threeSum(array));;
-	}
+		 
+	  }
 	  
 	  
 	  
