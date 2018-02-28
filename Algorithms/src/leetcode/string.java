@@ -2597,6 +2597,32 @@ public class string {
      }
      
      
+     public int lengthOfLongestSubstring(String s) {
+         int start = 0, maxLength = 0;
+         Set<Character> set = new HashSet<>();
+         for(int end=0; end < s.length(); end++) {
+        	 char c = s.charAt(end);
+        	 if(!set.contains(c))
+        		 set.add(c);
+        	 else {
+        		 while(s.charAt(start) != c) {
+        			 set.remove(s.charAt(start));
+        			 start++;
+        		 }
+        		 start++;
+        	 }
+        	 maxLength = Math.max(maxLength, end-start+1);
+         }
+    	 
+    	 return maxLength;
+     }
+     
+     
+     
+     
+     
+     
+     
      
      
      
