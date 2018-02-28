@@ -108,7 +108,45 @@ public class Hard {
 	}
 	
 	
-	
+	public int atoi(String str) {
+        long number = 0;
+        if(str == null || str.length() == 0)
+        	return (int) number;
+        str = str.trim();
+        char first = str.charAt(0);
+        boolean negative = false;
+        int start = 0;
+        if(first == '-') {
+        	negative = true;
+        	start++;
+        }
+        else if(first == '+') {
+        	start++;
+        }
+        else if(!( first >= '0' && first <= '9') )
+        	return (int) number;
+        for(int i=start; i<str.length(); i++) {
+        	char c = str.charAt(i);
+        	int num = c - '0';
+        	if(c == '.')
+        		return (int) number;
+        	if(c >= '0' && c <= '9') {
+        		if(negative) {
+        			if(number > (2147483648L-num)/10)
+        				return Integer.MIN_VALUE;
+        		}
+        		else {
+        			if(number > (Integer.MAX_VALUE - num) / 10)
+        				return Integer.MAX_VALUE;
+        		}
+    			number = number * 10 + num;
+        	}
+        	else
+        		break;
+        }
+        
+        return negative ? ((int) -number) : (int) number;
+    }
 	
 	
 	
