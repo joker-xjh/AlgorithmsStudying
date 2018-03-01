@@ -2555,12 +2555,91 @@ public class Array {
      
      
      
+     public void gameOfLife(int[][] board) {
+         int m = board.length, n = board[0].length;
+         int[][] preDir = {{-1,-1}, {-1,0},{0,-1},{1,-1}};
+         int[][] afterDir = {{-1,1}, {0,1}, {1,1}, {1,0}};
+         
+         for(int i=0; i<n; i++) {
+        	 for(int j=0; j<m; j++) {
+        		 int original = board[j][i];
+        		 int counter = 0;
+        		 
+        		 for(int[] dir : preDir) {
+        			 int x = j + dir[0];
+        			 int y = i + dir[1];
+        			 if(x<0 || x>=m || y<0 || y>=n)
+        				 continue;
+        			 if(board[x][y] > 1)
+        				 counter++;
+        		 }
+        		 for(int[] dir : afterDir) {
+        			 int x = j + dir[0];
+        			 int y = i + dir[1];
+        			 if(x<0 || x>=m || y<0 || y>=n)
+        				 continue;
+        		     counter += board[x][y];
+        		 }
+        		 
+        		 if(original == 1) {
+        			 if(counter < 2)
+        				 board[j][i] = 2;
+        			 else if(counter == 2 || counter == 3)
+        				 board[j][i] = 3;
+        			 else if(counter > 3)
+        				 board[j][i] = 2;
+        		 }
+        		 else {
+        			 if(counter == 3)
+        				 board[j][i] = 1;
+        			 else
+        				 board[j][i] = 0;
+        		 }
+        		 
+        		 
+        	 }
+         }
+         for(int i=0; i<m; i++)
+        	 System.out.println(Arrays.toString(board[i]));
+         
+         for(int i=0; i<m; i++)
+        	 for(int j=0; j<n; j++) {
+        		 if(board[i][j] == 2)
+        			 board[i][j] = 0;
+        		 else if(board[i][j] == 3)
+        			 board[i][j] = 1;
+        	 }
+     }
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
      
 
 
 	public static void main(String[] args) {
-		 Array test = new Array();
-		 test.rotatedDigits(100);
+		 
 	}
 
 }
