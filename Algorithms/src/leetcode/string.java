@@ -2618,7 +2618,31 @@ public class string {
      }
      
      
+     public int longestSubstring(String s, int k) {
+         char[] array = s.toCharArray();
+         return longestSubstringHelp(array, 0, array.length, k);
+     }
      
+     private int longestSubstringHelp(char[] array, int start, int end, int k) {
+    	 if(end - start < k)
+    		 return 0;
+    	 int[] counter = new int[26];
+    	 for(int i=start; i<end; i++)
+    		 counter[array[i]-'a']++;
+    	 for(int i=0; i<26; i++) {
+    		 if(counter[i] > 0 && counter[i] < k) {
+    			 for(int j=start; j<end; j++) {
+    				 if(array[j] == i+'a') {
+    					 int left = longestSubstringHelp(array, start, j, k);
+    					 int right = longestSubstringHelp(array, j+1, end, k);
+    					 return Math.max(left, right);
+    				 }
+    			 }
+    		 }
+    	 }
+    	 
+    	 return end - start;
+     }
      
      
      
