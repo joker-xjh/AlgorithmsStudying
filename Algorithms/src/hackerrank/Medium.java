@@ -1880,6 +1880,71 @@ public class Medium {
     }
 	
 	
+	static int evenTree(int n, int m, int[][] tree) {
+        Map<Integer, Set<Integer>> graph = new HashMap<>();
+        for(int[] edge : tree) {
+        	int v = edge[0], p = edge[1];
+        	if(!graph.containsKey(v))
+        		graph.put(v, new HashSet<>());
+        	graph.get(v).add(p);
+        	if(!graph.containsKey(p))
+        		graph.put(p, new HashSet<>());
+        	graph.get(p).add(v);
+        }
+        int[] counter = new int[n+1];
+        boolean[] visited = new boolean[n+1];
+        visited[1] = true;
+        evenTreeCountChild(graph, 1, visited, counter);
+        Arrays.fill(visited, false);
+        visited[1] = true;
+        int edges = evenTreeCutEdge(graph, 1, visited, counter);
+		return edges;
+    }
+	
+	static int evenTreeCutEdge(Map<Integer, Set<Integer>> graph, int p, boolean[] visited, int[] counter) {
+		int edge = 0;
+		if(counter[p] <= 3)
+			return edge;
+		for(int adj : graph.get(p)) {
+			if(visited[adj])
+				continue;
+			visited[adj] = true;
+			int sum = counter[p];
+			int part = counter[adj];
+			counter[adj] = sum;
+			edge += evenTreeCutEdge(graph, adj, visited, counter);
+			counter[adj] = part;
+			if((part % 2 == 0) && ((sum-part) % 2 == 0)) {
+				edge++;
+				counter[p] -= part;
+			}
+		}
+		
+		return edge;
+	}
+	
+	
+	static int evenTreeCountChild(Map<Integer, Set<Integer>> graph, int p, boolean[] visited, int[] counter) {
+		int count = 0;
+		for(int adj : graph.get(p)) {
+			if(visited[adj])
+				continue;
+			visited[adj] = true;
+			count += evenTreeCountChild(graph, adj, visited, counter);
+		}
+		counter[p] = count+1;
+		return count+1;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
