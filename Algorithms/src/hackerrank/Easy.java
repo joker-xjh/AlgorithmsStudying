@@ -1852,10 +1852,30 @@ public class Easy {
 	 }
 	 
 	 
+	 static int maximumToys(int[] prices, int k) {
+	        int toys = 0;
+	        Arrays.sort(prices);
+	        for(int i=0; i<prices.length; i++) {
+	        	int price = prices[i];
+	        	k -= price;
+	        	if(k > 0)
+	        		toys++;
+	        	else
+	        		break;
+	        }
+	        return toys;
+	 }
 	 
 	 
-	 
-	 
+	 static String catAndMouse(int x, int y, int z) {
+	     int d1 = Math.abs(x-z);
+	     int d2 = Math.abs(y-z);
+	     if(d1 < d2)
+	    	 return "Cat A";
+	     else if(d1 > d2)
+	    	 return "Cat B";
+	     return "Mouse C";
+	 }
 	 
 	 
 	 
