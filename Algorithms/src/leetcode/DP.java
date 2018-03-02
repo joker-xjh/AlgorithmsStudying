@@ -438,6 +438,72 @@ public class DP {
     }
     
     
+    public int findMaxForm(String[] strs, int m, int n) {
+    	int count = 0;
+    	Map<String, int[]> cost = new HashMap<>();
+    	boolean[] used = new boolean[strs.length];
+    	for(String str : strs)
+    		cost.put(str, findMaxFormCost(str));
+    	System.out.println(cost);
+    	Map<String, Integer> memoization = new HashMap<>();
+    	memoization.put("0,0", 0);
+    	count = findMaxFormMemoization(strs, used, m, n, cost, memoization);
+    	return count;
+    }
+    
+    private int findMaxFormMemoization(String[] strs,boolean[] used, int m, int n, Map<String, int[]> cost, Map<String, Integer> memoization) {
+    	int max = 0;
+    	String key = Arrays.toString(used)+","+m+","+n;
+    	if(memoization.containsKey(key))
+    		return memoization.get(key);
+    	for(int i=0; i<strs.length; i++) {
+    		if(used[i])
+    			continue;
+    		used[i] = true;
+    		int[] fee = cost.get(strs[i]);
+    		int zero = m - fee[0], one = n - fee[1];
+    		if(zero >= 0 && one >= 0)
+    			max = Math.max(max, 1+findMaxFormMemoization(strs, used, zero, one, cost, memoization));
+    		used[i] = false;
+    	}
+    	memoization.put(key, max);
+    	return max;
+    }
+    
+    private int[] findMaxFormCost(String str) {
+    	int[] res = new int[2];
+    	for(char c : str.toCharArray())
+    		if(c == '0')
+    			res[0]++;
+    		else
+    			res[1]++;
+    	return res;
+    }
+    
+    public int findMaxFormDP(String[] strs, int m, int n) {
+        int[][] dp = new int[m+1][n+1];
+        for(String str : strs) {
+        	int[] count = findMaxFormCost(str);
+        	for(int i=m; i>=count[0]; i--) {
+        		for(int j=n; j>=count[1]; j--) {
+        			dp[i][j] = Math.max(dp[i][j], 1+dp[i-count[0]][j-count[1]]);
+        		}
+        	}
+        }
+        return dp[m][n];
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     public static void main(String[] args) {
 		DP test = new DP();
