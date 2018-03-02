@@ -494,7 +494,39 @@ public class DP {
     }
     
     
-    
+    public int findIntegers(int num) {
+        int count = 0;
+        String binary = Integer.toBinaryString(num);
+        int length = binary.length();
+        if(length == 1)
+        	return 2;
+        if(num == 2)
+        	return 3;
+        int[] dp = new int[length+2];
+        dp[length+1] = 1; dp[length] = 1;
+        dp[length-1] = 2; dp[length-2] = 3;
+        for(int i=length-3; i>=0; i--)
+        	dp[i] = dp[i+1] + dp[i+2];
+        count = dp[0];
+        boolean last = true;
+        for(int i=0; i<length-1; i++) {
+        	char cur = binary.charAt(i);
+        	char next = binary.charAt(i+1);
+        	if(cur == '1') {
+        		if(next == '1') {
+        			last = false;
+        			break;
+        		}
+        		i++;
+        	}
+        	else {
+        		count -= dp[i+2];
+        	}
+        }
+        if(last && binary.charAt(length-1) == '0' && binary.charAt(length-2) == '0')
+        	count--;
+        return count;
+    }
     
     
     
@@ -507,7 +539,7 @@ public class DP {
     
     public static void main(String[] args) {
 		DP test = new DP();
-		System.out.println(test.knightProbability(8, 30, 6, 4));
+		test.findIntegers(43242);
 	}
     
     
