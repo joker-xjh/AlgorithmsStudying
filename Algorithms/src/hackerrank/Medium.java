@@ -2,14 +2,17 @@ package hackerrank;
 
 import java.math.BigInteger;
 
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -1937,7 +1940,65 @@ public class Medium {
 	}
 	
 	
-	
+	static void bfs(int n, int m, int[][] edges, int s) {
+        int[] answer = new int[n+1];
+        Arrays.fill(answer, -1);
+        Map<Integer, Set<Integer>> graph = new HashMap<>();
+        for(int[] edge : edges) {
+        	int p = edge[0], v = edge[1];
+        	if(!graph.containsKey(p))
+        		graph.put(p, new HashSet<>());
+        	graph.get(p).add(v);
+        	if(!graph.containsKey(v))
+        		graph.put(v, new HashSet<>());
+        	graph.get(v).add(p);
+        }
+        boolean[] visited = new boolean[n+1];
+        visited[s] = true;
+        Queue<Integer> queue = new LinkedList<>();
+        if(graph.get(s) != null) {
+        	for(int p : graph.get(s)) {
+            	visited[p] = true;
+            	queue.add(p);
+            }
+        }
+        
+        int distance = 0;
+        while(!queue.isEmpty()) {
+        	distance++;
+        	int size = queue.size();
+        	for(int i=0; i<size; i++) {
+        		int p = queue.poll();
+        		answer[p] = distance * 6;
+        		for(int v : graph.get(p)) {
+        			if(visited[v])
+        				continue;
+        			visited[v] = true;
+        			queue.add(v);
+        		}
+        	}
+        }
+        
+        
+        
+        for(int i=1; i<=n; i++) {
+        	if(i == n) {
+        		if(i != s) {
+        			System.out.print(answer[i]);
+        		}
+        	}
+        	else {
+        		if(s == n) {
+        			System.out.print(answer[i]);
+        		}
+        		else if(i!=s) {
+        			System.out.print(answer[i]+" ");
+        		}
+        	}
+        		
+        }
+        System.out.println();
+    }
 	
 	
 	
@@ -1952,7 +2013,7 @@ public class Medium {
 	
 	
 	public static void main(String[] args) {
-		substringDiff("helloworld", "yellomarin", 3);
+		
 		
 	}
 
