@@ -2613,7 +2613,41 @@ public class Array {
      
      
      
-     
+     public boolean isPossible(int[] nums) {
+    	 if(nums.length < 3)
+    		 return false;
+         Map<Integer, PriorityQueue<Integer>> map = new HashMap<>();
+         TreeSet<Integer> set = new TreeSet<>();
+         map.put(nums[0]-1, new PriorityQueue<>());
+         set.add(nums[0]-1);
+         for(int num : nums) {
+        	 if(!map.containsKey(num))
+        		 map.put(num, new PriorityQueue<>());
+        	 int pre = set.lower(num);
+        	 set.add(num);
+        	 PriorityQueue<Integer> preQueue = map.get(pre);
+        	 PriorityQueue<Integer> curQueue = map.get(num);
+        	 if(pre + 1 != num) {
+        		 curQueue.add(1);
+        		 continue;
+        	 }
+        	 if(preQueue.isEmpty()) {
+        		 curQueue.add(1);
+        		 continue;
+        	 }
+        	 int shortest = preQueue.poll();
+        	 curQueue.offer(shortest+1);
+         }
+         for(Integer num : map.keySet()) {
+        	 PriorityQueue<Integer> queue = map.get(num);
+        	 if(queue.isEmpty())
+        		 continue;
+        	 int shortest = queue.peek();
+        	 if(shortest < 3)
+        		 return false;
+         }
+    	 return true;
+     }
      
      
      
