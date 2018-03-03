@@ -2650,7 +2650,28 @@ public class Array {
      }
      
      
+     public int rob(int[] nums) {
+         int n = nums.length;
+         if(n == 0)
+             return 0;
+         if(n == 1)
+             return nums[0];
+         int profit1 = rob(nums,0,n-2);
+         int profit2 = rob(nums,1,n-1);
+         return Math.max(profit1, profit2);
+     }
      
+     public int rob(int[] nums, int start, int end) {
+         int no=0,yes=0;
+        for(int i=start; i<=end; i++){
+            int n = nums[i];
+     	   int temp = no;
+     	   no=Math.max(no, yes);
+     	   yes=temp+n;
+        }
+        
+        return Math.max(yes, no);
+     }
      
      
      
