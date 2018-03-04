@@ -1,6 +1,7 @@
 package leetcode;
 
 import java.util.ArrayList;
+
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -595,7 +596,58 @@ public class Design {
 	}
 	
 	
-	
+	 class SummaryRanges {
+
+		    /** Initialize your data structure here. */
+		 	TreeMap<Integer, Interval> tree;
+		 
+		    public SummaryRanges() {
+		        tree = new TreeMap<>();
+		    }
+		    
+		    public void addNum(int val) {
+		        Entry<Integer, Interval> pre = tree.floorEntry(val);
+		        boolean preMerge = false;
+		        if(pre != null) {
+		        	Interval preInterval = pre.getValue();
+		        	int end = preInterval.end;
+		        	if(end >= val)
+		        		return;
+		        	if(end+1 == val) {
+		        		preMerge = true;
+		        		preInterval.end = val;
+		        	}
+		        }
+		        Entry<Integer, Interval> next = tree.ceilingEntry(val);
+		        if(next != null) {
+		        	Interval nextInterval = next.getValue();
+		        	int start = nextInterval.start;
+		        	if(start <= val)
+		        		return;
+		        	if(val + 1 == start) {
+		        		if(preMerge) {
+		        			pre.getValue().end = nextInterval.end;
+		        			tree.remove(next.getKey());
+		        			return;
+		        		}
+		        		else {
+		        			nextInterval.start = val;
+		        			return;
+		        		}
+		        	}
+		        }
+		        if(!preMerge)
+		        	tree.put(val, new Interval(val, val));
+		    }
+		    
+		    public List<Interval> getIntervals() {
+		        List<Interval> list = new ArrayList<>();
+		        for(Entry<Integer, Interval> entry : tree.entrySet()) {
+		        	list.add(entry.getValue());
+		        }
+		        return list;
+		    }
+		}
 	
 	
 	
