@@ -2001,7 +2001,21 @@ public class Medium {
     }
 	
 	
+	static long theGreatXor(long x){
+        long xor = 0;
+        String binary = Long.toBinaryString(x);
+        for(int i=0; i<binary.length(); i++) {
+        	char c = binary.charAt(i);
+        	if(c == '0') {
+        		xor += theGreatXorHelp(binary.length()-i-1);
+        	}
+        }
+        return xor;
+    }
 	
+	static long theGreatXorHelp(int power) {
+		return (long) Math.pow(2, power);
+	}
 	
 	
 	
