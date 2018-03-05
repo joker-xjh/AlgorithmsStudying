@@ -192,7 +192,36 @@ public class math {
         return a;
     }
     
+    public int preimageSizeFZF(int K) {
+    	if(K == 0)
+    		return 5;
+        if(preimageSizeFZFCheck(1, K, K))
+        	return 5;
+        return 0;
+    }
     
+    private boolean preimageSizeFZFCheck(int left, int right, int target) {
+    	while(left <= right) {
+    		int mid = left + (right - left) / 2;
+    		int temp = preimageSizeFZFSum(mid);
+    		if(temp == target)
+    			return true;
+    		else if(temp < target)
+    			left = mid + 1;
+    		else
+    			right = mid - 1;
+    	}
+    	return false;
+    }
+    
+    private int preimageSizeFZFSum(int num) {
+    	int sum = 0;
+    	while(num != 0) {
+    		sum += num;
+    		num /= 5;
+    	}
+    	return sum;
+    }
     
     
     
