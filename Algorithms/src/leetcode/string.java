@@ -2644,6 +2644,55 @@ public class string {
     	 return end - start;
      }
      
+     public boolean validTicTacToe(String[] board) {
+         char[][] matrix = new char[3][3];
+    	 for(int i=0; i<3; i++)
+    		 matrix[i] = board[i].toCharArray();
+    	 int X = 0, O = 0;
+    	 for(int i=0; i<3; i++) {
+    		 for(int j=0; j<3; j++) {
+    			 char c = matrix[i][j];
+    			 if(c == 'X')
+    				 X++;
+    			 else if(c == 'O')
+    				 O++;
+    		 }
+    	 }
+    	 if(X < O || X - O > 1)
+    		 return false;
+    	 if(X == O) {
+    		 if(validTicTacToeIsWin(matrix, 'X'))
+    			 return false;
+    	 }
+    	 else {
+    		 if(validTicTacToeIsWin(matrix, 'O'))
+    			 return false;
+    	 }
+    	 return true;
+     }
+     
+     private boolean validTicTacToeIsWin(char[][] board, char c) {
+    	 int count3 = 0, count4 = 0;
+    	 for(int i=0; i<3; i++) {
+    		 int count1 = 0, count2 = 0;
+    		 for(int j=0; j<3; j++) {
+    			 if(board[i][j] == c)
+    				 count1++;
+    			 if(board[j][i] == c)
+    				 count2++;
+    		 }
+    		 if(count1 == 3 || count2 == 3)
+    			 return true;
+    		 if(board[i][i] == c)
+    			 count3++;
+    		 if(board[i][2-i] == c)
+    			 count4++;
+    	 }
+    	 if(count3 == 3 || count4 == 3)
+    		 return true;    	 
+    	 return false;
+     }
+     
      
      
      
