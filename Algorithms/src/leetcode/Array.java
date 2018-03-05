@@ -2673,7 +2673,46 @@ public class Array {
         return Math.max(yes, no);
      }
      
+     public int numMatchingSubseq(String S, String[] words) {
+         int match = 0;
+         char[] array = S.toCharArray();
+         boolean[] chars = new boolean[26];
+         for(char c : array)
+        	 chars[c-'a'] = true;
+         Set<String> checked = new HashSet<>();
+         for(String word : words) {
+        	 if(!numMatchingSubseqPreCheck(word, chars))
+        		 continue;
+        	 if(checked.contains(word)) {
+        		 match++;
+        		 continue;
+        	 }
+        	 if(numMatchingSubseqCheck(array, word)) {
+        		 match++;
+        		 checked.add(word);
+        	 }
+         }
+         return match;
+     }
      
+     private boolean numMatchingSubseqPreCheck(String word, boolean[] chars) {
+    	 for(char c : word.toCharArray()) {
+    		 if(!chars[c-'a'])
+    			 return false;
+    	 }
+    	 return true;
+     }
+     
+     private boolean numMatchingSubseqCheck(char[] array, String word) {
+    	 int index = 0;
+    	 for(char c : array) {
+    		 if(index == word.length())
+    			 return true;
+    		 if(word.charAt(index) == c)
+    			 index++;
+    	 }
+    	 return index == word.length();
+     }
      
      
      
