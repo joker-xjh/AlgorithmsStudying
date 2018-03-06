@@ -2078,6 +2078,72 @@ public class Medium {
 	
 	
 	
+	static int substringDiff2(String s1, String s2, int k) {
+		int answer = 0;
+		int n = s1.length();
+		int[][] dp = new int[n][n];
+		for(int i=0; i<n-answer; i++) {
+			for(int j=0; j<n-answer; j++) {
+				int mismatch = 0;
+				int l_ij = 0;
+				if(i == 0 || j == 0) {
+					
+				}
+				else if(s1.charAt(i-1) == s2.charAt(j-1)) {
+					mismatch = k;
+					l_ij = dp[i-1][j-1];
+				}
+				else {
+					mismatch = k-1;
+					l_ij = dp[i-1][j-1];
+				}
+				
+				while(mismatch <= k && i+l_ij < n && j + l_ij < n) {
+					if(s1.charAt(i+l_ij) != s2.charAt(j+l_ij))
+						mismatch++;
+					if(mismatch == k+1)
+						break;
+					l_ij++;
+				}
+				
+				dp[i][j] = l_ij;
+				answer = Math.max(answer, l_ij);
+				
+			}
+		}
+		
+		return answer;
+	}
+	
+	
+	static int unboundedKnapsack(int k, int[] arr) {
+		Arrays.sort(arr);
+        boolean[] dp = new boolean[k+1];
+        dp[0] = true;
+        for(int i=0; i<k; i++) {
+        	if(dp[i]) {
+        		for(int j=0; j<arr.length; j++) {
+        			int num = arr[j] + i;
+        			if(num > k)
+        				break;
+        			dp[num] = true;
+        		}
+        	}
+        }
+        for(int i=k; i>0; i--)
+        	if(dp[i])
+        		return i;
+		return 0;
+    }
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
