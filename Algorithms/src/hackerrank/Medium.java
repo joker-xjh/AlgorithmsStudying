@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
+import java.util.Stack;
 import java.util.TreeSet;
 
 
@@ -2016,6 +2017,64 @@ public class Medium {
 	static long theGreatXorHelp(int power) {
 		return (long) Math.pow(2, power);
 	}
+	
+	static void printShortestPath(int n, int i_start, int j_start, int i_end, int j_end) {
+        boolean[][] visited = new boolean[n][n];
+        int[][] dirs = {{-2,-1},{-2,1},{0,2},{2,1},{2,-1},{0,-2},{}};
+        String[] name = {"UL","UR","R","LR","LL","L"};
+        Queue<int[]> queue = new LinkedList<>();
+        visited[i_start][j_start] = true;
+        if(visited[i_end][j_end]) {
+        	System.out.println(0);
+        	System.out.println();
+        	return;
+        }
+        Map<String, Object[]> path = new HashMap<>();
+        path.put(i_start+","+j_start, null);
+        queue.add(new int[] {i_start, j_start});
+        int count = 0;
+        while(!queue.isEmpty()) {
+        	count++;
+        	int size = queue.size();
+        	for(int i=0; i<size; i++) {
+        		int[] array = queue.poll();
+        		String father = array[0] + ","+array[1];
+        		for(int j=0; j<dirs.length; j++) {
+        			int[] dir = dirs[j];
+        			String moveName = name[j];
+        			int x = array[0] + dir[0];
+        			int y = array[1] + dir[1];
+        			if(x < 0 || x >= n || y < 0 || y >= n || visited[x][y])
+        				continue;
+        			visited[x][y] = true;
+        			String son = x+","+y;
+        			path.put(son, new Object[] {father, moveName});
+        			if(x == i_end && y == j_end) {
+        				System.out.println(count);
+        				Stack<String> stack = new Stack<>();
+        				String key = son;
+        				while(path.get(key) != null) {
+        					Object[] temp = path.get(key);
+        					stack.add(temp[1].toString());
+        					key = temp[0].toString();
+        				}
+        				while(!stack.isEmpty()) {
+        					String move = stack.pop();
+        					if(stack.isEmpty())
+        						System.out.println(move);
+        					else
+        						System.out.print(move+" ");
+        				}
+        				return;
+        			}
+        			queue.add(new int[] {x,y});
+        		}
+        	}
+        }
+        
+        
+        System.out.println("Impossible");
+    }
 	
 	
 	
