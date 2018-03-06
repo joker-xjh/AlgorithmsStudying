@@ -2130,6 +2130,7 @@ public class Medium {
         		}
         	}
         }
+        
         for(int i=k; i>0; i--)
         	if(dp[i])
         		return i;
