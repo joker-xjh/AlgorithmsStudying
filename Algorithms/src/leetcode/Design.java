@@ -648,16 +648,84 @@ public class Design {
 		        return list;
 		    }
 		}
-	
+	 
+	 class AllOne {
+		 	
+		 	int max = 0;
+		 	int min = 0;
+		 	TreeMap<Integer, Set<String>> counter;
+		 	Map<String, Integer> values;
+
+		    /** Initialize your data structure here. */
+		    public AllOne() {
+		        values = new HashMap<>();
+		        counter = new TreeMap<>();
+		        counter.put(0, new HashSet<>());
+		    }
+		    
+		    /** Inserts a new key <Key> with value 1. Or increments an existing key by 1. */
+		    public void inc(String key) {
+		        int count = values.getOrDefault(key, 0) + 1;
+		        if(count == 1)
+		        	min = 1;
+		        if(!counter.containsKey(count))
+	        		counter.put(count, new HashSet<>());
+	        	counter.get(count).add(key);	
+	        	counter.get(count-1).remove(key);
+	        	if(counter.get(count-1).isEmpty() && count != 1)
+	        		counter.remove(count-1);
+		        if(count > max)
+		        	max = count;
+		        if(counter.get(min) == null)
+		        	min++;
+		        values.put(key, count);
+		    }
+		    
+		    /** Decrements an existing key by 1. If Key's value is 1, remove it from the data structure. */
+		    public void dec(String key) {
+		        if(!values.containsKey(key) || values.get(key) == 0)
+		        	return;
+		        int count = values.get(key) - 1;
+		        counter.get(count+1).remove(key);
+		        if(counter.get(count+1).isEmpty())
+		        	counter.remove(count+1);
+		        if(!counter.containsKey(count))
+	        		counter.put(count, new HashSet<>());
+	        	counter.get(count).add(key);
+	        	if(count > 0 && count < min)
+	        		min = count;
+	        	values.put(key, count);	     
+		        if(counter.get(max) == null)
+		        	max--;
+		        if(counter.get(min) == null)
+		        	min--;
+		        if(min == 0) {
+		        	Integer nextMin = counter.higherKey(0);
+		        	if(nextMin != null)
+		        		min = nextMin;
+		        }
+		    }
+		    
+		    /** Returns one of the keys with maximal value. */
+		    public String getMaxKey() {
+		        if(max == 0)
+		        	return "";
+		    	return counter.get(max).iterator().next();
+		    }
+		    
+		    /** Returns one of the keys with Minimal value. */
+		    public String getMinKey() {
+		        if(min == 0)
+		        	return "";
+		    	return counter.get(min).iterator().next();
+		    }
+		}
 	
 	
 	
 
 	public static void main(String[] args) {
-		Design cache = new Design();
-		cache.LFUCache(0);
-		cache.LFUput(0, 0);
-		cache.LFUget(0);
+		
 
 	}
 
