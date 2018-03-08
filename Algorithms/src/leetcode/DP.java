@@ -547,7 +547,34 @@ public class DP {
     }
     
     
-    
+    public int cherryPickup(int[][] grid) {
+        int n = grid.length;
+        int[][][][] dp = new int[n+1][n+1][n+1][n+1];
+        for(int i=0; i<=n; i++)
+        	for(int j=0; j<=n; j++)
+        		for(int k=0; k<=n; k++)
+        			Arrays.fill(dp[i][j][k], -1);
+        dp[1][1][1][1] = grid[0][0];
+        for(int x1=1; x1<=n; x1++) {
+        	for(int y1=1; y1<=n; y1++) {
+        		for(int x2=1; x2<=n; x2++) {
+        			for(int y2=1; y2<=n; y2++) {
+        				if(dp[x1][y1][x2][y2] >= 0 || grid[x1-1][y1-1] == -1 || grid[x2-1][y2-1] == -1)
+        					continue;
+        				int max1 = Math.max(dp[x1-1][y1][x2-1][y2], dp[x1-1][y1][x2][y2-1]);
+        				int max2 = Math.max(dp[x1][y1-1][x2-1][y2], dp[x1][y1-1][x2][y2-1]);
+        				int max = Math.max(max1, max2);
+        				if(max == -1)
+        					continue;
+        				dp[x1][y1][x2][y2] = max + grid[x1-1][y1-1];
+        				if(x1 != x2 && y1 != y2)
+        					dp[x1][y1][x2][y2] += grid[x2-1][y2-1];
+        			}
+        		}
+        	}
+        }
+        return Math.max(0, dp[n][n][n][n]);
+    }
     
     
     
