@@ -2738,6 +2738,50 @@ public class string {
     	 
      }
      
+     public String predictPartyVictory(String senate) {
+         int D = 0, R = 0;
+         int slot_D = 0, slot_R = 0;
+         char[] array = senate.toCharArray();
+         for(char c : array)
+        	 if(c == 'R')
+        		 slot_R++;
+        	 else
+        		 slot_D++;
+         boolean end = false;
+         while(!end) {
+        	 for(int i=0; i<array.length; i++) {
+        		 char c = array[i];
+        		 if(c == '\0')
+        			 continue;
+            	 if(c == 'R') {
+            		if(D > 0) {
+            			D--;
+            			array[i] = '\0';
+            			slot_R--;
+            		}
+            		else {
+            			R++;
+            		}
+            	 }
+            	 else {
+            		 if(R > 0) {
+            			 R--;
+            			 array[i] = '\0';
+            			 slot_D--;
+            		 }
+            		 else {
+            			 D++;
+            		 }
+            	 }
+             }
+        	 if(slot_D == 0 || slot_R == 0)
+        		 end = true;
+         }
+         
+    	 if(slot_D < slot_R)
+    		 return "Radiant";
+    	 return "Dire";
+     }
      
      
      
