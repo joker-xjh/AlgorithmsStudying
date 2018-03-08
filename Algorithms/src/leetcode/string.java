@@ -2694,7 +2694,49 @@ public class string {
      }
      
      
+     public int findLUSlength(String[] strs) {
+         int n = strs.length;
+         if(n < 2)
+        	 return 0;
+         Arrays.sort(strs, new findLUSlengthSorter());
+         for(int i=0; i<n; i++) {
+        	 boolean end = true;
+        	 String s2 = strs[i];
+        	 for(int j=0; j<n; j++) {
+        		 if(i == j)
+        			 continue;
+        		 String s1 = strs[j];
+        		 if(findLUSlengthHelp(s1, s2)) {
+        			end = false;
+        			break;
+        		 }
+        	 }
+        	 if(end)
+        		 return strs[i].length();
+         }
+         return -1;
+     }
      
+     private boolean findLUSlengthHelp(String s1, String s2) {
+    	 int index = 0;
+    	 if(s2.length() > s1.length())
+    		 return false;
+    	 for(char c : s1.toCharArray()) {
+    		 if(c == s2.charAt(index))
+    			 index++;
+    		 if(index == s2.length())
+    			 break;
+    	 }
+    	 return index == s2.length();
+     }
+     
+     class findLUSlengthSorter implements Comparator<String> {
+		@Override
+		public int compare(String o1, String o2) {
+			return o2.length() - o1.length();
+		}
+    	 
+     }
      
      
      
