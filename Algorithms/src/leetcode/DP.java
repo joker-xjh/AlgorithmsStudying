@@ -576,14 +576,44 @@ public class DP {
         return Math.max(0, dp[n][n][n][n]);
     }
     
+    public boolean canCross(int[] stones) {
+        if(stones.length == 1)
+        	return true;
+        Map<Integer, Integer> index = new HashMap<>();
+        for(int i=0; i<stones.length; i++)
+        	index.put(stones[i], i);
+    	return canCrossMemoization(stones, 1,1, new HashMap<>(),index);
+    }
     
-    
+    private boolean canCrossMemoization(int[] stones, int stone, int step, Map<String, Boolean> memoization, Map<Integer, Integer> indexMap) {
+    	int index = indexMap.getOrDefault(stone, -1);
+    	if(index == -1)
+    		return false;
+    	if(index == stones.length-1)
+    		return true;
+    	String key = index+","+step;
+    	if(memoization.containsKey(key))
+    		return memoization.get(key);
+    	for(int i=-1; i<=1; i++) {
+    		int next = step + i;
+    		if(next <= 0)
+    			continue;
+    		if(canCrossMemoization(stones, next+stone,next, memoization, indexMap)) {
+    			memoization.put(key, true);
+    			return true;
+    		}
+    	}
+    	memoization.put(key, false);
+    	return false;
+    }
     
     
     
     
     public static void main(String[] args) {
-		
+		DP test = new DP();
+		int[] array = {0,1,3,5,6,8,12,17};
+		test.canCross(array);
 	}
     
     
