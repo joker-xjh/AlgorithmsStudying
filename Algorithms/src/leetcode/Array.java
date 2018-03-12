@@ -2747,7 +2747,39 @@ public class Array {
      }
      
      
+     public List<List<Integer>> allPathsSourceTarget(int[][] graph) {
+         List<List<Integer>> answer = new ArrayList<>();
+         Map<Integer, Set<Integer>> map = new HashMap<>();
+         for(int i=0; i<graph.length; i++) {
+        	 int[] adj = graph[i];
+        	 if(!map.containsKey(i))
+        		 map.put(i, new HashSet<>());
+        	 for(int j : adj)
+        		 map.get(i).add(j);
+         }
+         List<Integer> list = new ArrayList<>();
+         list.add(0);
+         boolean[] visited = new boolean[graph.length];
+         visited[0] = true;
+         allPathsSourceTargetHelp(map, visited, answer,list, 0);
+         return answer;
+     }
      
+     private void allPathsSourceTargetHelp(Map<Integer, Set<Integer>> graph, boolean[] visited, List<List<Integer>> answer, List<Integer> list, int p) {
+    	 if(p == visited.length-1) {
+    		 answer.add(new ArrayList<>(list));
+    		 return;
+    	 }
+    	 for(int adj : graph.get(p)) {
+    		 if(visited[adj])
+    			 continue;
+    		 visited[adj] = true;
+    		 list.add(adj);
+    		 allPathsSourceTargetHelp(graph, visited, answer, list, adj);
+    		 list.remove(list.size()-1);
+    		 visited[adj] = false;
+    	 }
+     }
      
      
      
