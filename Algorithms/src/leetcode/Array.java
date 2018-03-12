@@ -2781,7 +2781,45 @@ public class Array {
     	 }
      }
      
-     
+     public int bestRotation(int[] A) {
+         int rotation = 0;
+         int score = 0;
+         int n = A.length;
+         Map<Integer, Integer> counter = new HashMap<>();
+         Map<Integer, Integer> after = new HashMap<>();
+         for(int i=0; i<n; i++) {
+        	 int index = i - A[i];
+        	 if(index >= 0)
+        		 score++;
+        	 counter.put(index, counter.getOrDefault(index, 0) + 1);
+         }
+         int max = score;
+         for(int k=1; k<n; k++) {
+             int temp = score;
+        	 int index = k - 1;
+        	 int num = A[index];
+        	 int diff = index - num;
+        	 if(diff >= 0 && counter.getOrDefault(diff, 0) > 0)
+        		 temp--;
+        	 counter.put(diff, counter.getOrDefault(diff, 0)-1);
+        	 temp -= counter.getOrDefault(index, 0);
+        	 counter.put(index, 0);
+        	 
+        	 if(num < n) {
+        		 temp++;
+        		 temp -= after.getOrDefault(k, 0);
+        		 after.put(k+n-num, after.getOrDefault(k+n-num, 0)+1);
+        	 }
+        	 
+        	 if(temp > max) {
+        		 max = temp;
+        		 rotation = k;
+        	 }
+        	 score = temp;
+         }
+         
+         return rotation;
+     }
      
      
      
@@ -2791,7 +2829,9 @@ public class Array {
 
 
 	public static void main(String[] args) {
-		 
+		 Array test = new Array();
+		 int[] array = {1, 3, 0, 2, 4};
+		 test.bestRotation(array);
 	}
 
 }
