@@ -2783,6 +2783,11 @@ public class string {
     	 return "Dire";
      }
      
+     public boolean rotateString(String A, String B) {
+         String temp = A + A;
+         return temp.indexOf(B) != -1;
+     }
+     
      
      
     
