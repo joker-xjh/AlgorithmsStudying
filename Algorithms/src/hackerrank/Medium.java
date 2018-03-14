@@ -2139,7 +2139,63 @@ public class Medium {
 	
 	
 	
-	
+	static long journeyToMoon(int n, int[][] astronaut) {
+        long ways = 0;
+        Map<Integer, Set<Integer>> map = new HashMap<>();
+        Set<Integer> used = new HashSet<>();
+        List<Set<Integer>> list = new ArrayList<>();
+        for(int[] array : astronaut) {
+        	int one = array[0];
+        	int two = array[1];
+        	used.add(one);
+        	used.add(two);
+        	Set<Integer> set_one = map.get(one);
+        	Set<Integer> set_two = map.get(two);
+        	if(set_one == null && set_two == null) {
+        		Set<Integer> temp = new HashSet<>();
+        		temp.add(one);
+        		temp.add(two);
+        		map.put(one, temp);
+        		map.put(two, temp);
+        		list.add(temp);
+        	}
+        	else if(set_one == null) {
+        		set_two.add(one);
+        		map.put(one, set_two);
+        	}
+        	else if(set_two == null) {
+        		set_one.add(two);
+        		map.put(two, set_one);
+        	}
+        	else {
+        		if(set_one == set_two)
+        			continue;
+        		Set<Integer> small = set_one.size() < set_two.size() ? set_one : set_two;
+        		Set<Integer> big = small == set_one ? set_two : set_one;
+        		big.addAll(small);
+        		for(Integer num : small)
+        			map.put(num, big);
+        		list.remove(small);
+        			
+        	}
+        }
+        int people_include = 0;
+        int people_left = n - used.size();
+        for(int i=0; i<list.size(); i++) {
+        	Set<Integer> set = list.get(i);
+        	people_include += set.size();
+        	int size = 0;
+        	for(int j=i+1; j<list.size(); j++)
+        		size += list.get(j).size();
+        	ways += size * set.size();
+        }
+        for(int i=0; i<people_left; i++) {
+        	ways += people_include + people_left - 1 - i;
+        }
+        
+        
+        return ways;
+    }
 	
 	
 	
