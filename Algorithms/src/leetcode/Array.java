@@ -2822,6 +2822,59 @@ public class Array {
      }
      
      
+     public boolean isBipartite(int[][] graph) {
+         int n = graph.length;
+         Map<Integer, Set<Integer>> map = new HashMap<>();
+         for(int i=0; i<n; i++) {
+        	 int[] adj = graph[i];
+        	 if(!map.containsKey(i))
+        		 map.put(i, new HashSet<>());
+        	 for(int p : adj) {
+        		 map.get(i).add(p);
+        		 if(!map.containsKey(p))
+        			 map.put(p, new HashSet<>());
+        		 map.get(p).add(i);
+        	 }
+         }
+         boolean[] visited = new boolean[n];
+         boolean[] A = new boolean[n];
+         boolean[] B = new boolean[n];
+         
+    	 for(int i=0; i<n; i++) {
+    		 visited[i] = true;
+    		 if(!isBipartiteSearch(i, map, A, B, visited))
+    			 return false;
+    	 }
+    	 
+    	 return true;
+     }
+     
+     private boolean isBipartiteSearch(int point, Map<Integer, Set<Integer>> graph, boolean[] A, boolean[] B, boolean[] visited) {
+    	 A[point] = true;
+    	 for(int adj : graph.get(point)) {
+    		 if(visited[adj])
+    			 continue;
+    		 if(A[adj])
+    			 return false;
+    		 B[adj] = true;
+    	 }
+    	 for(int adj : graph.get(point)) {
+    		 if(visited[adj])
+    			 continue;
+    		 visited[adj] = true;
+    		 if(!isBipartiteSearch(adj, graph, B, A, visited))
+    			 return false;
+    	 }
+    	 return true;
+     }
+     
+     
+     
+     
+     
+     
+     
+     
      
      
      
