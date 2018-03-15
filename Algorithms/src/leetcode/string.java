@@ -2788,6 +2788,33 @@ public class string {
          return temp.indexOf(B) != -1;
      }
      
+     public int lengthLongestPath(String input) {
+         if(input == null || input.length() == 0)
+        	 return 0;
+         String[] lines = input.split("\n");
+         Map<Integer, Integer> layer = new HashMap<>();
+         layer.put(-1, 0);
+         int max = 0;
+         for(String line : lines) {
+        	 int index = 0;
+        	 int t = 0;
+        	 while(line.charAt(index) == '\t') {
+        		 index++;
+        		 t++;
+        	 }
+        	 int length = line.length() - index + 1 + layer.get(t-1);
+        	 layer.put(t, length);
+        	 if(line.indexOf('.') != -1)
+        		 max = Math.max(max, length);
+         }
+    	 
+         if(max > 0)
+        	 max--;
+    	 return max;
+     }
+     
+     
+     
      
      
     
