@@ -223,6 +223,29 @@ public class math {
     	return sum;
     }
     
+    public int superPow(int a, int[] b) {
+        a %= mod;
+        int answer = 1;
+        for(int i=b.length-1; i>=0; i--) {
+        	answer = answer * fastPower(a, b[i]) % mod;
+        	a = fastPower(a, 10);
+        }
+        return answer;
+    }
+    
+    private static int mod = 1337;
+    
+    private int fastPower(int a, int b) {
+    	int answer = 1;
+    	while(b != 0) {
+    		if(b % 2 != 0)
+    			answer = answer * a % mod;
+    		a = a * a % mod;
+    		b /= 2;
+    	}
+    	return answer;
+    }
+    
     
     
 	
