@@ -1878,7 +1878,33 @@ public class Easy {
 	 }
 	 
 	 
+	 static void jimOrders(int[][] orders) {
+	     int n = orders.length;
+	     Integer[] array = new Integer[n];
+	     Map<Integer, Integer> time = new HashMap<>();
+	     for(int i=0; i<n; i++) {
+	    	 array[i] = i+1;
+	    	 time.put(i+1, orders[i][0] + orders[i][1]);
+	     }
+	     Arrays.sort(array, new jimOrdersSorter(time));
+	     for (int i = 0; i < array.length; i++) {
+	            System.out.print(array[i] + (i != array.length - 1 ? " " : ""));
+	      }
+	     System.out.println("");
+	 }
 	 
+	 static class jimOrdersSorter implements Comparator<Integer> {
+		 Map<Integer, Integer> time;
+		 public jimOrdersSorter(Map<Integer, Integer> time) {
+			this.time = time;
+		}
+
+		@Override
+		public int compare(Integer o1, Integer o2) {
+			return time.get(o1) == time.get(o2) ? o1 - o2 : time.get(o1) - time.get(o2);
+		}
+		 
+	 }
 	 
 	 
 	 
