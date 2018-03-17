@@ -246,6 +246,40 @@ public class math {
     	return answer;
     }
     
+    public double champagneTower(int poured, int query_row, int query_glass) {
+        double[][] array = new double[101][101];
+        array[0][0] = poured;
+        for(int i=0; i<100; i++) {
+        	for(int j=0; j<=i; j++) {
+        		if(array[i][j] > 1) {
+        			double fall = (array[i][j] - 1) / 2;
+        			array[i+1][j] += fall;
+        			array[i+1][j+1] += fall;
+        			array[i][j] = 1;
+        		}
+        	}
+        }
+    	
+    	return array[query_row][query_glass];
+    }
+    
+    
+    
+    public static void main(String[] args) {
+		math test = new math();
+		test.champagneTower(1000, 30, 6);
+	}
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
 	
