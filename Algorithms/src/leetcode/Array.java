@@ -2869,7 +2869,39 @@ public class Array {
      }
      
      
-     
+     public boolean isRectangleCover(int[][] rectangles) {
+         int x1 = Integer.MAX_VALUE;
+         int y1 = Integer.MAX_VALUE;
+         int x2 = Integer.MIN_VALUE;
+         int y2 = Integer.MIN_VALUE;
+         int area = 0;
+         Set<String> set = new HashSet<>();
+         for(int[] point : rectangles) {
+        	 x1 = Math.min(x1, point[0]);
+        	 y1 = Math.min(y1, point[1]);
+        	 x2 = Math.max(x2, point[2]);
+        	 y2 = Math.max(y2, point[3]);
+        	 
+        	 area += (point[2] - point[0]) * (point[3] - point[1]);
+        	 
+        	 String p1 = point[0]+","+point[1];
+        	 String p2 = point[0]+","+point[3];
+        	 String p3 = point[2]+","+point[1];
+        	 String p4 = point[2]+","+point[3];
+        	 
+        	 if(!set.add(p1))
+        		 set.remove(p1);
+        	 if(!set.add(p2))
+        		 set.remove(p2);
+        	 if(!set.add(p3))
+        		 set.remove(p3);
+        	 if(!set.add(p4))
+        		 set.remove(p4);
+         }
+         if(!set.contains(x1+","+y1) || !set.contains(x1+","+y2) || !set.contains(x2+","+y1) || !set.contains(x2+","+y2) || set.size() != 4)
+        	 return false;
+         return area == (x2 - x1) * (y2 - y1);
+     }
      
      
      
