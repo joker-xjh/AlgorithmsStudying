@@ -1,6 +1,7 @@
 package leetcode;
 
 import java.util.ArrayList;
+
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -2903,7 +2904,42 @@ public class Array {
          return area == (x2 - x1) * (y2 - y1);
      }
      
+     public List<Integer> eventualSafeNodes(int[][] graph) {
+         List<Integer> safe = new ArrayList<>();
+    	 int n = graph.length;
+    	 boolean[] unsafe = new boolean[n];
+    	 boolean[] visited = new boolean[n];
+    	 Set<Integer> path = new HashSet<>();
+    	 for(int i=0; i<n; i++) {
+    		 if(unsafe[i])
+    			 continue;
+    		 path.add(i);
+    		 visited[i] = true;
+    		 eventualSafeNodesDFS(graph, i, unsafe, path, visited);
+    		 Arrays.fill(visited, false);
+    		 path.clear();
+    	 }
+    	 for(int i=0; i<n; i++)
+    		 if(!unsafe[i])
+    			 safe.add(i);
+    	 return safe;
+     }
      
+     private void eventualSafeNodesDFS(int[][] graph, int cur, boolean[] unsafe, Set<Integer> path, boolean[] visited) {
+    	 for(int next : graph[cur]) {
+    		 if(unsafe[next] || path.contains(next)) {
+    			 for(int temp : path)
+    				 unsafe[temp] = true;
+    			 return;
+    		 }
+    		 if(visited[next])
+    			 continue;
+    		 visited[next] = true;
+    		 path.add(next);
+    		 eventualSafeNodesDFS(graph, next, unsafe, path, visited);
+    		 path.remove(next);
+    	 }
+     }
      
      
      
