@@ -2941,10 +2941,50 @@ public class Array {
     	 }
      }
      
+     public int[] hitBricks(int[][] grid, int[][] hits) {
+         int n = grid[0].length, h = hits.length;
+         int[] answer = new int[h];
+    	 for(int[] hit : hits) {
+    		 if(grid[hit[0]][hit[1]] == 1)
+    			 grid[hit[0]][hit[1]] = 0;
+    		 else
+    			 grid[hit[0]][hit[1]] = -1;
+    	 }
+    	 for(int i=0; i<n; i++) {
+    		 hitBricksCount(0, i, grid);
+    	 }
+    	 for(int i=h-1; i>=0; i--) {
+    		 int[] hit = hits[i];
+    		 if(grid[hit[0]][hit[1]] == -1)
+    			 continue;
+    		 grid[hit[0]][hit[1]] = 1;
+    		 if(!isConnected2Top(hit[0], hit[1], grid))
+    			 continue;
+    		 answer[i] = hitBricksCount(hit[0], hit[1], grid) - 1;
+    	 }
+         
+    	 return answer;
+     }
      
+     private int hitBricksCount(int i, int j, int[][] grid) {
+    	 if(i < 0 || i >= grid.length || j < 0 || j >= grid[0].length || grid[i][j] != 1)
+    		 return 0;
+    	 int count = 1;
+    	 grid[i][j] = 2;
+    	 for(int[] dir : directions)
+    		 count += hitBricksCount(i+dir[0], j+dir[1], grid);
+    	 return count;
+     }
      
-     
-     
+     private boolean isConnected2Top(int i, int j, int[][] grid) {
+    	 if(i >= 1 && grid[i-1][j] == 2 ||
+    	    i <= grid.length-2 && grid[i+1][j] == 2 ||
+    	    j >= 1 && grid[i][j-1] == 2 ||
+    	    j <= grid[0].length-2 && grid[i][j+1] == 2 ||
+    	    i == 0)
+    		 return true;
+    	 return false;
+     }
      
      
 
