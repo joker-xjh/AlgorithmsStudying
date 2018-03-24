@@ -2814,7 +2814,26 @@ public class string {
      }
      
      
-     
+     public int getMaxRepetitions(String s1, int n1, String s2, int n2) {
+         int repetition = 0;
+         int index = 0;
+         char[] array1 = s1.toCharArray();
+         char[] array2 = s2.toCharArray();
+         for(int i=0; i<n1; i++) {
+        	 
+        	 for(int j=0; j<array1.length; j++) {
+        		 char c = array1[j];
+        		 if(c == array2[index]) {
+        			 index++;
+        			 if(index == array2.length) {
+        				 index = 0;
+        				 repetition++;
+        			 }
+        		 }
+        	 }
+         }
+         return repetition / n2;
+     }
      
      
     
