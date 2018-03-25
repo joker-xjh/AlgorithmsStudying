@@ -2849,6 +2849,38 @@ public class string {
      }
      
      
+     public int[] numberOfLines(int[] widths, String S) {
+         int[] answer = new int[2];
+         answer[0] = 1;
+         int line = 0;
+         for(char c : S.toCharArray()) {
+        	 int width = widths[c - 'a'];
+        	 if(width + line > 100) {
+        		 answer[0]++;
+        		 line = width;
+        	 }
+        	 else {
+        		 line += width;
+        	 }
+         }
+         answer[1] = line;
+         return answer;
+     }
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
     
     public static void main(String[] args) {
     	
