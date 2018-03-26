@@ -3035,8 +3035,25 @@ public class Array {
      }
      
      
+     public boolean splitArraySameAverage(int[] A) {
+         int n = A.length;
+         int sum = Arrays.stream(A).sum();
+    	 for(int i=1; i<=n/2; i++) {
+    		 if(sum * i % n == 0 && splitArraySameAverageFindB(A, sum * i / n, i, 0))
+    			 return true;
+    	 }
+    	 
+    	 return false;
+     }
      
-     
+     private boolean splitArraySameAverageFindB(int[] array, int target, int lenB, int i) {
+    	 if(lenB == 0)
+    		 return target == 0;
+    	 if(lenB + i > array.length)
+    		 return false;
+    	 return splitArraySameAverageFindB(array, target-array[i], lenB-1, i+1) ||
+    			 splitArraySameAverageFindB(array, target, lenB, i+1);
+     }
      
      
      
