@@ -2987,6 +2987,65 @@ public class Array {
      }
      
      
+     public int maxIncreaseKeepingSkyline(int[][] grid) {
+         int increase = 0;
+         int m = grid.length, n = grid[0].length;
+         int[] top = new int[n];
+         int[] left = new int[m];
+         
+         for(int i=0; i<n; i++) {
+        	 for(int j=0; j<m; j++) {
+        		 if(grid[j][i] > top[i])
+        			 top[i] = grid[j][i];
+        	 }
+         }
+         for(int i=0; i<m; i++) {
+        	 for(int j=0; j<n; j++) {
+        		 if(grid[i][j] > left[i])
+        			 left[i] = grid[i][j];
+        	 }
+         }
+         
+         int[][] temp = new int[m][n];
+         for(int i=0; i<m; i++)
+        	 for(int j=0; j<n; j++)
+        		 temp[i][j] = Integer.MAX_VALUE;
+         
+         for(int i=0; i<n; i++) {
+        	 for(int j=0; j<m; j++) {
+        		 temp[j][i] = Math.min(temp[j][i], top[i]);
+        	 }
+         }
+         for(int i=0; i<m; i++) {
+        	 for(int j=0; j<n; j++) {
+        		 temp[i][j] = Math.min(temp[i][j], left[i]);
+        	 }
+         }
+         
+         for(int i=0; i<m; i++) {
+        	 for(int j=0; j<n; j++) {
+        		 increase += temp[i][j] - grid[i][j];
+        	 }
+         }
+         
+         for(int[] array:temp)
+        	 System.out.println(Arrays.toString(array));
+         
+         return increase;
+     }
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
 
 
 	public static void main(String[] args) {
