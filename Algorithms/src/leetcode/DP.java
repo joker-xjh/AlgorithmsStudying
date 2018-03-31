@@ -629,10 +629,64 @@ public class DP {
     }
 
     
+    public int[] maxSumOfThreeSubarrays(int[] nums, int k) {
+        int[] answer = new int[3];
+        if(nums == null || k <= 0 || nums.length < 3 * k)
+        	return answer;
+        int n = nums.length;
+        int[][] dp = new int[4][n+1];
+        int[][] pos = new int[4][n+1];
+        int[] sum = new int[n+1];
+        for(int i=1; i<=n; i++)
+        	sum[i] = sum[i-1] + nums[i-1];
+        for(int i=1; i<=3; i++) {
+        	for(int j=k*i; j<=n; j++) {
+        		int curSum = sum[j] - sum[j-k] + dp[i-1][j-k];
+        		if(curSum > dp[i][j-1]) {
+        			dp[i][j] = curSum;
+        			pos[i][j] = j-k;
+        		}
+        		else {
+        			dp[i][j] = dp[i][j-1];
+        			pos[i][j] = pos[i][j-1];
+        		}
+        	}
+        }
+        int index = n;
+        for(int i=2; i>=0; i--) {
+        	answer[i] = pos[i+1][index];
+        	index = answer[i];
+        }
+        return answer;
+    }
     
     
-    
-    
+    public int checkRecord(int n) {
+        int record = 0;
+        int mod = 1000000007;
+        if(n == 0)
+        	return 1;
+        if(n == 1)
+        	return 3;
+        if(n == 2)
+        	return 8;
+        int[] dp = new int[n+1];
+        dp[0] = 1;
+        dp[1] = 2;
+        dp[2] = 4;
+        for(int i=3; i<=n; i++) {
+        	dp[i] =(( dp[i-1] + dp[i-2] ) % mod + dp[i-3]) % mod;
+        }
+        
+        for(int i=0; i<n; i++) {
+        	long left = dp[i];
+        	long right = dp[n-1-i];
+        	long temp = left * right;
+        	record = (int) ((record + temp) % mod);
+        }
+        record = (record + dp[n]) %mod;
+        return record;
+    }
     
     
     
@@ -644,8 +698,7 @@ public class DP {
     
     
     public static void main(String[] args) {
-		DP test = new DP();
-		test.numTilings(3);
+		
 	}
     
     
