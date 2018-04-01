@@ -2868,7 +2868,27 @@ public class string {
      }
      
      
-     
+     public List<String> subdomainVisits(String[] cpdomains) {
+         Map<String, Integer> map = new HashMap<>();
+         for(String cpdomain : cpdomains) {
+        	 String[] temp = cpdomain.split(" ");
+        	 Integer count = Integer.parseInt(temp[0]);
+        	 String domain = temp[1];
+        	 while(true) {
+        		 map.put(domain, map.getOrDefault(domain, 0) + count);
+        		 int dot = domain.indexOf('.');
+        		 if(dot == -1)
+        			 break;
+        		 domain = domain.substring(dot+1);
+        	 }
+         }
+    	 List<String> list = new ArrayList<>();
+    	 for(Map.Entry<String, Integer> entry : map.entrySet()) {
+    		 String temp = entry.getValue()+" "+entry.getKey();
+    		 list.add(temp);
+    	 }
+    	 return list;
+     }
      
      
      
