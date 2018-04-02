@@ -2890,7 +2890,72 @@ public class string {
     	 return list;
      }
      
-     
+     public int expressiveWords(String S, String[] words) {
+    	 if(S.length() == 0 || words.length == 0)
+    		 return 0;
+         int expressive = 0;
+    	 List<Character> group_char = new ArrayList<>();
+    	 List<Integer> group_count = new ArrayList<>();
+    	 char ch = S.charAt(0);
+    	 int ch_count = 1;
+    	 for(int i=1; i<S.length(); i++) {
+    		 char c =S.charAt(i);
+    		 if(c == ch) {
+    			 ch_count++;
+    			 continue;
+    		 }
+    		 group_char.add(ch);
+    		 group_count.add(ch_count);
+    		 ch_count = 1;
+    		 ch = c;
+    	 }
+    	 group_char.add(ch);
+		 group_count.add(ch_count);
+		 
+		 System.out.println(group_char);
+		 System.out.println(group_count);
+		 
+		 for(String word : words) {
+			 if(word.length() == 0)
+				 continue;
+			 char pre = word.charAt(0);
+			 int pre_count = 1;
+			 int index = 0;
+			 boolean stretchy = true;
+			 for(int i=1; i<=word.length(); i++) {
+				 char c = i == word.length() ? '\0' : word.charAt(i);
+				 if(c == pre) {
+					 pre_count++;
+					 continue;
+				 }
+				 if(index == group_char.size()) {
+					 stretchy = false;
+					 break;
+				 }
+				 if(pre != group_char.get(index)) {
+					 stretchy = false;
+					 break;
+				 }
+				 int groupCount = group_count.get(index);
+				 if(groupCount < pre_count) {
+					 stretchy = false;
+					 break;
+				 }
+				 if(groupCount != pre_count && groupCount < 3) {
+					 stretchy = false;
+					 break;
+				 }
+				 index++;
+				 pre = c;
+				 pre_count = 1;
+			 }
+			 if(stretchy && index == group_char.size()) {
+				 expressive++;
+			 }
+		 }
+		 
+         return expressive;
+     }
      
      
      
@@ -2903,7 +2968,10 @@ public class string {
      
     
     public static void main(String[] args) {
-    	
+    	string test = new string();
+    	String S = "heeellooo";
+    	String[] words = {"hello", "hi", "helo"};
+    	test.expressiveWords(S, words);
     	
 	}
     
