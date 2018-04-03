@@ -715,9 +715,38 @@ public class DP {
     	return temp;
     }
     
+    public int minCut(String s) {
+    	Map<String, Integer> memoization = new HashMap<>();
+    	memoization.put("", 0);
+    	int min = minCutMemoization(s, memoization) - 1;
+    	return min;
+    }
+    
+    private int minCutMemoization(String s, Map<String, Integer> memoization) {
+    	if(memoization.containsKey(s))
+    		return memoization.get(s);
+    	int min = Integer.MAX_VALUE;
+    	for(int i=s.length()-1; i >= 0; i--) {
+    		if(isPalindrome(s, 0, i)) {
+    			min = Math.min(min, 1 + minCutMemoization(s.substring(i+1), memoization));
+    			if(min == 2 || min == 1)
+    				break;
+    		}
+    	}
+    	memoization.put(s, min);
+    	return min;
+    }
     
     
-    
+    private boolean isPalindrome(String str, int left, int right) {
+    	while(left <= right) {
+    		if(str.charAt(left) != str.charAt(right))
+    			return false;
+    		left++;
+    		right--;
+    	}
+    	return true;
+    }
     
     
     
