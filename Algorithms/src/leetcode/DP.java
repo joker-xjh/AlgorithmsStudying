@@ -688,7 +688,32 @@ public class DP {
         return record;
     }
     
+    public double soupServings(int N) {
+        if(N >= 5000)
+        	return 1;
+        return soupServingsMemo(N, N, new HashMap<>());
+    }
     
+    private double soupServingsMemo(int A, int B, Map<String, Double> memoization) {
+    	if (A <= 0 && B <= 0) {     
+            return 0.5;
+        }
+        if (A <= 0) {    
+            return 1.0;
+        }
+        if (B <= 0) {    
+            return 0.0;
+        }
+    	String key = A+","+B;
+    	if(memoization.containsKey(key))
+    		return memoization.get(key);
+    	double temp = 0.25 * (soupServingsMemo(A-100, B, memoization) + 
+    			              soupServingsMemo(A-75, B-25, memoization) + 
+    			              soupServingsMemo(A-50, B-50, memoization) + 
+    			              soupServingsMemo(A-25, B-75, memoization));
+    	memoization.put(key, temp);
+    	return temp;
+    }
     
     
     
