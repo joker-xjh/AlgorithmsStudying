@@ -1,6 +1,7 @@
 package lintcode;
 
 import java.util.AbstractMap;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -148,6 +149,24 @@ public class Hard {
         return negative ? ((int) -number) : (int) number;
     }
 	
+	
+	public int kSum(int[] A, int k, int target) {
+		int len = A.length;  
+        
+        int[][][] dp = new int[len+1][k+1][target+1];  
+          
+        for(int i=0;i<len;++i)  
+            if(A[i]<=target)  
+                for(int j=i+1;j<=len;++j)  
+                    dp[j][1][A[i]] = 1;  
+              
+        for(int i=1;i<=len;++i)  
+            for(int j=2;j<=k&&j<=i;++j)  
+                for(int s=1;s<=target;++s)  
+                    dp[i][j][s] = dp[i-1][j][s] + (s>A[i-1]?dp[i-1][j-1][s-A[i-1]]:0);  
+                      
+        return dp[len][k][target]; 
+    }
 	
 	
 	
