@@ -588,14 +588,70 @@ public class Easy {
         return index;
     }
 	
+	public int searchInsert(int[] A, int target) {
+        int left = 0, right = A.length-1;
+        while(left <= right) {
+        	int mid = (left + right) >>> 1;
+			if(A[mid] == target)
+				return mid;
+			else if(A[mid] < target)
+				left = mid + 1;
+			else
+				right = mid - 1;
+        }
+        
+        return left;
+    }
 	
+	public int[] searchRange(int[] A, int target) {
+        int[] range = new int[2];
+        int index = searchRangeHelp1(A, target);
+        if(index == A.length || A[index] != target) {
+        	range[0] = -1; range[1] = -1;
+        	return range;
+        }
+        range[0] = index;
+        index = searchRangeHelp2(A, target);
+        range[1] = index -1 ;
+        System.out.println(Arrays.toString(range));
+        return range;
+    }
 	
+	public int searchRangeHelp2(int[] A, int target) {
+		int left = 0, right = A.length - 1;
+		while(left <= right) {
+			int mid = (left + right) >>> 1;
+			if(A[mid] > target)
+				right = mid - 1;
+			else if(A[mid] < target)
+				left = mid + 1;
+			else
+				left++;
+				
+		}
+		
+		return left;
+	}
 	
+	public int searchRangeHelp1(int[] A, int target) {
+		int left = 0, right = A.length - 1;
+		while(left < right) {
+			int mid = (left + right) >>> 1;
+        	//System.out.println(left+"," + right);
+			if(A[mid] < target)
+				left = mid+1;
+			else
+				right = mid;
+		}
+		
+		return left;
+	}
 	
-	
-	
-	
-	
+	public static void main(String[] args) {
+		Easy test = new Easy();
+		int[] array = {-1,0,1,2,2,2,3,3,3,4,4,4,5,5,6,90,92,93,101};
+		test.searchRange(array, 2);
+	}
 	
 	
 	
