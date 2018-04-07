@@ -647,10 +647,43 @@ public class Easy {
 		return left;
 	}
 	
+	 class Point {
+		      int x;
+		      int y;
+		      Point() { x = 0; y = 0; }
+		      Point(int a, int b) { x = a; y = b; }
+		  }
+	
+	public String radarDetection(Point[] coordinates, int[] radius) {
+        int n = coordinates.length;
+        for(int i=0; i<n; i++) {
+        	Point point = coordinates[i];
+        	int r = radius[i];
+        	if(point.y >= 0 && point.y <= 1)
+        		return "YES";
+        	if(point.y < 0 && point.y+r > 0)
+        		return "YES";
+        	if(point.y > 1 && point.y - r < 1)
+        		return "YES";
+        }
+		return "NO";
+    }
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	public static void main(String[] args) {
-		Easy test = new Easy();
-		int[] array = {-1,0,1,2,2,2,3,3,3,4,4,4,5,5,6,90,92,93,101};
-		test.searchRange(array, 2);
+		
 	}
 	
 	
