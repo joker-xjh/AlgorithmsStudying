@@ -851,7 +851,27 @@ public class Medium {
 	  }
 	  
 	  
-	  
+	  public int longestIncreasingSubsequence(int[] nums) {
+		  int n = nums.length;
+		  if(n == 0)
+			  return 0;
+		  int[] dp= new int[n];
+		  int longest = 0;
+		  for(int i=0; i<n; i++) {
+			  dp[i] = 1;
+			  int cur = nums[i];
+			  for(int j=i-1; j>=0; j--) {
+				  int pre = nums[j];
+				  if(pre >= cur)
+					  continue;
+				  if(dp[j] + 1 > dp[i])
+					  dp[i] = dp[j] + 1;
+				  if(dp[i] > longest)
+					  longest = dp[i];
+			  }
+		  }
+		  return longest;
+	  }
 	  
 	  
 	  
