@@ -874,7 +874,20 @@ public class Medium {
 	  }
 	  
 	  
-	  
+	  public int backPack(int m, int[] A) {
+		  int[][] dp = new int[A.length][m+1];
+		  for(int j=1; j<=m; j++) {
+			  if(A[0] <= j)
+				  dp[0][j] = A[0];
+			  for(int i=1; i<A.length; i++) {
+				  if(A[i] > j)
+					  dp[i][j] = dp[i-1][j];
+				  else
+					  dp[i][j] = Math.max(dp[i-1][j], dp[i-1][j-A[i]]+A[i]);
+			  }
+		  }
+		  return dp[A.length-1][m];
+	  }
 	  
 	  
 	  
