@@ -907,7 +907,24 @@ public class Medium {
 	  }
 	  
 	  
+	  public int backPackVI(int[] nums, int target) {
+		  Map<Integer, Integer> memoization = new HashMap<>();
+		  memoization.put(0, 1);
+		  int count = backPackVIMemo(nums, target, memoization);
+		  return count;
+	  }
 	  
+	  private int backPackVIMemo(int[] nums, int target, Map<Integer, Integer> memoization) {
+		  if(target < 0)
+			  return 0;
+		  if(memoization.containsKey(target))
+			  return memoization.get(target);
+		  int count = 0;
+		  for(int num : nums)
+			  count += backPackVIMemo(nums, target - num, memoization); 
+		  memoization.put(target, count);
+		  return count;
+	  }
 	  
 	  
 	  
