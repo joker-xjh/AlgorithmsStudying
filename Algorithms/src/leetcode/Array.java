@@ -3079,6 +3079,104 @@ public class Array {
          return area;
      }
      
+     public int numBusesToDestination(int[][] routes, int S, int T) {
+    	 if(S == T)
+    		 return 0;
+         int bus = 1;
+         Map<Integer, Set<Integer>> graph = new HashMap<>();
+         for(int i=0; i<routes.length; i++) {
+        	 int[] route = routes[i];
+        	 Set<Integer> set = new HashSet<>();
+        	 for(int r : route)
+        		 set.add(r);
+        	 for(int r : route) {
+        		 if(!graph.containsKey(r))
+        			 graph.put(r, set);
+        		 else {
+        			 Set<Integer> newSet = new HashSet<>(set);
+        			 newSet.addAll(graph.get(r));
+        			 graph.put(r, newSet);
+        		 }
+        	 }
+         }
+         
+         Set<Integer> used = new HashSet<>();
+         Queue<Integer> queue = new LinkedList<>();
+         queue.add(S);
+         used.add(S);
+         while(!queue.isEmpty()) {
+        	 int size = queue.size();
+        	 for(int i=0; i<size; i++) {
+        		 int p = queue.poll();
+        		 Set<Integer> stops = graph.get(p);
+        		 if(stops.contains(T))
+        			 return bus;
+        		 for(int stop : stops) {
+        			 if(used.contains(stop))
+        				 continue;
+        			 used.add(stop);
+        			 queue.add(stop);
+        		 }
+        	 }
+        	 bus++;
+         }
+         
+         return -1;
+     }
+     
+     
+     public int numBusesToDestination2(int[][] routes, int S, int T) {
+         if(S == T)
+     		 return 0;
+          int bus = 1;
+          Map<Integer, List<Set<Integer>>> graph = new HashMap<>();
+          for(int i=0; i<routes.length; i++) {
+         	 int[] route = routes[i];
+         	 Set<Integer> set = new HashSet<>();
+         	 for(int r : route)
+         		 set.add(r);
+         	 for(int r : route) {
+         		 if(!graph.containsKey(r)) {
+         			 List<Set<Integer>> list = new ArrayList<>();
+         			 list.add(set);
+         			 graph.put(r, list);
+         		 }
+         		 else {
+         			 graph.get(r).add(set);
+         		 }
+         	 }
+          }
+          
+          Set<Integer> used = new HashSet<>();
+          Queue<Integer> queue = new LinkedList<>();
+          queue.add(S);
+          used.add(S);
+          while(!queue.isEmpty()) {
+         	 int size = queue.size();
+         	 for(int i=0; i<size; i++) {
+         		 int p = queue.poll();
+         		 List<Set<Integer>> list = graph.get(p);
+         		 for(Set<Integer> set : list) {
+         			 for(int stop : set) {
+         				 if(stop == T)
+         					 return bus;
+         				 if(used.contains(stop))
+         					 continue;
+         				 used.add(stop);
+         				 queue.add(stop);
+         			 }
+         		 }
+         	 }
+         	 bus++;
+          }
+          
+          return -1;
+     }
+     
+     
+     
+     
+     
      
      
      
