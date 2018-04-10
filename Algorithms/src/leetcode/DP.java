@@ -794,7 +794,37 @@ public class DP {
         return (int) dp[n][k];
     }
     
+    public double largestSumOfAverages(int[] A, int K) {
+        int n = A.length;
+        double[][] dp = new double[K+1][n+1];
+        double[] average = new double[n+1];
+        double sum = 0;
+        for(int i=1; i<=n; i++) {
+        	sum += A[i-1];
+        	average[i] = sum / i;
+        }
+        double answer = largestSumOfAveragesMemo(A, K, n, dp, average);
+        return answer;
+    }
     
+    private double largestSumOfAveragesMemo(int[] A, int k, int n, double[][] dp, double[] average) {
+    	if(k > n)
+    		return 0;
+    	if(k == 1)
+    		return average[n];
+    	if(dp[k][n] > 0)
+    		return dp[k][n];
+    	double lagest = 0;
+    	double temp = 0;
+    	for(int i=n; i>= k; i--) {
+    		temp += A[i-1];
+    		double avg = temp / (n-i+1);
+    		lagest = Math.max(lagest, avg + largestSumOfAveragesMemo(A, k-1, i-1, dp, average));
+    	}
+    	lagest = Math.max(lagest, largestSumOfAveragesMemo(A, k-1, n, dp, average));
+    	dp[k][n] = lagest;
+    	return lagest;
+    }
     
     
     
