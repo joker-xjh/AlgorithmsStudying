@@ -827,22 +827,55 @@ public class DP {
     }
     
     
+    public int splitArray(int[] nums, int m) {
+        int n = nums.length;
+        int[][] dp = new int[m+1][n+1];
+        int[] preSum = new int[n+1];
+        int sum = 0;
+        for(int i=1; i<=n; i++) {
+        	sum += nums[i-1];
+        	preSum[i] = sum;
+        }
+        int answer = splitArrayMemo(nums, m, n, preSum, dp);
+    	return answer;
+    }
+    
+    private int splitArrayMemo(int[] nums, int m, int n, int[] preSum, int[][] dp) {
+    	if(m > n)
+    		return Integer.MAX_VALUE;
+    	if(m == 1)
+    		return preSum[n];
+    	if(dp[m][n] > 0)
+    		return dp[m][n];
+    	int sum = 0, min = Integer.MAX_VALUE;
+    	for(int i=n; i>= m;i--) {
+    		sum += nums[i-1];
+    		int max = Math.max(sum, splitArrayMemo(nums, m-1, i-1, preSum, dp));
+    		min = Math.min(min, max);
+    	}
+    	dp[m][n] = min;
+    	return dp[m][n];
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     public static void main(String[] args) {
-		
+		DP test = new DP();
+		int[] array = {7,2,5,10,8};
+		test.splitArray(array, 2);
 	}
     
-    
-    
-    
- 
- 
- 
- 
-    
-    
-    
-	
 
 }
