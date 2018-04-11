@@ -170,7 +170,41 @@ public class Hard {
 	
 	
 	
+	public int maxSubArray(int[] nums, int k) {
+		if(k == 0)
+			return 0;
+		int n = nums.length;
+		if(k > n)
+			return 0;
+		int[][] dp = new int[k+1][n+1];
+		for(int i=0; i<=k; i++)
+			for(int j=0; j<=n; j++)
+				dp[i][j] = Integer.MIN_VALUE;
+		int[] preSum = new int[n+1];
+		int sum = 0;
+		for(int i=1; i<=n; i++) {
+			sum += nums[i-1];
+			preSum[i] = sum;
+		}
+		return maxSubArrayMemo(nums, k, n, dp, preSum);
+	}
 	
+	private int maxSubArrayMemo(int[] nums, int k, int n, int[][] dp, int[] preSum) {
+		if(k > n || k == 0)
+			return 0;
+		if(k == 1 || k == n)
+			return preSum[n];
+		if(dp[k][n] > 0)
+			return dp[k][n];
+		int sum = 0;
+		for(int i=n; i>=k; i--) {
+			sum += nums[i-1];
+			int temp = sum + maxSubArrayMemo(nums, k-1, i-1, dp, preSum);
+			dp[k][n] = Math.max(temp, dp[k][n]);
+		}
+		dp[k][n] = Math.max(maxSubArrayMemo(nums, k, n-1, dp, preSum), dp[k][n]);
+		return dp[k][n];
+	}
 	
 	
 	
