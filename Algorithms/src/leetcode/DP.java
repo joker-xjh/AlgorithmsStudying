@@ -858,7 +858,26 @@ public class DP {
     }
     
     
-    
+    @SuppressWarnings("unchecked")
+	public int numberOfArithmeticSlices(int[] A) {
+        int slices = 0;
+        Map<Long, Integer>[] indexMap = new HashMap[A.length];
+        for(int i=0; i<A.length;i ++) {
+        	int cur = A[i];
+        	indexMap[i] = new HashMap<>();
+        	for(int j=0; j<i; j++) {
+        		int pre = A[j];
+        		long diff = (long)cur - pre;
+        		if(diff < Integer.MIN_VALUE || diff > Integer.MAX_VALUE)
+        			continue;
+        		int d1 = indexMap[i].getOrDefault(diff, 0);
+        		int d2 = indexMap[j].getOrDefault(diff, 0);
+        		slices += d2;
+        		indexMap[i].put(diff, d1+d2+1);
+        	}
+        }
+        return slices;
+    }
     
     
     
@@ -872,9 +891,7 @@ public class DP {
     
     
     public static void main(String[] args) {
-		DP test = new DP();
-		int[] array = {7,2,5,10,8};
-		test.splitArray(array, 2);
+		
 	}
     
 
