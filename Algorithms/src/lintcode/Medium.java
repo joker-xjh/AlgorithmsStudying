@@ -938,12 +938,35 @@ public class Medium {
 	       return dp[amount];
 	  }
 	  
+	  Integer memo[][][];
+	  public int findMaxForm(String[] strs, int m, int n) {
+	        if(strs == null || strs.length == 0 || (m == 0 && n == 0)) return 0;
+	        memo = new Integer[m+1][n+1][strs.length];
+	        int [][] pairs = new int[strs.length][2];
+	        for(int i = 0;i<strs.length;i++){
+	            for(int j = 0;j<strs[i].length();j++){
+	                char ch  = strs[i].charAt(j);
+	                if(ch == '0') pairs[i][0]++;
+	                else pairs[i][1]++;
+	            }
+	        }
+	        return go(pairs, 0, m, n);
+	    }
 	  
-	  
-	  
-	  
-	  
-	  
+	  public int go(int pairs[][], int s, int m, int n){
+	        if(s >= pairs.length) return 0;
+	        if(memo[m][n][s] != null) return memo[m][n][s];
+	        int count = 0;
+	        for(int i = s;i<pairs.length;i++){
+	            int dm = m - pairs[i][0];
+	            int dn = n - pairs[i][1];
+	            if(dm >= 0 && dn >=0) {
+	                count = Math.max(count, 1+go(pairs, i+1, dm, dn));
+	            }
+	        }
+	        memo[m][n][s] = count;
+	        return count;
+	    }
 	  
 	  
 	  
