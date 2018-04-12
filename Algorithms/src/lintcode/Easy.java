@@ -670,10 +670,55 @@ public class Easy {
     }
 	
 	
+	public String[] dataSegmentation(String str) {
+		List<String> list = new ArrayList<>();
+		StringBuilder sb = new StringBuilder();
+		for(int i=0; i<str.length(); i++) {
+			char c = str.charAt(i);
+			if(c == ' ') {
+				if(sb.length() > 0) {
+					list.add(sb.toString());
+					sb = new StringBuilder();
+				}
+				continue;
+			}
+			else if(c >= 'a' && c <= 'z') {
+				sb.append(c);
+			}
+			else {
+				if(sb.length() > 0) {
+					list.add(sb.toString());
+					list.add(""+c);
+					sb = new StringBuilder();
+				}
+				else {
+					list.add(""+c);
+				}
+			}
+		}
+		if(sb.length() > 0)
+			list.add(sb.toString());
+		String[] answer = new String[list.size()];
+		list.toArray(answer);
+		return answer;
+    }
 	
 	
-	
-	
+	public String isBuild(int x) {
+        int mod = x % 7;
+		int div = x / 7;
+		if(mod == 1 && div >= 2)
+			return "YES";
+		else if(mod == 2 && div >= 1)
+			return "YES";
+		else if(mod == 3 || mod == 6)
+			return "YES";
+		else if(mod ==4 && div >= 2)
+			return "YES";
+		else if(mod == 5 && div >= 1)
+			return "YES";
+		return "NO";
+    }
 	
 	
 	
