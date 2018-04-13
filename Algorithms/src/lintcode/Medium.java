@@ -969,7 +969,30 @@ public class Medium {
 	    }
 	  
 	  
-	  
+	  public int MinAdjustmentCost(List<Integer> A, int target) {
+	      int n = A.size();
+	      if(n < 2)
+	    	  return 0;
+	      int[][] dp = new int[n][101];
+	      for(int i=1; i<=100; i++)
+	    	  dp[0][i] = Math.abs(A.get(0) - i);
+	      
+	      for(int i=1; i<n; i++) {
+	    	  for(int j=1; j<=100; j++) {
+	    		  dp[i][j] = 1000000;
+	    		  int diff = Math.abs(j - A.get(i));
+	    		  int max = Math.min(100, j + target);
+	    		  int min = Math.max(1, j - target);
+	    		  for(int k=min; k<=max; k++)
+	    			  dp[i][j] = Math.min(dp[i][j], dp[i-1][k] + diff);
+	    	  }
+	      }
+		  
+		  int cost = Integer.MAX_VALUE;
+		  for(int i=1; i<=100; i++)
+			  cost = Math.min(cost, dp[n-1][i]);
+		  return cost;
+	  }
 	  
 	  
 	  
@@ -984,29 +1007,5 @@ public class Medium {
 	  public static void main(String[] args) {
 		 
 	  }
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-		  
-	  
-	
-	
 
 }
