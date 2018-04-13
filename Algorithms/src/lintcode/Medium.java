@@ -994,9 +994,28 @@ public class Medium {
 		  return cost;
 	  }
 	  
+	  public long getNumberOfWays(int n, int m, int limit, int[] cost) {
+		    Long[][] dp = new Long[n+1][m+1];
+		  	long ways = getNumberOfWaysMemo(n, m, limit, cost, dp, n);
+	        return ways;
+	  }
 	  
-	  
-	  
+	  private long getNumberOfWaysMemo(int n, int m, int limit, int[] cost, Long[][] dp, int index) {
+		   if(index < 0 || index > n || m < 0)
+			  return -1;
+		   if(index == 0)
+			   return 1;
+		   if(dp[index][m] != null)
+			   return dp[index][m];
+		   long ways = 0;
+		   for(int i=index-1; i>=index-limit && i >= 0; i--) {
+			   long temp = getNumberOfWaysMemo(n, m - cost[index], limit, cost, dp, i);
+			   if(temp != -1)
+				   ways += temp;
+		   }
+		   dp[index][m] = ways;
+		   return dp[index][m];
+	  }
 	  
 	  
 	  
