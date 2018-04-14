@@ -1058,7 +1058,27 @@ public class Medium {
 		  return result;
 	  }
 	  
+	  public int jump(int[] A) {
+	        int answer = jumpDFS(A, 0, new Integer[A.length]);
+	        if(answer == Integer.MAX_VALUE)
+	        	return 0;
+	        return answer;
+	  }
 	  
+	  private int jumpDFS(int[] A, int index, Integer[] dp) {
+		  if(index >= A.length-1)
+			  return 0;
+		  if(dp[index] != null)
+			  return dp[index];
+		  int steps = Integer.MAX_VALUE;
+		  for(int i=A[index]; i >0; i--) {
+			  int temp = jumpDFS(A, index + i,dp);
+			  if(temp != Integer.MAX_VALUE)
+				  steps = Math.min(steps, temp+1);
+		  }
+		  dp[index] = steps;
+		  return steps;
+	  }
 	  
 	  
 	  
