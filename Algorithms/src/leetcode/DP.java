@@ -879,7 +879,38 @@ public class DP {
         return slices;
     }
     
+    public int findRotateSteps(String ring, String key) {
+    	return findRotateStepsMemo(ring, key, 0, new HashMap<>());
+    }
     
+    private int findRotateStepsMemo(String ring, String key, int index, Map<String, Integer> memo) {
+    	if(index == key.length())
+    		return 0;
+    	String temp = ring + ","+index;
+    	if(memo.containsKey(temp))
+    		return memo.get(temp);
+    	int steps = Integer.MAX_VALUE;
+    	int length = ring.length();
+    	for(int i=0; i<length; i++) {
+    		char c = ring.charAt(i);
+    		if(c == key.charAt(index)) {
+    			String left = ring.substring(0, i);
+    			String right = ring.substring(i);
+    			String nextRing = right + left;
+    			steps = Math.min(steps, i+1+findRotateStepsMemo(nextRing, key, index+1, memo));
+    		}
+    		c = ring.charAt(length - i - 1);
+    		if(c == key.charAt(index)) {
+    			String right = ring.substring(length - i - 1, length);
+    			String left = ring.substring(0, length - i - 1);
+    			String nextRing = right + left;
+    			steps = Math.min(steps, i+2+findRotateStepsMemo(nextRing, key, index+1, memo));
+    		}
+    	}
+    	
+    	memo.put(temp, steps);
+    	return steps;
+    }
     
     
     
