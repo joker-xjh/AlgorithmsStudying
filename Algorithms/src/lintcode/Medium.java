@@ -1027,7 +1027,7 @@ public class Medium {
 			  for(int j=1; j<=len1; j++) {
 				  char c1 = S.charAt(j-1);
 				  if(c1 == c2) {
-					  dp[i][j] += dp[i][j-1] + dp[i-1][j];
+					  dp[i][j] += dp[i][j-1] + dp[i-1][j-1];
 				  }
 				  else {
 					  dp[i][j] += dp[i][j-1];
@@ -1038,7 +1038,25 @@ public class Medium {
 		  return dp[len2][len1];
 	  }
 	  
+	  public boolean canJump(int[] A) {
+	      return canJumpMemo(A, 0, new Boolean[A.length]);
+	  }
 	  
+	  private boolean canJumpMemo(int[] A, int index, Boolean[] memo) {
+		  if(index >= A.length-1)
+			  return true;
+		  if(memo[index] != null)
+			  return memo[index];
+		  boolean result = false;
+		  for(int i = A[index]; i>0; i--) {
+			  if(canJumpMemo(A, index+i, memo)) {
+				  result = true;
+				  break;
+			  }
+		  }
+		  memo[index] = result;
+		  return result;
+	  }
 	  
 	  
 	  
