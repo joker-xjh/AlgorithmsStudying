@@ -2957,7 +2957,36 @@ public class string {
          return expressive;
      }
      
-     
+     public String mostCommonWord(String paragraph, String[] banned) {
+         Set<String> used = new HashSet<>(Arrays.asList(banned));
+    	 StringBuilder sb = new StringBuilder();
+    	 String answer = "";
+    	 int counter = 0;
+    	 Map<String, Integer> map = new HashMap<>();
+    	 for(int i=0; i<=paragraph.length(); i++) {
+    		 char c = i == paragraph.length() ? '\0' : paragraph.charAt(i);
+    		 if(c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z') {
+    			 c = (char) (c < 'a' ? c + 32 : c);
+    			 sb.append(c);
+    		 }
+    		 else {
+    			 if(sb.length() == 0)
+    				 continue;
+    			 String word = sb.toString();
+    			 sb = new StringBuilder();
+    			 if(used.contains(word))
+    				 continue;
+    			 int temp = map.getOrDefault(word, 0) + 1;
+    			 if(temp > counter) {
+    				 counter = temp;
+    				 answer = word;
+    			 }
+    			 map.put(word, temp);
+    			 
+    		 }
+    	 }
+    	 return answer;
+     }
      
      
      
@@ -2968,10 +2997,7 @@ public class string {
      
     
     public static void main(String[] args) {
-    	string test = new string();
-    	String S = "heeellooo";
-    	String[] words = {"hello", "hi", "helo"};
-    	test.expressiveWords(S, words);
+    	
     	
 	}
     
