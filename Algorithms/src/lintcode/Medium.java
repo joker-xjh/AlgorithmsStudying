@@ -2,6 +2,7 @@ package lintcode;
 
 import java.util.ArrayList;
 
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -14,6 +15,7 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
+
 
 
 public class Medium {
@@ -1079,6 +1081,61 @@ public class Medium {
 		  dp[index] = steps;
 		  return steps;
 	  }
+	  
+	  
+	  public int maxProduct(int[] nums) {
+	     return (int) maxProductMemo(nums, nums.length-1, new Long[nums.length]);
+	  }
+	  
+	  private long maxProductMemo(int[] nums, int index, Long[] dp) {
+		  if(index < 0)
+			  return Long.MIN_VALUE;
+		  if(index == 0)
+			  return nums[0];
+		  if(dp[index] != null)
+			  return dp[index];
+		  long max = 1;
+		  for(int i=index; i>=0; i--) {
+			  max *= nums[i];
+			  long temp = Math.max(max, maxProductMemo(nums, i-1, dp));
+			  if(dp[index] == null)
+				  dp[index] = Long.MIN_VALUE;
+			  dp[index] = Math.max(dp[index], temp);
+		  }
+		  dp[index] = Math.max(dp[index], maxProductMemo(nums, index-1, dp));
+		  return dp[index];
+	  }
+	  
+	  
+	  public int maxProduct2(int[] nums) {
+		  int n = nums.length;
+		  if(n == 0)
+			  return 0;
+		  long[] dp = new long[n+1];
+		  Arrays.fill(dp, Long.MIN_VALUE);
+		  dp[1] = nums[0];
+		  for(int i=2; i<=n; i++) {
+			  long max = 1;
+			  for(int j=i; j>0; j--) {
+				  max *= nums[j-1];
+				  long temp = Math.max(max, dp[j-1]);
+				  dp[i] = Math.max(dp[i], temp);
+			  }
+			  dp[i] = Math.max(dp[i], dp[i-1]);
+		  }
+		  
+		  return (int) dp[n];
+	  }
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
 	  
 	  
 	  
