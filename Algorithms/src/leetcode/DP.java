@@ -913,10 +913,98 @@ public class DP {
     }
     
     
+    public String longestPalindrome(String s) {
+        if(s == null || s.length() == 0)
+        	return "";
+    	int n = s.length();
+    	if(n == 1)
+    		return s;
+    	Integer[] dp = new Integer[n];
+    	int[] pos = new int[n];
+    	for(int i=0; i<n; i++) {
+    		dp[i] = 1;
+    		pos[i] = i;
+    	}
+    	longestPalindromeMemo(s.toCharArray(), n-1, dp, pos);
+    	String answer = s.substring(pos[n-1], pos[n-1] + dp[n-1]);
+    	return answer;
+    }
+    
+    private int longestPalindromeMemo(char[] array, int index, Integer[] dp, int[] pos) {
+    	if(index < 0)
+    		return -1;
+    	if(index == 0)
+    		return 1;
+    	if(dp[index] != null)
+    		return dp[index];
+    	dp[index] = 1;
+    	pos[index] = index;
+    	for(int i=index; i>=0; i--) {
+    		if(!isPalindromeMemo(array, i, index))
+    			continue;
+    		int length = index - i + 1;
+    		int preLength = longestPalindromeMemo(array, i-1, dp, pos);
+    		if(length > preLength) {
+    			dp[index] = length;
+    			pos[index] = i;
+    		}else {
+    			dp[index] = preLength;
+    			pos[index] = pos[i-1];
+    		}
+    	}
+    	int pre = longestPalindromeMemo(array, index-1, dp, pos);
+    	if(pre > dp[index]) {
+    		dp[index] = pre;
+    		pos[index] = pos[index-1];
+    	}
+    	return dp[index];
+    }
+    
+    private boolean isPalindromeMemo(char[] array, int left, int right) {
+    	while(left <= right) {
+    		if(array[left] != array[right])
+    			return false;
+    		left++;
+    		right--;
+    	}
+    	return true;
+    }
     
     
-    
-    
+    public String longestPalindrome2(String s) {
+    	if(s == null || s.length() == 0)
+    		return "";
+    	int n = s.length();
+    	if(n == 1)
+    		return s;
+    	char[] array = s.toCharArray();
+    	int[] dp = new int[n+1];
+    	int[] pos = new int[n+1];
+    	dp[1] = 1;
+    	pos[1] = 0;
+    	for(int i=2; i<=n; i++) {
+    		for(int j=i; j>0; j--) {
+    			if(!isPalindromeMemo(array, j-1, i-1))
+    				continue;
+    			int length = i - j + 1;
+    			if(length > dp[j-1]) {
+    				dp[i] = length;
+    				pos[i] = j-1;
+    			}
+    			else {
+    				dp[i] = dp[j-1];
+    				pos[i] = pos[j-1];
+    			}
+    		}
+    		if(dp[i] < dp[i-1]) {
+    			dp[i] = dp[i-1];
+    			pos[i] = pos[i-1];
+    		}
+    	}
+    	
+    	String answer = s.substring(pos[n], pos[n] + dp[n]);
+    	return answer;
+    }
     
     
     
