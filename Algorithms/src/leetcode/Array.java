@@ -3174,7 +3174,28 @@ public class Array {
      }
      
      
-     
+     public int numComponents(ListNode head, int[] G) {
+         int compoents = 0;
+         boolean c = false;
+         Set<Integer> set = new HashSet<>();
+         for(int n : G)
+        	 set.add(n);
+         for(ListNode node = head; node != null; node = node.next) {
+        	 int val = node.val;
+        	 if(set.contains(val)) {
+        		 c = true;
+        	 }
+        	 else {
+        		 if(c) {
+        			 compoents++;
+        		 }
+    			 c = false;
+        	 }
+         }
+         if(c)
+        	 compoents++;
+         return compoents;
+     }
      
      
      
