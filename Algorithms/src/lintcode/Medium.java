@@ -3,6 +3,7 @@ package lintcode;
 import java.util.ArrayList;
 
 
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -15,6 +16,7 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
+
 
 
 
@@ -1210,7 +1212,33 @@ public class Medium {
 		  return dp[n];
 	  }
 	  
-	  
+	  public int numDecodings(String s) {
+	        int length = s.length();
+	        if(length == 0)
+	        	return 0;
+	        if(s.charAt(0) == '0')
+	        	return 0;
+	        if(length == 1)
+	        	return 1;
+	        char[] array = s.toCharArray();
+	        int[] dp = new int[length+1];
+	        dp[1] = 1;
+	        int temp = (array[0] - '0') * 10 + array[1] - '0';
+	        dp[2] = temp <= 26 && array[1] != '0' ? 2 : 1;
+	        
+	        for(int i=3; i<=length; i++) {
+	        	char c1 = array[i-1];
+	        	char c2 = array[i-2];
+	        	int num = (c2 - '0') * 10 + c1 - '0';
+	        	if(num == 0)
+	        		return 0;
+	        	if(c1 != '0')
+	        		dp[i] += dp[i-1];
+	        	if(c2 != '0' && num <= 26)
+	        		dp[i] += dp[i-2];
+	        }
+	        return dp[length];
+	  }
 	  
 	  
 	  
