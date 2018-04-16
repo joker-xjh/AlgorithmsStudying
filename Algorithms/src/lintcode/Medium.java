@@ -1160,6 +1160,59 @@ public class Medium {
 	  }
 	  
 	  
+	  public int numSquares(int n) {
+	      List<Integer> list = new ArrayList<>();
+	      for(long i=1; i*i <= n; i++) {
+	    	  int temp = (int) (i * i);
+	    	  list.add(temp);
+	      }
+	      
+		  return numSquaresMemo(n, list, new HashMap<>());
+	  }
+	  
+	  private int numSquaresMemo(int n, List<Integer> list, Map<Integer, Integer> memo) {
+		  if(n < 0)
+			  return -1;
+		  if(n == 0)
+			  return 0;
+		  if(memo.containsKey(n))
+			  return memo.get(n);
+		  int squares = Integer.MAX_VALUE;
+		  for(int suqare : list) {
+			  int temp = numSquaresMemo(n - suqare, list, memo);
+			  if(temp != -1)
+				  squares = Math.min(squares, 1+temp);
+			  if(temp == 0)
+				  break;
+		  }
+		  memo.put(n, squares);
+		  return squares;
+	  }
+	  
+	  
+	  public int numSquares2(int n) {
+	      List<Integer> list = new ArrayList<>();
+	      for(long i=1; i*i <= n; i++) {
+	    	  int temp = (int) (i * i);
+	    	  list.add(temp);
+	      }
+	      int[] dp = new int[n+1];
+	      Arrays.fill(dp, Integer.MAX_VALUE);
+	      dp[0] = 0;
+	      for(int i=1; i<=n; i++) {
+	    	  for(int square : list) {
+	    		  if(square > i)
+	    			  continue;
+	    		  dp[i] = Math.min(dp[i], dp[i - square] + 1);
+	    	  }
+	      }
+	      
+		  return dp[n];
+	  }
+	  
+	  
+	  
+	  
 	  
 	  
 	  
