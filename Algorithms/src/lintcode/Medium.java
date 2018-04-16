@@ -1241,7 +1241,22 @@ public class Medium {
 	  }
 	  
 	  
-	  
+	  public int[] countBits(int num) {
+		  if(num == 0)
+			  return new int[] {0};
+	        int[] dp = new int[num+1];
+	        dp[0] = 0;
+	        dp[1] = 1;
+	        int a = 1 , b = 2;
+	        for(int i=2; i<=num; i++) {
+	        	if(i == b) {
+	        		a = b;
+	        		b *= 2;
+	        	}
+	        	dp[i] = dp[i-a]+1;
+	        }
+	        return dp;
+	  }
 	  
 	  
 	  
