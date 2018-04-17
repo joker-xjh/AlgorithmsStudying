@@ -1,8 +1,14 @@
 package leetcode;
 
 import java.util.Arrays;
+
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.Queue;
+import java.util.Set;
+
 
 public class DP {
 	
@@ -1030,10 +1036,128 @@ public class DP {
     }
     
     
+    public int racecar(int target) {
+        int[] min = {Integer.MAX_VALUE};
+        racecarDFS(0, 1, target, min, 0);
+        return min[0];
+    }
+    
+    private void racecarDFS(int position, int speed, int target, int[] min, int steps) {
+    	if(steps > min[0])
+    		return;
+    	if(target == position) {
+    		min[0] = Math.min(steps, min[0]);
+    		return;
+    	}
+    	if(position >= 1000000)
+    		return;
+    	if(position < target) {
+    		if(speed > 0) {
+    			racecarDFS(position+speed, speed*2, target, min, steps+1);
+            	racecarDFS(position, -1, target, min, steps+1);
+    		}
+    		else {
+            	racecarDFS(position, 1, target, min, steps+1);
+        		racecarDFS(position+speed, speed*2, target, min, steps+1);
+    		}
+    	}
+    	else {
+    		if(speed > 0) {
+            	racecarDFS(position, -1, target, min, steps+1);
+        		racecarDFS(position+speed, speed*2, target, min, steps+1);
+    		}
+    		else {
+    			racecarDFS(position+speed, speed*2, target, min, steps+1);
+            	racecarDFS(position, 1, target, min, steps+1);
+    		}
+    	}
+    }
     
     
-    
-    
+    public int racecarBFS(int target) {
+    	Queue<int[]> queue = new LinkedList<>();
+    	Set<String> used = new HashSet<>();
+    	used.add(0+","+1);
+    	queue.add(new int[] {0, 1, 0});
+    	int max = 3000;
+    	int min = -3000;
+    	while(!queue.isEmpty()) {
+    		int size = queue.size();
+    		for(int i=0; i<size; i++) {
+    			int[] array = queue.poll();
+    			int pos = array[0]; 
+    			int speed = array[1];
+    			int step = array[2];
+    			if(speed > 0) {
+    				
+    				if(pos < target) {
+    					if(pos + speed == target)
+        					return step + 1;
+        				if(speed < max) {
+        					int next_pos = pos + speed;
+        					int next_speed = speed * 2;
+        					queue.add(new int[] {next_pos, next_speed, step + 1});
+        				}
+        				String str = pos + "," + -1;
+        				if(!used.contains(str)) {
+        					used.add(str);
+        					queue.add(new int[] {pos, -1, step+1});
+        				}
+    				}
+    				else {
+    					String str = pos + "," + -1;
+        				if(!used.contains(str)) {
+        					used.add(str);
+        					queue.add(new int[] {pos, -1, step+1});
+        				}
+        				if(pos + speed == target)
+        					return step + 1;
+        				if(speed < max) {
+        					int next_pos = pos + speed;
+        					int next_speed = speed * 2;
+        					queue.add(new int[] {next_pos, next_speed, step + 1});
+        				}
+    				}    				
+    				
+    			}
+    			else {
+    				
+    				if(pos < target) {
+    					String str = pos + "," + 1;
+        				if(!used.contains(str)) {
+        					used.add(str);
+        					queue.add(new int[] {pos, 1, step+1});
+        				}
+        				if(pos + speed == target)
+        					return step + 1;
+        				if(speed >= min) {
+        					int next_pos = pos + speed;
+        					int next_speed = speed * 2;
+        					queue.add(new int[] {next_pos, next_speed, step + 1});
+        				}
+    				}
+    				else {
+    					if(pos + speed == target)
+        					return step + 1;
+        				if(speed >= min) {
+        					int next_pos = pos + speed;
+        					int next_speed = speed * 2;
+        					queue.add(new int[] {next_pos, next_speed, step + 1});
+        				}
+        				String str = pos + "," + 1;
+        				if(!used.contains(str)) {
+        					used.add(str);
+        					queue.add(new int[] {pos, 1, step+1});
+        				}
+    				}
+    				
+    				
+    			}
+    		}
+    	}
+    	
+    	return -1;
+    }
     
     
     
