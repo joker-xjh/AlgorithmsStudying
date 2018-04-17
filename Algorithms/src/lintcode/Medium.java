@@ -1297,7 +1297,34 @@ public class Medium {
 	  }
 	  
 	  
+	  public List<TreeNode> generateTrees(int n) {
+		  
+		  return generateTreesDFS(1, n);
+	  }
 	  
+	  
+	  private List<TreeNode> generateTreesDFS(int low, int high){
+		  List<TreeNode> list = new ArrayList<>();
+		  if(low > high) {
+			  list.add(null);
+			  return list;
+		  }
+		  for(int i=low; i<=high; i++) {
+			  for(int j=low; j<=i; j++) {
+				  List<TreeNode> left = generateTreesDFS(low, j-1);
+				  List<TreeNode> right = generateTreesDFS(j+1, high);
+				  for(TreeNode L :left)
+					  for(TreeNode R : right) {
+						  TreeNode node = new TreeNode(j);
+						  node.left = L;
+						  node.right = R;
+						  list.add(node);
+					  }
+			  }
+		  }
+		  
+		  return list;
+	  }
 	  
 	  
 	  
