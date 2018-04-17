@@ -1278,6 +1278,40 @@ public class Medium {
 	  }
 	  
 	  
+	  public int numTrees(int n) {
+		  if(n < 3) {
+			  return n == 0 ? 1 : n;
+		  }
+	      int[] dp = new int[n+1];
+	      dp[0] = 1;
+	      dp[1] = 1;
+	      dp[2] = 2;
+	      for(int i=3; i<=n; i++) {
+	    	  for(int j=1; j<=i; j++) {
+	    		  int left = dp[j-1];
+	    		  int right = dp[i-j];
+	    		  dp[i] += left * right;
+	    	  }
+	      }
+	      return dp[n];
+	  }
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
 	  
 	  
 	  public static void main(String[] args) {
