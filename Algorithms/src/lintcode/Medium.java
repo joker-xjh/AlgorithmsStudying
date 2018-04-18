@@ -1348,7 +1348,37 @@ public class Medium {
 	       return dp[sum/2][n];
 	  }
 	  
-	  
+	  public int findMin(int[] nums) {
+		  if(nums.length == 0)
+			  return 0;
+		  if(nums.length == 1)
+			  return nums[0];
+		  int sum = 0;
+	       for(int num : nums)
+	    	   sum += num;
+	       int n = nums.length;
+	       boolean[][] dp = new boolean[sum/2+1][n+1];
+	       Arrays.fill(dp[0], true);
+	       
+	       for(int i=1; i<=sum/2; i++) {
+	    	   for(int j=1; j<=n; j++) {
+	    		   int num = nums[j-1];
+	    		   if(num > i)
+	    			   dp[i][j] = dp[i][j-1];
+	    		   else
+	    			   dp[i][j] = dp[i][j-1] || dp[i - num][j-1];
+	    	   }
+	       }
+	       int odd = sum % 2 == 0 ? 0 : 1;
+	       for(int i=sum/2; i>0; i--) {
+	    	   if(dp[i][n]) {
+	    		   return (sum / 2 - i) * 2 + odd;
+	    	   }
+	       }
+	       
+	       
+	       return -1;
+	  }
 	  
 	  
 	  
