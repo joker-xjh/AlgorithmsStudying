@@ -1325,7 +1325,28 @@ public class Medium {
 	  }
 	  
 	  
-	  
+	  public boolean canPartition(int[] nums) {
+	       int sum = 0;
+	       for(int num : nums)
+	    	   sum += num;
+	       if(sum % 2 != 0)
+	    	   return false;
+	       int n = nums.length;
+	       boolean[][] dp = new boolean[sum/2+1][n+1];
+	       Arrays.fill(dp[0], true);
+	       
+	       for(int i=1; i<=sum/2; i++) {
+	    	   for(int j=1; j<=n; j++) {
+	    		   int num = nums[j-1];
+	    		   if(num > i)
+	    			   dp[i][j] = dp[i][j-1];
+	    		   else
+	    			   dp[i][j] = dp[i][j-1] || dp[i - num][j-1];
+	    	   }
+	       }
+	       
+	       return dp[sum/2][n];
+	  }
 	  
 	  
 	  
