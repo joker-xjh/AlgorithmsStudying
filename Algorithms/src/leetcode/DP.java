@@ -2,6 +2,7 @@ package leetcode;
 
 import java.util.Arrays;
 
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -1159,16 +1160,106 @@ public class DP {
     	return -1;
     }
     
+    public int[] maxNumber(int[] nums1, int[] nums2, int k) {
+        String maxNumber = maxNumberMemo(nums1, nums2, nums1.length-1, nums2.length-1, k, new HashMap<>());
+    	int[] answer = new int[k];
+    	for(int i=0; i<k; i++)
+    		answer[i] = maxNumber.charAt(i) - '0';
+    	System.out.println(maxNumber);
+    	return answer;
+    }
     
+    private String maxNumberMemo(int[] A, int[] B, int indexA, int indexB, int k, Map<String, String> memo) {
+    	if((k < 0) || (indexA + 1 + indexB + 1 < k))
+    		return "";
+    	if(k == 0)
+    		return "";
+    	String key = indexA+","+indexB+","+k;
+    	if(memo.containsKey(key))
+    		return memo.get(key);
+    	String max = "";
+    	if(indexA >= 0) {
+    		max = getMaxNum(max, maxNumberMemo(A, B, indexA-1, indexB, k, memo));
+        	max = getMaxNum(max, maxNumberMemo(A, B, indexA-1, indexB, k-1, memo)+A[indexA]);
+    	}
+    	if(indexB >= 0) {
+    		max = getMaxNum(max, maxNumberMemo(A, B, indexA, indexB-1, k, memo));
+        	max = getMaxNum(max, maxNumberMemo(A, B, indexA, indexB-1, k-1, memo)+B[indexB]);
+    	}
+    	memo.put(key, max);
+    	return max;
+    }
     
+    private String getMaxNum(String A, String B) {
+    	int lenA = A.length();
+    	int lenB = B.length();
+    	if(lenA < lenB)
+    		return B;
+    	else if(lenA > lenB)
+    		return A;
+    	for(int i=0; i<lenA; i++) {
+    		char c1 = A.charAt(i);
+    		char c2 = B.charAt(i);
+    		if(c1 < c2)
+    			return B;
+    		else if(c1 > c2)
+    			return A;
+    	}
+    	return A;
+    }
     
-    
+    public int[] maxNumberDP(int[] nums1, int[] nums2, int k) {
+    	int lenA = nums1.length;
+    	int lenB = nums2.length;
+    	String[][][] dp = new String[k+1][lenA+1][lenB+1];
+    	
+    	for(int i=0; i<=lenA; i++)
+    		for(int j=0; j<=lenB; j++)
+    			dp[0][i][j] = "";
+    	
+    	for(int x=1; x<=k && x <= lenA; x++) {
+    		for(int i=1; i<=lenA; i++) {
+    			dp[x][i][0] = "";
+    			dp[x][i][0] = getMaxNum(dp[x][i][0], dp[x][i-1][0] == null ? "" : dp[x][i-1][0]);
+    			dp[x][i][0] = getMaxNum(dp[x][i][0], (dp[x-1][i-1][0] == null ? "" : dp[x-1][i-1][0])+nums1[i-1]);
+    		}
+    	}
+    	
+    	for(int x=1; x<=k && x <= lenB; x++) {
+    		for(int i=1; i<=lenB; i++) {
+    			dp[x][0][i] = "";
+    			dp[x][0][i] = getMaxNum(dp[x][0][i], dp[x][0][i-1] == null ? "" : dp[x][0][i-1]);
+    			dp[x][0][i] = getMaxNum(dp[x][0][i], (dp[x-1][0][i-1] == null ? "" : dp[x-1][0][i-1]) + nums2[i-1]);
+    		}
+    	}
+    	
+    	
+    	for(int x=1; x<=k; x++) {
+    		for(int i=1; i<=lenA; i++) {
+        		for(int j=1; j<=lenB; j++) {
+        			dp[x][i][j] = "";
+        			if(i + j < x)
+        				continue;
+        			dp[x][i][j] = getMaxNum(dp[x][i][j], dp[x][i-1][j] == null ? "" : dp[x][i-1][j]);
+        			dp[x][i][j] = getMaxNum(dp[x][i][j], (dp[x-1][i-1][j] == null ? "" : dp[x-1][i-1][j]) + nums1[i-1]);
+        			dp[x][i][j] = getMaxNum(dp[x][i][j], dp[x][i][j-1] == null ? "" : dp[x][i][j-1]);
+        			dp[x][i][j] = getMaxNum(dp[x][i][j], (dp[x-1][i][j-1] == null ? "" : dp[x-1][i][j-1]) + nums2[j-1]);
+        		}
+        	}
+		}
+    	int[] answer = new int[k];
+    	System.out.println(dp[k][lenA][lenB]);
+    	for(int i=0; i<k; i++) {
+    		answer[i] = dp[k][lenA][lenB].charAt(i) - '0';
+    	}
+    	return answer;
+    }
     
     
     
     
     public static void main(String[] args) {
-		
+    	
 	}
     
 
