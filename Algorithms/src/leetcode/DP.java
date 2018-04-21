@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
@@ -1328,9 +1329,60 @@ public class DP {
     	return isInterleave;
     }
     
+    public int minimumTotal(List<List<Integer>> triangle) {
+    	if(triangle==null || triangle.size()==0)
+ 		   return 0;
+    	for(int i=triangle.size()-2; i>=0; i--) {
+    		List<Integer> now = triangle.get(i);
+    		List<Integer> next = triangle.get(i+1);
+    		for(int j=0; j<now.size(); j++) {
+    			int cur = now.get(j);
+    			now.set(j, cur + Math.min(next.get(j), next.get(j+1)));
+    		}
+    	}
+    	return triangle.get(0).get(0);
+    }
     
+    public int maxProduct(int[] nums) {
+    	return maxProductMemo(nums, nums.length-1, new Integer[nums.length]);
+    }
     
+    private int maxProductMemo(int[] nums, int n, Integer[] dp) {
+    	if(n == 0)
+    		return nums[0];
+    	if(dp[n]!= null)
+    		return dp[n];
+    	dp[n] = Integer.MIN_VALUE;
+    	int temp = 1;
+    	for(int i=n; i>0; i--) {
+    		temp *= nums[i];
+    		dp[n] = Math.max(temp, dp[n]);
+    		int left = maxProductMemo(nums, i-1, dp);
+    		dp[n] = Math.max(left, dp[n]);
+    	}
+    	dp[n] = Math.max(dp[n], temp * nums[0]);
+    	dp[n] = Math.max(dp[n], maxProductMemo(nums, n-1, dp));
+    	return dp[n];
+    }
     
+    public int maxProduct2(int[] nums) {
+    	int n = nums.length;
+    	if(n == 0)
+            return 0;
+    	int[] dp = new int[n+1];
+    	dp[0] = Integer.MIN_VALUE;
+    	for(int i=1; i<=n; i++) {
+    		int cur = 1;
+    		dp[i] = Integer.MIN_VALUE;
+    		for(int j=i; j>0; j--) {
+    			cur *= nums[j-1];
+    			dp[i] = Math.max(dp[i], cur);
+    			dp[i] = Math.max(dp[i], dp[j-1]);
+    		}
+    	}
+    	
+    	return dp[n];
+    }
     
     
     
