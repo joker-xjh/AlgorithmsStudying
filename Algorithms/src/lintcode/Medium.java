@@ -1380,8 +1380,26 @@ public class Medium {
 	       return -1;
 	  }
 	  
+	  public int maxValue(String str) {
+		  return maxValueMemo(str, 0, str.length()-1, new HashMap<>());
+	  }
 	  
-	  
+	  private int maxValueMemo(String str, int left, int right, Map<String, Integer> memo) {
+		  if(left == right)
+			  return str.charAt(left) - '0';
+		  String key = left+","+right;
+		  if(memo.containsKey(key))
+			  return memo.get(key);
+		  int max = -1;
+		  for(int i=right-1; i>=left; i--) {
+			  int L = maxValueMemo(str, left, i, memo);
+			  int R = maxValueMemo(str, i+1, right, memo);
+			  max = Math.max(max, L + R);
+			  max = Math.max(max, L * R);
+		  }
+		  memo.put(key, max);
+		  return max;
+	  }
 	  
 	  
 	  
@@ -1391,7 +1409,8 @@ public class Medium {
 	  
 	  
 	  public static void main(String[] args) {
-		 
+		 Medium test = new Medium();
+		 System.out.println(test.maxValue("01231"));
 	  }
 
 }
