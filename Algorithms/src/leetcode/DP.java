@@ -1300,7 +1300,33 @@ public class DP {
     	return ans;
     }
     
+    public boolean isInterleave(String s1, String s2, String s3) {
+    	if(s1.length() + s2.length() != s3.length())
+    		return false;
+    	if(s1.length() == 0)
+    		return s3.equals(s2);
+    	else if(s2.length() == 0)
+    		return s3.equals(s1);
+    	return isInterleaveMemo(s1, s2, s3, 1, 1, new HashMap<>());
+    }
     
+    private boolean isInterleaveMemo(String s1, String s2, String s3, int index1, int index2, Map<String, Boolean> memo) {
+    	if(index1 + index2 == s3.length())
+    		return true;
+    	String key = index1 + "," + index2;
+    	if(memo.containsKey(key))
+    		return memo.get(key);
+    	boolean isInterleave = false;
+    	int index3 = index1 + index2;
+    	if(index1 <= s1.length() && s1.charAt(index1-1)	== s3.charAt(index3-2))
+    		isInterleave = isInterleaveMemo(s1, s2, s3, index1+1, index2, memo);
+    	if(isInterleave)
+    		return true;
+    	if(index2 <= s2.length() && s2.charAt(index2-1) == s3.charAt(index3-2))
+    		isInterleave = isInterleaveMemo(s1, s2, s3, index1, index2+1, memo);
+    	memo.put(key, isInterleave);
+    	return isInterleave;
+    }
     
     
     
