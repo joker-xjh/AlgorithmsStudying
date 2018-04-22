@@ -3197,16 +3197,34 @@ public class Array {
          return compoents;
      }
      
-     
+     public int flipgame(int[] fronts, int[] backs) {
+         int n = fronts.length;
+         Set<Integer> used = new HashSet<>();
+         Set<Integer> contain = new HashSet<>();
+         for(int i=0; i<n; i++) {
+        	 if(fronts[i] == backs[i])
+        		 used.add(fronts[i]);
+        	 else {
+        		 contain.add(fronts[i]);
+        		 contain.add(backs[i]);
+        	 }
+         }
+         for(int i=1; i<=2000; i++) {
+        	 if(!contain.contains(i))
+        		 continue;
+        	 if(!used.contains(i))
+        		 return i;
+         }
+        	 
+    	 return 0;
+     }
      
      
      
 
 
 	public static void main(String[] args) {
-		 Array test = new Array();
-		 int[] array = {1, 3, 0, 2, 4};
-		 test.bestRotation(array);
+		 
 	}
 
 }
