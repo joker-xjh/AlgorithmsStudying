@@ -3034,7 +3034,34 @@ public class string {
          return answer;
      }
      
-     
+     public int minimumLengthEncoding(String[] words) {
+         int min = 0;
+         Map<Integer, Set<String>> map = new HashMap<>();
+         for(String word : words) {
+        	 int length = word.length();
+        	 if(!map.containsKey(length))
+        		 map.put(length, new HashSet<>());
+        	 map.get(length).add(word);
+         }
+         Set<String> used = new HashSet<>();
+         for(int i=7; i>0; i--) {
+        	 Set<String> now = map.get(i);
+        	 if(now == null)
+        		 continue;
+        	 for(String word : now) {
+        		if(used.contains(word))
+        			continue;
+        		min += word.length() + 1;
+        		for(int j=0; j<word.length(); j++) {
+        			String sub = word.substring(j);
+        			used.add(sub);
+        		}
+        	 }
+        	 
+         }
+    	 
+    	 return min;
+     }
      
      
     
