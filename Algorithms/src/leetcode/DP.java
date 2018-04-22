@@ -1403,7 +1403,31 @@ public class DP {
     
     
     
-    
+    public int numFactoredBinaryTrees(int[] A) {
+        if(A.length == 0)
+        	return 0;
+        int mod = 1000000007;
+        Arrays.sort(A);
+        Map<Integer, Long> dp = new HashMap<>();
+        long count = 0;
+        for(int i=0; i<A.length; i++) {
+        	int num = A[i];
+        	long temp = 1;
+        	for(int j=0; j<i; j++) {
+        		int one = A[j];
+        		if(num % one != 0)
+        			continue;
+        		int two = num / one;
+        		if(!dp.containsKey(two))
+        			continue;
+        		temp =(((dp.get(one) * dp.get(two)) % mod) + temp) % mod;
+        	}
+        	dp.put(num, temp);
+        	count = (count + temp) % mod;
+        }
+        
+        return (int) count;
+    }
     
     
     
