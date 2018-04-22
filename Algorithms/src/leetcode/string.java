@@ -15,6 +15,7 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 public class string {
 	
@@ -3011,6 +3012,27 @@ public class string {
          return res;
      }
      
+     public int[] shortestToChar(String S, char C) {
+         int n = S.length();
+         int[] answer = new int[n];
+         if(n == 0)
+        	 return answer;
+         TreeSet<Integer> set = new TreeSet<>();
+         set.add(-100000);
+         set.add(100000);
+         for(int i=0; i<n; i++) {
+        	 char c = S.charAt(i);
+        	 if(c == C)
+        		 set.add(i);
+         }
+         for(int i=0; i<n; i++) {
+        	 int pre = set.floor(i);
+        	 int next = set.ceiling(i);
+        	 answer[i] = Math.min(i-pre, next - pre);
+         }
+         
+         return answer;
+     }
      
      
      
