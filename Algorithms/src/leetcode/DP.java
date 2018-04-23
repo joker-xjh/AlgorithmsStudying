@@ -1430,7 +1430,28 @@ public class DP {
     }
     
     
-    
+    public int countNumbersWithUniqueDigits(int n) {
+        if(n > 10)
+        	n = 10;
+        if(n == 0)
+        	return 1;
+        if(n == 1)
+        	return 10;
+        if(n == 2)
+        	return 91;
+        int[] array = {9,9,8,7,6,5,4,3,2,1};
+        int[] dp = new int[n+1];
+        dp[1] = 10;
+        dp[2] = 91;
+        for(int i=3; i<=n; i++) {
+        	dp[i] += dp[i-1];
+        	int temp = 1;
+        	for(int j=0; j<i; j++)
+        		temp *= array[j];
+        	dp[i] += temp;
+        }
+        return dp[n];
+    }
     
     
     
