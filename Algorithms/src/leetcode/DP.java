@@ -1453,6 +1453,37 @@ public class DP {
         return dp[n];
     }
     
+    public int countSubstrings(String s) {
+        int n = s.length();
+        int[] dp = new int[n+1];
+        for(int i=1; i<=n; i++) {
+        	dp[i] += dp[i-1];
+        	for(int j=i; j>0; j--) {
+        		if(isPalindromic(s, j, i)) {
+        			dp[i]++;
+        		}
+        	}
+        }
+        return dp[n];
+    }
+    
+    private boolean isPalindromic(String str, int left, int right) {
+    	while(left <= right) {
+    		if(str.charAt(left) != str.charAt(right))
+    			return false;
+    		left++;
+    		right--;
+    	}
+    	return true;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     
