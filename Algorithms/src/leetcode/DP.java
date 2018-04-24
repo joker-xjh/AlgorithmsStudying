@@ -1477,7 +1477,19 @@ public class DP {
     	return true;
     }
     
-    
+    public boolean isSubsequence(String s, String t) {
+    	if(s.length() == 0)
+    		return true;
+    	int index = 0;
+    	for(char c : toString().toCharArray()) {
+    		if(s.charAt(index) == c) {
+    			index++;
+    			if(index == s.length())
+    				break;
+    		}
+    	}
+    	return index == s.length();
+    }
     
     
     
