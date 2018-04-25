@@ -1515,7 +1515,31 @@ public class DP {
         return sum;
     }
     
+    public int findTargetSumWays(int[] nums, int S) {
+        int n = nums.length;
+        int[] preSum = new int[n];
+        int sum = 0;
+        for(int i=n-1; i>=0; i--) {
+        	sum += nums[i];
+        	preSum[i] = sum;
+        }
+    	return findTargetSumWaysMemo(nums, 0, S, new HashMap<>(), preSum);
+    }
     
+    private int findTargetSumWaysMemo(int[] nums, int n, int target, Map<String, Integer> memo, int[] preSum) {
+    	if(n == nums.length)
+    		return target == 0 ? 1 : 0;
+    	String key = n + "," + target;
+    	if(memo.containsKey(key))
+    		return memo.get(key);
+    	if(preSum[n] < Math.abs(target))
+    		return 0;
+    	int count = 0;
+    	count += findTargetSumWaysMemo(nums, n+1, target+nums[n], memo, preSum);
+    	count += findTargetSumWaysMemo(nums, n+1, target-nums[n], memo, preSum);
+    	memo.put(key, count);
+    	return count;
+    }
     
     
     
