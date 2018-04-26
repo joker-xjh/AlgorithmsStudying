@@ -1587,7 +1587,7 @@ public class DP {
     		return 1;
     	if(N == 0)
     		return 0;
-    	if(i - N > 0 || i + N <= m || j - N > 0 || j + N <= n)
+        if(i - N > 0 && i + N <= m && j - N > 0 && j + N <= n)
     		return 0;
     	if(dp[i][j][N] != null)
     		return dp[i][j][N];
@@ -1599,7 +1599,28 @@ public class DP {
     }
     
     
-    
+    public int findLongestChain(int[][] pairs) {
+        if(pairs.length == 0)
+        	return 0;
+        Arrays.sort(pairs, (int[] a, int[] b) -> a[1] - b[1]);
+        int n = pairs.length;
+        int[] dp = new int[n];
+        dp[0] = 1;
+        int longest = 1;
+        for(int i=1; i<n; i++) {
+        	dp[i] = 1;
+        	int[] cur = pairs[i];
+        	for(int j=i-1; j>=0; j--) {
+        		int[] pre = pairs[j];
+        		if(cur[0] <= pre[1])
+        			continue;
+        		if(dp[j] + 1 > dp[i])
+        			dp[i] = dp[j] + 1;
+        	}
+        	longest = Math.max(longest, dp[i]);
+        }
+        return longest;
+    }
     
     
     
