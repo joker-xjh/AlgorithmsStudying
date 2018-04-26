@@ -1578,9 +1578,25 @@ public class DP {
     }
     
     
-    
-    
-    
+    public int findPaths(int m, int n, int N, int i, int j) {
+    	return findPathsMemo(m, n, i+1, j+1, N, new Integer[m+1][n+1][N+1]);
+    }
+    int[][] dirs = {{-1,0}, {1,0}, {0,-1}, {0,1}};
+    private int findPathsMemo(int m, int n, int i, int j, int N, Integer[][][] dp) {
+    	if(i == 0 || j == 0 || i > m || j > n)
+    		return 1;
+    	if(N == 0)
+    		return 0;
+    	if(i - N > 0 || i + N <= m || j - N > 0 || j + N <= n)
+    		return 0;
+    	if(dp[i][j][N] != null)
+    		return dp[i][j][N];
+    	dp[i][j][N] = 0;
+    	for(int[] dir : dirs) {
+    		dp[i][j][N] = (dp[i][j][N] + findPathsMemo(m, n, i+dir[0], j+dir[1], N-1, dp)) % 1000000007;
+    	}
+    	return dp[i][j][N];
+    }
     
     
     
@@ -1593,7 +1609,8 @@ public class DP {
     
     
     public static void main(String[] args) {
-    	
+    	DP test = new DP();
+    	test.findPaths(2, 2, 2, 0, 0);
 	}
     
 
