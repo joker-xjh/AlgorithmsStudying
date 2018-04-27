@@ -1649,6 +1649,56 @@ public class DP {
     	}
     	return count;
     }
+    public int minStickers(String[] stickers, String target) {
+        int n = stickers.length;
+        int[][] array = new int[n][26];
+        for(int i=0; i<n; i++) {
+        	int[] temp = new int[26];
+        	String sticker = stickers[i];
+        	for(char c : sticker.toCharArray())
+        		temp[c - 'a']++;
+        	array[i] = temp;
+        }
+        
+    	return minStickersMemo(array, target, new HashMap<>());
+    }
+    
+    private int minStickersMemo(int[][] stickers, String target, Map<String, Integer> memo) {
+    	if(target.isEmpty())
+    		return 0;
+    	if(memo.containsKey(target))
+    		return memo.get(target);
+    	int[] target_array = new int[26];
+    	for(char c : target.toCharArray())
+    		target_array[c - 'a']++;
+    	int min = Integer.MAX_VALUE;
+    	for(int i=0; i<stickers.length; i++) {
+    		int[] sticker = stickers[i];
+    		StringBuilder sb = new StringBuilder();
+    		for(int j=0; j<26; j++) {
+    			if(target_array[j] <= 0)
+    				continue;
+    			int count = target_array[j] - sticker[j];
+    			for(int k=0; k<count; k++)
+    				sb.append((char)('a' + j));
+    		}
+    		if(target.length() == sb.length())
+    			continue;
+    		int t = minStickersMemo(stickers, sb.toString(), memo);
+    		if(t != -1)
+    			min = Math.min(min, t+1);
+    	}
+    	
+    	min = min == Integer.MAX_VALUE ? -1 : min;
+    	memo.put(target, min);
+    	return min;
+    }
+    
+    
+    
+    
+    
+    
     
     
     
