@@ -1622,7 +1622,33 @@ public class DP {
         return longest;
     }
     
-    
+    public int findNumberOfLIS(int[] nums) {
+        int n = nums.length;
+        if(n == 0)
+        	return 0;
+        int[] dp = new int[n];
+        Map<Integer, Map<Integer, Integer>> map = new HashMap<>();
+        int longest = 0;
+        for(int i=0; i<n; i++) {
+        	dp[i] = 1;
+        	Map<Integer, Integer> teMap = new HashMap<>();
+        	teMap.put(1, 1);
+        	for(int j=i-1; j>=0; j--) {
+        		if(nums[i] <= nums[j])
+        			continue;
+        		teMap.put(dp[j]+1, teMap.getOrDefault(dp[j]+1, 0) + map.get(j).get(dp[j]));
+        		if(dp[j]+1 > dp[i])
+        			dp[i] = dp[j]+1;
+        	}
+        	map.put(i, teMap);
+        	longest = Math.max(longest, dp[i]);
+        }
+        int count = 0;
+    	for(Map<Integer, Integer> temp: map.values()) {
+    		count += temp.getOrDefault(longest, 0);
+    	}
+    	return count;
+    }
     
     
     
