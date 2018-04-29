@@ -3219,6 +3219,68 @@ public class Array {
     	 return 0;
      }
      
+     public int largestIsland(int[][] grid) {
+         if(grid.length == 0)
+        	 return 0;
+         int land = -1;
+         Map<Integer, Integer> map = new HashMap<>();
+         int num = 2;
+         for(int i=0; i<grid.length; i++) {
+        	 for(int j=0; j<grid[0].length; j++) {
+        		 if(grid[i][j] != 1)
+        			 continue;
+        		 int count = largestIslandDFS(grid, i, j, num);
+        		 map.put(num, count);
+        		 num++;
+        	 }
+         }
+         Set<Integer> set = new HashSet<>();
+         for(int i=0; i<grid.length; i++) {
+        	 for(int j=0; j<grid[0].length; j++) {
+        		 if(grid[i][j] != 0)
+        			 continue;
+        		 for(int[] dir : directions) {
+        			 int x = i + dir[0];
+        			 int y = j + dir[1];
+        			 if(x < 0 || x >= grid.length || y < 0 || y >= grid[0].length)
+        				 continue;
+        			 set.add(grid[x][y]);
+        		 }
+        		 int temp = 1;
+        		 for(int index : set)
+        			 temp += map.getOrDefault(index, 0);
+        		 land = Math.max(land, temp);
+        		 set.clear();
+        	 }
+         }
+         
+    	 if(land == -1)
+    		 land = map.get(2);
+    	 return land;
+     }
+     
+     
+     private int largestIslandDFS(int[][] grid, int i, int j, int num) {
+    	 if(i < 0 || i >= grid.length || j < 0 || j >= grid[0].length || grid[i][j] != 1)
+    		 return 0;
+    	 grid[i][j] = num;
+    	 int count = 1;
+    	 for(int[] dir : directions)
+    		 count += largestIslandDFS(grid, i+dir[0], j+dir[1], num);
+    	 return count;
+     }
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
      
      
 
