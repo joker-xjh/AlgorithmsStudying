@@ -1768,7 +1768,40 @@ public class DP {
     	return dp[n1][n2];
     }
     
-    
+    public int countPalindromicSubsequences2(String S) {
+    	if(S.length() == 0)
+    		return 0;
+    	char[] array = S.toCharArray();
+    	int[][] dp = new int[array.length][array.length];
+    	for(int i=0; i<array.length; i++)
+    		dp[i][i] = 1;
+    	for(int i=array.length-1; i>=0; i--) {
+    		char c1 = array[i];
+    		for(int j=i+1; j<array.length; j++) {
+    			char c2 = array[j];
+    			if(c1 == c2) {
+    				int left = i+1; int right = j-1;
+    				while(left <= right && array[left] != c1)
+    					left++;
+    				while(left <= right && array[right] != c2)
+    					right--;
+    				
+    				if(left > right)
+    					dp[i][j] = dp[i+1][j-1] * 2 + 2;
+    				else if(left == right)
+    					dp[i][j] = dp[i+1][j-1] * 2 + 1;
+    				else
+    					dp[i][j] = dp[i+1][j-1] * 2 - dp[left+1][right-1];
+    			}
+    			else
+    				dp[i][j] = dp[i+1][j] + dp[i][j-1] - dp[i+1][j-1];
+        		dp[i][j] = dp[i][j] < 0 ? dp[i][j] + 1000000007 : dp[i][j] % 1000000007 ; 
+    		}
+    	}
+    	
+    	
+    	return dp[0][array.length-1];
+    }
     
     
     
