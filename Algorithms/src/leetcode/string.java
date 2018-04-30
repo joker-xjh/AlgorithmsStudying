@@ -3063,6 +3063,50 @@ public class string {
     	 return min;
      }
      
+     public String toGoatLatin(String S) {
+         String[] array = S.split(" ");
+    	 StringBuilder sb = new StringBuilder();
+    	 StringBuilder A = new StringBuilder();
+    	 for(int i=0; i<array.length; i++) {
+    		 String word = array[i];
+    		 A.append('a');
+    		 boolean vowel = false;
+    		 char c = word.charAt(0);
+    		 if(c == 'a' || c =='e' || c == 'i' || c == 'o' || c == 'u')
+    			 vowel = true;
+    		 c = (char)(c + 32);
+    		 if(c == 'a' || c =='e' || c == 'i' || c == 'o' || c == 'u')
+    			 vowel = true;
+    		 if(vowel) {
+    			 word = word + "ma";
+    		 }
+    		 else {
+    			 c = word.charAt(0);
+    			 word = word.substring(1, word.length()) + c + "ma";
+    		 }
+    		 sb.append(word).append(A.toString());
+    		 if(i != array.length -1)
+    			 sb.append(' ');
+    	 }
+    	 
+    	 
+    	 return sb.toString();
+     }
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
      
     
     public static void main(String[] args) {
