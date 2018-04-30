@@ -3270,7 +3270,33 @@ public class Array {
     	 return count;
      }
      
-     
+     public int maxProfitAssignment(int[] difficulty, int[] profit, int[] worker) {
+         int n = difficulty.length;
+         if(n == 0)
+        	 return 0;
+         int maxProfit = 0;
+    	 int[][] job = new int[n][2];
+    	 for(int i=0; i<n; i++) {
+    		 job[i][0] = difficulty[i];
+    		 job[i][1] = profit[i];
+    	 }
+    	 Arrays.sort(job, (int[] a, int[] b) -> a[1] - b[1]);
+    	 TreeMap<Integer, Integer> map = new TreeMap<>();
+    	 for(int w : worker)
+    		 map.put(w, map.getOrDefault(w, 0)+1);
+    	 for(int i=n-1; i>=0; i--) {
+    		 int p = job[i][1];
+    		 int d = job[i][0];
+    		 Integer ability = map.ceilingKey(d);
+    		 while(ability != null) {
+    			 maxProfit += map.get(ability) * p;
+    			 map.remove(ability);
+    			 ability = map.ceilingKey(d);
+    		 }
+    	 }
+    	 
+    	 return maxProfit;
+     }
      
      
      
