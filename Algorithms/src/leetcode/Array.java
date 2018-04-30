@@ -3298,7 +3298,25 @@ public class Array {
     	 return maxProfit;
      }
      
-     
+     public int numFriendRequests(int[] ages) {
+         int requests = 0;
+         int[] bucket = new int[121];
+         for(int age : ages)
+        	 bucket[age]++;
+         for(int i=1; i<=120; i++) {
+        	 if(bucket[i] == 0)
+        		 continue;
+        	 int low = i / 2 + 8;
+        	 int temp = 0;
+        	 for(int j=low; j<i; j++)
+        		 temp += bucket[j];
+        	 if(low-1 < i) {
+        		 temp += bucket[i] - 1;
+            	 requests += temp * bucket[i];
+        	 }
+         }
+         return requests;
+     }
      
      
      
