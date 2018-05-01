@@ -1831,7 +1831,19 @@ public class DP {
     	return dp[n+1];
     }
     
-    
+    public int rob(int[] nums) {
+        int n = nums.length;
+        if(n == 0)
+        	return 0;
+    	int[] rob = new int[n];
+    	int[] skip = new int[n];
+    	rob[0] = nums[0];
+    	for(int i=1; i<n; i++) {
+    		rob[i] = skip[i-1] + nums[i];
+    		skip[i] = Math.max(skip[i-1], rob[i-1]);
+    	}
+    	return Math.max(skip[n-1], rob[n-1]);
+    }
     
     
     
