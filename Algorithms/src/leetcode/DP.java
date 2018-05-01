@@ -1803,6 +1803,37 @@ public class DP {
     	return dp[0][array.length-1];
     }
     
+    public int deleteAndEarn2(int[] nums) {
+    	int n = 10001;
+    	int[] values = new int[n];
+    	for(int num : nums)
+    		values[num] += num;
+    	int[] take = new int[n];
+    	int[] skip = new int[n];
+    	for(int i=1; i<n; i++) {
+    		take[i] = skip[i-1] + values[i];
+    		skip[i] = Math.max(take[i-1], skip[i-1]);
+    	}
+    	return Math.max(take[n-1], skip[n-1]);
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     public static void main(String[] args) {
