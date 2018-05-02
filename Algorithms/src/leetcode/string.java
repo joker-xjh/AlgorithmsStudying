@@ -3093,8 +3093,43 @@ public class string {
     	 return sb.toString();
      }
      
+     public String nearestPalindromic(String n) {
+         int len = n.length();
+         boolean even = len % 2 == 0;
+         int i = even ? len/2-1 : len/2;
+    	 long left = Long.parseLong(n.substring(0, i+1));
+    	 List<Long> candidate = new ArrayList<>();
+    	 candidate.add(getPalindrome(left, even));
+    	 candidate.add(getPalindrome(left+1, even));
+    	 candidate.add(getPalindrome(left-1, even));
+    	 candidate.add((long)Math.pow(10, len-1)-1);
+    	 candidate.add((long)Math.pow(10, len)+1);
+    	 long diff = Long.MAX_VALUE, num = Long.parseLong(n), answer = 0;
+    	 for(long cand : candidate) {
+    		 if(cand == num)
+    			 continue;
+    		 if(Math.abs(cand - num) < diff) {
+    			 diff = Math.abs(cand - num);
+    			 answer = cand;
+    		 }
+    		 else if(Math.abs(cand - num) == diff) {
+    			 answer = Math.min(answer, cand);
+    		 }
+    	 }
+    	 return String.valueOf(answer);
+     }
      
-     
+     private long getPalindrome(long left, boolean even) {
+    	 long res = left;
+    	 if(!even)
+    		 left /= 10;
+    	 while(left != 0) {
+    		 res = res * 10 + left % 10;
+    		 left /= 10;
+    	 }
+    	 
+    	 return res;
+     }
      
      
      
