@@ -3319,9 +3319,96 @@ public class Array {
      }
      
      
+     public int containVirus(int[][] grid) {
+         int walls = 0;
+    	 int m = grid.length, n = grid[0].length;
+         int[][] used = new int[m][n];
+         int virus = 1, nextVirus = 2;
+         Set<String> set = new HashSet<>();
+         List<int[]> list = new ArrayList<>();
+         while(true) {
+        	 boolean end = true;
+        	 int max = -1;
+        	 int[] selected = {-1, -1};
+        	 for(int i=0; i<m; i++) {
+        		 for(int j=0; j<n; j++) {
+        			 if(grid[i][j] == virus && used[i][j] != -virus) {
+        				 end = false;
+        				 int count = containVirusCountWalls(grid, virus, nextVirus, used, i, j, set);
+        				 if(count > max) {
+        					 max = count;
+        					 selected[0] = i; selected[1] = j;
+        				 }
+        				 set.clear();
+        			 }
+        		 }
+        	 }
+        	 if(end)
+        		 break;
+        	 int temp = containVirusRemoveVirus(grid, used, selected[0], selected[1], nextVirus, set, list);
+        	 walls += temp;
+        	 set.clear();
+        	 for(int[] array : list)
+        		 grid[array[0]][array[1]] = 0;
+        	 list.clear();
+        	 virus++; nextVirus++;
+         }
+    	 return walls;
+     }
      
+     private int containVirusCountWalls(int[][] grid, int virus, int nextVirus, int[][] used, int x, int y, Set<String> set) {
+    	 int count = 0;
+    	 used[x][y] = -virus;
+    	 for(int[] dir : directions) {
+    		 int i = x + dir[0];
+    		 int j = y + dir[1];
+    		 String key = i+","+j;
+    		 if(i < 0 || i >= grid.length || j < 0 || j >= grid[0].length)
+    			 continue;
+    		 if(grid[i][j] == 0 || (grid[i][j] == nextVirus && !set.contains(key))) {
+    			 set.add(key);
+        		 used[i][j]++;
+    			 grid[i][j] = nextVirus;
+    			 count++;
+    		 }
+    		 
+    	 }
+    	 for(int[] dir : directions) {
+    		 int i = x + dir[0];
+    		 int j = y + dir[1];
+    		 if(i < 0 || i >= grid.length || j < 0 || j >= grid[0].length || used[i][j] == -virus || grid[i][j] == -1 || grid[i][j] > virus)
+    			 continue;
+    		 count += containVirusCountWalls(grid, virus, nextVirus, used, i, j, set);
+    	 }
+    	 return count;
+     }
      
-     
+     private int containVirusRemoveVirus(int[][] grid, int[][] used, int x, int y, int nextVirus, Set<String> set, List<int[]> list) {
+    	 grid[x][y] = -1;
+    	 int count = 0;
+    	 for(int[] dir : directions) {
+    		 int i = x + dir[0];
+    		 int j = y + dir[1];
+    		 String key = i + "," + j;
+    		 if(i < 0 || i >= grid.length || j < 0 || j >= grid[0].length || grid[i][j] != nextVirus)
+    			 continue;
+    		 if(!set.contains(key)) {
+    			 set.add(key);
+        		 used[i][j]--;
+        		 if(used[i][j] == 0)
+        			 list.add(new int[] {i, j});
+    		 }
+    		 count++;
+    	 }
+    	 for(int[] dir : directions) {
+    		 int i = x + dir[0];
+    		 int j = y + dir[1];
+    		 if(i < 0 || i >= grid.length || j < 0 || j >= grid[0].length  || grid[i][j] == -1 || grid[i][j] == 0 || grid[i][j] == nextVirus)
+    			 continue;
+    		 count += containVirusRemoveVirus(grid, used, i, j, nextVirus, set, list);
+    	 }
+    	 return count;
+     }
      
      
      
@@ -3330,7 +3417,9 @@ public class Array {
 
 
 	public static void main(String[] args) {
-		 
+		 int[][] array = {{1,1,1,0,0,0,0,0,0,0,1,0,0,0}, {1,0,1,0,1,1,1,1,1,0,1,0,0,0}, {1,1,1,0,0,0,0,0,0,0,0,0,0,0}};
+		 Array test = new Array();
+		 test.containVirus(array);
 	}
 
 }
