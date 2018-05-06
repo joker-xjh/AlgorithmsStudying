@@ -263,11 +263,38 @@ public class math {
     	return array[query_row][query_glass];
     }
     
+    public int consecutiveNumbersSum(int N) {
+    	if(N == 3)
+    		return 2;
+        int count = 1;
+        int sum = 1;
+        for(int i=2; N/i > 1 && N > sum; i++) {
+        	if((N > sum) && (N-sum) % i == 0)
+        		count++;
+        	sum += i;
+        }
+        return count;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     public static void main(String[] args) {
-		math test = new math();
-		test.champagneTower(1000, 30, 6);
+		
 	}
     
     
