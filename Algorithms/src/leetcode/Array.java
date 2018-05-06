@@ -3410,6 +3410,42 @@ public class Array {
     	 return count;
      }
      
+     public List<List<Integer>> largeGroupPositions(String S) {
+         List<List<Integer>> groups = new ArrayList<>();
+         int count = 1;
+         int index = 0;
+         for(int i=1; i<S.length(); i++) {
+        	 char cur = S.charAt(i);
+        	 char pre = S.charAt(i-1);
+        	 if(cur == pre)
+        		 count++;
+        	 else {
+        		 if(count >= 3) {
+        			 List<Integer> temp = new ArrayList<>();
+        			 temp.add(index);
+        			 temp.add(i-1);
+        			 groups.add(temp);
+        		 }
+        		 index = i;
+        		 count = 1;
+        	 }
+         }
+         if(count >= 3) {
+        	 List<Integer> temp = new ArrayList<>();
+			 temp.add(index);
+			 temp.add(S.length()-1);
+			 groups.add(temp);
+         }
+         
+         return groups;
+     }
+     
+     
+     
+     
+     
+     
+     
      
      
      
@@ -3417,9 +3453,7 @@ public class Array {
 
 
 	public static void main(String[] args) {
-		 int[][] array = {{1,1,1,0,0,0,0,0,0,0,1,0,0,0}, {1,0,1,0,1,1,1,1,1,0,1,0,0,0}, {1,1,1,0,0,0,0,0,0,0,0,0,0,0}};
-		 Array test = new Array();
-		 test.containVirus(array);
+		 
 	}
 
 }
