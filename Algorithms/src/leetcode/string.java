@@ -3131,9 +3131,66 @@ public class string {
     	 return res;
      }
      
+     public int uniqueLetterString(String S) {
+         int sum = 0;
+         int mod = 1000000007;
+         char[] array = S.toCharArray();
+    	 Map<Character, Integer> counter = new HashMap<>();
+         for(int i=0; i<array.length; i++) {
+        	 int temp = 0;
+        	 int unique = 0;
+        	 for(int j=i; j<array.length; j++) {
+        		 char c = array[j];
+        		 int t = counter.getOrDefault(c, 0) + 1;
+        		 if(t == 1)
+        			 unique++;
+        		 else if(t == 2)
+        			 unique--;
+        		 temp = (temp + unique) % mod;
+        		 counter.put(c, t);
+        	 }
+        	 sum = (sum + temp) % mod;
+        	 counter.clear();
+         }
+         return sum;
+     }
      
-     
-     
+     public String maskPII(String S) {
+    	 StringBuilder mask = new StringBuilder();
+         int emailIndex = S.indexOf('@');
+         if(emailIndex != -1) {
+        	 int dotIndex = S.indexOf('.');
+        	 String name1 = S.substring(0, emailIndex).toLowerCase();
+        	 String name2 = S.substring(emailIndex+1, dotIndex).toLowerCase();
+        	 String name3 = S.substring(dotIndex+1).toLowerCase();
+        	 return name1.charAt(0)+"*****"+name1.charAt(name1.length()-1) + "@" + name2 +"."+name3;
+         }
+         StringBuilder phoneCode = new StringBuilder();
+         StringBuilder countryCode = new StringBuilder();
+         int phoneIndex = S.length()-1;
+         for(; phoneIndex>=0; phoneIndex--) {
+        	 char code = S.charAt(phoneIndex);
+        	 if(code >= '0' && code <= '9')
+        		 phoneCode.append(code);
+        	 if(phoneCode.length() == 10)
+        		 break;
+         }
+         for(int i=0; i<phoneIndex; i++) {
+        	 char code = S.charAt(i);
+        	 if(code >= '0' && code <= '9')
+        		 countryCode.append(code);
+         }
+    	 if(countryCode.length() > 0) {
+    		 mask.append('+');
+    		 for(int i=0; i<countryCode.length(); i++)
+    			 mask.append('*');
+    		 mask.append('-');
+    	 }
+    	 mask.append("***-***-");
+    	 for(int i=3; i>=0; i--)
+    		 mask.append(phoneCode.charAt(i));
+    	 return mask.toString();
+     }
      
      
      
