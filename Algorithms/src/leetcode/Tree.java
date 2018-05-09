@@ -761,7 +761,46 @@ public class Tree {
     }
     
     
+    public int[] findRedundantDirectedConnection(int[][] edges) {
+    	int[] can1 = {-1, -1};
+    	int[] can2 = {-1, -1};
+    	int N = edges.length;
+    	int[] parent = new int[N+1];
+    	for(int i=0; i<N; i++) {
+    		int[] edge = edges[i];
+    		int u = edge[0], v = edge[1];
+    		if(parent[v] != 0) {
+    			can2 = new int[]{u, v};
+    			can1 = new int[]{parent[v], v};
+    			edge[1] = 0;
+    			continue;
+    		}
+    		parent[v] = u;
+    	}
+    	for(int i=1; i<=N; i++)
+    		parent[i] = i;
+    	for(int[] edge : edges) {
+    		if(edge[1] == 0)
+    			continue;
+    		int child = edge[0], father = edge[1];
+    		if(findRedundantDirectedConnectionUF(parent, father) == child) {
+    			if(can1[0] == -1)
+    				return edge;
+    			return can1;
+    		}
+    		parent[child] = father;
+    	}
+    	
+    	return can2;
+    }
     
+    private int findRedundantDirectedConnectionUF(int[] parent, int i) {
+    	while(parent[i] != i) {
+    		parent[i] = parent[parent[i]];
+    		i = parent[i];
+    	}
+    	return i;
+    }
     
     
     
