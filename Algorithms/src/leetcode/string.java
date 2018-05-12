@@ -3193,8 +3193,23 @@ public class string {
      }
      
      
-     
-     
+     public int uniqueLetterString2(String S) {
+    	 int unique = 0;
+    	 int mod = 1000000007;
+    	 int N = S.length();
+    	 int[][] index = new int[26][2];
+    	 for(int i=0; i<26; i++)
+    		 Arrays.fill(index[i], -1);
+    	 for(int i=0; i<N; i++) {
+    		 int c = S.charAt(i) - 'A';
+    		 unique = (unique + ((i - index[c][1]) * (index[c][1] - index[c][0])) % mod) % mod;
+    		 index[c] = new int[] {index[c][1], i};
+    	 }
+    	 for(int i=0; i<26; i++) {
+    		 unique = (unique + ((N - index[i][1]) * (index[i][1] - index[i][0])) % mod) % mod;
+    	 }
+    	 return unique;
+     }
      
      
      
