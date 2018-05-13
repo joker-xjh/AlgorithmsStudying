@@ -3440,7 +3440,20 @@ public class Array {
          return groups;
      }
      
-     
+     public int[][] flipAndInvertImage(int[][] A) {
+         for(int[] row : A) {
+        	 int left = 0, right = A.length-1;
+        	 while(left < right) {
+        		 int temp = row[left];
+        		 row[left] = row[right];
+        		 row[right] = temp;
+        		 left++;right--;
+        	 }
+        	 for(int i=0; i<row.length; i++)
+        		 row[i] ^= 1;
+         }
+    	 return A;
+     }
      
      
      
