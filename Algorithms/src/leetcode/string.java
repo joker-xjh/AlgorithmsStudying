@@ -3211,6 +3211,50 @@ public class string {
     	 return unique;
      }
      
+     public String findReplaceString(String S, int[] indexes, String[] sources, String[] targets) {
+         StringBuilder sb = new StringBuilder();
+    	 int[] mark = new int[S.length()];
+    	 String[] mark_str = new String[S.length()];
+    	 int n = indexes.length;
+    	 for(int i=0; i<n; i++) {
+    		 int index = indexes[i];
+    		 String source = sources[i];
+    		 String target = targets[i];
+    		 if(euqal(S, index, source)) {
+    			 mark[index] = index + source.length();
+    			 mark_str[index] = target;
+    		 }
+    	 }
+    	 for(int i=0; i<S.length(); i++) {
+    		 if(mark[i] == 0)
+    			 sb.append(S.charAt(i));
+    		 else {
+    			 sb.append(mark_str[i]);
+    			 i = mark[i] - 1;
+    		 }
+    	 }
+    	 
+    	 return sb.toString();
+     }
+     
+     private boolean euqal(String S, int index, String source) {
+    	 int len1 = source.length();
+    	 int len2 = S.length();
+    	 if(index  + len1 > len2)
+    		 return false;
+    	 for(int i=index; i<index+len1; i++)
+    		 if(S.charAt(i) != source.charAt(i - index))
+    			 return false;
+    	 return true;
+     }
+     
+     
+     
+     
+     
+     
+     
+     
      
      
      
