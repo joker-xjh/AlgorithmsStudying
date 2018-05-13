@@ -3455,9 +3455,62 @@ public class Array {
     	 return A;
      }
      
+     public int largestOverlap(int[][] A, int[][] B) {
+         int N = A.length;
+         Set<String> used = new HashSet<>();
+         int overlap = largestOverlapRD(0, 0, A, B, used);
+         used.clear();
+    	 overlap = Math.max(overlap, largestOverlapLT(N-1, N-1, A, B, used));
+    	 return overlap;
+     }
      
+     private int largestOverlapRD(int x, int y, int[][] A, int[][] B, Set<String> used) {
+    	 int N = A.length;
+    	 if(x >= N || y >= N)
+    		 return 0;
+    	 int overlap = 0;
+    	 for(int a_i=x,b_i=0; a_i<N; a_i++,b_i++) {
+    		 for(int a_j=y,b_j=0; a_j<N; a_j++,b_j++) {
+    			 if(A[a_i][a_j] == 1 && B[b_i][b_j] == 1)
+    				 overlap++;
+    		 }
+    	 }
+    	 String next = (x+1) +","+y;
+    	 if(!used.contains(next)) {
+    		 used.add(next);
+    		 overlap = Math.max(overlap, largestOverlapRD(x+1, y, A, B, used));
+    	 }
+    	 next = x +","+(y+1);
+    	 if(!used.contains(next)) {
+    		 used.add(next);
+    		 overlap = Math.max(overlap, largestOverlapRD(x, y+1, A, B, used));
+    	 }
+    	 return overlap;
+     }
      
-     
+     private int largestOverlapLT(int x, int y, int[][] A, int[][] B, Set<String> used) {
+    	 if(x < 0 || y < 0)
+    		 return 0;
+    	 int overlap = 0;
+    	 int N = A.length;
+    	 for(int a_i=x,b_i=N-1; a_i>=0; a_i--,b_i--) {
+    		 for(int a_j=y,b_j=N-1; a_j>=0; a_j--,b_j--) {
+    			 if(A[a_i][a_j] == 1 && B[b_i][b_j] == 1)
+    				 overlap++;
+    		 }
+    	 }
+    	 String next = (x-1) + "," + y;
+    	 if(!used.contains(next)) {
+    		 used.add(next);
+    		 overlap = Math.max(overlap, largestOverlapLT(x-1, y, A, B, used));
+    	 }
+    	 next = x + "," + (y-1);
+    	 if(!used.contains(next)) {
+    		 used.add(next);
+    		 overlap = Math.max(overlap, largestOverlapLT(x, y-1, A, B, used));
+    	 }
+    	 return overlap;
+     }
      
      
      
