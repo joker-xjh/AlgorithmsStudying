@@ -1,6 +1,7 @@
 package leetcode;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -802,10 +803,52 @@ public class Tree {
     	return i;
     }
     
+    private int distance;
+    public int[] sumOfDistancesInTree(int N, int[][] edges) {
+    	if(N == 1)
+    		return new int[1];
+        Map<Integer, Set<Integer>> tree = new HashMap<>();
+        int[] answer = new int[N];
+        int[] subTree = new int[N];
+        boolean[] used = new boolean[N];
+        for(int[] edge : edges) {
+        	int f = edge[0], s = edge[1];
+        	if(!tree.containsKey(f))
+        		tree.put(f, new HashSet<>());
+        	if(!tree.containsKey(s))
+        		tree.put(s, new HashSet<>());
+        	tree.get(f).add(s);
+        	tree.get(s).add(f);
+        }
+        used[0] = true;
+        countSubTree(tree, subTree, used, 0, 1);
+        Arrays.fill(used, false);
+        used[0] = true;
+        sumOfDistancesInTreeHelp(tree, 0, N, used, answer, distance + N, subTree);
+    	return answer;
+    }
     
+    private int countSubTree(Map<Integer, Set<Integer>> tree, int[] subTree, boolean[] used, int node, int dis) {
+    	subTree[node] = 1;
+    	for(int next : tree.get(node)) {
+    		if(used[next])
+    			continue;
+    		used[next] = true;
+    		distance += dis;
+    		subTree[node] += countSubTree(tree, subTree, used, next, dis+1);
+    	}
+    	return subTree[node];
+    }
     
-    
-    
+    private void sumOfDistancesInTreeHelp(Map<Integer, Set<Integer>> tree, int node, int N, boolean[] used, int[] distances, int dis, int[] subTree) {
+    	distances[node] = dis - subTree[node] + N - subTree[node];
+    	for(int next : tree.get(node)) {
+    		if(used[next])
+    			continue;
+    		used[next] = true;
+    		sumOfDistancesInTreeHelp(tree, next, N, used, distances, distances[node], subTree);
+    	}
+    }
     
     
     
