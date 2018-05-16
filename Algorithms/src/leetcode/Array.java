@@ -2,6 +2,7 @@ package leetcode;
 
 import java.util.ArrayList;
 
+
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -9,6 +10,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
@@ -3512,8 +3514,54 @@ public class Array {
     	 return overlap;
      }
      
-     
-     
+     public List<Integer> fallingSquares(int[][] positions) {
+         int n = positions.length;
+         List<Integer> heights = new ArrayList<>(n);
+         TreeMap<Integer, Integer> tree = new TreeMap<>();
+         Map<Integer, List<int[]>> map = new HashMap<>();
+         int max = -1;
+         for(int[] position : positions) {
+        	 int x = position[0], height = position[1];
+        	 int temp = 0;
+        	 List<int[]> list = map.get(x);
+        	 Integer h = 0;
+        	 if(list != null) {
+        		 for(int[] array : list)
+        			 h = Math.max(h, array[2]);
+        	 }
+        	 int cur = tree.getOrDefault(x, 0);
+        	 temp = h + height;
+        	 Entry<Integer, Integer> low = tree.lowerEntry(x);
+        	 while(low != null) {
+        		 list = map.get(low.getKey());
+        		 for(int[] array : list) {
+        			 if(array[0] + array[1] > x) {
+        				 temp = Math.max(temp, array[2] + height);
+        			 }
+        		 }
+        		 low = tree.lowerEntry(low.getKey());
+        	 }
+        	 Entry<Integer, Integer> high = tree.higherEntry(x);
+        	 while(high != null) {
+        		 if(x + height <= high.getKey())
+        			 break;
+        		 list = map.get(high.getKey());
+        		 for(int[] array : list) {
+        			temp = Math.max(temp, array[2] + height);
+        		 }
+        		 high = tree.higherEntry(high.getKey());
+        	 }
+        	 max = Math.max(max, temp);
+        	 if(!map.containsKey(x))
+        		 map.put(x, new ArrayList<>());
+    		 map.get(x).add(new int[] {x, height, temp});
+        	 if(height > cur) {
+        		 tree.put(x, height);
+        	 }
+        	 heights.add(max);
+         }
+         return heights;
+     }
      
      
 
