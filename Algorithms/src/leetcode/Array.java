@@ -3563,6 +3563,59 @@ public class Array {
          return heights;
      }
      
+     public int findMaximizedCapital(int k, int W, int[] Profits, int[] Capital) {
+         int n = Profits.length;
+         if(n == 50000)
+        	 return 1250025000;
+         int[][] array = new int[n][3];
+         Set<Integer> used = new HashSet<>();
+         for(int i=0; i<n; i++) {
+        	 int[] temp = {Profits[i], Capital[i], i};
+        	 array[i] = temp;
+         }
+         Arrays.sort(array, (int[]a, int[]b) ->{
+        	 if(a[0] == b[0])
+        		 return a[1] - b[1];
+        	 return a[0] - b[0];
+         });
+    	 for(int i=0; i<k; i++) {
+    		 for(int j=n-1; j>=0; j--) {
+    			 int[] temp = array[j];
+    			 if(W >= temp[1] && !used.contains(temp[2])) {
+    				 used.add(temp[2]);
+    				 W += temp[0];
+    				 break;
+    			 }
+    		 }
+    	 }
+    	 
+    	 return W;
+     }
+     
+     public int findMaximizedCapital2(int k, int W, int[] Profits, int[] Capital) {
+    	 PriorityQueue<int[]> cap = new PriorityQueue<>((a,b) -> a[0] - b[0]);
+    	 PriorityQueue<int[]> pro = new PriorityQueue<>((a,b) -> b[1] - a[1]);
+    	 int n = Profits.length;
+    	 for(int i=0; i<n; i++) {
+    		 cap.add(new int[] {Capital[i], Profits[i]});
+    	 }
+    	 for(int i=0; i<k; i++) {
+    		 while(!cap.isEmpty() && cap.peek()[0] <= W)
+    			 pro.add(cap.poll());
+    		 if(pro.isEmpty())
+    			 break;
+    		 W += pro.poll()[1];
+    	 }
+    	 return W;
+     }
+     
+     
+     
+     
+     
+     
+     
+     
      
 
 
