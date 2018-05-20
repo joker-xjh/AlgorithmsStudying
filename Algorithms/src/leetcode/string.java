@@ -3248,8 +3248,61 @@ public class string {
     	 return true;
      }
      
+     public int numSimilarGroups(String[] A) {
+         int N = A.length;
+         if(N == 0)
+        	 return 0;
+         int[] groups = new int[N];
+         for(int i=0; i<N; i++) 
+        	 groups[i] = i;
+         for(int i=0; i<N; i++) {
+        	 String a = A[i];
+        	 int group_a = findGroup(groups, i);
+        	 for(int j=0; j<N; j++) {
+        		 String b = A[j];
+        		 if(i == j)
+        			 continue;
+        		 if(!isSimilar(a, b))
+        			 continue;
+        		 int group_b = findGroup(groups, j);
+        		 if(group_b != group_a) {
+        			 groups[group_b] = group_a;
+        		 }
+        	 }
+         }
+         Set<Integer> set = new HashSet<>();
+         for(int g : groups) {
+        	 set.add(findGroup(groups, g));
+         }
+         return set.size();
+     }
      
+     private int findGroup(int[] groups, int i) {
+    	 while(groups[i] != i) {
+    		 groups[i] = groups[groups[i]];
+    		 i = groups[i];
+    	 }
+    	 return i;
+     }
      
+     private boolean isSimilar(String a, String b) {
+    	 int[] pos = {-1, -1};
+    	 int count = 0;
+    	 int n = a.length();
+    	 for(int i=0; i<n; i++) {
+    		 char c1 = a.charAt(i);
+    		 char c2 = b.charAt(i);
+    		 if(c1 == c2)
+    			 continue;
+    		 if(count == 2)
+    			 return false;
+    		 pos[count] = i;
+    		 count++;
+    	 }
+    	 if(a.charAt(pos[0]) == b.charAt(pos[1]) && a.charAt(pos[1]) == b.charAt(pos[0]))
+    		 return true;
+    	 return false;
+     }
      
      
      
