@@ -3304,7 +3304,84 @@ public class string {
     	 return false;
      }
      
-     
+     public String pushDominoes(String dominoes) {
+         int n = dominoes.length();
+    	 if(n == 0)
+    		 return "";
+    	 char[] answer = new char[n];
+    	 int[] count = new int[n];
+    	 for(int i=n-1; i>=0; i--) {
+    		 char c = dominoes.charAt(i);
+    		 if(c == 'L') {
+    			 count[i] = 1;
+    		 }
+    		 else if(c == '.') {
+    			 if(i < n-1 && count[i+1] > 0 && dominoes.charAt(i+1) != 'R') {
+    				 count[i] = count[i+1] + 1;
+    			 }
+    		 }
+    		 else {
+    			 if(i == n-1)
+    				 continue;
+    			 if(count[i+1] > 0)
+    				 count[i] = count[i+1] + 1;
+    		 }
+    	 }
+    	 int temp = 0;
+    	 boolean preR = false;
+    	 for(int i=0; i<n; i++) {
+    		 char c = dominoes.charAt(i);
+    		 if(c == 'R') {
+    			 preR = true;
+    			 if(count[i] == 0) {
+    				 count[i]--;
+    			 }
+    			 else {
+    				 temp = count[i];
+        			 answer[i] = 'R';
+        			 count[i]--;
+        			 if(i < n-1 && dominoes.charAt(i+1) == 'L') {
+        				 i++;
+        				 preR = false;
+        			 }
+    			 }
+    		 }
+    		 else if(c == '.') {
+    			 if(i == 0) {
+    				 continue;
+    			 }
+    			 int pre = count[i-1];
+    			 if((count[i] == 0 && pre > 0 )|| pre == 0 || !preR)
+    				 continue;
+    			 if(pre < 0) {
+    				 count[i] = pre - 1;
+    				 continue;
+    			 }
+				 count[i]--;
+				 answer[i] = 'R';
+				 if(count[i] == temp / 2) {
+					 if(temp % 2 == 1)
+						 answer[i] = '.';
+					 temp = 0;
+					 i += count[i];
+					 preR = false;
+				 }
+    		 }
+    	 }
+    	 
+    	 for(int i=0; i<n; i++) {
+    		 if(answer[i] != '\0')
+    			 continue;
+    		 if(count[i] == 0)
+    			 answer[i] = '.';
+    		 else if(count[i] > 0)
+    			 answer[i] = 'L';
+    		 else
+    			 answer[i] = 'R';
+    	 }
+    	 
+    	 return new String(answer);
+     }
      
      
      
