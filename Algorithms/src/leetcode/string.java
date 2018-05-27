@@ -3383,9 +3383,53 @@ public class string {
     	 return new String(answer);
      }
      
+     public List<Integer> splitIntoFibonacci(String S) {
+         List<Integer> list = new ArrayList<>();
+         if(S.length() < 3)
+        	 return list;
+    	 splitIntoFibonacciDFS(S.toCharArray(), 0, list);
+    	 return list;
+     }
      
+     private boolean splitIntoFibonacciDFS(char[] S, int index, List<Integer> list) {
+    	 if(index == S.length && list.size() > 2)
+    		 return true;
+    	 for(int i= index; i<S.length; i++) {
+    		 int num = getIntegerFromS(S, index, i);
+    		 if(num == -1)
+    			 return false;
+    		 if(list.size() < 2) {
+    			 list.add(num);
+    			 if(splitIntoFibonacciDFS(S, i+1, list))
+    				 return true;
+    			 list.remove(list.size()-1);
+    		 }
+    		 else {
+    			 long one = list.get(list.size()-2);
+    			 long two = list.get(list.size()-1);
+    			 if(one + two < num)
+    				 return false;
+    			 if(one + two > num)
+    				 continue;
+    			 list.add(num);
+    			 if(splitIntoFibonacciDFS(S, i+1, list))
+    				 return true;
+    			 list.remove(list.size()-1);
+    		 }
+    	 }
+    	 return false;
+     }
      
-     
+     private int getIntegerFromS(char[] S, int from, int to) {
+    	 if(from == to)
+    		 return S[from] - '0';
+    	 if(S[from] == '0')
+    		 return -1;
+    	 int num = 0;
+    	 for(int i=from; i<=to; i++)
+    		 num = num * 10 + S[i] - '0';
+    	 return num;
+     }
      
      
      
