@@ -3633,6 +3633,68 @@ public class Array {
     	 }
      }
      
+     public int numMagicSquaresInside(int[][] grid) {
+         int magic_squares = 0;
+         int m = grid.length, n = grid[0].length;
+         for(int i=0; i<=m-3; i++) {
+        	 for(int j=0; j<=n-3; j++) {
+        		 if(numMagicSquaresInside(grid, i, j))
+        			 magic_squares++;
+        	 }
+         }
+         return magic_squares;
+     }
+     
+     private boolean numMagicSquaresInside(int[][] grid, int x, int y) {
+    	 boolean[] used = new boolean[10];
+    	 int sum = 0;
+    	 for(int i=0; i<3; i++) {
+    		 sum += grid[x][y+i];
+    	 }
+    	 for(int i=x; i<x+3; i++) {
+    		 int temp = 0;
+    		 for(int j=y; j<y+3; j++) {
+    			 if(grid[i][j] >= 10 || grid[i][j] == 0)
+    				 return false;
+    			 if(used[grid[i][j]])
+    				 return false;
+    			 temp += grid[i][j];
+    			 used[grid[i][j]] = true;
+    		 }
+    		 if(temp != sum)
+    			 return false;
+    	 }
+    	 for(int j=y; j<y+3; j++) {
+    		 int temp = 0;
+    		 for(int i=x; i<x+3; i++) {
+    			 temp += grid[i][j];
+    		 }
+    		 if(temp != sum)
+    			 return false;
+    	 }
+    	 int temp = 0;
+    	 for(int i=0; i<3; i++) {
+    		 temp += grid[x+i][y+i];
+    	 }
+    	 if(temp != sum)
+    		 return false;
+    	 temp = 0;
+    	 for(int i=0; i<3; i++) {
+    		 temp += grid[x+i][y+3-i];
+    	 }
+    	 if(temp != sum)
+    		 return false;
+    	 return true;
+     }
+     
+     
+     
+     
+     
+     
+     
+     
+     
      
      
      
