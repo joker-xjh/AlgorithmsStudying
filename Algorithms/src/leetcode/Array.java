@@ -3610,9 +3610,28 @@ public class Array {
      }
      
      
+     public boolean isRectangleOverlap(int[] rec1, int[] rec2) {
+    	 return (Math.max(rec1[0], rec2[0]) < Math.min(rec1[2], rec2[2]) && Math.max(rec1[1], rec2[1]) < Math.min(rec1[3], rec2[3]));
+     }
      
-     
-     
+     public boolean canVisitAllRooms(List<List<Integer>> rooms) {
+         int N = rooms.size();
+         boolean[] visited = new boolean[N];
+         visited[0] = true;
+         room_visited = 1;
+    	 canVisitAllRoomsDFS(rooms, 0, visited);
+    	 return room_visited == N;
+     }
+     private int room_visited;
+     private void canVisitAllRoomsDFS(List<List<Integer>> rooms, int room, boolean[] visited) {
+    	 for(int next : rooms.get(room)) {
+    		 if(visited[next])
+    			 continue;
+    		 visited[next] = true;
+    		 room_visited++;
+    		 canVisitAllRoomsDFS(rooms, next, visited);
+    	 }
+     }
      
      
      
