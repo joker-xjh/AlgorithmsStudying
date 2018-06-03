@@ -3432,6 +3432,35 @@ public class string {
      }
      
      
+     public boolean backspaceCompare(String S, String T) {
+         List<Character> list_S = new ArrayList<>();
+         List<Character> list_T = new ArrayList<>();
+    	 for(char c : S.toCharArray()) {
+    		 if(c == '#') {
+    			 if(!list_S.isEmpty())
+    				 list_S.remove(list_S.size()-1);
+    		 }
+    		 else
+    			 list_S.add(c);
+    	 }
+    	 for(char c : T.toCharArray()) {
+    		 if(c == '#') {
+    			 if(!list_T.isEmpty())
+        			 list_T.remove(list_T.size()-1);
+    		 }
+    		 else
+    			 list_T.add(c);
+    	 }
+    	 if(list_S.size() != list_T.size())
+    		 return false;
+    	 for(int i=0; i<list_S.size(); i++) {
+    		 if(list_S.get(i) != list_T.get(i))
+    			 return false;
+    	 }
+    	 return true;
+     }
+     
+     
      
     
     public static void main(String[] args) {
