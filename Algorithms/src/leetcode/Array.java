@@ -3713,7 +3713,42 @@ public class Array {
     	 return true;
      }
      
-     
+     public int longestMountain(int[] A) {
+         int mountain = 0;
+         if(A.length < 3)
+        	 return mountain;
+         int n = A.length;
+         int[] left = new int[n];
+         int[] right = new int[n];
+         int counter = 0;
+         for(int i=0; i<n-1; i++) {
+        	 if(A[i] < A[i+1])
+        		 counter++;
+        	 else {
+        		 left[i] = counter;
+        		 counter = 0;
+        	 }
+         }
+         if(counter == n - 1)
+        	 return 0;
+         counter = 0;
+         for(int i=n-1; i>0; i--) {
+        	 if(A[i] < A[i-1])
+        		 counter++;
+        	 else {
+        		 right[i] = counter;
+        		 counter = 0;
+        	 }
+         }
+         for(int i=1; i<n-1; i++) {
+        	 if(left[i] == 0 || right[i] == 0)
+        		 continue;
+        	 if(left[i] + right[i] + 1 < 3)
+        		 continue;
+        	 mountain = Math.max(mountain, left[i] + right[i] + 1);
+         }
+         return mountain;
+     }
      
      
      
