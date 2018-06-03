@@ -3,6 +3,7 @@ package leetcode;
 import java.util.ArrayList;
 
 
+
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -3687,7 +3688,30 @@ public class Array {
     	 return true;
      }
      
-     
+     public boolean isNStraightHand(int[] hand, int W) {
+    	 if(hand.length % W != 0)
+    		 return false;
+         TreeMap<Integer, Integer> map = new TreeMap<>();
+    	 for(int card : hand)
+    		 map.put(card, map.getOrDefault(card, 0) + 1);
+    	 while(!map.isEmpty()) {
+    		 Map.Entry<Integer, Integer> minEntry = map.firstEntry();
+    		 Map.Entry<Integer, Integer> curEntry = minEntry;
+    		 Map.Entry<Integer, Integer> nextEntry = null;
+    		 for(int j=1; j<W; j++) {
+    			 nextEntry = map.higherEntry(curEntry.getKey());
+    			 if(nextEntry == null || nextEntry.getValue() < minEntry.getValue() || nextEntry.getKey() != curEntry.getKey() + 1)
+    				 return false;
+    			 int temp = nextEntry.getValue() - minEntry.getValue();
+    			 map.put(nextEntry.getKey(), temp);
+    			 curEntry = nextEntry;
+    			 if(temp == 0)
+    				 map.remove(nextEntry.getKey());
+    		 }
+    		 map.remove(minEntry.getKey());
+    	 }
+    	 return true;
+     }
      
      
      
