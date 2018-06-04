@@ -3750,7 +3750,39 @@ public class Array {
          return mountain;
      }
      
+     public int shortestPathLength(int[][] graph) {
+    	 int N = graph.length;
+    	 Queue<State> queue = new LinkedList<>();
+    	 int[][] dist = new int[1 << N][N];
+    	 for(int[] row : dist)
+    		 Arrays.fill(row, N*N);
+    	 for(int i=0; i<N; i++) {
+    		 queue.offer(new State(1 << i, i));
+    		 dist[1 << i][i] = 0;
+    	 }
+    	 while(!queue.isEmpty()) {
+    		 State node = queue.poll();
+    		 int d = dist[node.cover][node.head];
+    		 if(node.cover == (1 << N) - 1)
+    			 return d;
+    		 for(int child : graph[node.head]) {
+    			 int next_cover = node.cover | (1 << child);
+    			 if(d + 1 < dist[next_cover][child]) {
+    				 dist[next_cover][child] = d + 1;
+    				 queue.offer(new State(next_cover, child));
+    			 }
+    		 }
+    	 }
+         return -1;
+     }
      
+     class State {
+    	 int cover, head;
+    	 public State(int cover, int head) {
+			this.cover = cover;
+			this.head = head;
+		}
+     }
      
      
      
