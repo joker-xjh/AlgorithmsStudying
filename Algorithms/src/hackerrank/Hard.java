@@ -199,7 +199,40 @@ public class Hard {
 	} 
 	
 	
+	static class Node {
+		boolean end;
+		Node[] next = new Node[10];
+	}
 	
+	static void NoPrefixSet(String[] words) {
+		Node root = new Node();
+		for(String word : words) {
+			Node node = root;
+			for(char c : word.toCharArray()) {
+				int i = c - 'a';
+				if(node.next[i] == null) {
+					node.next[i] = new Node();
+				}
+				node = node.next[i];
+				if(node.end) {
+					System.out.println("BAD SET");
+					System.out.println(word);
+					return;
+				}
+			}
+			node.end = true;
+			for(Node temp : node.next) {
+				if(temp != null) {
+					System.out.println("BAD SET");
+					System.out.println(word);
+					return;
+				}
+			}
+		}
+		
+		System.out.println("GOOD SET");
+	}
+
 	
 	
 	
