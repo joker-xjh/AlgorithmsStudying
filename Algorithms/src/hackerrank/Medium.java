@@ -1,5 +1,7 @@
 package hackerrank;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
 import java.math.BigInteger;
 
 
@@ -2197,11 +2199,58 @@ public class Medium {
         return ways;
     }
 	
+	static class Node {
+		boolean end;
+		int count;
+		Node[] next = new Node[26];
+	}
 	
+	static Node addName(Node root, String name) {
+		Node node = root;
+		for(char c : name.toCharArray()) {
+			int i = c - 'a';
+			if(node.next[i] == null) {
+				node.next[i] = new Node();
+			}
+			node = node.next[i];
+			node.count++;
+			
+		}
+		return root;
+	}
 	
+	static Node getNode(Node root, String name) {
+		Node node = root;
+		for(char c : name.toCharArray()) {
+			int i = c - 'a';
+			node = node.next[i];
+			if(node == null)
+				return node;
+		}
+		return node;
+	}
 	
+	static int getCountStartingOf(Node root, String partial) {
+		Node node = getNode(root, partial);
+		if(node != null)
+			return node.count;
+		return 0;
+	}
 	
-	
+	static void contacts(String[][] queries, BufferedWriter writer) throws IOException {
+		Node root = new Node();
+        for(String[] query : queries) {
+        	String command = query[0];
+        	String name = query[1];
+        	if(command.equals("add")) {
+        		root = addName(root, name);
+        	}
+        	else {
+        		int count = getCountStartingOf(root, name);
+        		writer.write(count+"\n");
+        	}
+        }
+    }
 	
 	
 	
