@@ -1,5 +1,7 @@
 package hackerrank;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import java.util.Arrays;
@@ -1930,7 +1932,25 @@ public class Easy {
 		 }
 	 }
 	 
-	 
+	 static void dynamicArray(int n, int[][] queries, BufferedWriter writer) throws IOException {
+		@SuppressWarnings("unchecked")
+		List<Integer>[] lists = new List[n];
+		int lastAnswer = 0;
+		for(int[] query : queries) {
+			List<Integer> list = lists[(query[1] ^ lastAnswer) % n];
+			if(list == null) {
+				list = new ArrayList<>();
+				lists[(query[1] ^ lastAnswer) % n] = list;
+			}
+			if(query[0] == 1) {
+				list.add(query[2]);
+			}
+			else {
+				lastAnswer = list.get(query[2] % list.size());
+				writer.write(lastAnswer+"\n");
+			}
+		}
+	 }
 	 
 	 
 	 
