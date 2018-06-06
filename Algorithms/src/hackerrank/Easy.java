@@ -1906,7 +1906,29 @@ public class Easy {
 		 
 	 }
 	 
+	 static int equalStacks(int[] h1, int[] h2, int[] h3) {
+	     TreeSet<Integer> tree1 = new TreeSet<>();
+	     TreeSet<Integer> tree2 = new TreeSet<>();
+	     TreeSet<Integer> tree3 = new TreeSet<>();
+	     add(tree1, h1);
+	     add(tree2, h2);
+	     add(tree3, h3);
+	     int sum = Arrays.stream(h1).sum();
+	     for(int i=0; i<h1.length; i++) {
+	    	 if(tree2.contains(sum) && tree3.contains(sum))
+	    		 return sum;
+	    	 sum -= h1[i];
+	     }
+		 return 0;
+	 }
 	 
+	 static void add(TreeSet<Integer> tree, int[] array) {
+		 int sum = 0;
+		 for(int i=array.length-1; i>=0; i--) {
+			 sum += array[i];
+			 tree.add(sum);
+		 }
+	 }
 	 
 	 
 	 
@@ -1916,7 +1938,7 @@ public class Easy {
 	
 
 	public static void main(String[] args) {
-		System.out.println(countC(30, 14));
+		
 	}
 
 }
