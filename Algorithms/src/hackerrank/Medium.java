@@ -2253,7 +2253,27 @@ public class Medium {
     }
 	
 	
+	static int downToZero(int n) {        
+        return dp[n];
+    }
+	static  int[] dp = new int[100001];
+    
+    static{
+        init();
+    }
 	
+	static void init(){
+        for(int i=1; i<=1000000; i++){
+            dp[i] = Integer.MAX_VALUE;
+            int limit = (int)Math.sqrt(i);
+            for(int j=2; j<=limit; j++){
+                if(i % j != 0)
+                    continue;
+                dp[i] = Math.min(dp[i], dp[i/j] + 1);
+            }
+            dp[i] = Math.min(dp[i], dp[i-1] + 1);
+        }
+    }
 	
 	
 	
