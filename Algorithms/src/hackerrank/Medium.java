@@ -1,6 +1,7 @@
 package hackerrank;
 
 import java.io.BufferedWriter;
+
 import java.io.IOException;
 import java.math.BigInteger;
 
@@ -17,6 +18,7 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 
@@ -2274,6 +2276,58 @@ public class Medium {
             dp[i] = Math.min(dp[i], dp[i-1] + 1);
         }
     }
+	
+	
+	static long solve(int[] arr) {
+		long indexProduct = 0;
+		TreeMap<Integer, List<Integer>> map = new TreeMap<>();
+		for(int i=0; i<arr.length; i++) {
+			int num = arr[i];
+			List<Integer> list = map.get(num);
+			if(list == null) {
+				list = new ArrayList<>();
+				map.put(num, list);
+			}
+			list.add(i);
+		}
+		for(int i=1; i<arr.length-1; i++) {
+			int num = arr[i];
+			long left = 0, right = Integer.MAX_VALUE;
+			Map.Entry<Integer, List<Integer>> entry = map.higherEntry(num);
+			while(entry != null) {
+				List<Integer> list = entry.getValue();
+				for(int index : list) {
+					if(index < i)
+						left = Math.max(left, index);
+					else if(index > i)
+						right = Math.min(right, index);
+				}
+				num = entry.getKey();
+				entry = map.higherEntry(num);
+			}
+			left++;right++;
+			indexProduct = Math.max(indexProduct, left * right);
+		}
+		return indexProduct;
+    }
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
