@@ -16,6 +16,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import java.util.Scanner;
 import java.util.Set;
 import java.util.Stack;
 import java.util.TreeMap;
@@ -2260,10 +2261,7 @@ public class Medium {
     }
 	static  int[] dp = new int[100001];
     
-    static{
-        init();
-    }
-	
+    
 	static void init(){
         for(int i=1; i<=1000000; i++){
             dp[i] = Integer.MAX_VALUE;
@@ -2312,7 +2310,32 @@ public class Medium {
     }
 	
 	
-	
+	static void SimpleTextEditor(){
+        Scanner scanner = new Scanner(System.in);
+        int n = scanner.nextInt();
+        Stack<String> stack = new Stack<>();
+        String S = "";
+        stack.push(S);
+        for(int i=0; i<n; i++) {
+        	int op = scanner.nextInt();
+        	if(op == 1) {
+        		S += scanner.next();
+        		stack.push(S);
+        	}
+        	else if(op == 2) {
+        		S = S.substring(0, S.length() - scanner.nextInt());
+        		stack.push(S);
+        	}
+        	else if(op == 3) {
+        		System.out.println(S.charAt(scanner.nextInt() - 1));
+        	}
+        	else {
+        		stack.pop();
+        		S = stack.peek();
+        	}
+        }
+        scanner.close();
+    }
 	
 	
 	
@@ -2332,8 +2355,7 @@ public class Medium {
 	
 	
 	public static void main(String[] args) {
-		
-		
+		SimpleTextEditor();
 	}
 
 }
