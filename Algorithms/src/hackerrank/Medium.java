@@ -2407,30 +2407,138 @@ public class Medium {
     }
 	
 	
+	static void twoStacks(int x, int[] a, int[] b) {
+        System.out.println(twoStacksDP(x, a, b, 0, 0, new HashMap<>(), 0));
+    }
+	static int twoStacksDP(int limit, int[] a, int[] b, int i_a, int i_b, Map<String, Integer> memo, long sum) {
+		if(sum > limit)
+			return -1;
+		String key = i_a+","+i_b;
+		int count = 0;
+		if(memo.containsKey(key))
+			return memo.get(key);
+		if(i_a < a.length) {
+			int temp = twoStacksDP(limit, a, b, i_a+1, i_b, memo, sum + a[i_a]);
+			if(temp != -1) {
+				count = Math.max(temp + 1, count);
+			}
+		}
+		if(i_b < b.length) {
+			int temp = twoStacksDP(limit, a, b, i_a, i_b+1, memo, sum + b[i_b]);
+			if(temp != -1) {
+				count = Math.max(temp + 1, count);
+			}
+		}
+		memo.put(key, count);
+		return count;
+	}
 	
 	
+	static void twoStacksGreedy(int x, int[] a, int[] b) {
+		int index_a = 0;
+		int index_b = 0;
+		long sum = 0;
+		int count = 0;
+		while(index_a < a.length || index_b < b.length) {
+			if(index_a == a.length) {
+				if(sum + b[index_b] > x)
+					break;
+				sum += b[index_b++];
+			}
+			else if(index_b == b.length) {
+				if(sum + a[index_a] > x)
+					break;
+				sum += a[index_a++];
+			}
+			else {
+				if(a[index_a] < b[index_b]) {
+					if(sum + a[index_a] > x)
+						break;
+					sum += a[index_a];
+					index_a++;
+				}
+				else {
+					if(sum + b[index_b] > x)
+						break;
+					sum += b[index_b];
+					index_b++;
+				}
+			}
+			count++;
+		}
+		System.out.println(count);
+	}
 	
-	
-	
-	
-	
-	
+	static void twoStacks2(int x, int[] a, int[] b) {
+		long sum = 0;
+		int max = 0;
+		TreeMap<Long, Integer> map_a = new TreeMap<>();
+		TreeMap<Long, Integer> map_b = new TreeMap<>();
+		for(int i=0; i<a.length; i++) {
+			sum += a[i];
+			if(sum > x)
+				break;
+			map_a.put(sum, i+1);
+		}
+		sum = 0;
+		for(int i=0; i<b.length; i++) {
+			sum += b[i];
+			if(sum > x)
+				break;
+			map_b.put(sum, i+1);
+		}
+		
+		sum = 0;
+		int temp = 0;
+		for(int i=0; i<a.length; i++) {
+			sum += a[i];
+			if(sum > x)
+				break;
+			temp++;
+			Map.Entry<Long, Integer> entry = map_b.floorEntry(x - sum);
+			if(entry != null) {
+				max = Math.max(max, temp + entry.getValue());
+			}
+			
+		}
+		max = Math.max(max, temp);
+		temp = 0;
+		sum = 0;
+		for(int i=0; i<b.length; i++) {
+			sum += b[i];
+			if(sum > x)
+				break;
+			temp++;
+			Map.Entry<Long, Integer> entry = map_a.floorEntry(x - sum);
+			if(entry != null) {
+				max = Math.max(max, temp + entry.getValue());
+			}
+		}
+		max = Math.max(max, temp);
+		System.out.println(max);
+	}
 	
 	
 	
 	
 	public static void main(String[] args) {
 		Scanner scanner = new Scanner(System.in);
-		while(scanner.hasNext()) {
-			int n = scanner.nextInt();
-			for(int i=0; i<n; i++) {
-				String str = scanner.next();
-				System.out.println(isBalanced(str));
-			}
-		}
+        while(scanner.hasNext()){
+            int g = scanner.nextInt();
+            for(int gg =0; gg < g; gg++){
+                int n = scanner.nextInt();
+                int m = scanner.nextInt();
+                int x = scanner.nextInt();
+                int[] a = new int[n];
+                int[] b = new int[m];
+                for(int i=0; i<n; i++)
+                    a[i] = scanner.nextInt();
+                for(int i=0; i<m; i++)
+                    b[i] = scanner.nextInt();
+                twoStacks2(x, a, b);
+            }
+        }
 		scanner.close();
-		
-		//isBalanced("[()][{}[{}[{}]]][]{}[]{}[]{{}({}(){({{}{}[([[]][[]])()]})({}{{}})})}");
 	}
 
 }
