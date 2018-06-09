@@ -2339,7 +2339,72 @@ public class Medium {
 	
 	
 	
-	
+	static String isBalanced(String s) {
+		if(s.isEmpty())
+			return "YES";
+		if(s.charAt(0) == ')' || s.charAt(0) == ']' || s.charAt(0) == '}')
+			return "NO";
+		int n = s.length();
+		int[][] array = new int[n][3];
+		Stack<Integer> one_stack = new Stack<>();
+		Stack<Integer> two_stack = new Stack<>();
+		Stack<Integer> three_stack = new Stack<>();
+		int one = 0;
+		int two = 0;
+		int three = 0;
+		for(int i=0; i<s.length(); i++) {
+			char c = s.charAt(i);
+			boolean isRight = false;
+			if(c == '(') {
+				one++;
+				one_stack.add(i);
+			}
+			else if(c == '[') {
+				two++;
+				two_stack.add(i);
+			}
+			else if(c == '{') {
+				three++;
+				three_stack.add(i);
+			}
+			else if(c == ')') {
+				one--;
+				isRight = true;
+			}
+			else if(c == ']') {
+				two--;
+				isRight = true;
+			}
+			else if(c == '}') {
+				three--;
+				isRight = true;
+			}
+			
+			if(one < 0 || two < 0 || three < 0)
+				return "NO";
+			
+			if(isRight) {
+				int pre_i = (c == ')' ? one_stack.pop() : ( c == ']' ? two_stack.pop() : three_stack.pop()))-1;
+				if(pre_i == -1) {
+					if(one != 0 || two != 0 || three != 0)
+						return "NO";
+					continue;
+				}
+				int[] pre_arr = array[pre_i];
+				if(one - pre_arr[0] != 0)
+					return "NO";
+				if(two - pre_arr[1] != 0)
+					return "NO";
+				if(three - pre_arr[2] != 0)
+					return "NO";
+			}
+			array[i] = new int[] {one, two, three};
+		}
+		if(one != 0 || two != 0 || three != 0)
+			return "NO";
+		
+		return "YES";
+    }
 	
 	
 	
@@ -2355,7 +2420,17 @@ public class Medium {
 	
 	
 	public static void main(String[] args) {
-		SimpleTextEditor();
+		Scanner scanner = new Scanner(System.in);
+		while(scanner.hasNext()) {
+			int n = scanner.nextInt();
+			for(int i=0; i<n; i++) {
+				String str = scanner.next();
+				System.out.println(isBalanced(str));
+			}
+		}
+		scanner.close();
+		
+		//isBalanced("[()][{}[{}[{}]]][]{}[]{}[]{{}({}(){({{}{}[([[]][[]])()]})({}{{}})})}");
 	}
 
 }
