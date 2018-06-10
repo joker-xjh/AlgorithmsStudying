@@ -277,7 +277,20 @@ public class math {
     }
     
     
-    
+    public int computeArea(int A, int B, int C, int D, int E, int F, int G, int H) {
+    	int area = 0;
+    	int areaA = (C - A) * (D - B);
+    	int areaB = (G - E) * (H - F);
+    	int overlap = 0;
+    	if(A >= G || E >= C || B >= H || F >= D) {
+    		overlap = 0;
+    	}
+    	else {
+    		overlap = ((Math.min(C, G) - Math.max(A, E)) * ((Math.min(D, H) - Math.max(B, F))));
+    	}
+    	area = areaA + areaB - overlap;
+    	return area;
+    }
     
     
     
