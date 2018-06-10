@@ -3460,7 +3460,17 @@ public class string {
     	 return true;
      }
      
-     
+     public String shiftingLetters(String S, int[] shifts) {
+         int n = S.length();
+         char[] answer = new char[n];
+         int time = 0;
+         for(int i=n-1; i>=0; i--) {
+        	 time = (time + shifts[i]) % 26;
+        	 int num = S.charAt(i) - 'a';
+        	 answer[i] = (char)((num + time) % 26 + 'a');
+         }
+         return new String(answer);
+     }
      
     
     public static void main(String[] args) {
