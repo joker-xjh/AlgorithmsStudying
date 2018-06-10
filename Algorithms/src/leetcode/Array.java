@@ -3784,7 +3784,45 @@ public class Array {
 		}
      }
      
-     
+     public int maxDistToClosest(int[] seats) {
+         int max = -1;
+    	 int n = seats.length;
+    	 int[] left = new int[n];
+    	 int[] right = new int[n];
+    	 if(seats[0] == 1)
+    		 left[0] = 0;
+    	 else
+    		 left[0] = 1;
+    	 for(int i=1; i<n; i++) {
+    		 if(seats[i-1] == 1)
+    			 left[i] = 1;
+    		 else
+    			 left[i] = left[i-1] + 1;
+    	 }
+    	 if(seats[n-1] == 1)
+    		 right[n-1] = 0;
+    	 else
+    		 right[n-1] = 1;
+    	 for(int i=n-2; i>=0; i--) {
+    		 if(seats[i+1] == 1)
+    			 right[i] = 1;
+    		 else
+    			 right[i] = right[i+1] + 1;
+    	 }
+    	 for(int i=0; i<n; i++) {
+    		 if(seats[i] == 1)
+    			 continue;
+    		 int temp = Math.min(left[i], right[i]);
+    		 max = Math.max(max, temp);
+    	 }
+    	 if(seats[0] == 0) {
+    		 max = Math.max(max, right[0]);
+    	 }
+    	 if(seats[n-1] == 0) {
+    		 max = Math.max(max, left[n-1]);
+    	 }
+    	 return max;
+     }
      
      
      
