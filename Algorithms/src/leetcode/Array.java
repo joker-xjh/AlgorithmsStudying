@@ -3824,6 +3824,68 @@ public class Array {
     	 return max;
      }
      
+     public int maxDistToClosest2(int[] seats) {
+    	 int max = 0, index = -1;
+    	 for(int i=0; i<seats.length; i++) {
+    		 if(seats[i] == 0)
+    			 continue;
+    		 if(index == -1)
+    			 max = Math.max(max, i - index - 1);
+    		 else
+    			 max = Math.max(max, (i - index)/2);
+    		 index = i;
+    	 }
+    	 max = Math.max(max, seats.length - index - 1);
+    	 return max;
+     }
+     
+     
+     public int[] loudAndRich(int[][] richer, int[] quiet) {
+         int n = quiet.length;
+         if(n == 0)
+        	 return new int[0];
+         int[] answer = new int[n];
+         Map<Integer, Set<Integer>> map = new HashMap<>();
+         for(int[] r : richer) {
+        	 int x = r[0], y = r[1];
+        	 Set<Integer> pq = map.get(y);
+        	 if(pq == null) {
+        		 pq = new HashSet<>();
+        		 map.put(y, pq);
+        	 }
+        	 pq.add(x);
+         }
+         Arrays.fill(answer, -1);
+         for(int i=0; i<n; i++) {
+        	 answer[i] = loudAndRichDFS(map, i, quiet, answer);
+         }
+         return answer;
+     }
+     
+     private int loudAndRichDFS(Map<Integer, Set<Integer>> map, int person, int[] quiet, int[] array) {
+    	 if(array[person] != -1)
+    		 return array[person];
+    	 Set<Integer> richers= map.get(person);
+    	 if(richers == null)
+    		 return person;
+    	 int answer = person;
+    	 for(int p : richers) {
+    		 if(quiet[p] < quiet[answer])
+    			 answer = p;
+    		 int next = loudAndRichDFS(map, p, quiet, array);
+    		 if(quiet[next] < quiet[answer])
+    			 answer = next;
+    	 }
+    	 return answer;
+     }
+     
+     
+     
+     
+     
+     
+     
+     
      
      
      
