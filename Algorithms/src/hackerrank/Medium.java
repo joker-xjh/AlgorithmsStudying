@@ -2518,25 +2518,129 @@ public class Medium {
 		System.out.println(max);
 	}
 	
+	static int minimumMoves(String[] grid, int startX, int startY, int goalX, int goalY) {
+		int moves = 0;
+		if(startX == goalX && startY == goalY)
+			return moves;
+		int m = grid.length, n = grid[0].length();
+		int[][] dp = new int[m][n];
+		char[][] plane = new char[m][n];
+		for(int i=0; i<m; i++) {
+			plane[i] = grid[i].toCharArray();
+			Arrays.fill(dp[i], Integer.MAX_VALUE);
+		}
+		dp[startX][startY] = 0;
+		Queue<int[]> queue = new LinkedList<>();
+		queue.add(new int[] {startX, startY});
+		while(!queue.isEmpty()) {
+			int size = queue.size();
+			for(int i=0; i<size; i++) {
+				int[] pos = queue.poll();
+				
+				int up = pos[0] - 1;
+				while(true) {
+					if(up < 0) {
+						up = 0;
+						break;
+					}
+					if(plane[up][pos[1]] == 'X') {
+						up++;
+						break;
+					}
+					if(up == goalX && pos[1] == goalY)
+						return moves + 1;
+					if(dp[up][pos[1]] > moves + 1) {
+						dp[up][pos[1]] = moves + 1;
+						queue.add(new int[] {up, pos[1]});
+					}
+					up--;
+				}
+				
+				int down = pos[0] + 1;
+				while(true) {
+					if(down >= m) {
+						down = m-1;
+						break;
+					}
+					if(plane[down][pos[1]] == 'X') {
+						down--;
+						break;
+					}
+					if(down == goalX && pos[1] == goalY)
+						return moves + 1;
+					if(dp[down][pos[1]] > moves + 1) {
+						dp[down][pos[1]] = moves + 1;
+						queue.add(new int[] {down, pos[1]});
+					}
+					down++;
+				}
+				
+				
+				int left = pos[1] - 1;
+				while(true) {
+					if(left < 0) {
+						left = 0;
+						break;
+					}
+					if(plane[pos[0]][left] == 'X') {
+						left++;
+						break;
+					}
+					if(pos[0] == goalX && left == goalY)
+						return moves + 1;
+					if(dp[pos[0]][left] > moves + 1) {
+						dp[pos[0]][left] = moves + 1;
+						queue.add(new int[] {pos[0], left});
+					}
+					left--;
+				}
+				
+				
+				int right = pos[1] + 1;
+				while(true) {
+					if(right >= n) {
+						right = n-1;
+						break;
+					}
+					if(plane[pos[0]][right] == 'X') {
+						right--;
+						break;
+					}
+					if(pos[0] == goalX && right == goalY)
+						return moves + 1;
+					if(dp[pos[0]][right] > moves + 1) {
+						dp[pos[0]][right] = moves + 1;
+						queue.add(new int[] {pos[0], right});
+					}
+					right++;
+				}
+				
+			}
+			moves++;
+		}
+		return -1;
+    }
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
 	public static void main(String[] args) {
 		Scanner scanner = new Scanner(System.in);
         while(scanner.hasNext()){
-            int g = scanner.nextInt();
-            for(int gg =0; gg < g; gg++){
-                int n = scanner.nextInt();
-                int m = scanner.nextInt();
-                int x = scanner.nextInt();
-                int[] a = new int[n];
-                int[] b = new int[m];
-                for(int i=0; i<n; i++)
-                    a[i] = scanner.nextInt();
-                for(int i=0; i<m; i++)
-                    b[i] = scanner.nextInt();
-                twoStacks2(x, a, b);
-            }
+            
         }
 		scanner.close();
 	}
