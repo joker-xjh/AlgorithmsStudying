@@ -15,6 +15,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Scanner;
 import java.util.Set;
@@ -2621,8 +2622,84 @@ public class Medium {
 		return -1;
     }
 	
+	static class JimandtheSkyscrapersNode {
+		int val;
+		JimandtheSkyscrapersNode left, right;
+		PriorityQueue<Integer> pq = new PriorityQueue<>((a,b) -> a-b);
+		JimandtheSkyscrapersNode(int val, int index){
+			this.val = val;
+			pq.add(index);
+		}
+	}
 	
+	static JimandtheSkyscrapersNode build(JimandtheSkyscrapersNode node, int val, int index, int[] minIndex) {
+		if(node == null) {
+			return new JimandtheSkyscrapersNode(val, index);
+		}
+		if(val < node.val) {
+			minIndex[0] = Math.min(minIndex[0], node.pq.peek());
+			node.left = build(node.left, val, index, minIndex);
+		}
+		else if(val > node.val) {
+			node.pq.add(index);
+			node.right = build(node.right, val, index, minIndex);
+		}
+		else {
+			node.pq.add(index);
+		}
+		return node;
+	}
 	
+	static long JimandtheSkyscrapers(int[] arr) {
+		long pairs = 0;
+		int[] max = new int[arr.length];
+		Stack<Integer> stack = new Stack<>();
+		Map<Integer, List<Integer>> map = new HashMap<>();
+		for(int i=0; i<arr.length; i++) {
+			List<Integer> list = map.get(arr[i]);
+			if(list == null) {
+				list = new ArrayList<>();
+				map.put(arr[i], list);
+			}
+			list.add(i);
+			
+			if(stack.isEmpty() || arr[stack.peek()] >= arr[i]) {
+				stack.push(i);
+			}
+			else {
+				while(!stack.isEmpty() && arr[stack.peek()] < arr[i]) {
+					max[stack.pop()] = i;
+				}
+				stack.push(i);
+			}
+			
+		}
+		while(!stack.isEmpty()) {
+			max[stack.pop()] = arr.length;
+		}
+		
+		for(Map.Entry<Integer, List<Integer>> entry : map.entrySet()) {
+			List<Integer> list = entry.getValue();
+			for(int i=0; i<list.size(); i++) {
+				int left = list.get(i);
+				if(max[left] == arr.length) {
+					pairs += ((1 + (long)(list.size() - i - 1)) * ((long)list.size() - i - 1)) / 2;
+					break;
+				}
+				for(int j=i+1; j<list.size(); j++) {
+					int right = list.get(j);
+					if(max[left] > right) {
+						pairs++;
+					}
+					else {
+						break;
+					}
+				}
+			}
+		}
+		
+		return pairs * 2;
+    }
 	
 	
 	
