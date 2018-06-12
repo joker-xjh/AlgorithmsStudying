@@ -2703,10 +2703,62 @@ public class Medium {
 	
 	
 	
+	static List<Integer> getPrime(int to){
+		List<Integer> primes = new ArrayList<>();
+		boolean[] table = new boolean[to+1];
+		for(int i=2; i<=to; i++) {
+			if(!table[i]) {
+				for(int j=2; i*j<=to; j++) {
+					table[i*j] = true;
+				}
+			}
+		}
+		for(int i=2; i<=to; i++)
+			if(!table[i])
+				primes.add(i);
+		return primes;
+	}
 	
 	
-	
-	
+	static void waiter(int[] number, int q) {
+		List<Integer> primes = getPrime(10000);
+		int counter = 0;
+		while(counter < q) {
+			if((counter & 1 ) == 0) {
+				for(int j=0; j<number.length; j++) {
+					if(number[j] == -1)
+						continue;
+					if(number[j] % primes.get(counter) == 0) {
+						System.out.println(number[j]);
+						number[j] = -1;
+					}
+				}
+			}
+			else {
+				for(int j=number.length-1; j>=0; j--) {
+					if(number[j] == -1)
+						continue;
+					if(number[j] % primes.get(counter) == 0) {
+						System.out.println(number[j]);
+						number[j] = -1;
+					}
+				}
+			}
+			counter++;
+		}
+		if(counter % 2 == 1) {
+			for(int num : number) {
+				if(num != -1)
+					System.out.println(num);
+			}
+		}
+		else {
+			for(int i=number.length-1; i>=0; i--) {
+				if(number[i] != -1)
+					System.out.println(number[i]);
+			}
+		}
+    }
 	
 	
 	
