@@ -110,21 +110,6 @@ public class Hard {
 		return count;
 	}
 	
-	public static void main(String[] args) {
-		Scanner scanner = new Scanner(System.in);
-		int n = scanner.nextInt();
-		int k = scanner.nextInt();
-		int[][] edges = new int[n-1][2];
-		for(int i=0; i<n-1; i++) {
-			int[] array = new int[2];
-			array[0] = scanner.nextInt();
-			array[1] = scanner.nextInt();
-			edges[i] = array;
-		}
-		similarPair(n, edges, k);
-		scanner.close();
-	}
-	
 	
 	static void matrixRotation(int[][] matrix, int R) {
         int M = matrix.length, N = matrix[0].length;
@@ -233,6 +218,50 @@ public class Hard {
 		System.out.println("GOOD SET");
 	}
 
+	
+	static int[][][] cube;
+	static Map<String, int[]> cube_map = new HashMap<>();
+	
+	static void CubeSummationUPDATE(int x, int y, int z, int W) {
+		cube[x][y][z] = W;
+		String key = x+","+y+","+z;
+		cube_map.put(key, new int[] {x,y,z});
+	}
+	
+	static void CubeSummationQUERY(int x1, int y1, int z1, int x2, int y2, int z2) {
+		long sum = 0;
+		for(Map.Entry<String, int[]> entry : cube_map.entrySet()) {
+			int[] pos = entry.getValue();
+			if(x1 <= pos[0] && pos[0] <= x2 &&
+				y1 <= pos[1] && pos[1] <= y2 &&
+				 z1 <= pos[2] && pos[2] <= z2) {
+				sum = sum + cube[pos[0]][pos[1]][pos[2]];
+			}
+		}
+		System.out.println(sum);
+	}
+	
+	
+	
+	public static void main(String[] args) {
+		Scanner scanner = new Scanner(System.in);
+		while(scanner.hasNext()) {
+			
+		}
+		
+		scanner.close();
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
