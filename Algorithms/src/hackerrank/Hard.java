@@ -242,6 +242,28 @@ public class Hard {
 	}
 	
 	
+	static int[] MergingCommunities_array;
+	static int[] MergingCommunities_counter;
+	
+	static void MergingCommunities(int I, int J) {
+		int pre_I = MergingCommunitiesUF(I, MergingCommunities_array);
+		int pre_J = MergingCommunitiesUF(J, MergingCommunities_array);
+		if(pre_I != pre_J) {
+			MergingCommunities_array[pre_I] = MergingCommunities_array[pre_J];
+			MergingCommunities_counter[pre_J] += MergingCommunities_counter[pre_I];
+			MergingCommunities_counter[pre_I] = 0;
+		}
+	}
+	
+	static int MergingCommunitiesUF(int person, int[] array) {
+		while(person != array[person]) {
+			array[person] = array[array[person]];
+			person = array[person];
+		}
+		return person;
+	}
+	
+	
 	
 	public static void main(String[] args) {
 		Scanner scanner = new Scanner(System.in);
