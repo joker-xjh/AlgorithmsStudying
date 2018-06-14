@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -1952,13 +1954,36 @@ public class Easy {
 		}
 	 }
 	 
+	 static int cookies(int k, int[] A) {
+		 PriorityQueue<Long> pq = new PriorityQueue<>();
+		 for(int num : A)
+			 pq.add((long)num);
+		 int answer = 0;
+		 while(!pq.isEmpty()) {
+			 long one = pq.poll();
+			 if(one >= k)
+				 return answer;
+			 if(pq.isEmpty())
+				 return -1;
+			 long two = pq.poll();
+			 long three = one + 2 * two;
+			 pq.add(three);
+			 answer++;
+		 }
+		 return answer;
+	 }
 	 
+
 	 
 	
 	
 
 	public static void main(String[] args) {
-		
+		Scanner scanner = new Scanner(System.in);
+		while(scanner.hasNext()) {
+			
+		}
+		scanner.close();
 	}
 
 }
