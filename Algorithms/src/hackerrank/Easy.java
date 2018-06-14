@@ -1973,6 +1973,40 @@ public class Easy {
 		 return answer;
 	 }
 	 
+	 static int minimumNumber(int n, String password) {
+		 int steps = 0;
+		 boolean digit = false;
+		 boolean lowercase = false;
+		 boolean uppercase = false;
+		 boolean special = false;
+		 char[] array = {'!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '+'};
+		 for(char c : password.toCharArray()) {
+			 if(c >= '0' && c <= '9')
+				 digit = true;
+			 else if(c >= 'a' && c <= 'z')
+				 lowercase = true;
+			 else if(c >= 'A' && c <= 'Z')
+				 uppercase = true;
+			 else {
+				 for(char s : array)
+					 if(s == c) {
+						 special = true;
+						 break;
+					 }
+			 }
+		 }
+		 if(!digit)
+			 steps++;
+		 if(!lowercase)
+			 steps++;
+		 if(!uppercase)
+			 steps++;
+		 if(!special)
+			 steps++;
+		 if(n + steps < 6)
+			 steps += 6 - n - steps;
+		 return steps;
+	 }
 
 	 
 	
