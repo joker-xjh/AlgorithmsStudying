@@ -264,6 +264,39 @@ public class Hard {
 	}
 	
 	
+	static long largestValue(int[] A) {
+        int n = A.length;
+        int[] preSum = new int[n];
+        int sum = 0;
+        for(int i=0; i<n; i++) {
+        	sum += A[i];
+        	preSum[i] = sum;
+        }
+        long answer = largestValueMemo(A, n-1,  preSum, new Long[n]);
+		return answer;
+    }
+	
+	static long largestValueMemo(int[] A, int index, int[] preSum, Long[] dp) {
+		if(index <= 0)
+			return Long.MIN_VALUE;
+		if(dp[index] != null)
+			return dp[index];
+		long max = Long.MIN_VALUE;
+		for(int i=index; i>=0; i--) {
+			long pre = 0;
+			for(int j=index-1; j>0; j--) {
+				int sum = preSum[i] - preSum[j];
+				long temp = (long)A[j] * sum + pre;
+				pre = temp;
+				max = Math.max(max, temp);
+				max = Math.max(max, largestValueMemo(A, j-1, preSum, dp));
+			}
+		}
+		dp[index] = max;
+		return max;
+	}
+	
+	
 	
 	public static void main(String[] args) {
 		Scanner scanner = new Scanner(System.in);
