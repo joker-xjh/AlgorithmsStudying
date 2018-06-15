@@ -2007,7 +2007,31 @@ public class Easy {
 			 steps += 6 - n - steps;
 		 return steps;
 	 }
-
+	 
+	 static String gameOfStones(int n) {
+		 if(gameOfStones(n, new Boolean[n+1]))
+			 return "First";
+		 return "Second";
+	 }
+	 
+	 static boolean gameOfStones(int n, Boolean[] dp) {
+		 if(dp[n] != null)
+			 return dp[n];
+		 if( n >= 2 && !gameOfStones(n - 2, dp)) {
+			 dp[n] = true;
+			 return true;
+		 }
+		 if(n >= 3 && !gameOfStones(n - 3, dp)) {
+			 dp[n] = true;
+			 return true;
+		 }
+		 if(n >= 5 && !gameOfStones(n - 5, dp)) {
+			 dp[n] = true;
+			 return true;
+		 }
+		 dp[n] = false;
+		 return false;
+	 }
 	 
 	
 	
