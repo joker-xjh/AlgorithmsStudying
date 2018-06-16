@@ -2760,7 +2760,17 @@ public class Medium {
 		}
     }
 	
-	
+	static int flippingMatrix(int[][] matrix) {
+        int sum = 0;
+        int n = matrix.length / 2;
+        for(int i=0; i<n; i++) {
+        	for(int j=0; j<n; j++) {
+        		int max =  Math.max(matrix[i][n*2 - 1 - j], Math.max(matrix[n*2 - i - 1][j], Math.max(matrix[i][j], matrix[n*2 - 1 -i][n*2 - 1 - j])));
+        		sum += max;
+        	}
+        }
+        return sum;
+    }
 	
 	
 	
