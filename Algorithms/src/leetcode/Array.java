@@ -3880,7 +3880,29 @@ public class Array {
      }
      
      
+     static long stoneDivision(long n, long[] s) {
+    	 Arrays.sort(s);
+    	 return stoneDivision(n, s, new HashMap<>());
+     }
      
+     static long stoneDivision(long n, long[] s, Map<Long, Long> dp) {
+    	 if(dp.containsKey(n))
+    		 return dp.get(n);
+    	 long answer = -1;
+    	 for(long y : s) {
+    		 if(y >= n)
+    			 break;
+    		 if(n % y != 0)
+    			 continue;
+    		 long div = n / y;
+    		 long temp = stoneDivision(y, s, dp);
+    		 if(temp != -1) {
+        		 answer = Math.max(answer, 1 + div * temp);
+    		 }
+    	 }
+    	 dp.put(n, answer);
+    	 return answer;
+     }
      
      
      
