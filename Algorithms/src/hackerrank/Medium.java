@@ -2772,7 +2772,33 @@ public class Medium {
         return sum;
     }
 	
-	
+	static void GamingArray(int[] array, BufferedWriter bufferedWriter) throws IOException {
+		int winner = 1;
+		PriorityQueue<Integer> pq = new PriorityQueue<>((a,b) -> b-a);
+		Map<Integer, Integer> index = new HashMap<>();
+		for(int i=0; i<array.length; i++) {
+			pq.add(array[i]);
+			index.put(array[i], i);
+		}
+		Integer right = null;
+		while(true) {
+			Integer max = pq.poll();
+			if(max == null)
+				break;
+			int i = index.get(max);
+			if(right == null || i < right) {
+				right = i;
+				winner = winner ^ 1;
+			}
+		}
+		
+		if(winner == 1) {
+			bufferedWriter.write("ANDY");
+		}
+		else {
+			bufferedWriter.write("BOB");
+		}
+	}
 	
 	
 	
