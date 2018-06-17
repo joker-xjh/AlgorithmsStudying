@@ -2801,6 +2801,29 @@ public class Medium {
 	}
 	
 	
+	static long andProduct(long a, long b) {
+		long answer = 0;
+		String bit = Long.toBinaryString(a);
+		String bit_b = Long.toBinaryString(b);
+		long two = 1;
+		for(int i=bit.length()-1; i>=0; i--) {
+			char c = bit.charAt(i);
+			if(c == '0' ||(c == '1' && a + two <= b) || bit_b.charAt(i) == '0') {
+				two *= 2;
+				continue;
+			}
+			answer += two;
+			two *= 2;
+		}
+		return answer;
+    }
+	
+	
+	
+	
+	
+	
+	
 	
 	public static void main(String[] args) {
 		Scanner scanner = new Scanner(System.in);
