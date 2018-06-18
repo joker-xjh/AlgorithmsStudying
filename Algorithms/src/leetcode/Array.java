@@ -3904,7 +3904,16 @@ public class Array {
     	 return answer;
      }
      
-     
+     public int peakIndexInMountainArray(int[] A, int L, int R) {
+         int index = 0, temp = A[0];
+         for(int i=1; i<A.length; i++) {
+        	 if(A[i] > temp) {
+        		 temp = A[i];
+        		 index = i;
+        	 }
+         }
+         return index;
+     }
      
      
      
