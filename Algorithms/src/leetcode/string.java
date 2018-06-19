@@ -3472,6 +3472,58 @@ public class string {
          return new String(answer);
      }
      
+     
+     public int kSimilarity(String A, String B) {
+         int k = 0;
+          if(A.equals(B))
+         	 return 0;
+          Queue<String> queue = new LinkedList<>();
+          Set<String> used = new HashSet<>();
+          queue.add(A);
+          used.add(A);
+          while(!queue.isEmpty()) {
+         	 int size = queue.size();
+         	 k++;
+         	 for(int t=0; t<size; t++) {
+         		 String str = queue.poll();
+         		 char[] array = str.toCharArray();
+         		 int i = 0;
+         		 while(array[i] == B.charAt(i))
+         			 i++;
+     			 for(int j=i+1; j<array.length; j++) {
+     				if (array[j]==B.charAt(j) || array[i]!=B.charAt(j) ) 
+     					continue;
+     				 exchange(array, i, j);
+     				 String next_str = new String(array);
+     				 if(next_str.equals(B))
+     					 return k;
+     				 if(used.add(next_str))
+     					 queue.add(next_str);
+     				
+     			 }
+         	}
+         	 
+          }
+          
+          return k;
+     }
+     private void exchange(char[] array, int i, int j) {
+     	 char temp = array[i];
+     	 array[i] = array[j];
+     	 array[j] = temp;
+      }
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
     
     public static void main(String[] args) {
     	
