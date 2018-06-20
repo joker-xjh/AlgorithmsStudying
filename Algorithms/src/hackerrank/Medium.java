@@ -2940,6 +2940,65 @@ public class Medium {
 	
 	
 	
+	static long winningLotteryTicket(String[] tickets) {
+        long count=0;
+        int[] masks = new int[tickets.length];
+        char[] chs = null;
+        int mask = 0;
+        int mask_full =  0b1111111111;
+        for(int i=0;i<tickets.length;i++){
+            chs = tickets[i].toCharArray();
+            mask = 0;
+            for(char ch:chs){
+                int digit = ch - '0';
+                mask |= (1 << digit);
+            }
+            masks[i] = mask;
+        }
+        
+        for(int i=0;i<tickets.length-1;i++){
+            int mask_i = masks[i];
+           for(int j=i+1;j<tickets.length;j++){
+               int mask_j = masks[j];
+               int mask_i_j_concatenated =  (mask_i | mask_j);
+            if (mask_i_j_concatenated == mask_full) {
+                count++;
+            }
+           }
+       }
+        return count;
+
+    }
+	
+	static long winningLotteryTicket2(String[] tickets) {
+		long count = 0;
+		int[] masks = new int[1024];
+		for(String ticket : tickets) {
+			int mask = 0;
+			for(char c : ticket.toCharArray()) {
+				mask |= 1 << (c - '0');
+			}
+			masks[mask]++;
+		}
+		for(int i=1; i<1024; i++) {
+			if(masks[i] == 0)
+				continue;
+			for(int j=i+1; j<1024; j++) {
+				if(masks[j] == 0 || (i | j )!= 0b1111111111)
+					continue;
+				count += (long)masks[i] * masks[j];
+			}
+		}
+		if(masks[1023] > 1) {
+			count += (1L + masks[1023] - 1) * (masks[1023] - 1) / 2;
+		}
+		
+		return count;
+	}
+	
+	
+	
+	
 	
 	public static void main(String[] args) {
 		Scanner scanner = new Scanner(System.in);
