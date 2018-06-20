@@ -1,7 +1,10 @@
 package hackerrank;
 
-import java.io.BufferedWriter;
+import java.io.BufferedReader;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigInteger;
 
@@ -2818,9 +2821,122 @@ public class Medium {
 		return answer;
     }
 	
+	static void whatsNext(long[] arr, List<String> debug) {
+        List<Long> list = new ArrayList<>();
+        int n = arr.length;
+    	int index = n-1;
+        if(n % 2 == 0) {
+        	index--;
+        	if(n == 2) {
+        		if(arr[n-2] > 1)
+        			list.add(arr[n-2] - 1);
+        		list.add(arr[n-1]+1);
+        		
+        		list.add(1L);
+        		index--;
+        	}
+        	else {
+        		if(arr[n-2] > 1)
+        			list.add(arr[n-2] - 1);
+        		list.add(arr[n-1]+1);
+        		
+        		if(arr[n-3] > 1) {
+        			list.add(1L);
+        			list.add(arr[n-3] - 1);
+        			index = n-4;
+        		}
+        		else {
+        			list.add(arr[n-4] + 1);
+        			index = n-5;
+        		}
+        	}
+        	
+        }
+        else {
+        	arr[index]--;
+        	if(arr[index] == 0) {
+        		if(list.isEmpty()) {
+        			//list.add(arr[index]);
+        		}
+        		else {
+        			list.set(0, list.get(0)+1);
+        		}
+        	}
+        	else {
+        		list.add(arr[index]);
+        	}
+        	list.add(1L);
+        	index--;
+        	if(index >= 0) {
+        		if(arr[index] - 1 == 0) {
+            		list.add(arr[index-1] + 1);
+            		index -= 2;
+            	}
+            	else {
+            		list.add(1L);
+            		list.add(arr[index] - 1);
+            		index--;
+            	}
+        	}
+        	else {
+        		list.add(1L);
+        	}
+        }
+    	
+    	for(int i=index; i>=0; i--)
+    		list.add(arr[i]);
+    	debug.add(list.size()+"");
+
+//    	System.out.println(list.size());
+//        for(int i=list.size()-1; i>=0; i--) {
+//        	if(i == 0)
+//        		System.out.println(list.get(i));
+//        	else
+//        		System.out.print(list.get(i) + " ");
+//        }
+    	StringBuilder sb = new StringBuilder();
+        for(int i=list.size()-1; i>=0; i--) {
+        	if(i == 0)
+        		sb.append(list.get(i)+"");
+        	else
+        		sb.append(list.get(i) + " ");
+        }
+        debug.add(sb.toString());
+    }
 	
-	
-	
+	private static void debug(List<String> list) {
+		File file = new File("F:\\hackerrank\\input02.txt");
+		try (BufferedReader reader = new BufferedReader(new FileReader(file));){
+			String line = "";
+			int case_counter = 1;
+			List<String> temp = new ArrayList<>();
+			//reader.readLine();
+			while((line = reader.readLine()) != null) {
+				temp.add(line);
+			}
+			System.out.println(temp);
+			for(int i=0; i<temp.size(); i+=2) {
+				if(!list.get(i).equals(temp.get(i))) {
+					System.out.println(case_counter+"大小错误");
+					System.out.println("正确:"+temp.get(i)+" 我的:"+list.get(i));
+					return;
+				}
+				if(!list.get(i+1).equals(temp.get(i+1))) {
+					System.out.println(case_counter+"错误");
+					System.out.println("正确:"+temp.get(i+1));
+					System.out.println(" 我的:"+list.get(i+1));
+					return;
+				}
+				
+				
+				case_counter++;
+			}
+			System.out.println("pass");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
 	
 	
 	
@@ -2828,7 +2944,17 @@ public class Medium {
 	public static void main(String[] args) {
 		Scanner scanner = new Scanner(System.in);
         while(scanner.hasNext()){
-            
+            int T = scanner.nextInt();
+            List<String> debug_list = new ArrayList<>();
+            for(int t=0; t<T; t++) {
+            	int n = scanner.nextInt();
+            	long[] arr = new long[n];
+            	for(int i=0; i<n; i++)
+            		arr[i] = scanner.nextLong();
+            	whatsNext(arr, debug_list);
+            }
+            System.out.println(debug_list);
+            debug(debug_list);
         }
 		scanner.close();
 	}
