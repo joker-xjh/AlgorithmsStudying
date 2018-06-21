@@ -3195,6 +3195,7 @@ public class Medium {
 			int left_score = arraySplittingDP(arr, preSum, left, i, dp);
 			int right_score = arraySplittingDP(arr, preSum, i+1, right, dp);
 			score = Math.max(score, 1+Math.max(left_score, right_score));
+			break;
 		}
 		dp.put(key, score);
 		return score;
