@@ -3096,6 +3096,121 @@ public class Medium {
         return answer;
     }
 	
+	//public static long[] dp;
+
+	public static long maxScore(int[] arr,int i,int n){
+
+	    if(i == n)
+	        return 0;
+
+	    if(i>n)
+	        return Long.MIN_VALUE;
+
+	    if(n-i<=4){
+	        long ans = 0;
+	        for(int j=i;j<n&&j<i+3;j++)
+	            ans = ans + arr[j];
+	        return ans;
+	    }
+
+	    if(dp[i] != 0)
+	        return dp[i];
+
+	    long ans1 = Long.MAX_VALUE;
+
+	                        // player 1 take 1 brick
+	    // player 2 also take 1 brick
+	    long a = maxScore(arr,i+2,n);
+	    if(a!=Long.MIN_VALUE)
+	        ans1 = Math.min(ans1,arr[i]+a);
+	    //player 2 take 2 bricks
+	    a = maxScore(arr,i+3,n);
+	    if(a!=Long.MIN_VALUE)
+	        ans1 = Math.min(ans1,arr[i]+a);
+	    // player 2 take 3 bricks
+	    a = maxScore(arr,i+4,n);
+	    if(a!=Long.MIN_VALUE)
+	        ans1 = Math.min(ans1,arr[i]+a);
+
+	                    // player 1 take 2 bricks
+	    long ans2 = Long.MAX_VALUE;
+	    // player 2 take 1 brick
+	    a = maxScore(arr,i+3,n);
+	    if(a!=Long.MIN_VALUE)
+	        ans2 = Math.min(ans2,arr[i]+arr[i+1]+a);
+	    // player 2 take 2 bricks
+	    a = maxScore(arr,i+4,n);
+	    if(a!=Long.MIN_VALUE)
+	        ans2 = Math.min(ans2,arr[i]+arr[i+1]+a);
+	    // player 2 take 3 bricks
+	    a = maxScore(arr,i+5,n);
+	    if(a!=Long.MIN_VALUE)
+	        ans2 = Math.min(ans2,arr[i]+arr[i+1]+a);
+
+	                    // player 1 take 3 bricks
+	    long ans3 = Long.MAX_VALUE;
+	    // player 2 take 1 brick
+	    a = maxScore(arr,i+4,n);
+	    if(a!=Long.MIN_VALUE)
+	        ans3 = Math.min(ans3,arr[i]+arr[i+1]+arr[i+2]+a);
+	    // player 2 take 2 bricks
+	    a = maxScore(arr,i+5,n);
+	    if(a!=Long.MIN_VALUE)
+	        ans3 = Math.min(ans3,arr[i]+arr[i+1]+arr[i+2]+a);
+	    // player 2 take 3 bricks
+	    a = maxScore(arr,i+6,n);
+	    if(a!=Long.MIN_VALUE)
+	        ans3 = Math.min(ans3,arr[i]+arr[i+1]+arr[i+2]+a);
+
+	    long ans = Math.max(ans1,Math.max(ans2,ans3));
+
+	    dp[i] = (int) ans;
+
+	    return ans;
+
+	}
+	
+	
+	static int arraySplitting(int[] arr) {
+		long[] preSum = new long[arr.length];
+		long sum = 0;
+		for(int i=0; i<arr.length; i++) {
+			sum += arr[i];
+			preSum[i] = sum;
+		}
+		int score = arraySplittingDP(arr, preSum, 0, arr.length-1, new HashMap<>());
+		return score;
+    }
+	
+	static int arraySplittingDP(int[] arr, long[] preSum, int left, int right, Map<String, Integer> dp) {
+		if(left == right)
+			return 0;
+		String key = left + "," +right;
+		if(dp.containsKey(key))
+			return dp.get(key);
+		int score = 0;
+		for(int i=left; i<right; i++) {
+			if(preSum[i] - preSum[left] + arr[left] != preSum[right] - preSum[i])
+				continue;
+			int left_score = arraySplittingDP(arr, preSum, left, i, dp);
+			int right_score = arraySplittingDP(arr, preSum, i+1, right, dp);
+			score = Math.max(score, 1+Math.max(left_score, right_score));
+		}
+		dp.put(key, score);
+		return score;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
