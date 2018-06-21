@@ -3074,7 +3074,27 @@ public class Medium {
 		return min;
     }
 	
-	
+	static int[] maxSubarray(int[] arr) {
+        int[] answer = new int[2];
+        int max_subarray_sum = 0;
+        int max = Integer.MIN_VALUE;
+        int max_subarray = Integer.MIN_VALUE, max_subsequence = 0;
+        for(int num : arr) {
+        	max_subarray_sum += num;
+        	max_subarray = Math.max(max_subarray, max_subarray_sum);
+        	if(max_subarray_sum < 0)
+        		max_subarray_sum = 0;
+        	if(num > 0)
+        		max_subsequence += num;
+        	max = Math.max(max, num);
+        }
+        answer[0] = max_subarray;
+        if(max_subsequence > 0)
+        	answer[1] = max_subsequence;
+        else
+        	answer[1] = max;
+        return answer;
+    }
 	
 	
 	
