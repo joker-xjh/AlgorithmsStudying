@@ -2904,7 +2904,8 @@ public class Medium {
         debug.add(sb.toString());
     }
 	
-	private static void debug(List<String> list) {
+	
+	 static void debug(List<String> list) {
 		File file = new File("F:\\hackerrank\\input02.txt");
 		try (BufferedReader reader = new BufferedReader(new FileReader(file));){
 			String line = "";
@@ -2996,6 +2997,86 @@ public class Medium {
 		return count;
 	}
 	
+	static void permutation(int[] array) {
+		Arrays.sort(array);
+		permutation(array,new ArrayList<>(), new boolean[array.length]);
+	}
+	
+	static void permutation(int[] array, List<Integer> list, boolean[] used) {
+		if(list.size() == array.length) {
+			int xor = Integer.MIN_VALUE;
+			for(int i=1; i<list.size(); i++) {
+				xor = Math.max(xor, list.get(i) ^ list.get(i-1));
+			}
+			System.out.println(list+":"+xor);
+		}
+		else {
+			for(int i=0; i<array.length; i++) {
+				if(used[i])
+					continue;
+				used[i] = true;
+				list.add(array[i]);
+				permutation(array, list, used);
+				list.remove(list.size()-1);
+				used[i] = false;
+			}
+		}
+	}
+	
+	
+	
+	static int anotherMinimaxProblem(int[] a) {
+		int min = Integer.MAX_VALUE;
+		int commen = 100;
+		for(int i=1; i<a.length; i++) {
+			int temp = 0;
+			for(int j=31; j>=0; j--) {
+				int b1 = a[i-1] & (1 << j);
+				int b2 = a[i] & (1 << j);
+				if(b1 != b2)
+					break;
+				temp++;
+			}
+			commen = Math.min(commen, temp);
+		}
+		List<Integer> A = new ArrayList<>();
+		List<Integer> B = new ArrayList<>();
+		for(int num : a) {
+			int bit = (1 << (31 - commen)) & num;
+			if(bit == 0)
+				A.add(num);
+			else
+				B.add(num);
+		}
+		
+		if(A.isEmpty()) {
+			for(int i=0; i<B.size(); i++) {
+				for(int j=i+1; j<B.size(); j++) {
+					min = Math.min(min, B.get(i) ^ B.get(j));
+				}
+			}
+		}
+		else if(B.isEmpty()) {
+			for(int i=0; i<A.size(); i++) {
+				for(int j=i+1; j<A.size(); j++) {
+					min = Math.min(min, A.get(i) ^ A.get(j));
+				}
+			}
+		}
+		else {
+			for(int num1 : A) {
+				for(int num2 : B) {
+					min = Math.min(min, num1 ^ num2);
+				}
+			}
+		}
+		
+		return min;
+    }
+	
+	
+	
+	
 	
 	
 	
@@ -3003,17 +3084,8 @@ public class Medium {
 	public static void main(String[] args) {
 		Scanner scanner = new Scanner(System.in);
         while(scanner.hasNext()){
-            int T = scanner.nextInt();
-            List<String> debug_list = new ArrayList<>();
-            for(int t=0; t<T; t++) {
-            	int n = scanner.nextInt();
-            	long[] arr = new long[n];
-            	for(int i=0; i<n; i++)
-            		arr[i] = scanner.nextLong();
-            	whatsNext(arr, debug_list);
-            }
-            System.out.println(debug_list);
-            debug(debug_list);
+           
+            
         }
 		scanner.close();
 	}
