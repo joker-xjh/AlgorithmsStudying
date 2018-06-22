@@ -3262,7 +3262,28 @@ public class Medium {
 	}
 	
 	
-	
+	static String gridSearch(String[] G, String[] P) {
+		int m = P.length, n = P[0].length();
+		int M = G.length, N = G[0].length();
+		for(int i=0; i<=M-m; i++) {
+			for(int j=0; j<=N-n; j++) {
+				boolean end = true;
+				outer:
+				for(int a=i; a<i+m; a++) {
+					for(int b=j; b<j+n; b++) {
+						if(G[a].charAt(b) != P[a-i].charAt(b-j)) {
+							end = false;
+							break outer;
+						}
+					}
+				}
+				if(end)
+					return "YES";
+			}
+		}
+		
+		return "NO";
+    }
 	
 	
 	
@@ -3270,13 +3291,12 @@ public class Medium {
 	
 	
 	public static void main(String[] args) {
-		mandragora(new int[] {3,2,2});
-//		Scanner scanner = new Scanner(System.in);
-//        while(scanner.hasNext()){
-//           
-//            
-//        }
-//		scanner.close();
+		Scanner scanner = new Scanner(System.in);
+        while(scanner.hasNext()){
+           
+            
+        }
+		scanner.close();
 	}
 
 }
