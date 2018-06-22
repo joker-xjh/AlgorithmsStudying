@@ -2,6 +2,7 @@ package hackerrank;
 
 import java.io.BufferedReader;
 
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
@@ -3230,7 +3231,35 @@ public class Medium {
 	
 	
 	
+	static long mandragora(int[] H) {
+		long P = 0;
+		long[] preSum = new long[H.length];
+		long sum = 0;
+		Arrays.sort(H);
+		for(int i=0; i<H.length; i++) {
+			sum += H[i];
+			preSum[i] = sum;
+		}
+		int S = 1;
+		for(int i=0; i<H.length; i++) {
+			P = Math.max(P, S * (preSum[H.length-1] - preSum[i] + H[i]));
+			S++;
+		}
+		return P;
+    }
 	
+	static long mandragora(int[] H, int index, int S, Map<String, Long> dp) {
+		if(index == H.length)
+			return 0;
+		String key = index + ","+ S;
+		if(dp.containsKey(key))
+			return dp.get(key);
+		long P = 0;
+		P = Math.max(P, mandragora(H, index+1, S+1, dp));
+		P = Math.max(P, mandragora(H, index+1, S, dp)+ H[index] * S);		
+		dp.put(key, P);
+		return P;
+	}
 	
 	
 	
@@ -3241,12 +3270,13 @@ public class Medium {
 	
 	
 	public static void main(String[] args) {
-		Scanner scanner = new Scanner(System.in);
-        while(scanner.hasNext()){
-           
-            
-        }
-		scanner.close();
+		mandragora(new int[] {3,2,2});
+//		Scanner scanner = new Scanner(System.in);
+//        while(scanner.hasNext()){
+//           
+//            
+//        }
+//		scanner.close();
 	}
 
 }
