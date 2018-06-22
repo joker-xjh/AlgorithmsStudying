@@ -3,6 +3,7 @@ package hackerrank;
 import java.io.BufferedReader;
 
 
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
@@ -3285,18 +3286,60 @@ public class Medium {
 		return "NO";
     }
 	
+	static int beautifulPath(int[][] edges, int A, int B, int N) {
+		Map<Integer, List<int[]>> graph = new HashMap<>();
+		for(int[] edge : edges) {
+			int p = edge[0], v = edge[1], cost = edge[2];
+			List<int[]> list_p = graph.get(p);
+			if(list_p == null) {
+				list_p = new ArrayList<>();
+				graph.put(p, list_p);
+			}
+			List<int[]> list_v = graph.get(v);
+			if(list_v == null) {
+				list_v = new ArrayList<>();
+				graph.put(v, list_v);
+			}
+			list_p.add(new int[] {v, cost});
+			list_v.add(new int[] {p, cost});
+		}
+		boolean[][] visited = new boolean[N+1][1024];
+		visited[A][0] = true;
+		Queue<int[]> queue = new LinkedList<>();
+		queue.add(new int[] {A, 0});
+		while(!queue.isEmpty()) {
+			int[] array = queue.poll();
+			int p = array[0], cost = array[1];
+			List<int[]> list = graph.get(p);
+			if(list == null)
+				continue;
+			for(int[] next : list) {
+				if(visited[next[0]][cost | next[1]])
+					continue;
+				visited[next[0]][cost | next[1]] = true;
+				queue.add(new int[] {next[0], cost | next[1]});
+			}
+			
+		}
+		for(int i=0; i<1024; i++) {
+			if(visited[B][i])
+				return i;
+		}
+		return -1;
+    }
 	
 	
 	
 	
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		Scanner scanner = new Scanner(System.in);
-        while(scanner.hasNext()){
-           
-            
-        }
-		scanner.close();
-	}
+		while(scanner.hasNext()) {
+			
+		}
+        scanner.close();
+    }
+	
 
 }
+
