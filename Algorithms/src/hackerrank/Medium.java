@@ -3354,6 +3354,46 @@ public class Medium {
 		return "First";
     }
 	
+	static String permutationGame(int[] arr) {
+		boolean result = permutationGame(arr, new boolean[arr.length], new HashMap<>());
+		if(!result)
+			return "Bob";
+		return "Alice";
+    }
+	
+	static boolean permutationGame(int[] array, boolean[] used, Map<String, Boolean> dp) {
+		String key = Arrays.toString(used);
+		boolean win = true;
+		int pre = -1;
+		for(int i=0; i<array.length; i++) {
+			if(used[i])
+				continue;
+			if(array[i] <= pre) {
+				win = false;
+				break;
+			}
+			pre = array[i];
+		}
+		if(win) {
+			return false;
+		}
+		if(dp.containsKey(key))
+			return dp.get(key);
+		for(int i=0; i<array.length; i++) {
+			if(used[i])
+				continue;
+			used[i] = true;
+			if(!permutationGame(array, used, dp)) {
+				win = true;
+				used[i] = false;
+				break;
+			}
+			used[i] = false;
+		}
+		dp.put(key, win);
+		return win;
+	}
+	
 	
 	
 	
