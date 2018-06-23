@@ -3327,16 +3327,70 @@ public class Medium {
 		}
 		return -1;
     }
-	
+	static String funGame(int[] a, int[] b) {
+		int points_a = 0, points_b = 0;
+		int n = a.length;
+		int[][] array = new int[n][2];
+		for(int i=0; i<n; i++) {
+			array[i][0] = a[i] + b[i];
+			array[i][1] = i;
+		}
+		Arrays.sort(array, (A, B) -> A[0] - B[0]);
+		boolean turn = true;
+		for(int i=n-1; i>=0; i--) {
+			if(turn) {
+				points_a += a[array[i][1]];
+			}
+			else {
+				points_b += b[array[i][1]];
+			}
+			turn = !turn;
+		}
+		
+		if(points_a == points_b)
+			return "Tie";
+		else if(points_a < points_b)
+			return "Second";
+		return "First";
+    }
 	
 	
 	
 	
 	public static void main(String[] args) throws IOException {
 		Scanner scanner = new Scanner(System.in);
-		while(scanner.hasNext()) {
-			
-		}
+        int t = scanner.nextInt();
+        scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
+
+        for (int tItr = 0; tItr < t; tItr++) {
+            int n = scanner.nextInt();
+            scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
+
+            int[] a = new int[n];
+
+            String[] aItems = scanner.nextLine().split(" ");
+            scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
+
+            for (int i = 0; i < n; i++) {
+                int aItem = Integer.parseInt(aItems[i]);
+                a[i] = aItem;
+            }
+
+            int[] b = new int[n];
+
+            String[] bItems = scanner.nextLine().split(" ");
+            scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
+
+            for (int i = 0; i < n; i++) {
+                int bItem = Integer.parseInt(bItems[i]);
+                b[i] = bItem;
+            }
+
+            String result = funGame(a, b);
+            System.out.println(result);
+        }
+
+
         scanner.close();
     }
 	
