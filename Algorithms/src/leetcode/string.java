@@ -3581,8 +3581,36 @@ public class string {
     	  return false;
       }
      
+      public int scoreOfParentheses(String S) {
+    	  int score = 0;
+    	  Stack<Integer> stack_score = new Stack<>();
+    	  Stack<Integer> stack_index = new Stack<>();
+    	  for(int i=0; i<S.length(); i++) {
+    		  char c = S.charAt(i);
+    		  if(c == '(') {
+    			  stack_index.push(i);
+    			  stack_score.push(0);
+    		  }
+    		  else {
+    			  int left = stack_index.pop();
+    			  if(left+1 == i) {
+    				  stack_score.push(stack_score.pop()+1);
+    			  }
+    			  else {
+    				  int temp = 0;
+    				  while(stack_score.peek() != 0) {
+    					  temp += stack_score.pop();
+    				  }
+    				  stack_score.push(stack_score.pop() + temp * 2);
+    			  }
+    		  }
+    	  }
+    	  while(!stack_score.isEmpty())
+    		  score += stack_score.pop();
+    	  return score;
+      }
      
-     
+      
      
      
      
