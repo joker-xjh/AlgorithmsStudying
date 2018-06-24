@@ -3474,40 +3474,75 @@ public class string {
      
      
      public int kSimilarity(String A, String B) {
-         int k = 0;
-          if(A.equals(B))
+         if(A.equals(B))
          	 return 0;
-          Queue<String> queue = new LinkedList<>();
+          Queue<kSimilarityNode> queue = new PriorityQueue<>(new kSimilarityComparator(B));
           Set<String> used = new HashSet<>();
-          queue.add(A);
+          queue.add(new kSimilarityNode(A, 0));
           used.add(A);
           while(!queue.isEmpty()) {
-         	 int size = queue.size();
-         	 k++;
-         	 for(int t=0; t<size; t++) {
-         		 String str = queue.poll();
-         		 char[] array = str.toCharArray();
-         		 int i = 0;
-         		 while(array[i] == B.charAt(i))
-         			 i++;
-     			 for(int j=i+1; j<array.length; j++) {
-     				if (array[j]==B.charAt(j) || array[i]!=B.charAt(j) ) 
-     					continue;
-     				 exchange(array, i, j);
-     				 String next_str = new String(array);
-     				 if(next_str.equals(B))
-     					 return k;
-     				 if(used.add(next_str))
-     					 queue.add(next_str);
-     				
-     			 }
-         	}
-         	 
+         	 kSimilarityNode node = queue.poll();
+ 			 String str = node.string;
+ 			 char[] array = str.toCharArray();
+ 			 for(int i=0; i<array.length; i++) {
+ 				  if(array[i] == B.charAt(i))
+ 					 continue;
+ 				 for(int j=i+1; j<array.length; j++) {
+ 					 if(array[j] != B.charAt(i))
+ 						 continue;
+ 					 exchange(array, i, j);
+ 					 String next_str = new String(array);
+ 					 if(next_str.equals(B))
+ 						 return node.step+1;
+ 					 if(used.add(next_str))
+ 						 queue.add(new kSimilarityNode(next_str, node.step+1));
+ 					 exchange(array, i, j);
+ 				 }
+ 			 }
           }
           
-          return k;
+          return -1;
      }
-     private void exchange(char[] array, int i, int j) {
+     class kSimilarityNode {
+     	 String string;
+     	 int step;
+     	 public kSimilarityNode(String string, int step) {
+ 			this.step = step;
+ 			this.string = string;
+ 		}
+      }
+      
+      class kSimilarityComparator implements Comparator<kSimilarityNode>{
+     	 
+     	 private String target;
+     	 public kSimilarityComparator(String target) {
+ 			this.target = target;
+ 		}
+
+ 		@Override
+ 		public int compare(kSimilarityNode node1, kSimilarityNode node2) {
+ 			String o1 = node1.string, o2 = node2.string;
+ 			int count1 = 0;
+ 			int count2 = 0;
+ 			int n = target.length();
+ 			for(int i=0; i<n; i++) {
+ 				char c1 = o1.charAt(i);
+ 				char c = target.charAt(i);
+ 				char c2 = o2.charAt(i);
+ 				if(c != c1)
+ 					count1++;
+ 				if(c != c2)
+ 					count2++;
+ 				
+ 			}
+ 			count1 = (count1+1)/2 ;
+				count2 = (count2+1)/2;
+ 			return   (count1 + node1.step) - (count2+node2.step) ;
+ 		}
+     	 
+      }
+      
+      private void exchange(char[] array, int i, int j) {
      	 char temp = array[i];
      	 array[i] = array[j];
      	 array[j] = temp;
@@ -3515,7 +3550,36 @@ public class string {
      
      
      
-     
+      public boolean buddyStrings(String A, String B) {
+    	  if(A.length() != B.length())
+    		  return false;
+    	  int n = A.length();
+    	  int[] pos = {-1, -1};
+    	  int[] map = new int[26];
+    	  int count = 0;
+    	  for(int i=0; i<n; i++) {
+    		  if(A.charAt(i) != B.charAt(i)) {
+    			  if(count >= 2)
+    				  return false;
+    			  pos[count++] = i;
+    		  }
+    		  map[A.charAt(i) - 'a']++;
+    	  }
+    	  if(count == 0) {
+    		  for(int i=0; i<26; i++) {
+    			  if(map[i] == 0)
+    				  continue;
+    			  if(map[i] > 1)
+    				  return true;
+    		  }
+    		  return false;
+    	  }
+    	  if(count == 1)
+    		  return false;
+    	  if((A.charAt(pos[0]) == B.charAt(pos[1])) && (A.charAt(pos[1]) == B.charAt(pos[0])))
+    		  return true;
+    	  return false;
+      }
      
      
      
