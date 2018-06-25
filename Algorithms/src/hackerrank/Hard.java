@@ -1,10 +1,12 @@
 package hackerrank;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeSet;
@@ -297,11 +299,55 @@ public class Hard {
 	}
 	
 	
+	static int[] solve(int[] arr, int[] queries) {
+		int[] answer = new int[queries.length];
+		PriorityQueue<int[]> pq = new PriorityQueue<>((a,b) -> b[0]-a[0]);
+		for(int t=0; t<queries.length; t++) {
+			int d = queries[t];
+			int min = Integer.MAX_VALUE;
+			pq.clear();
+			for(int i=0; i<d; i++)
+				pq.add(new int[] {arr[i], i});
+			for(int i=d; i<arr.length; i++) {
+				int[] pair = pq.peek();
+				while(pair[1] < i - d) {
+					pq.poll();
+					pair = pq.peek();
+				}
+				min = Math.min(min, pq.peek()[0]);
+				pq.add(new int[] {arr[i], i});
+			}
+			while(!(pq.peek()[1] >= arr.length-d)) {
+				pq.poll();
+			}
+			min = Math.min(min, pq.peek()[0]);
+			answer[t] = min;
+		}
+		return answer;
+    }
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	public static void main(String[] args) {
 		Scanner scanner = new Scanner(System.in);
 		while(scanner.hasNext()) {
-			
+			int n = scanner.nextInt();
+			int q = scanner.nextInt();
+			int[] arr = new int[n];
+			int[] queries = new int[q];
+			for(int i=0; i<n; i++)
+				arr[i] = scanner.nextInt();
+			for(int i=0; i<q; i++)
+				queries[i] = scanner.nextInt();
+			System.out.println(Arrays.toString(solve(arr, queries)));
 		}
 		
 		scanner.close();
