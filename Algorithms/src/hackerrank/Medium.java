@@ -3396,39 +3396,44 @@ public class Medium {
 	
 	
 	
+	static int[] swapPermutation(int n, int k) {
+        int[] answer = new int[2];
+        int[][] dp = new int[n+1][k+1];
+        int mod = 1000000007;
+        for(int i=1; i<=n; i++) {
+        	dp[i][0] = 1;
+        	for(int j=1; j<=k; j++) {
+        		for(int a=0; a<i && a <=j; a++) {
+        			dp[i][j] = (dp[i-1][j-a] + dp[i][j]) % mod;
+        		}
+        	}
+        }
+        for(int i=k; i>=0; i-=2) {
+        	answer[0] = (answer[0] + dp[n][i]) % mod;
+        }
+        
+        dp = new int[n+1][k+1];
+        for(int i=1; i<=n; i++) {
+        	dp[i][0] = 1;
+        	for(int j=1; j<=k; j++) {
+        		dp[i][j] = (int) (((dp[i-1][j] + dp[i][j]) % mod + (i-1L) * dp[i-1][j-1]) % mod);
+        	}
+        }
+        for(int i=k; i>=0; i--)
+        	answer[1] = (answer[1] + dp[n][i]) % mod;
+        
+        return answer;
+    }
+	
+	
+	
+	
+	
+	
 	
 	public static void main(String[] args) throws IOException {
 		Scanner scanner = new Scanner(System.in);
-        int t = scanner.nextInt();
-        scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
-
-        for (int tItr = 0; tItr < t; tItr++) {
-            int n = scanner.nextInt();
-            scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
-
-            int[] a = new int[n];
-
-            String[] aItems = scanner.nextLine().split(" ");
-            scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
-
-            for (int i = 0; i < n; i++) {
-                int aItem = Integer.parseInt(aItems[i]);
-                a[i] = aItem;
-            }
-
-            int[] b = new int[n];
-
-            String[] bItems = scanner.nextLine().split(" ");
-            scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
-
-            for (int i = 0; i < n; i++) {
-                int bItem = Integer.parseInt(bItems[i]);
-                b[i] = bItem;
-            }
-
-            String result = funGame(a, b);
-            System.out.println(result);
-        }
+        
 
 
         scanner.close();
