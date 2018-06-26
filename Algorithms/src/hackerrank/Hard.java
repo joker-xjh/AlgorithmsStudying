@@ -327,7 +327,40 @@ public class Hard {
     }
 	
 	
-	
+	static long minimumAverage(int[][] customers) {
+        long wait = 0;
+        Arrays.sort(customers, (a,b) -> a[0]-b[0]);
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a,b)->a[1]-b[1]);
+        long time = 0;
+        int index = 0;
+        while(index < customers.length || !pq.isEmpty()) {
+        	if(pq.isEmpty()) {
+        		int[] pair = customers[index++];
+        		time = (long)pair[0] + pair[1];
+        		wait = wait + pair[1];
+        		for(int i=index; i<customers.length; i++) {
+        			if(customers[i][0] > time)
+        				break;
+        			pq.add(new int[] {customers[i][0], customers[i][1], i});
+        			index++;
+        		}
+        	}
+        	else {
+        		while(!pq.isEmpty()) {
+        			int[] pair = pq.poll();
+        			wait += time - pair[0] + pair[1];
+        			time = time + pair[1];
+        			for(int i=index; i<customers.length; i++) {
+            			if(customers[i][0] > time)
+            				break;
+            			pq.add(new int[] {customers[i][0], customers[i][1], i});
+            			index++;
+            		}
+        		}
+        	}
+        }
+        return wait / customers.length;
+    }
 	
 	
 	
@@ -340,14 +373,12 @@ public class Hard {
 		Scanner scanner = new Scanner(System.in);
 		while(scanner.hasNext()) {
 			int n = scanner.nextInt();
-			int q = scanner.nextInt();
-			int[] arr = new int[n];
-			int[] queries = new int[q];
-			for(int i=0; i<n; i++)
-				arr[i] = scanner.nextInt();
-			for(int i=0; i<q; i++)
-				queries[i] = scanner.nextInt();
-			System.out.println(Arrays.toString(solve(arr, queries)));
+			int[][] arr = new int[n][2];
+			for(int i=0; i<n; i++) {
+				arr[i][0] = scanner.nextInt();
+				arr[i][1] = scanner.nextInt();
+			}
+			System.out.println(minimumAverage(arr));
 		}
 		
 		scanner.close();
