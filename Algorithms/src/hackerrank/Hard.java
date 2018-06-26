@@ -362,7 +362,45 @@ public class Hard {
         return wait / customers.length;
     }
 	
-	
+	static double[] runningMedian(int[] a) {
+        int n = a.length;
+        double[] answer = new double[n];
+        PriorityQueue<Integer> left = new PriorityQueue<>((x,y)->y-x);
+        PriorityQueue<Integer> right = new PriorityQueue<>();
+        for(int i=0; i<n; i++) {
+        	int num = a[i];
+        	if(left.isEmpty()) {
+        		left.add(num);
+        	}
+        	else if(left.size() == right.size()) {
+        		if(num <= right.peek()) {
+        			left.add(num);
+        		}
+        		else {
+        			left.add(right.poll());
+        			right.add(num);
+        		}
+        	}
+        	else if(left.size() > right.size()) {
+        		if(num < left.peek()) {
+        			right.add(left.poll());
+        			left.add(num);
+        		}
+        		else {
+        			right.add(num);
+        		}
+        	}
+        	
+        	if(left.size() > right.size()) {
+        		answer[i] = left.peek();
+        	}
+        	else {
+        		answer[i] = (left.peek() + right.peek()) / 2d;
+        	}
+        }
+        
+        return answer;
+    }
 	
 	
 	
@@ -372,13 +410,7 @@ public class Hard {
 	public static void main(String[] args) {
 		Scanner scanner = new Scanner(System.in);
 		while(scanner.hasNext()) {
-			int n = scanner.nextInt();
-			int[][] arr = new int[n][2];
-			for(int i=0; i<n; i++) {
-				arr[i][0] = scanner.nextInt();
-				arr[i][1] = scanner.nextInt();
-			}
-			System.out.println(minimumAverage(arr));
+			
 		}
 		
 		scanner.close();
