@@ -2033,7 +2033,63 @@ public class Easy {
 		 return false;
 	 }
 	 
-	
+	 
+	 static String chessboardGame2(int x, int y) {
+		 if(!chessboardGame2MiniMax(x, y, new Boolean[16][16]))
+			 return "Second";
+		 return "First";
+	 }
+	 
+	 static int[][] chessboardGame_dir = {{-2,1}, {-2,-1}, {1,-2}, {-1, -2}};
+	 
+	 static boolean chessboardGame2MiniMax(int x, int y, Boolean[][] dp) {
+		 if(x < 1 || x > 15 || y < 1 || y > 15)
+			 return true;
+		 if(dp[x][y] != null)
+			 return dp[x][y];
+		 for(int[] dir : chessboardGame_dir) {
+			 if(!chessboardGame2MiniMax(x+dir[0], y+dir[1], dp)) {
+				 dp[x][y] = true;
+				 return true;
+			 }
+		 }
+		 dp[x][y] = false;
+		 return false;
+	 }
+	 
+	 
+	 static void QHEAP1() {
+		 Scanner scanner = new Scanner(System.in);
+		 while(scanner.hasNext()) {
+			 int n = scanner.nextInt();
+			 Set<Integer> delete = new HashSet<>();
+			 PriorityQueue<Integer> pq = new PriorityQueue<>();
+			 for(int i=0; i<n; i++) {
+				 int op = scanner.nextInt();
+				 if(op == 1)
+					 pq.add(scanner.nextInt());
+				 else if(op == 2)
+					 delete.add(scanner.nextInt());
+				 else {
+					 while(delete.contains(pq.peek()))
+						 pq.poll();
+					 System.out.println(pq.peek());
+				 }
+			 }
+		 }
+		 scanner.close();
+	 }
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
 	
 
 	public static void main(String[] args) {
