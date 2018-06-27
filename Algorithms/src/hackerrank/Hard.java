@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.Stack;
 import java.util.TreeSet;
 
 public class Hard {
@@ -401,6 +402,50 @@ public class Hard {
         
         return answer;
     }
+	
+	
+	static long arrayManipulation(int n, int[][] queries) {
+		long max = 0;
+		long[] diff = new long[n+2];
+		for(int[] query : queries) {
+			int left = query[0], right = query[1], sum = query[2];
+			diff[left] = diff[left] + sum;
+			diff[right+1] = diff[right+1] - sum;
+		}
+		long temp = 0;
+		for(int i=1; i<=n; i++) {
+			temp += diff[i];
+			max = Math.max(max, temp);
+		}
+		return max;
+    }
+	
+	
+	static int andXorOr(int[] a) {
+		int max = Integer.MIN_VALUE;
+		Stack<Integer> stack = new Stack<>();
+		stack.push(0);
+		for(int i=1; i<a.length; i++) {
+			if(a[stack.peek()] < a[i]) {
+				max = Math.max(max, a[stack.peek()] ^ a[i]);
+				stack.push(i);
+			}
+			else if(a[stack.peek()] > a[i]){
+				while(!stack.isEmpty() && a[stack.peek()] > a[i]) {
+					max = Math.max(max, a[i] ^ a[stack.pop()]);
+				}
+				if(!stack.isEmpty())
+					max = Math.max(max, a[stack.peek()] ^ a[i]);
+				stack.push(i);
+			}
+			
+		}
+		
+		
+		return max;
+    }
+	
+	
 	
 	
 	
