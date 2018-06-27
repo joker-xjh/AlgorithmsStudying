@@ -445,7 +445,58 @@ public class Hard {
 		return max;
     }
 	
-	
+	static int poisonousPlants(int[] p) {
+		int day = 0;
+		Stack<Integer> stack = new Stack<>();
+		stack.push(0);
+		int[] days = new int[p.length];
+		for(int i=1; i<p.length; i++) {
+			if(p[i] > p[i-1]) {
+				days[i] = 1;
+				day = Math.max(day, 1);
+				continue;
+			}
+			if(p[i] > p[stack.peek()]) {
+				days[i] = 2;
+				day = Math.max(day, days[i]);
+				stack.push(i);
+				continue;
+			}
+			else if(p[i] <= p[stack.peek()]) {
+				if(p[i] <= p[stack.get(0)]) {
+					stack.clear();
+					days[i] = 0;
+					stack.push(i);
+				}
+				else {
+					while(!stack.isEmpty() && p[i] <= p[stack.peek()]) {
+						if(stack.size() == 1) {
+							stack.pop();
+							stack.push(i);
+							days[i] = 0;
+							break;
+						}
+						
+						if(p[i] == p[stack.peek()]) {
+							days[i] = Math.max(days[i], days[stack.peek()] + 1);
+							day = Math.max(day, days[i]);
+							stack.push(i);
+							break;
+						}
+						
+						days[i] = Math.max(days[i], days[stack.pop()] + 1);
+						day = Math.max(day, days[i]);
+					}
+					if(!stack.isEmpty() && p[i] > p[stack.peek()]) {
+						stack.push(i);
+					}
+				}
+				
+			}
+		}
+		
+		return day;
+    }
 	
 	
 	
