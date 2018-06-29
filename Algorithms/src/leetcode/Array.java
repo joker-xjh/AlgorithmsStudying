@@ -3916,7 +3916,45 @@ public class Array {
      }
      
      
-     
+     class RangeSumQuery {
+    	 int[] BIT;
+    	 int[] nums;
+    	 
+    	 public RangeSumQuery(int[] nums) {
+			this.nums = nums;
+			this.BIT = new int[nums.length+1];
+			for(int i=0; i<nums.length; i++) {
+				updateBIT(i, nums[i]);
+			}
+		}
+    	 
+    	 void update(int i, int val) {
+    		 int diff = val - nums[i];
+    		 nums[i] = val;
+    		 updateBIT(i, diff);
+    	 }
+    	 
+    	 int rangeSum(int i, int j) {
+    		 return sum(j) - sum(i-1);
+    	 }
+    	 
+    	 void updateBIT(int i, int val) {
+    		 i++;
+    		 while(i<BIT.length) {
+    			 BIT[i] += val;
+    			 i += i & -i;
+    		 }
+    	 }
+    	 int sum(int i) {
+    		 int sum = 0;
+    		 i++;
+    		 while(i > 0) {
+    			 sum += BIT[i];
+    			 i -= i & -i;
+    		 }
+    		 return sum;
+    	 }
+     }
      
      
      
