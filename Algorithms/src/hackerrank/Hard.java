@@ -1,6 +1,7 @@
 package hackerrank;
 
 import java.util.ArrayList;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -499,6 +500,135 @@ public class Hard {
     }
 	
 	
+	static class ArrayPairs_Node {
+		int eq;
+		int higher;
+		double val;
+		ArrayPairs_Node left, right;
+		
+		ArrayPairs_Node(int eq, int higher, double val){
+			this.higher = higher;
+			this.eq = eq;
+			this.val = val;
+		}
+		
+		static ArrayPairs_Node insert(ArrayPairs_Node node, double val, int h) {
+			if(node == null)
+				return new ArrayPairs_Node(1, h, val);
+			int cmp = Double.compare(node.val, val);
+			if(cmp < 0) {
+				h += node.eq + node.higher;
+				node.left = insert(node.left, val, h);
+			}
+			else if(cmp > 0){
+				node.higher++;
+				node.right = insert(node.right, val, h);
+			}
+			else {
+				node.eq++;
+			}
+			return node;
+		}
+		
+		static long EH(ArrayPairs_Node node, double val) {
+			if(node == null)
+				return 0;
+			int cmp = Double.compare(node.val, val);
+			long ans = 0;
+			if(cmp < 0) {
+				ans = ans + node.eq + node.higher;
+				ans += EH(node.left, val);
+			}
+			else if(cmp > 0) {
+				ans = EH(node.right, val);
+			}
+			else {
+				ans = node.eq + node.higher;
+			}
+			return ans;
+		}
+		
+	}
+
+	
+	static long ArrayPairs(int[] arr) {
+		return ArrayPairsHelp(arr, 0, arr.length-1);
+    }
+	
+	static long ArrayPairsHelp(int[] array, int left, int right) {
+		if(left >= right)
+			return 0;
+		long pairs = 0;
+		int max_index = -1;
+		int max = Integer.MIN_VALUE;
+		for(int i=left; i<=right; i++) {
+			if(array[i] > max) {
+				max = array[i];
+				max_index = i;
+			}
+		}
+		
+		if(max_index != left && max_index != right) {
+			int[] right_part = new int[right - max_index];
+			for(int i=max_index+1; i<=right; i++)
+				right_part[i - max_index - 1] = array[i];
+			Arrays.sort(right_part);
+			for(int i=left; i<max_index; i++) {
+				double target = (double)max / array[i];
+				int L = 0, R = right_part.length-1;
+				while(L < R) {
+					int mid = (L + R) >>> 1;
+					int cmp = Double.compare(target, right_part[mid]);
+					if(cmp >= 0) {
+						L = mid + 1;
+					}
+					else {
+						R = mid;
+					}
+				}
+				if(Double.compare(target, right_part[L]) < 0)
+					L--;
+				L++;
+				pairs = pairs + L;
+			}
+		}
+		else {
+			for(int i=left; i<=right; i++)
+				if(array[i] == 1)
+					pairs++;
+			if(max == 1)
+				pairs--;
+		}
+		
+		if(max_index == left) {
+			while(left < right && array[left+1] == array[left])
+				left++;
+			pairs += ArrayPairsHelp(array, left+1, right);
+		}
+		else if(max_index == right) {
+			while(left < right && array[right-1] == array[right])
+				right--;
+			pairs += ArrayPairsHelp(array, left, right-1);
+		}
+		else {
+			pairs += ArrayPairsHelp(array, left, max_index);
+			pairs += ArrayPairsHelp(array, max_index, right);
+		}
+		return pairs;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
@@ -506,7 +636,11 @@ public class Hard {
 	public static void main(String[] args) {
 		Scanner scanner = new Scanner(System.in);
 		while(scanner.hasNext()) {
-			
+			int n = scanner.nextInt();
+			int[] arr = new int[n];
+			for(int i=0; i<n; i++)
+				arr[i] = scanner.nextInt();
+			System.out.println(ArrayPairs(arr));
 		}
 		
 		scanner.close();
