@@ -851,8 +851,43 @@ public class Tree {
     }
     
     
+    public List<Integer> distanceK(TreeNode root, TreeNode target, int K) {
+        List<Integer> list = new ArrayList<>();
+        Map<Integer, List<Integer>> graph = new HashMap<>();
+        distanceKBuildGraph(root, graph, -1);
+        Set<Integer> visited = new HashSet<>();
+        visited.add(target.val);
+        distanceKDFS(graph, target.val, K, visited, list);
+        return list;
+    }
     
+    private void distanceKDFS(Map<Integer, List<Integer>> graph, int node, int K, Set<Integer> visited, List<Integer> answer) {
+    	if(K == 0) {
+    		answer.add(node);
+    		return;
+    	}
+    	for(int next : graph.get(node)) {
+    		if(visited.contains(next))
+    			continue;
+    		visited.add(next);
+    		distanceKDFS(graph, next, K-1, visited, answer);
+    	}
+    }
     
+    private void distanceKBuildGraph(TreeNode node, Map<Integer, List<Integer>> graph, int father) {
+    	List<Integer> list = new ArrayList<>();
+    	if(father != -1)
+    		list.add(father);
+    	if(node.left != null) {
+    		list.add(node.left.val);
+    		distanceKBuildGraph(node.left, graph, node.val);
+    	}
+    	if(node.right != null) {
+    		list.add(node.right.val);
+    		distanceKBuildGraph(node.right, graph, node.val);
+    	}
+    	graph.put(node.val, list);
+    }
     
     
    
