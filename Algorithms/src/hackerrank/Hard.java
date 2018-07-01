@@ -10,7 +10,9 @@ import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.SortedMap;
 import java.util.Stack;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 public class Hard {
@@ -618,7 +620,46 @@ public class Hard {
 	}
 	
 	
+	static long SubsequenceWeighting(int[] a, int[] w) {
+		long answer = Long.MIN_VALUE;
+		TreeMap<Integer, Long> map = new TreeMap<>();
+		for(int i=0; i<a.length; i++) {
+			Map.Entry<Integer, Long> lowEntry = map.lowerEntry(a[i]);
+			long b = (lowEntry == null ? 0 : lowEntry.getValue()) + w[i];
+			SortedMap<Integer, Long> sortedMap = map.tailMap(a[i]);
+			List<Integer> delete = new ArrayList<>();
+			for(Map.Entry<Integer, Long> entry : sortedMap.entrySet()) {
+				if(entry.getValue() > b)
+					break;
+				delete.add(entry.getKey());
+			}
+			for(Integer dele : delete)
+				map.remove(dele);
+			if(!map.containsKey(a[i]))
+				map.put(a[i], b);
+			if(b > answer)
+				answer = b;
+		}
+		return answer;
+	}
 	
+	static void BIT_update(int[] BIT, int i, int val) {
+		i++;
+		while(i < BIT.length) {
+			BIT[i] += val;
+			i += i & -i;
+		}
+	}
+	
+	static long BIT_sum(int[] BIT, int i) {
+		i++;
+		long sum = 0;
+		while(i > 0) {
+			sum = sum + BIT[i];
+			i -= i & -i;
+		}
+		return sum;
+	}
 	
 	
 	
