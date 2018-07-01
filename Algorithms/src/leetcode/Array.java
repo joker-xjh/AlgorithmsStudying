@@ -3957,6 +3957,55 @@ public class Array {
      }
      
      
+     class countSmallerclass {
+    	 
+    	 int sum(int i, int[] BIT) {
+    		 i++;
+    		 int sum = 0;
+    		 while(i > 0) {
+    			 sum += BIT[i];
+    			 i -= i & -i;
+    		 }
+    		 return sum;
+    	 }
+    	 
+    	 void update(int i, int[] BIT, int val) {
+    		 i++;
+    		 while(i < BIT.length) {
+    			 BIT[i] += val;
+    			 i += i & -i;
+    		 }
+    	 }
+    	 
+    	 List<Integer> countSmaller(int[] nums) {
+    		 List<Integer> list = new LinkedList<>();
+    		 if(nums == null || nums.length == 0)
+    			 return list;
+    		 int max = Integer.MIN_VALUE;
+    		 int min = Integer.MAX_VALUE;
+    		 for(int i=0; i<nums.length; i++) {
+    			 min = Integer.min(min, nums[i]);
+    		 }
+    		 for(int i=0; i<nums.length; i++) {
+    			 nums[i] = nums[i] - min + 1;
+    			 max = Math.max(max, nums[i]);
+    		 }
+    		 int[] BIT = new int[max+1];
+    		 for(int i=nums.length-1; i>=0; i--) {
+    			 list.add(0, sum(nums[i]-1, BIT));
+    			 update(nums[i], BIT, 1);
+    		 }
+    		 return list;
+    	 }
+    	 
+    	 
+     }
+     
+     
+     
+     
+     
+     
      
 
 
