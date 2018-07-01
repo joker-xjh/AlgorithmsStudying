@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
+import java.util.TreeMap;
 
 
 public class DP {
@@ -1865,9 +1866,51 @@ public class DP {
     }
     
     
+    public int shortestSubarray(int[] A, int K) {
+        int answer = shortestSubarrayDP(A, A.length-1, K, new Integer[A.length]);
+    	if(answer == Integer.MAX_VALUE)
+    		return -1;
+    	return answer;
+    }
     
+    private int shortestSubarrayDP(int[] A, int index, int K, Integer[] dp) {
+    	if(index < 0)
+    		return Integer.MAX_VALUE;
+    	if(dp[index] != null)
+    		return dp[index];
+    	int shortest = Integer.MAX_VALUE;
+    	int sum = 0;
+    	for(int i=index; i>=0; i--) {
+    		sum += A[i];
+    		if(sum < K)
+    			continue;
+    		shortest = Math.min(shortest, index - i + 1);
+    		shortest = Math.min(shortest, shortestSubarrayDP(A, i-1, K, dp));
+    		break;
+    	}
+    	shortest = Math.min(shortest, shortestSubarrayDP(A, index-1, K, dp));
+    	dp[index] = shortest;
+    	return shortest;
+    }
     
-    
+    public int shortestSubarray2(int[] A, int K) {
+    	int shortest = Integer.MAX_VALUE;
+    	TreeMap<Long, Integer> map = new TreeMap<>();
+    	long sum = 0;
+    	for(int i=0; i<A.length; i++) {
+    		sum += A[i];
+    		if(sum >= K)
+    			shortest = Math.min(shortest, i+1);
+    		Long num = map.floorKey(sum - K);
+    		while(num != null) {
+    			shortest = Math.min(shortest, i - map.get(num));
+    			map.remove(num);
+    			num = map.lowerKey(num);
+    		}
+    		map.put(sum, i);
+    	}
+    	return shortest == Integer.MAX_VALUE ? -1 : shortest;
+    }
     
     
     
@@ -1879,7 +1922,9 @@ public class DP {
     
     
     public static void main(String[] args) {
-    	
+    	DP test = new DP();
+    	int[] array = {11,47,97,35,-46,59,46,51,59,80,14,-6,2,20,96,1,18,74,-17,71};
+    	test.shortestSubarray2(array, 282);
 	}
     
 
