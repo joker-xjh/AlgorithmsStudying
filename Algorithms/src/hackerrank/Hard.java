@@ -662,9 +662,79 @@ public class Hard {
 	}
 	
 	
+	static void LibraryQuery(int[] libraiy, int[][] query) {
+		PriorityQueue<Integer> pq = new PriorityQueue<>((a,b) -> b-a);
+		for(int [] q : query) {
+			if(q[0] == 0) {
+				int x = q[1], y = q[2], k = q[3];
+				for(int i=x-1; i<y; i++) {
+					if(pq.size() < k)
+						pq.add(libraiy[i]);
+					else {
+						if(libraiy[i] < pq.peek()) {
+							pq.poll();
+							pq.add(libraiy[i]);
+						}
+					}
+				}
+				System.out.println(pq.peek());
+				pq.clear();
+			}
+			else {
+				libraiy[q[1]-1] = q[2];
+			}
+		}
+	}
 	
+	static void LibraryQuery2(int[] libraiy, int[][] query) {
+		int[] help = new int[1001];
+		for(int[] q : query) {
+			if(q[0] == 1) {
+				libraiy[q[1] - 1] = q[2];
+			}
+			else {
+				int x = q[1]-1, y = q[2] - 1, k = q[3];
+				for(int i=x; i<=y; i++) {
+					help[libraiy[i]]++;
+				}
+				for(int i=1; i<=1000; i++) {
+					k -= help[i];
+					if(k <= 0) {
+						System.out.println(i);
+						break;
+					}
+				}
+				Arrays.fill(help, 0);
+			}
+		}
+	}
+
 	
-	
+	static void LibraryQueryInput() {
+		Scanner scanner = new Scanner(System.in);
+		while(scanner.hasNext()) {
+			int T = scanner.nextInt();
+			for(int t=0; t<T; t++) {
+				int n = scanner.nextInt();
+				int[] library = new int[n];
+				for(int i=0; i<n; i++)
+					library[i] = scanner.nextInt();
+				n = scanner.nextInt();
+				int[][] query = new int[n][4];
+				for(int i=0; i<n; i++) {
+					query[i][0] = scanner.nextInt();
+					query[i][1] = scanner.nextInt();
+					query[i][2] = scanner.nextInt();
+					if(query[i][0] == 0) {
+						query[i][3] = scanner.nextInt();
+					}
+				}
+				LibraryQuery(library, query);
+			}
+		}
+		scanner.close();
+	}
+
 	
 	
 	
