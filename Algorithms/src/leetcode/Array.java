@@ -4033,7 +4033,40 @@ public class Array {
     	 return true;
      }
      
+     public int matrixScore(int[][] A) {
+         int score = 0;
+         int m = A.length, n = A[0].length;
+         for(int i=0; i<m; i++) {
+        	 if(A[i][0] == 0) {
+        		 matrixScoreFlip(A[i]);
+        	 }
+         }
+         for(int i=1; i<n; i++) {
+        	 int one = 0;
+        	 for(int j=0; j<m; j++) {
+        		 if(A[j][i] == 1)
+        			 one++;
+        	 }
+        	 if(one * 2 < m) {
+        		 for(int j=0; j<m; j++) {
+            		 A[j][i] ^= 1;
+            	 }
+        	 }
+         }
+         for(int i=0; i<m; i++) {
+        	 int temp = 0;
+        	 for(int j=n-1; j>=0; j--) {
+        		 temp |= A[i][j] << (n-1-j);
+        	 }
+        	 score += temp;
+         }
+         return score;
+     }
      
+     private void matrixScoreFlip(int[] array) {
+    	 for(int i=0; i<array.length; i++)
+    		 array[i] = array[i] ^ 1;
+     }
      
      
      
