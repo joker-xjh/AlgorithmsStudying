@@ -1913,7 +1913,32 @@ public class DP {
     }
     
     
-    
+    static int KindergartenAdventures(int[] array) {
+    	int[] ranges = new int[array.length+2];
+    	for(int i=0; i<array.length; i++) {
+    		if(array[i] == 0 || array[i] > array.length)
+    			continue;
+    		int end = i + 1 - array[i];
+    		if(end <= 0)
+    			end += array.length;
+    		int start = i + 2;
+    		if(start > array.length)
+    			start -= array.length;
+    		ranges[start]++;
+    		ranges[(end + 1) ]--;
+    	}
+    	int answer = -1;
+    	int max = -1, temp = 0;
+    	for(int i=1; i<=array.length; i++) {
+    		temp += ranges[i];
+    		if(temp > max) {
+    			max = temp;
+    			answer = i;
+    		}
+    	}
+    	
+    	return answer;
+    }
     
     
     
