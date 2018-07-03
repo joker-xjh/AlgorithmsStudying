@@ -3425,6 +3425,164 @@ public class Medium {
         return answer;
     }
 	
+	static int MrXandHisShots(int[][] shots, int[][] players) {
+		int sum = 0;
+		TreeMap<Integer, Integer> tree = new TreeMap<>();
+		Map<String, Integer> map = new HashMap<>();
+		outer:
+		for(int[] shot : shots) {
+			Map.Entry<Integer, Integer> floorEntry = tree.floorEntry(shot[0]);
+			if(floorEntry != null) {
+				if(floorEntry.getKey() == shot[0]) {
+					if(floorEntry.getValue() < shot[0]) {
+						shot[0] = floorEntry.getValue();
+					}
+					else if(floorEntry.getValue() > shot[0]) {
+						tree.put(shot[0], shot[1]);
+						tree.put(shot[1], floorEntry.getValue());
+						continue;
+					}
+					else {
+						String key = shot[0] + "," + shot[1];
+						map.put(key, map.getOrDefault(key, 0)+1);
+						continue;
+					}
+				}
+				else {
+					if(floorEntry.getValue() > shot[0] && floorEntry.getValue() < shot[1]) {
+						tree.put(floorEntry.getKey(), shot[0]);
+						tree.put(shot[0], floorEntry.getValue());
+						String key = shot[0] + "," + floorEntry.getValue();
+						map.put(key, map.getOrDefault(key, 0)+1);
+						shot[0] = floorEntry.getValue();
+					}
+					else if(floorEntry.getValue() == shot[1]) {
+						tree.put(floorEntry.getKey(), shot[0]);
+						tree.put(shot[0], shot[1]);
+						String key = shot[0] + "," + floorEntry.getValue();
+						map.put(key, map.getOrDefault(key, 0)+1);
+						continue;
+					}
+					else if(floorEntry.getValue() > shot[1]) {
+						tree.put(floorEntry.getKey(), shot[0]);
+						tree.put(shot[0], shot[1]);
+						String key = shot[0] + "," + shot[1];
+						map.put(key, map.getOrDefault(key, 0)+1);
+						tree.put(shot[1], floorEntry.getValue());
+						continue;
+					}
+				}
+			}
+			
+			
+			Map.Entry<Integer, Integer> ceilEntry = tree.ceilingEntry(shot[0]);
+			while(ceilEntry != null && ceilEntry.getKey() < shot[1]) {
+				if(ceilEntry.getKey() == shot[0]) {
+					if(ceilEntry.getValue() < shot[1]) {
+						String key = ceilEntry.getKey()+","+ceilEntry.getValue();
+						map.put(key, map.getOrDefault(key, 0)+1);
+						shot[0] = ceilEntry.getValue();
+					}
+					else if(ceilEntry.getValue() > shot[1]) {
+						tree.put(ceilEntry.getKey(), shot[1]);
+						tree.put(shot[1], ceilEntry.getValue());
+						String key = shot[0] + "," + shot[1];
+						map.put(key, map.getOrDefault(key, 0)+1);
+						continue outer;
+					}
+					else {
+						String key = shot[0] + "," + shot[1];
+						map.put(key, map.getOrDefault(key, 0)+1);
+						continue outer;
+					}
+				}
+				
+				else if(ceilEntry.getKey() < shot[1]) {
+					tree.put(shot[0], ceilEntry.getKey());
+					shot[0] = ceilEntry.getKey();
+					
+					if(ceilEntry.getValue() < shot[1]) {
+						String key = ceilEntry.getKey() +"," + ceilEntry.getValue();
+						map.put(key, map.getOrDefault(key, 0)+1);
+						shot[0] = ceilEntry.getValue();
+					}
+					else if(ceilEntry.getValue() > shot[1]) {
+						tree.put(shot[0], shot[1]);
+						String key = shot[0] +"," + shot[1];
+						map.put(key, map.getOrDefault(key, 0)+1);
+						tree.put(shot[1], ceilEntry.getValue());
+						continue outer;
+					}
+					else {
+						String key = shot[0] + "," + shot[1];
+						map.put(key, map.getOrDefault(key, 0)+1);
+						continue outer;
+					}
+					
+				}
+				System.out.println(Arrays.toString(shot));
+				ceilEntry = tree.ceilingEntry(shot[0]);
+			}
+			
+			tree.put(shot[0], shot[1]);
+		}
+		
+		for(int[] player : players) {
+			Map.Entry<Integer, Integer> low = tree.lowerEntry(player[0]);
+			if(low != null) {
+				if(low.getValue() >= player[0]) {
+					String key = low.getKey() + "," + low.getValue();
+					sum += 1 + map.getOrDefault(key, 0);
+					low = tree.lowerEntry(low.getKey());
+				}
+			}
+			Map.Entry<Integer, Integer> high = tree.ceilingEntry(player[0]);
+			while(high != null && high.getKey() <= player[1]) {
+				String key = high.getKey() + "," + high.getValue();
+				sum += 1 + map.getOrDefault(key, 0);
+				high = tree.higherEntry(high.getKey());
+			}
+		}
+		return sum;
+    }
+	
+	
+	static boolean MrXandHisShots_isOverlap(int[] a, int[] b) {
+		if(a[0] > b[1] || a[1] < b[0])
+			return false;
+		return true;
+	}
+	
+	static int MrXandHisShots2(int[][] shots, int[][] players) {
+		int sum = 0;
+		Arrays.sort(shots, (a,b) -> a[0] - b[0]);
+		Arrays.sort(players, (a,b) -> a[0] - b[0]);
+		int shot_index = 0, player_index = 0;
+		while(shot_index < shots.length && player_index < players.length) {
+			int[] shot = shots[shot_index];
+			int[] player = players[player_index];
+			if(shot[1] < player[0]) {
+				shot_index++;
+			}
+			else if(player[1] < shot[0]) {
+				player_index++;
+			}
+			else {
+				int i = shot_index;
+				while(i < shots.length && player[1] >= shots[i][0]) {
+					if(MrXandHisShots_isOverlap(shots[i], player)) {
+						sum++;
+					}
+					i++;
+				}
+				player_index++;
+			}
+		}
+		return sum;
+	}
+	
+	
+	
 	
 	
 	
@@ -3433,8 +3591,19 @@ public class Medium {
 	
 	public static void main(String[] args) throws IOException {
 		Scanner scanner = new Scanner(System.in);
-        
-
+        int n = scanner.nextInt();
+        int m = scanner.nextInt();
+        int[][] shots = new int[n][2];
+        int[][] players = new int[m][2];
+        for(int i=0; i<n; i++) {
+        	shots[i][0] = scanner.nextInt();
+        	shots[i][1] = scanner.nextInt();
+        }
+        for(int i=0; i<m; i++) {
+        	players[i][0] = scanner.nextInt();
+        	players[i][1] = scanner.nextInt();
+        }
+        System.out.println(MrXandHisShots(shots, players));
 
         scanner.close();
     }
