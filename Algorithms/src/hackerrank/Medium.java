@@ -3581,7 +3581,49 @@ public class Medium {
 		return sum;
 	}
 	
-	
+	static class MrXandHisShots {
+		
+		static void BIT_update(int[] BIT, int i, int val) {
+			i++;
+			while(i < BIT.length) {
+				BIT[i] += val;
+				i += i & -i;
+			}
+		}
+		
+		static int BIT_sum(int[] BIT, int i) {
+			int sum = 0;
+			i++;
+			while(i > 0) {
+				sum += BIT[i];
+				i -= i & -i;
+			}
+			return sum;
+		}
+		
+		
+		static int MrXandHisShots2(int[][] shots, int[][] players) {
+			int sum = 0;
+			int[] BIT_left = new int[100001];
+			int[] BIT_right = new int[100001];
+			for(int[] shot : shots) {
+				BIT_update(BIT_left, shot[0], 1);
+				BIT_update(BIT_right, shot[1], 1);
+			}
+			for(int[] player : players) {
+				sum += BIT_sum(BIT_left, player[1]) - BIT_sum(BIT_right, player[0] - 1 );
+			}
+			return sum;
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+	}
 	
 	
 	
@@ -3591,20 +3633,7 @@ public class Medium {
 	
 	public static void main(String[] args) throws IOException {
 		Scanner scanner = new Scanner(System.in);
-        int n = scanner.nextInt();
-        int m = scanner.nextInt();
-        int[][] shots = new int[n][2];
-        int[][] players = new int[m][2];
-        for(int i=0; i<n; i++) {
-        	shots[i][0] = scanner.nextInt();
-        	shots[i][1] = scanner.nextInt();
-        }
-        for(int i=0; i<m; i++) {
-        	players[i][0] = scanner.nextInt();
-        	players[i][1] = scanner.nextInt();
-        }
-        System.out.println(MrXandHisShots(shots, players));
-
+        
         scanner.close();
     }
 	
