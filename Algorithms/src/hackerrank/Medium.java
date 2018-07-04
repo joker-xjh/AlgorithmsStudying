@@ -3665,6 +3665,93 @@ public class Medium {
 		return counter;
 	}
 	
+	static class AVL {
+		static class Node{
+			int val;
+			int ht;
+			Node left, right;
+		}
+		
+		static int height(Node node) {
+			if(node == null)
+				return -1;
+			return node.ht;
+		}
+		
+		static int setHeight(Node node) {
+			if(node == null)
+				return -1;
+			return 1 + Math.max(height(node.left), height(node.right));
+		}
+		
+		static Node leftRotation(Node node) {
+			Node newNode = node.right;
+			node.right = newNode.left;
+			newNode.left = node;
+			node.ht = setHeight(node);
+			newNode.ht = setHeight(newNode);
+			return newNode;
+		}
+		
+		static Node rightRotation(Node node) {
+			Node newNode = node.left;
+			node.left = newNode.right;
+			newNode.right = node;
+			node.ht = setHeight(node);
+			newNode.ht = setHeight(newNode);
+			return newNode;
+		}
+		
+		static Node insert(Node root, int val) {
+			if(root == null) {
+				root = new Node();
+				root.val = val;
+				root.ht = setHeight(root);
+				return root;
+			}
+			if(val <= root.val) {
+				root.left = insert(root.left, val);
+			}
+			else {
+				root.right = insert(root.right, val);
+			}
+			int blance = height(root.left) - height(root.right);
+			
+			if(blance > 1) {
+				if(height(root.left.left) >= height(root.left.right)) {
+					root = rightRotation(root);
+				}
+				else {
+					root.left = leftRotation(root.left);
+					root = rightRotation(root);
+				}
+			}
+			else if(blance < -1) {
+				if(height(root.right.right) >= height(root.right.left)) {
+					root = leftRotation(root);
+				}
+				else {
+					root.right = rightRotation(root.right);
+					root = leftRotation(root);
+				}
+			}
+			else {
+				root.ht = setHeight(root);
+			}
+			return root;
+		}
+		
+		
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
