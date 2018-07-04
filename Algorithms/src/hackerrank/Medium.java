@@ -3626,7 +3626,44 @@ public class Medium {
 	}
 	
 	
+	static int[] componentsInGraph(int[][] gb, int N) {
+        int[] answer = {Integer.MAX_VALUE, Integer.MIN_VALUE};
+        Map<Integer, List<Integer>> graph = new HashMap<>();
+        int[] visited = new int[N*2+1];
+        for(int[] edge : gb) {
+        	List<Integer> list = graph.get(edge[0]);
+        	if(list == null) {
+        		list = new ArrayList<>();
+        		graph.put(edge[0], list);
+        	}
+        	list.add(edge[1]);
+        	list = graph.get(edge[1]);
+        	if(list == null) {
+        		list = new ArrayList<>();
+        		graph.put(edge[1], list);
+        	}
+        	list.add(edge[0]);
+        }
+        for(int i=1; i<=N*2; i++) {
+        	if(visited[i] != 0 || !graph.containsKey(i))
+        		continue;
+        	int v = vertices(graph, i, visited, i);
+        	answer[0] = Math.min(v, answer[0]);
+        	answer[1] = Math.max(v, answer[1]);
+        }
+		return answer;
+    }
 	
+	static int vertices(Map<Integer, List<Integer>> graph, int cur, int[] visited, int index) {
+		visited[cur] = index;
+		int counter = 1;
+		for(int next : graph.get(cur)) {
+			if(visited[next] != 0)
+				continue;
+			counter += vertices(graph, next, visited, index);
+		}
+		return counter;
+	}
 	
 	
 	
