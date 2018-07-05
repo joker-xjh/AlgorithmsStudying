@@ -2081,9 +2081,44 @@ public class Easy {
 	 }
 	 
 	 
+	 static int beautifulPairs(int[] A, int[] B) {
+		Scanner scan = new Scanner(System.in);
+        int N = scan.nextInt();
+        int [] bucketA = new int[1001];
+        for (int i = 0; i < N; i++) {
+            bucketA[scan.nextInt()]++;
+        }
+        int beautifulPairs = 0;
+        for (int i = 0; i < N; i++) {
+            int num = scan.nextInt();
+            if (bucketA[num] > 0) {
+                bucketA[num]--;
+                beautifulPairs++;
+            }
+        }
+        scan.close();
+        
+        /* Accounts for changing 1 element in B */
+        if (beautifulPairs == N) {
+            beautifulPairs--;
+        } else {
+            beautifulPairs++;
+        }
+        return beautifulPairs;
+	 }
 	 
-	 
-	 
+	 static int chocolateFeast(int n, int c, int m) {
+        int chocolate = 0;
+        chocolate += n / c;
+        int wrappers = n / c;
+        while(wrappers / m > 0){
+            int nextWrappers = wrappers % m;
+            chocolate += wrappers / m;
+            nextWrappers += wrappers / m;
+            wrappers = nextWrappers;
+        }
+        return chocolate;
+	 }
 	 
 	 
 	 
