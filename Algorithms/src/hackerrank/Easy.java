@@ -2120,7 +2120,19 @@ public class Easy {
         return chocolate;
 	 }
 	 
-	 
+	 static int howManyGames(int p, int d, int m, int s) {
+	        int count = 0;
+	        while(s > 0){
+	            if(p < m)
+	                s -= m;
+	            else
+	                s -= p;
+	            p -= d;
+	            if(s >= 0)
+	            	count++;
+	        }
+	        return count;
+	 }
 	 
 	 
 	 
