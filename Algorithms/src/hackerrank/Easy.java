@@ -2134,7 +2134,20 @@ public class Easy {
 	        return count;
 	 }
 	 
-	 
+	 static int countingValleys(int n, String s) {
+		 int valleys = 0;
+		 int seaLevel = 0;
+		 for(char c : s.toCharArray()) {
+			 int pre = seaLevel;
+			 if(c == 'U')
+				 seaLevel++;
+			 else
+				 seaLevel--;
+			 if(pre >= 0 && seaLevel < 0)
+				 valleys++;
+		 }
+		 return valleys;
+	 }
 	 
 	 
 	
