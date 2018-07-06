@@ -3777,7 +3777,23 @@ public class Medium {
 		return timeInWords_m[m] + " minutes to " + hour;
     }
 	
-	
+	static int surfaceArea(int[][] A) {
+		int area = 0;
+		for(int i=0; i<A[0].length; i++) {
+			area += 2 + A[0][i] * 4;
+			if(i > 0)
+				area -= 2 * (Math.min(A[0][i], A[0][i-1]));
+		}
+		for(int i=1; i<A.length; i++) {
+			for(int j=0; j<A[0].length; j++) {
+				area += 2 + A[i][j] * 4;
+				area -= 2 * Math.min(A[i-1][j], A[i][j]);
+				if(j > 0)
+					area -= 2 * Math.min(A[i][j-1], A[i][j]);
+			}
+		}
+		return area;
+    }
 	
 	
 	
