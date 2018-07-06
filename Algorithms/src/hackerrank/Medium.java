@@ -3745,8 +3745,37 @@ public class Medium {
 		
 	}
 	
-	
-	
+	static String[] timeInWords_h = {"","one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve"};
+	static String[] timeInWords_m = {"","one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve",
+										"thirteen", "fourteen", "quarter", "sixteen", "seventeen", "eighteen", "nineteen", "twenty", 
+										"twenty one", "twenty two", "twenty three", "twenty four", "twenty five", "twenty six", "twenty seven", 
+										"twenty eight", "twenty nine", "half"};
+	static String timeInWords(int h, int m) {
+		if(m == 0) {
+			return timeInWords_h[h] +" o' clock";
+		}
+		if(m >= 1 && m < 30) {
+			if(m == 15) {
+				return timeInWords_m[m] + " past " + timeInWords_h[h];
+			}
+			if(m == 1) {
+				return timeInWords_m[m] + " minute past " + timeInWords_h[h];
+			}
+			return timeInWords_m[m] + " minutes past " + timeInWords_h[h];
+		}
+		if(m == 30) {
+			return "half past "+timeInWords_h[h];
+		}
+		String hour = h == 12 ? "one" : timeInWords_h[h+1];
+		m = 60 - m;
+		if(m == 15) {
+			return timeInWords_m[m] + " to " + hour;
+		}
+		if(m == 59) {
+			return "one minute to " + hour;
+		}
+		return timeInWords_m[m] + " minutes to " + hour;
+    }
 	
 	
 	
