@@ -3795,6 +3795,159 @@ public class Medium {
 		return area;
     }
 	
+	static String[] bomberMan(int n, String[] grid) {
+		int m = grid.length;
+		n = grid[0].length();
+		int[][] help = new int[m][n];
+		int[][] dir = {{-1,0}, {1,0}, {0,-1}, {0,1}};
+		char[][] matrix = new char[m][n];
+		for(int i=0; i<m; i++)
+			matrix[i] = grid[i].toCharArray();
+		int time = 0;
+		time++;
+		for(int t=0; t<10; t++) {
+			time++;
+			for(int i=0; i<m; i++) {
+				for(int j=0; j<n; j++) {
+					if(matrix[i][j] != '.')
+						continue;
+					matrix[i][j] = 'O';
+					help[i][j] = time;
+				}
+			}
+			System.out.println(time+"秒后*************************");
+			for(char[] temp : matrix)
+				System.out.println(temp);
+			time++;
+			for(int i=0; i<m; i++) {
+				for(int j=0; j<n; j++) {
+					if(matrix[i][j] == '.' || time < help[i][j] + 3)
+						continue;
+					matrix[i][j] = '.';
+					help[i][j] = 0;
+					for(int[] d : dir) {
+						int x = i + d[0];
+						int y = j + d[1];
+						if(x < 0 || x >= m || y<0 || y>=n)
+							continue;
+						if(matrix[x][y] == 'O' && time >= help[x][y]+3)
+							continue;
+						matrix[x][y] = '.';
+						help[i][j] = 0;
+					}
+				}
+			}
+			System.out.println(time+"秒后************");
+			for(char[] temp : matrix)
+				System.out.println(temp);
+		}
+		
+		
+		return null;
+    }
+	
+	
+	static String[] bomberMan2(int s, String[] grid) {
+		int m = grid.length;
+		int n = grid[0].length();
+		int[][] help = new int[m][n];
+		int[][] dir = {{-1,0}, {1,0}, {0,-1}, {0,1}};
+		char[][] matrix = new char[m][n];
+		for(int i=0; i<m; i++)
+			matrix[i] = grid[i].toCharArray();
+		int time = 0;
+		time++;
+		if(s == 1)
+			return grid;
+		time++;
+		for(int i=0; i<m; i++) {
+			for(int j=0; j<n; j++) {
+				if(matrix[i][j] != '.')
+					continue;
+				matrix[i][j] = 'O';
+				help[i][j] = time;
+			}
+		}
+		String[] two = new String[m];
+		for(int i=0; i<m; i++)
+			two[i] = new String(matrix[i]);
+		
+		time++;
+		for(int i=0; i<m; i++) {
+			for(int j=0; j<n; j++) {
+				if(matrix[i][j] == '.' || time < help[i][j] + 3)
+					continue;
+				matrix[i][j] = '.';
+				help[i][j] = 0;
+				for(int[] d : dir) {
+					int x = i + d[0];
+					int y = j + d[1];
+					if(x < 0 || x >= m || y<0 || y>=n)
+						continue;
+					if(matrix[x][y] == 'O' && time >= help[x][y]+3)
+						continue;
+					matrix[x][y] = '.';
+					help[x][y] = 0;
+				}
+			}
+		}
+		
+		String[] three = new String[m];
+		for(int i=0; i<m; i++)
+			three[i] = new String(matrix[i]);
+		
+		time++;
+		for(int i=0; i<m; i++) {
+			for(int j=0; j<n; j++) {
+				if(matrix[i][j] != '.')
+					continue;
+				matrix[i][j] = 'O';
+				help[i][j] = time;
+			}
+		}
+		
+		String[] four = new String[m];
+		for(int i=0; i<m; i++)
+			four[i] = new String(matrix[i]);
+		
+		time++;
+		for(int i=0; i<m; i++) {
+			for(int j=0; j<n; j++) {
+				if(matrix[i][j] == '.' || time < help[i][j] + 3)
+					continue;
+				matrix[i][j] = '.';
+				help[i][j] = 0;
+				for(int[] d : dir) {
+					int x = i + d[0];
+					int y = j + d[1];
+					if(x < 0 || x >= m || y<0 || y>=n)
+						continue;
+					if(matrix[x][y] == 'O' && time >= help[x][y]+3)
+						continue;
+					matrix[x][y] = '.';
+					help[x][y] = 0;
+				}
+			}
+		}
+		
+		String[] one = new String[m];
+		for(int i=0; i<m; i++)
+			one[i] = new String(matrix[i]);
+		
+		
+		int mod = s % 4;
+		if(mod == 1)
+			return one;
+		else if(mod == 2 || mod == 0)
+			return two;
+		else if(mod == 3)
+			return three;
+		
+		return null;
+	}
+	
+	
+	
 	
 	
 	
@@ -3802,7 +3955,9 @@ public class Medium {
 	
 	public static void main(String[] args) throws IOException {
 		Scanner scanner = new Scanner(System.in);
-        
+        while(scanner.hasNext()) {
+        	
+        }
         scanner.close();
     }
 	
