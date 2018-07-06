@@ -3946,7 +3946,24 @@ public class Medium {
 		return null;
 	}
 	
-	
+	static long sherlockAndAnagrams2(String s){
+		long anagrams = 0;
+		int n = s.length();
+		Map<String, Integer> map = new HashMap<>();
+		for(int i=0; i<n; i++) {
+			for(int j=i+1; j<=n; j++) {
+				char[] temp = s.substring(i, j).toCharArray();
+				Arrays.sort(temp);
+				String sub = new String(temp);
+				map.put(sub, map.getOrDefault(sub, 0)+1);
+			}
+		}
+		for(Map.Entry<String, Integer> entry : map.entrySet()) {
+			int count = entry.getValue();
+			anagrams = anagrams + count * (count-1) / 2;
+		}
+		return anagrams;
+	}
 	
 	
 	
