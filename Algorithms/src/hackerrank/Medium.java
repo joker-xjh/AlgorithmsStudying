@@ -4049,7 +4049,28 @@ public class Medium {
 		return (int) min;
     }
 	
-	
+	static int shortPalindrome(String s) {
+		int sp = 0;
+		int mod = 1000000007;
+		int n = s.length();
+		int[][] dp = new int[n][n];
+		for(int i=0; i<n; i++) {
+			char c1 = s.charAt(i);
+			for(int j=i-1; j>=0; j--) {
+				char c2 = s.charAt(j);
+				dp[i][j] = (dp[i][j] + dp[i-1][j]) % mod;
+				dp[i][j] = (dp[i][j] + dp[i][j+1]) % mod;
+				if(i - j > 2)
+					dp[i][j] = (dp[i][j] - dp[i-1][j+1]) % mod;
+				if(c1 == c2) {
+					dp[i][j] = (dp[i][j] + 1) % mod;
+					if(i - j > 2)
+						sp = (sp + dp[i-1][j+1]) % mod;
+				}
+			}
+		}
+		return sp;
+    }
 	
 	
 	
@@ -4064,7 +4085,8 @@ public class Medium {
 	public static void main(String[] args) throws IOException {
 		Scanner scanner = new Scanner(System.in);
         while(scanner.hasNext()) {
-        	
+        	String s = scanner.nextLine();
+        	shortPalindrome(s);
         }
         scanner.close();
     }
