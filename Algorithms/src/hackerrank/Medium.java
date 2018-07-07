@@ -4035,7 +4035,19 @@ public class Medium {
 	}
 	
 	
-	
+	static int minimumLoss(long[] price) {
+		long min = Integer.MAX_VALUE;
+		TreeSet<Long> tree = new TreeSet<>();
+		tree.add(price[price.length-1]);
+		for(int i=price.length-2; i>=0; i--) {
+			Long low = tree.floor(price[i]);
+			if(low != null) {
+				min = Math.min(min, price[i] - low);
+			}
+			tree.add(price[i]);
+		}
+		return (int) min;
+    }
 	
 	
 	
