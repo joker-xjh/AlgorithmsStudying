@@ -3996,6 +3996,58 @@ public class Medium {
 		return true;
 	}
 	
+	static int[][] knightlOnAChessboard(int n) {
+		int[][] answer = new int [n-1][n-1];
+		for(int i=1; i<n; i++) {
+			for(int j=1; j<n; j++) {
+				if(answer[i-1][j-1] != 0)
+					continue;
+				int temp = knightlOnAChessboardHelp(n, i, j);
+				answer[i-1][j-1] = temp;
+				answer[j-1][i-1] = temp;
+			}
+		}
+		return answer;
+    }
+	
+	static int knightlOnAChessboardHelp(int n, int a, int b) {
+		int[][] chess = new int[n][n];
+		int[][] dirs = {{a,b}, {a,-b}, {-a,b}, {-a,-b}, {b,a}, {b,-a}, {-b,a}, {-b,-a}};
+		Queue<int[]> queue = new LinkedList<>();
+		queue.add(new int[] {0, 0});
+		while(!queue.isEmpty()) {
+			int size = queue.size();
+			for(int t=0; t<size; t++) {
+				int[] pos = queue.poll();
+				for(int[] d:dirs) {
+					int x = pos[0] + d[0];
+					int y = pos[1] + d[1];
+					if(x < 0 || x >= n || y < 0 || y >= n || (x == 0 && y == 0) || chess[x][y] != 0)
+						continue;
+					chess[x][y] = chess[pos[0]][pos[1]] + 1;
+					if(x == n -1 && y == n-1)
+						return chess[x][y];
+					queue.add(new int[] {x, y});
+				}
+			}
+		}
+		return -1;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	public static void main(String[] args) throws IOException {
 		Scanner scanner = new Scanner(System.in);
