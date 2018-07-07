@@ -4097,6 +4097,60 @@ public class Medium {
 	}
 	
 	
+	static long roadsAndLibraries(int n, int c_lib, int c_road, int[][] cities) {
+		long cost = 0;
+		Map<Integer, List<Integer>> graph = new HashMap<>();
+		for(int[] city : cities) {
+			List<Integer> list = graph.get(city[0]);
+			if(list == null) {
+				list = new ArrayList<>();
+				graph.put(city[0], list);
+			}
+			list.add(city[1]);
+			list = graph.get(city[1]);
+			if(list == null) {
+				list = new ArrayList<>();
+				graph.put(city[1], list);
+			}
+			list.add(city[0]);
+		}
+		boolean[] visited = new boolean[n+1];
+		int library = 0;
+		int road = 0;
+		int single = 0;
+		for(int i=1; i<=n; i++) {
+			if(visited[i])
+				continue;
+			visited[i] = true;
+			if(!graph.containsKey(i)) {
+				single++;
+				continue;
+			}
+			road += roadsAndLibrariesDFS(graph, i, visited) - 1;
+			library++;
+		}
+		if(c_lib < c_road) {
+			cost = cost + (long)n * c_lib; 
+		}
+		else {
+			cost = cost + (long)road * c_road + ((long)library + single) * c_lib; 
+		}
+		return cost;
+    }
+
+	static int roadsAndLibrariesDFS(Map<Integer, List<Integer>> graph, int city, boolean[] visited) {
+		int count = 1;
+		List<Integer> list = graph.get(city);
+		for(int next : list) {
+			if(visited[next])
+				continue;
+			visited[next] = true;
+			count += roadsAndLibrariesDFS(graph, next, visited);
+		}
+		return count;
+	}
+	
+	
 	
 	
 	
