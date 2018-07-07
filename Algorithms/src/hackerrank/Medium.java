@@ -3966,8 +3966,35 @@ public class Medium {
 	}
 	
 	
+	static int steadyGene(String gene) {
+		int min = Integer.MAX_VALUE;
+		Map<Character, Integer> map = new HashMap<>();
+		map.put('C', 0);
+		map.put('G', 0);
+		map.put('A', 0);
+		map.put('T', 0);
+		for(char c : gene.toCharArray())
+			map.put(c, map.get(c)+1);
+		int left = 0, right = 0, n = gene.length();
+		while(right < n) {
+			char r = gene.charAt(right++);
+			map.put(r, map.get(r)-1);
+			while(steadyGeneHelp(map, n)) {
+				min = Math.min(min, right - left);
+				char l = gene.charAt(left++);
+				map.put(l, map.get(l)+1);
+			}
+		}
+		return min;
+    }
 	
-	
+	static boolean steadyGeneHelp(Map<Character, Integer> map, int n) {
+		for(Integer i : map.values()) {
+			if(i > n / 4)
+				return false;
+		}
+		return true;
+	}
 	
 	
 	public static void main(String[] args) throws IOException {
