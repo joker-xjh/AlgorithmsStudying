@@ -4151,9 +4151,49 @@ public class Medium {
 	}
 	
 	
+	static int activityNotifications(int[] expenditure, int d) {
+		int notification = 0;
+		int[] bucket = new int[201];
+		for(int i=0; i<d; i++) {
+			bucket[expenditure[i]]++;
+		}
+		for(int i=d; i<expenditure.length; i++) {
+			int median_sum = activityNotifications_median(bucket, d);
+			if(median_sum <= expenditure[i])
+				notification++;
+			bucket[expenditure[i-d]]--;
+			bucket[expenditure[i]]++;
+		}
+		
+		return notification;
+    }
 	
-	
-	
+	static int activityNotifications_median(int[] bucket, int d) {
+		boolean is_odd = (d & 1) == 1;
+		int count = 0;
+		int mid_index = (d+1) / 2;
+		for(int i=0; i<=200; i++) {
+			if(bucket[i] == 0)
+				continue;
+			count += bucket[i];
+			if(is_odd) {
+				if(count >= mid_index)
+					return i + i;
+			}
+			else {
+				if(count >= mid_index && count < mid_index + 1) {
+					for(int j=i+1; j<=200; j++) {
+						if(bucket[j] != 0) {
+							return i + j;
+						}
+					}
+				}
+				if(count >= mid_index+1)
+					return i + i;
+			}
+		}
+		return 0;
+	}
 	
 	
 	
