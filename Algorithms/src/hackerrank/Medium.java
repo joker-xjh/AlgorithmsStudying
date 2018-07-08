@@ -4195,6 +4195,55 @@ public class Medium {
 		return 0;
 	}
 	
+	static int quickestWayUp(int[][] ladders, int[][] snakes) {
+		int[] board = new int[101];
+		int rolls = 0;
+		boolean[] visited = new boolean[101];
+		for(int[] ladder : ladders) {
+			int from = ladder[0], to = ladder[1];
+			board[from] = to;
+		}
+		for(int[] snake : snakes) {
+			int from = snake[0], to = snake[1];
+			board[from] = -to;
+		}
+		Queue<Integer> queue = new LinkedList<Integer>();
+		visited[1] = true;
+		queue.add(1);
+		while(!queue.isEmpty()) {
+			int size = queue.size();
+			rolls++;
+			for(int t=0; t<size; t++) {
+				int point = queue.poll();
+				for(int i=1; i<=6; i++) {
+					int next = point + i;
+					if(next == 100)
+						return rolls;
+					if(visited[next])
+						continue;
+					visited[next] = true;
+					if(board[next] > 0)
+						next = board[next];
+					else if(board[next] < 0)
+						next = -board[next];
+					visited[next] = true;
+					if(next == 100)
+						return rolls;
+					queue.add(next);
+				}
+			}
+		}
+		return -1;
+    }
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
