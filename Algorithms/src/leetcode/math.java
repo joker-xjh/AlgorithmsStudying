@@ -1,5 +1,7 @@
 package leetcode;
 
+import java.math.BigInteger;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -293,9 +295,41 @@ public class math {
     }
     
     
+    public int primePalindrome(int n) {
+    	if(929 < n && n < 10301)
+            return 10301;
+        if(98689 < n && n < 1003001)
+            return 1003001;
+        if(9989899 < n && n < 100030001)
+            return 100030001;
+        n--;
+        BigInteger num = new BigInteger(n+"");
+        BigInteger prime = num.nextProbablePrime();
+        while(!ispalindrome(prime.toString())) {
+        	prime = prime.nextProbablePrime();
+        }
+        return prime.intValue();
+        
+    }
     
+    private boolean ispalindrome(String s) {
+    	int left = 0, right = s.length()-1;
+    	while(left < right) {
+    		if(s.charAt(left++) != s.charAt(right--))
+    			return false;
+    	}
+    	return true;
+    }
     
-    
+    public boolean isPrime(int num) {
+    	if(num < 2 || num % 2 == 0)
+    		return num == 2;
+    	int end = (int) Math.sqrt(num);
+    	for(int i=3; i<=end; i+=2)
+    		if(num % i == 0)
+    			return false;
+    	return true;
+    }
     
     
     
