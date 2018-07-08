@@ -890,9 +890,54 @@ public class Tree {
     }
     
     
-   
+    public TreeNode subtreeWithAllDeepest(TreeNode root) {
+        Map<Integer, Integer> map = new HashMap<>();
+    	subtreeWithAllDeepestHelp(root, map, 0);
+    	return subtreeWithAllDeepestHelp(root, map);
+    }
     
+    private void subtreeWithAllDeepestHelp(TreeNode root, Map<Integer, Integer> map, int deep) {
+    	if(root == null)
+    		return;
+    	map.put(root.val, deep);
+    	subtreeWithAllDeepestHelp(root.left, map, deep+1);
+    	subtreeWithAllDeepestHelp(root.right, map, deep+1);
+    }
     
+    private TreeNode subtreeWithAllDeepestHelp(TreeNode root, Map<Integer, Integer> map) {
+    	if(root.left == null && root.right == null)
+    		return root;
+    	else if(root.left == null) {
+    		TreeNode right = subtreeWithAllDeepestHelp(root.right, map);
+    		map.put(root.val, map.get(right.val));
+    		return right;
+    	}
+    	else if(root.right == null) {
+    		TreeNode left = subtreeWithAllDeepestHelp(root.left, map);
+    		map.put(root.val, map.get(left.val));
+    		return left;
+    	}
+    	else {
+    		TreeNode left = subtreeWithAllDeepestHelp(root.left, map);
+    		TreeNode right = subtreeWithAllDeepestHelp(root.right, map);
+    		int left_deep = map.get(left.val);
+    		int right_deep = map.get(right.val);
+    		if(left_deep > right_deep) {
+    			map.put(root.val, left_deep);
+    			return left;
+    		}
+    		else if(left_deep < right_deep) {
+    			map.put(root.val, right_deep);
+    			return right;
+    		}
+    		else {
+    			map.put(root.val, right_deep);
+    			return root;
+    		}
+    	}
+    }
+    
+ 
 
 	public static void main(String[] args) {
 		
