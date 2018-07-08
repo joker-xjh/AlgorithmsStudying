@@ -4237,12 +4237,51 @@ public class Medium {
     }
 	
 	
+	static class Node2 {
+        int index;
+        int val;
+        String word;
+        Node2(int index, int val, String word){
+            this.index = index;
+            this.val = val;
+            this.word = word;
+        }
+    }
 	
-	
-	
-	
-	
-	
+	static void sort(Node2[] nodes) {
+		@SuppressWarnings("unchecked")
+		List<String>[] list = new ArrayList[100];
+		int n = nodes.length;
+		int half = nodes.length / 2;
+		for(Node2 node : nodes) {
+			int val = node.val;
+			if(list[val] == null) {
+				list[val] = new ArrayList<>();
+			}
+			if(node.index < half) {
+				list[val].add("-");
+			}
+			else {
+				list[val].add(node.word);
+			}
+		}
+		int count = 0;
+		StringBuilder sb = new StringBuilder();
+		for(int i=0; i<100; i++) {
+			List<String> temp = list[i];
+			if(temp == null)
+				continue;
+			for(String word : temp) {
+				if(count == n-1) {
+					sb.append(word);
+				}
+				else {
+					sb.append(word+" ");
+				}
+			}
+		}
+		System.out.println(sb);
+	}
 	
 	
 	
