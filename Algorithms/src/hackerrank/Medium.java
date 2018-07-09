@@ -4334,7 +4334,115 @@ public class Medium {
     }
 	
 	
+	static int GenaPlayingHanoi(int[] Hanoi, int N) {
+		int moves = 0;
+		int[] rods = new int[5];
+		for(int i=0; i<N; i++) {
+			rods[Hanoi[i]] |= 1 << i;
+		}
+		if(GenaPlayingHanoi_Isinitial(rods, N))
+			return 0;
+		Queue<int[]> queue = new LinkedList<>();
+		queue.add(rods);
+		Set<String> used = new HashSet<>();
+		used.add(Arrays.toString(rods));
+		while(!queue.isEmpty()) {
+			int size = queue.size();
+			moves++;
+			for(int t=0; t<size; t++) {
+				int[] R = queue.poll();
+				System.out.println(Arrays.toString(R));
+				for(int i=1; i<=4; i++) {
+					int from = R[i];
+					if(from == 0)
+						continue;
+					int from_top_num = GenaPlayingHanoi_getTopNum(from, N);
+					for(int j=1; j<=4; j++) {
+						if(j == i)
+							continue;
+						int to = R[j];
+						if(to == 0) {
+							int[] next_rods = new int[5];
+							for(int k=0; k<5; k++) {
+								if(k == i) {
+									next_rods[k] = R[i] - from_top_num;
+								}
+								else if(k == j) {
+									next_rods[k] = R[j] + from_top_num;
+								}
+								else {
+									next_rods[k] = R[k];
+								}
+							}
+							if(GenaPlayingHanoi_Isinitial(next_rods, N))
+								return moves;
+							GenaPlayingHanoi_sortHanoi(next_rods, N);
+							String key = Arrays.toString(next_rods);
+							if(used.add(key))
+								queue.add(next_rods);
+						}
+						else {
+							int to_top_num = GenaPlayingHanoi_getTopNum(to, N);
+							if(from_top_num > to_top_num)
+								continue;
+							int[] next_rods = new int[5];
+							for(int k=0; k<5; k++) {
+								if(k == i) {
+									next_rods[k] = R[i] - from_top_num;
+								}
+								else if(k == j) {
+									next_rods[k] = R[j] + from_top_num;
+								}
+								else {
+									next_rods[k] = R[k];
+								}
+							}
+							if(GenaPlayingHanoi_Isinitial(next_rods, N))
+								return moves;
+							GenaPlayingHanoi_sortHanoi(next_rods, N);
+							String key = Arrays.toString(next_rods);
+							if(used.add(key))
+								queue.add(next_rods);
+						}
+					}
+				}
+			}
+		}
+		
+		return -1;
+	}
 	
+	static int GenaPlayingHanoi_getTopNum(int rod, int N) {
+		int num = 1;
+		for(int i=0; i<N; i++) {
+			if(((rod >>> i) & 1) == 1)
+				return num;
+			num *= 2;
+		}
+		return num;
+	}
+	
+	static boolean GenaPlayingHanoi_Isinitial(int[] rods, int N) {
+		if((rods[1] == (1 << N)-1) &&
+			(rods[2] == 0) && (rods[3] == 0) && (rods[4] == 0))
+			return true;
+		return false;
+	}
+	
+	static void GenaPlayingHanoi_sortHanoi(int[] rods, int N) {
+		for(int i=2; i<5; i++) {
+			for(int j=2; j<=5-i; j++) {
+				int one = GenaPlayingHanoi_getTopNum(rods[j], N);
+				int two = GenaPlayingHanoi_getTopNum(rods[j+1], N);
+				if(one > two) {
+					int temp = rods[j];
+					rods[j] = rods[j+1];
+					rods[j+1] = temp;
+				}
+			}
+		}
+	}
+
 	
 	
 	
@@ -4347,7 +4455,12 @@ public class Medium {
 	public static void main(String[] args) throws IOException {
 		Scanner scanner = new Scanner(System.in);
         while(scanner.hasNext()) {
-        	
+        	int n = scanner.nextInt();
+        	int[] hanoi = new int[n];
+        	for(int i=0; i<n; i++)
+        		hanoi[i] = scanner.nextInt();
+        	int moves = GenaPlayingHanoi(hanoi, n);
+        	System.out.println(moves);
         }
         scanner.close();
     }
