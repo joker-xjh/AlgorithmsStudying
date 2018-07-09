@@ -4308,6 +4308,40 @@ public class Medium {
     }
 	
 	
+	static int pylons(int k, int[] arr) {
+		k--;
+		int power = 0;
+		int index = 0;
+		int pre_index = -1;
+		outer:
+		while(index < arr.length) {
+			boolean negative = true;
+			for(int i=index+k; i>pre_index; i--) {
+				if(i>=arr.length ||arr[i] == 0)
+					continue;
+				power++;
+				if(i + k >= arr.length-1)
+					break outer;
+				index = Math.min(i + k + 1, arr.length-1);
+				pre_index = i;
+				negative = false;
+				break;
+			}
+			if(negative)
+				return -1;
+		}
+		return power;
+    }
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	public static void main(String[] args) throws IOException {
