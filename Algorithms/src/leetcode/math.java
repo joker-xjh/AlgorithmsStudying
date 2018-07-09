@@ -3,9 +3,14 @@ package leetcode;
 import java.math.BigInteger;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
+import java.util.Set;
 
 public class math {
 	
@@ -331,9 +336,76 @@ public class math {
     	return true;
     }
     
+    public int shortestPathAllKeys(String[] grid) {
+        int m = grid.length, n = grid[0].length();
+        int moves = 0;
+        char[][] board = new char[m][n];
+        int[][] dirs = {{-1,0}, {1,0}, {0,-1}, {0,1}};
+        for(int i=0; i<m; i++)
+        	board[i] = grid[i].toCharArray();
+    	int[] start = shortestPathAllKeys_getStartPos(board);
+    	int key_count = start[2];
+    	Queue<int[]> queue = new LinkedList<>();
+    	Set<String> visited = new HashSet<>();
+    	int[] start_state = new int[] {0,0,0,0,0,0,start[0],start[1],0};
+    	visited.add(Arrays.toString(start_state));
+    	queue.add(start_state);
+    	while(!queue.isEmpty()) {
+    		int size = queue.size();
+    		moves++;
+    		for(int t=0; t<size; t++) {
+    			int[] array = queue.poll();
+    			for(int[] d : dirs) {
+    				int x = d[0] + array[6];
+    				int y = d[1] + array[7];
+    				if(x < 0 || x >= m || y < 0 || y >= n || board[x][y] == '#')
+    					continue;
+    				
+    				if('A' <= board[x][y] && board[x][y] <= 'F') {
+    					int key_index = board[x][y] + 32 - 'a';
+    					if(array[key_index] == 0)
+    						continue;
+    				}
+    				int[] next_array = new int[] {array[0], array[1], array[2], array[3], array[4],
+		                      array[5], x, y, array[8]};
+    				if('a' <= board[x][y] && board[x][y] <= 'f') {
+    					int key_index = board[x][y] - 'a';
+    					if(next_array[key_index] == 0) {
+    						next_array[key_index] = 1;
+    						next_array[8]++;
+    						if(next_array[8] == key_count)
+    							return moves;
+    					}
+    				}
+    				
+    				String visited_key = Arrays.toString(next_array);
+    				if(visited.contains(visited_key))
+    					continue;
+    				visited.add(visited_key);
+    				queue.add(next_array);
+    			}
+    		}
+    	}
+    	
+    	
+    	return -1;
+    }
     
-    
-    
+    private int[] shortestPathAllKeys_getStartPos(char[][] board) {
+    	int[] result = new int[3];
+    	for(int i=0; i<board.length; i++) {
+    		for(int j=0; j<board[0].length; j++) {
+    			if(board[i][j] == '@') {
+    				result[0] = i;
+    				result[1] = j;
+    			}
+    			if('a' <= board[i][j] && board[i][j] <= 'f') {
+    				result[2]++;
+    			}
+    		}
+    	}
+    	return result;
+    }
     
     
     
