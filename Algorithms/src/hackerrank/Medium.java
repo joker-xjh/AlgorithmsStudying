@@ -4284,6 +4284,30 @@ public class Medium {
 	}
 	
 	
+	static long getMinimumCost(int k, int[] c) {
+		long cost = 0;
+		if(k >= c.length) {
+			for(int t : c)
+				cost = cost + t;
+		}
+		else {
+			Arrays.sort(c);
+			for(int i=c.length-1; i>=c.length-k; i--) {
+				cost = cost + c[i];
+			}
+			long count = 2;
+			for(int i=c.length-k-1; i>=0; i-=k) {
+				for(int j=i; j>i-k&&j>=0; j--) {
+					cost += count * c[j];
+				}
+				count++;
+			}
+		}
+		
+		return cost;
+    }
+	
+	
 	
 	
 	public static void main(String[] args) throws IOException {
