@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import java.util.Random;
 import java.util.Set;
 
 public class math {
@@ -406,6 +407,79 @@ public class math {
     	}
     	return result;
     }
+    
+    
+    class RandomPickWithBlacklist {
+    	int[] array = null;
+    	int index = 0;
+    	int N;
+    	public void  Solution(int N, int[] blacklist) {
+            this.array = blacklist;
+            this.N = N;
+            Arrays.sort(array);
+        }
+        
+        public int pick() {
+        	if(array.length == 0)
+        		return (int) (Math.random() * N);
+        	int pick = -1;
+            while(true) {
+            	int min = -1, max = -1;
+            	if(index == array.length-1) {
+            		min = array[index] + 1;
+            		max = N-1;
+            	}
+            	else if(index == 0) {
+            		min = 0;
+            		max = array[index] - 1;
+            	}
+            	else {
+            		min = array[index] + 1;
+            		max = array[index+1] - 1;
+            	}
+            	if(min <= max) {
+    				pick = min + (int)(Math.random() * (max - min + 1));
+    			}
+        		index = (index + 1) % array.length;
+        		if(pick != -1)
+        			break;
+            }
+            return pick;
+        }
+    }
+    
+    
+    class RandomPickWithBlacklist2 {
+    	int M;
+    	Map<Integer, Integer> map = new HashMap<>();
+    	Random random;
+    	public void  Solution(int N, int[] blacklist) {
+            for(int b : blacklist) {
+            	map.put(b, -1);
+            }
+            M = N - blacklist.length;
+            for(int b : blacklist) {
+            	if(b >= M)
+            		continue;
+            	while(map.containsKey(N - 1))
+            		N--;
+            	map.put(b, N-1);
+            	N--;
+            }
+            random = new Random();
+        }
+        
+        public int pick() {
+        	int pick = random.nextInt(M);
+        	if(map.containsKey(pick))
+        		return map.get(pick);
+        	return pick;
+        }
+    }
+    
+    
+    
+    
     
     
     
