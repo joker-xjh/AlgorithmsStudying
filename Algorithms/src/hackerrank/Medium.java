@@ -4,10 +4,12 @@ import java.io.BufferedReader;
 
 
 
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.math.BigInteger;
 
 
@@ -27,6 +29,7 @@ import java.util.Set;
 import java.util.Stack;
 import java.util.TreeMap;
 import java.util.TreeSet;
+
 
 
 
@@ -4351,7 +4354,6 @@ public class Medium {
 			moves++;
 			for(int t=0; t<size; t++) {
 				int[] R = queue.poll();
-				System.out.println(Arrays.toString(R));
 				for(int i=1; i<=4; i++) {
 					int from = R[i];
 					if(from == 0)
@@ -4443,9 +4445,122 @@ public class Medium {
 		}
 	}
 
+	static void JackgoestoRapture(int N, int[][] E) {
+		Map<Integer, List<Integer>> graph = new HashMap<>();
+		Map<String, Integer> cost = new HashMap<>();
+		for(int[] edge : E) {
+			int from = edge[0], to = edge[1], fare = edge[2];
+			List<Integer> list = graph.get(from);
+			if(list == null) {
+				list = new ArrayList<>();
+				graph.put(from, list);
+			}
+			list.add(to);
+			list = graph.get(to);
+			if(list == null) {
+				list = new ArrayList<>();
+				graph.put(to, list);
+			}
+			list.add(from);
+			cost.put(from+","+to, fare);
+			cost.put(to+","+from, fare);
+		}
+		
+		long min = JackgoestoRaptureDFS(graph, 1, N, 0, cost, new HashMap<>());
+		if(min == Long.MAX_VALUE)
+			System.out.println("NO PATH EXISTS");
+		else
+			System.out.println(min);
+	}
 	
+	static long JackgoestoRaptureDFS(Map<Integer, List<Integer>> graph, int station, int N,long cost,Map<String, Integer> fares, Map<Integer, Long> dp) {
+		if(cost >= dp.getOrDefault(station, Long.MAX_VALUE))
+			return Long.MAX_VALUE;
+		dp.put(station, cost);
+		if(station == N)
+			return cost;
+		long min = Long.MAX_VALUE;
+		for(int next : graph.get(station)) {
+			long next_fate = -1;
+			next_fate = fares.get(station+","+next);
+			if(next_fate < cost)
+				next_fate = 0;
+			else
+				next_fate = next_fate - cost;
+			long next_cost = cost + next_fate;
+			min = Math.min(min, JackgoestoRaptureDFS(graph, next, N, next_cost, fares, dp));
+		}
+		return min;
+	}
 	
+	static void JackgoestoRapture2(Map<Integer, List<Integer>> graph, Map<String, Integer> cost, int N) {
+		long min = Long.MAX_VALUE;
+		Queue<Integer> queue = new LinkedList<>();
+		Map<Integer, Long> dp = new HashMap<>();
+		queue.add(1);
+		dp.put(1, 0L);
+		while(!queue.isEmpty()) {
+			int size = queue.size();
+			for(int t=0; t<size; t++) {
+				int station = queue.poll();
+				long total = dp.get(station);
+				for(int next : graph.get(station)) {
+					int fare = cost.get(station+","+next);
+					long next_total = fare >= total ? fare : total;
+					if(next_total >= dp.getOrDefault(next, Long.MAX_VALUE))
+						continue;
+					dp.put(next, next_total);
+					if(next == N)
+						min = Math.min(min, next_total);
+					else
+						queue.add(next);
+				}
+			}
+			
+		}
+		
+		
+		
+		if(min == Long.MAX_VALUE)
+			System.out.println("NO PATH EXISTS");
+		else
+			System.out.println(min);
+	}
 	
+	static void JackgoestoRaptureInput() throws IOException {
+		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+		String line = reader.readLine();
+		String[] first = line.split(" ");
+		int N = Integer.parseInt(first[0]);
+		int E = Integer.parseInt(first[1]);
+		int[][] array = new int[E][3];
+		Map<Integer, List<Integer>> graph = new HashMap<>();
+		Map<String, Integer> cost = new HashMap<>();
+		for(int i=0; i<E; i++) {
+			String[] temp = reader.readLine().split(" ");
+			for(int j=0; j<3; j++) {
+				array[i][j] = Integer.parseInt(temp[j]);
+				
+			}
+			int from = array[i][0], to = array[i][1], fare = array[i][2];
+			List<Integer> list = graph.get(from);
+			if(list == null) {
+				list = new ArrayList<>();
+				graph.put(from, list);
+			}
+			list.add(to);
+			list = graph.get(to);
+			if(list == null) {
+				list = new ArrayList<>();
+				graph.put(to, list);
+			}
+			list.add(from);
+			cost.put(from+","+to, fare);
+			cost.put(to+","+from, fare);
+		}
+		
+		JackgoestoRapture2(graph, cost, N);
+	}
 	
 	
 	
@@ -4455,12 +4570,8 @@ public class Medium {
 	public static void main(String[] args) throws IOException {
 		Scanner scanner = new Scanner(System.in);
         while(scanner.hasNext()) {
-        	int n = scanner.nextInt();
-        	int[] hanoi = new int[n];
-        	for(int i=0; i<n; i++)
-        		hanoi[i] = scanner.nextInt();
-        	int moves = GenaPlayingHanoi(hanoi, n);
-        	System.out.println(moves);
+        	
+            
         }
         scanner.close();
     }
