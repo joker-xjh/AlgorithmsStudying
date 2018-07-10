@@ -4617,6 +4617,21 @@ public class Medium {
 		return answer;
     }
 	
+	static long stockmax(int[] prices) {
+		long profit = 0;
+		int max = -1;
+		for(int i=prices.length-1; i>=0; i--) {
+			max = Math.max(max, prices[i]);
+			profit += max - prices[i];
+		}
+		return profit;
+    }
+	
+	
+	
+	
+	
+	
 	
 	
 	
