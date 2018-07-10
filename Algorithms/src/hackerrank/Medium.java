@@ -4627,7 +4627,23 @@ public class Medium {
 		return profit;
     }
 	
-	
+	static String sillyGame(int n) {
+		int prime = 0;
+		boolean[] prime_table = new boolean[n+1];
+		for(int i=2; i<=n; i++) {
+			if(!prime_table[i]) {
+				for(int j=2; i*j <= n; j++)
+					prime_table[i*j] = true;
+			}
+		}
+		for(int i=2; i<=n; i++) {
+			if(!prime_table[i])
+				prime++;
+		}
+		if(prime % 2 == 0)
+			return "Bob";
+		return "Alice";
+    }
 	
 	
 	
