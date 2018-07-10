@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -4562,7 +4563,59 @@ public class Medium {
 		JackgoestoRapture2(graph, cost, N);
 	}
 	
-	
+	static int[] rustMurdered(int n, int[][] roads, int s) {
+		int[] answer = new int[n-1];
+		Map<Integer, Set<Integer>> graph = new HashMap<>();
+		for(int[] edge : roads) {
+			int from = edge[0], to = edge[1];
+			Set<Integer> list = graph.get(from);
+			if(list == null) {
+				list = new HashSet<>();
+				graph.put(from, list);
+			}
+			list.add(to);
+			list = graph.get(to);
+			if(list == null) {
+				list = new HashSet<>();
+				graph.put(to, list);
+			}
+			list.add(from);
+		}
+		int[] dp = new int[n+1];
+		Arrays.fill(dp, Integer.MAX_VALUE);
+		dp[s] = 0;
+		Set<Integer> N = new HashSet<>();
+		for(int i=1; i<=n; i++)
+			N.add(i);
+		N.remove(s);
+		Queue<Integer> queue = new LinkedList<>();
+		queue.add(s);
+		while(!queue.isEmpty()) {
+			int size = queue.size();
+			for(int t=0; t<size; t++) {
+				int node = queue.poll();
+				Set<Integer> set = graph.get(node);
+				Iterator<Integer> iterator = N.iterator();
+				while(iterator.hasNext()) {
+					Integer i = iterator.next();
+					if(set != null && set.contains(i))
+						continue;
+					if(dp[node] + 1 >= dp[i])
+						continue;
+					dp[i] = dp[node] + 1;
+					queue.add(i);
+					iterator.remove();
+				}
+			}
+		}
+		int index = 0;
+		for(int i=1; i<=n; i++) {
+			if(dp[i] == 0)
+				continue;
+			answer[index++] = dp[i];
+		}
+		return answer;
+    }
 	
 	
 	
