@@ -4632,13 +4632,10 @@ public class Medium {
 		boolean[] prime_table = new boolean[n+1];
 		for(int i=2; i<=n; i++) {
 			if(!prime_table[i]) {
+				prime++;
 				for(int j=2; i*j <= n; j++)
 					prime_table[i*j] = true;
 			}
-		}
-		for(int i=2; i<=n; i++) {
-			if(!prime_table[i])
-				prime++;
 		}
 		if(prime % 2 == 0)
 			return "Bob";
@@ -4646,7 +4643,17 @@ public class Medium {
     }
 	
 	
-	
+	static long countArray(int n, int K, int x) {
+		int mod = 1000000007;
+		long[] dp = new long[n+1];
+		long[] ep = new long[n+1];
+		dp[1] = 1;
+		for(int i = 2;i <= n;i++){
+			dp[i] = ep[i-1] * (K-1) % mod;
+			ep[i] = (dp[i-1] + ep[i-1] * (K-2)) % mod;
+		}
+		return (x == 1 ? dp[n] : ep[n]);
+    }
 	
 	
 	
