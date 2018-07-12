@@ -4655,7 +4655,18 @@ public class Medium {
 		return (x == 1 ? dp[n] : ep[n]);
     }
 	
+	static long xorSequence(long l, long r) {
+		return xorPresum(r) ^ xorPresum(l-1);
+    }
 	
+	static long xorPresum(long x) {
+		long a = x % 8;
+		if(a == 0 || a == 1) return x;
+	    if(a == 2 || a == 3) return 2;
+	    if(a == 4 || a == 5) return x+2;
+	    if(a == 6 || a == 7) return 0;
+	    return -1;
+	}
 	
 	
 	public static void main(String[] args) throws IOException {
