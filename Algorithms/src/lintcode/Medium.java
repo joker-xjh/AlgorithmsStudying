@@ -1449,9 +1449,59 @@ public class Medium {
 	  }
 	  
 	  
+	  public float getSimilarity(List<String> words1, List<String> words2, List<List<String>> pairs) {
+	      Map<String, String> UF = new HashMap<>();
+	      for(List<String> list : pairs) {
+	    	  for(String word : list) {
+	    		  UF.put(word, word);
+	    	  }
+	      }
+	      for(List<String> list : pairs) {
+	    	  String one = list.get(0);
+	    	  String one_root = getSimilarity_getRoot(UF, one);
+	    	  for(int i=1; i<list.size(); i++) {
+	    		  String two = list.get(i);
+	    		  String two_root = getSimilarity_getRoot(UF, two);
+	    		  if(!one_root.equals(two_root)) {
+	    			  UF.put(two_root, one_root);
+	    		  }
+	    	  }
+	      }
+	      int[][] dp = new int[words1.size()+1][words2.size()+1];
+	      for(int i=1; i<=words1.size(); i++) {
+	    	  String one = words1.get(i-1);
+	    	  for(int j=1; j<=words2.size(); j++) {
+	    		  String two = words2.get(j-1);
+	    		  if(getSimilarity_isSimilary(one, two, UF)) {
+	    			  dp[i][j] = dp[i-1][j-1] + 1;
+	    		  }
+	    		  else {
+	    			  dp[i][j] = Math.max(dp[i-1][j], dp[i][j-1]);
+	    		  }
+	    	  }
+	      }
+		  return dp[words1.size()][words2.size()] * 2.0f / (words1.size() + words2.size());
+	  }
 	  
+	  private boolean getSimilarity_isSimilary(String one, String two, Map<String, String> UF) {
+		  if(one.equals(two))
+			  return true;
+		  if(!UF.containsKey(one) || !UF.containsKey(two))
+			  return false;
+		  String one_root = getSimilarity_getRoot(UF, one);
+		  String two_root = getSimilarity_getRoot(UF, two);
+		  if(!one_root.equals(two_root))
+			  return false;
+		  return true;
+	  }
 	  
-	  
+	  private String getSimilarity_getRoot(Map<String, String> UF, String word) {
+		  while(!word.equals(UF.get(word))) {
+			  UF.put(word, UF.get(UF.get(word)));
+			  word = UF.get(word);
+		  }
+		  return word;
+	  }
 	  
 	  
 	  
@@ -1461,8 +1511,7 @@ public class Medium {
 	  
 	  
 	  public static void main(String[] args) {
-		 Medium test = new Medium();
-		 System.out.println(test.maxValue("01231"));
+		 
 	  }
 
 }
