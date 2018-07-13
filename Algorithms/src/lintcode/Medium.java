@@ -1402,6 +1402,58 @@ public class Medium {
 	  }
 	  
 	  
+	  public boolean validTree(int n, int[][] edges) {
+		  if(n == 1)
+			  return true;
+		  Map<Integer, List<Integer>> graph = new HashMap<>();
+		  for(int[] edge : edges) {
+			  int p = edge[0], v = edge[1];
+			  List<Integer> list = graph.get(p);
+			  if(list == null) {
+				  list = new ArrayList<>();
+				  graph.put(p, list);
+			  }
+			  list.add(v);
+			  list = graph.get(v);
+			  if(list == null) {
+				  list = new ArrayList<>();
+				  graph.put(v, list);
+			  }
+			  list.add(p);
+		  }
+		  boolean[] visited = new boolean[n];
+		  visited[0] = true;
+		  if(!validTreeDFS(0, -1, graph, visited))
+			  return false;
+		  for(int i=1; i<n; i++) {
+			  if(!visited[i])
+				  return false;
+		  }
+		  return true;
+	  }
+	  
+	  private boolean validTreeDFS(int cur, int father, Map<Integer, List<Integer>> graph, boolean[] visited) {
+		  List<Integer> next = graph.get(cur);
+		  if(next == null)
+			  return false;
+		  for(int v : next) {
+			  if(v == father)
+				  continue;
+			  if(visited[v])
+				  return false;
+			  visited[v] = true;
+			  if(!validTreeDFS(v, cur, graph, visited))
+				  return false;
+		  }
+		  return true;
+	  }
+	  
+	  
+	  
+	  
+	  
+	  
+	  
 	  
 	  
 	  
