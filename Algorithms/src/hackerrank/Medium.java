@@ -4711,6 +4711,24 @@ public class Medium {
 	       return -1;
 	  }
 	
+	static int intervalSelection(int[][] intervals) {
+		Arrays.sort(intervals, (a,b) -> a[1] - b[1]);
+		int overlape = 1;
+		int last = 0, limit = 0;
+		for(int i=1; i<intervals.length; i++) {
+			if(intervals[i][0] > intervals[last][1]) {
+				last = i;
+				overlape++;
+			}
+			else if(intervals[i][0] > limit) {
+				limit = intervals[last][1];
+				last = i;
+				overlape++;
+			}
+		}
+		return overlape;
+    }
+	
 	
 	
 	
