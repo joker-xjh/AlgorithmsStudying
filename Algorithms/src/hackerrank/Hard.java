@@ -839,7 +839,18 @@ public class Hard {
 		scanner.close();
 	}
 
-	
+	static int truckTour(int[][] petrolpumps) {
+		int index = 0;
+		long sum = 0;
+		for(int i=0; i<petrolpumps.length; i++) {
+			if(sum < 0) {
+				sum = 0;
+				index = i;
+			}
+			sum = sum + petrolpumps[i][0] - petrolpumps[i][1];
+		}
+		return index;
+    }
 	
 	
 	
@@ -851,16 +862,7 @@ public class Hard {
 	public static void main(String[] args) {
 		Scanner scanner = new Scanner(System.in);
         while(scanner.hasNext()){
-            int n = scanner.nextInt();
-            int[][] query = new int[n][2];
-            for(int i=0; i<n; i++){
-                String c = scanner.next();
-                if(c.equals("a")){
-                    query[i][0] = 1;
-                }
-                query[i][1] = scanner.nextInt();
-            }
-            MedianUpdates(query);
+            
         }
         scanner.close();
 	}
