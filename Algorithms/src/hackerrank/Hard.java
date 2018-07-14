@@ -2,6 +2,7 @@ package hackerrank;
 
 import java.util.ArrayList;
 
+
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -17,6 +18,7 @@ import java.util.SortedMap;
 import java.util.Stack;
 import java.util.TreeMap;
 import java.util.TreeSet;
+
 
 public class Hard {
 	
@@ -880,13 +882,52 @@ public class Hard {
 	}
 	
 	
+	static long Triplets(int[] d) {
+		long triplets = 0;
+		TreeSet<Integer> right = new TreeSet<>();
+		Map<Integer, Integer> map = new HashMap<>();
+		Map<Integer, Integer> small = new HashMap<>();
+		TreeSet<Integer> left = new TreeSet<>();
+		for(int i=1; i<d.length; i++) {
+			right.add(d[i]);
+			map.put(d[i], map.getOrDefault(d[i], 0) + 1);
+		}
+		left.add(d[0]);
+		for(int i=1; i<d.length; i++) {
+			int fre = map.get(d[i]);
+			int pre_left_size = small.getOrDefault(d[i], 0);
+			long left_size = left.headSet(d[i]).size() - pre_left_size;
+			long right_size = right.tailSet(d[i], false).size();
+			triplets += left_size * right_size;
+			left.add(d[i]);
+			if(fre == 1)
+				right.remove(d[i]);
+			else
+				map.put(d[i], fre - 1);
+			small.put(d[i], (int)left_size);
+		}
+		return triplets;
+    }
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
 	public static void main(String[] args) {
 		Scanner scanner = new Scanner(System.in);
         while(scanner.hasNext()){
-            
+            int n = scanner.nextInt();
+            int[] d = new int[n];
+            for(int i=0; i<n; i++)
+            	d[i] = scanner.nextInt();
+            System.out.println(Triplets(d));
         }
         scanner.close();
 	}
