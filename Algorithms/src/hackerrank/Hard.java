@@ -6,9 +6,11 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.SortedMap;
@@ -853,7 +855,29 @@ public class Hard {
     }
 	
 	
-	
+	static int truckTour2(int[][] array) {
+		Queue<Integer> queue = new LinkedList<>();
+		int n = array.length;
+		for(int i=0; i<n; i++) {
+			queue.add(array[i][0] - array[i][1]);
+		}
+		for(int i=0; i<n; i++) {
+			long sum = 0;
+			boolean success = true;
+			for(Integer temp : queue) {
+				sum += temp;
+				if(sum < 0) {
+					success = false;
+					break;
+				}
+			}
+			if(success) {
+				return i;
+			}
+			queue.add(queue.poll());
+		}
+		return -1;
+	}
 	
 	
 	
