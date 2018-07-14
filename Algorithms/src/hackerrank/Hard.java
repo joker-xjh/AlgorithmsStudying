@@ -3,6 +3,7 @@ package hackerrank;
 import java.util.ArrayList;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -365,6 +366,109 @@ public class Hard {
         }
         return wait / customers.length;
     }
+	
+	
+	static class MedianUpdates_comparator implements Comparator<Long> {
+
+		@Override
+		public int compare(Long o1, Long o2) {
+			if(o1 < o2)
+				return 1;
+			else if(o1 > o2)
+				return -1;
+			return 0;
+		}
+		
+	}
+	
+	static void MedianUpdates(int[][] query) {
+		PriorityQueue<Long> left = new PriorityQueue<>(new MedianUpdates_comparator());
+        PriorityQueue<Long> right = new PriorityQueue<>();
+        for(int[] q : query) {
+        	long num = q[1];
+        	if(q[0] == 0) {
+        		if(left.isEmpty()) {
+        			System.out.println("Wrong!");
+            		continue;
+        		}
+        		double avg = 0;
+            	if(left.size() > right.size()) {
+            		avg = left.peek();
+            	}
+            	else {
+            		avg = (left.peek() + right.peek()) / 2d;
+            	}
+            	boolean success = false;
+            	if(num <= avg) {
+            		success = left.remove(num);
+            	}
+            	else {
+            		success = right.remove(num);
+            	}
+            	if(!success) {
+            		System.out.println("Wrong!");
+            		continue;
+            	}
+            	if(left.size() < right.size()) {
+            		left.add(right.poll());
+            	}
+            	else if(left.size() - 2 == right.size()) {
+            		right.add(left.poll());
+            	}
+            	
+        	}
+        	else {
+        		if(left.isEmpty()) {
+            		left.add(num);
+            	}
+            	else if(left.size() == right.size()) {
+            		if(num <= right.peek()) {
+            			left.add(num);
+            		}
+            		else {
+            			left.add(right.poll());
+            			right.add(num);
+            		}
+            	}
+            	else if(left.size() > right.size()) {
+            		if(num < left.peek()) {
+            			right.add(left.poll());
+            			left.add(num);
+            		}
+            		else {
+            			right.add(num);
+            		}
+            	}
+            	
+        	}
+        	if(left.isEmpty()) {
+    			System.out.println("Wrong!");
+        		continue;
+    		}
+        	long avg = 0;
+        	if(left.size() > right.size()) {
+        		avg = left.peek();
+        		System.out.println(avg);
+        	}
+        	else {
+        		avg = (left.peek() + right.peek()) / 2;
+        		if(avg * 2 == (left.peek() + right.peek())) {
+            		System.out.println(avg);
+        		}
+        		else {
+        			if(avg == 0) {
+        				System.out.println((left.peek() + right.peek()) / 2d);
+        			}
+        			else {
+        				System.out.println(avg+".5");
+        			}
+        		}
+        	}
+        	
+        	
+        }
+	}
+	
 	
 	static double[] runningMedian(int[] a) {
         int n = a.length;
@@ -746,15 +850,19 @@ public class Hard {
 	
 	public static void main(String[] args) {
 		Scanner scanner = new Scanner(System.in);
-		while(scanner.hasNext()) {
-			int n = scanner.nextInt();
-			int[] arr = new int[n];
-			for(int i=0; i<n; i++)
-				arr[i] = scanner.nextInt();
-			System.out.println(ArrayPairs(arr));
-		}
-		
-		scanner.close();
+        while(scanner.hasNext()){
+            int n = scanner.nextInt();
+            int[][] query = new int[n][2];
+            for(int i=0; i<n; i++){
+                String c = scanner.next();
+                if(c.equals("a")){
+                    query[i][0] = 1;
+                }
+                query[i][1] = scanner.nextInt();
+            }
+            MedianUpdates(query);
+        }
+        scanner.close();
 	}
 	
 	
