@@ -909,7 +909,52 @@ public class Hard {
 		return triplets;
     }
 	
-	
+	static long Triplets2(int[] d) {
+		long triplets = 0;
+		int[] clone = d.clone();
+		Arrays.sort(clone);
+		Map<Integer, Integer> index_map = new HashMap<>();
+		int index = 0;
+		index_map.put(clone[0], index++);
+		for(int i=1; i<d.length; i++) {
+			if(clone[i] == clone[i-1])
+				continue;
+			index_map.put(clone[i], index++);
+		}
+		index--;
+		int[] right_BIT = new int[d.length+1];
+		int[] left_BIT = new int[d.length+1];
+		Map<Integer, Integer> used = new HashMap<>();
+		for(int i=1; i<d.length; i++) {
+			int fre = used.getOrDefault(d[i], 0);
+			if(fre == 0) {
+				BIT_update(right_BIT, index_map.get(d[i]), 1);
+			}
+			used.put(d[i], fre+1);
+		}
+		Set<Integer> left_used = new HashSet<>();
+		BIT_update(left_BIT, index_map.get(d[0]), 1);
+		left_used.add(d[0]);
+		Map<Integer, Integer> preSmall = new HashMap<>();
+		for(int i=1; i<d.length-1; i++) {
+			int fre = used.get(d[i]);
+			int pos = index_map.get(d[i]);
+			int pre_left_size = preSmall.getOrDefault(d[i], 0);
+			long left_size = BIT_sum(left_BIT, pos-1) - pre_left_size;
+			long right_size =BIT_sum(right_BIT, index) - BIT_sum(right_BIT, pos);
+			triplets += left_size * right_size;
+			if(fre == 1) {
+				BIT_update(right_BIT, pos, -1);
+			}
+			if(left_used.add(d[i])) {
+				BIT_update(left_BIT, pos, 1);
+			}
+			preSmall.put(d[i], (int)left_size);
+			used.put(d[i], fre-1);
+		}
+		
+		return triplets;
+	}
 	
 	
 	
@@ -927,7 +972,7 @@ public class Hard {
             int[] d = new int[n];
             for(int i=0; i<n; i++)
             	d[i] = scanner.nextInt();
-            System.out.println(Triplets(d));
+            System.out.println(Triplets2(d));
         }
         scanner.close();
 	}
