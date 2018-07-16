@@ -3624,7 +3624,23 @@ public class string {
           return max;
       }
      
-     
+      public boolean reorderedPowerOf2(int N) {
+          int two = 1;
+          Set<String> pow_of_two = new HashSet<>();
+    	  pow_of_two.add("1");
+    	  for(int i=1; i<31; i++) {
+    		  two *= 2;
+    		  char[] temp = Integer.toString(two).toCharArray();
+    		  Arrays.sort(temp);
+    		  pow_of_two.add(new String(temp));
+    	  }
+    	  String binary = Integer.toString(N);
+    	  char[] binary_array = binary.toCharArray();
+    	  Arrays.sort(binary_array);
+    	  if(!pow_of_two.contains(new String(binary_array)))
+    		  return false;
+    	  return true;
+      }
      
      
      
