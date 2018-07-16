@@ -4079,6 +4079,52 @@ public class Array {
          return transpose;
      }
      
+     
+     
+     public int[] advantageCount(int[] A, int[] B) {
+    	 int n = A.length;
+         int[] answer = new int[n];
+         TreeMap<Integer, List<Integer>> tree = new TreeMap<>();
+         for(int i=0; i<n; i++) {
+        	 List<Integer> index = tree.get(A[i]);
+        	 if(index == null) {
+        		 index = new LinkedList<>();
+        		 tree.put(A[i], index);
+        	 }
+        	 index.add(i);
+         }
+         boolean[] used = new boolean[n];
+         for(int i=0; i<n; i++) {
+        	 answer[i] = -1;
+        	 Map.Entry<Integer, List<Integer>> entry = tree.higherEntry(B[i]);
+        	 if(entry == null)
+        		 continue;
+        	 List<Integer> index = entry.getValue();
+        	 int j = index.remove(0);
+        	 used[j] = true;
+        	 answer[i] = A[j];
+        	 if(index.isEmpty())
+        		 tree.remove(entry.getKey());
+         }
+         int index = 0;
+         for(int i=0; i<n; i++) {
+        	 if(answer[i] == -1) {
+        		 while(used[index])
+        			 index++;
+        		 answer[i] = A[index++];
+        	 }
+         }
+         
+         return answer;
+     }
+     
+     
+     
+     
+     
+     
+     
+     
 
 
 	public static void main(String[] args) {
