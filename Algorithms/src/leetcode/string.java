@@ -3610,7 +3610,19 @@ public class string {
     	  return score;
       }
      
-      
+      public int binaryGap(int N) {
+          int max = 0;
+          String binary = Integer.toBinaryString(N);
+          int left = 0;
+          for(int i=1; i<binary.length(); i++) {
+        	  char c = binary.charAt(i);
+        	  if(c == '1') {
+        		  max = Math.max(max, i - left);
+        		  left = i;
+        	  }
+          }
+          return max;
+      }
      
      
      
