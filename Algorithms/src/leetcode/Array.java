@@ -4118,9 +4118,73 @@ public class Array {
          return answer;
      }
      
+     public int minRefuelStops(int target, int startFuel, int[][] stations) {
+    	 if(startFuel >= target)
+    		 return 0;
+         TreeMap<Long, Integer> tree = new TreeMap<>();
+         for(int i=0; i<stations.length; i++) {
+        	 int distance = stations[i][0];
+        	 tree.put((long)distance, i);
+         }
+    	 Queue<long[]> queue = new LinkedList<>();
+    	 queue.add(new long[] {0, startFuel, 0});
+    	 Map<String, Integer> dp = new HashMap<>();
+    	 dp.put(0+","+startFuel, 0);
+    	 while(!queue.isEmpty()) {
+    		 int size = queue.size();
+    		 for(int t=0; t<size; t++) {
+    			 long[] array = queue.poll();
+    			 long position = array[0], fuel = array[1], stop = array[2];
+    			 Map.Entry<Long, Integer> entry = tree.floorEntry(position + fuel);
+    			 if(entry == null)
+    				 continue;
+    			 int limit = entry.getValue();
+    			 for(int i=limit; i>=0; i--) {
+    				 if(stations[i][0] <= position)
+    					 break;
+    				 long[] next_array = {stations[i][0], fuel-(stations[i][0]-position)+stations[i][1], stop+1};
+    				 if(next_array[0] + next_array[1] <= stations[limit][0])
+    					 continue;
+    				 if(next_array[0]+next_array[1] >= target)
+    					 return (int) next_array[2];
+    				 String key = Arrays.toString(next_array);
+    				 if(next_array[2] >= dp.getOrDefault(key, Integer.MAX_VALUE))
+    					 continue;
+    				 dp.put(key, (int)next_array[2]);
+    				 queue.add(next_array);
+    			 }
+    		 }
+    	 }
+    	 return -1;
+     }
      
-     
-     
+     public int minRefuelStops2(int target, int startFuel, int[][] stations) {
+    	 int stop = 0;
+    	 PriorityQueue<Integer> pq = new PriorityQueue<>((a,b) -> b-a);
+    	 int pre = 0;
+    	 int tank = startFuel;
+    	 for(int[] station : stations) {
+    		 int cur = station[0], fuel = station[1];
+    		 tank -= cur - pre;
+    		 while(!pq.isEmpty() && tank < 0) {
+    			 tank += pq.poll();
+    			 stop++;
+    		 }
+    		 if(tank < 0)
+    			 return -1;
+    		 pre = cur;
+    		 pq.add(fuel);
+    	 }
+    	 tank -= target - pre;
+    	 while(!pq.isEmpty() && tank < 0) {
+			 tank += pq.poll();
+			 stop++;
+		 }
+		 if(tank < 0)
+			 return -1;
+    	 
+    	 return stop;
+     }
      
      
      
