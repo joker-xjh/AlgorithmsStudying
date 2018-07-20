@@ -937,11 +937,58 @@ public class Tree {
     	}
     }
     
+    
+    class Node {
+        public int val;
+        public List<Node> children;
+
+        public Node() {}
+
+        public Node(int _val,List<Node> _children) {
+            val = _val;
+            children = _children;
+        }
+    };
+    
+    
+    public int maxDepth(Node root) {
+        int depth = 0;
+    	if(root == null)
+    		return 0;
+    	Queue<Node> queue = new LinkedList<>();
+    	queue.add(root);
+    	while(!queue.isEmpty()) {
+    		int size = queue.size();
+    		depth++;
+    		for(int t=0; t<size; t++) {
+    			Node node = queue.poll();
+    			for(Node child : node.children) {
+    				if(child == null)
+    					continue;
+    				queue.add(child);
+    			}
+    		}
+    	}
+    	return depth;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
  
 
 	public static void main(String[] args) {
 		
-
 	}
 
 }
