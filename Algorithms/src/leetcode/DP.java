@@ -1941,15 +1941,36 @@ public class DP {
     }
     
     
+    public int change(int amount, int[] coins) {
+    	int[][] dp = new int[coins.length+1][amount+1];
+    	dp[0][0] = 1;
+    	for(int i=1; i<=coins.length; i++) {
+    		dp[i][0] = 1;
+    		for(int j=1; j<=amount; j++) {
+    			dp[i][j] += dp[i-1][j];
+    			if(j >= coins[i-1])
+    				dp[i][j] += dp[i][j-coins[i-1]];
+    		}
+    	}
+    	return dp[coins.length][amount];
+    }
     
+    public int change2(int amount, int[] coins) {
+    	int[] dp = new int[amount+1];
+    	dp[0] = 1;
+    	for(int coin : coins) {
+    		for(int i=coin; i<=amount; i++) {
+    			dp[i] += dp[i-coin];
+    		}
+    	}
+    	return dp[amount];
+    }
     
     
     
     
     public static void main(String[] args) {
-    	DP test = new DP();
-    	int[] array = {11,47,97,35,-46,59,46,51,59,80,14,-6,2,20,96,1,18,74,-17,71};
-    	test.shortestSubarray2(array, 282);
+    	
 	}
     
 
