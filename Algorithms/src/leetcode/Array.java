@@ -4268,6 +4268,41 @@ public class Array {
     	 return false;
      }
      
+     public boolean circularArrayLoop3(int[] nums) {
+    	 int n = nums.length;
+    	 for(int i=0; i<n; i++) {
+    		 if(nums[i] < 0)
+    			 continue;
+    		 int index = i;
+    		 int pre = index;
+    		 while(nums[index] > 0) {
+    			 pre = index;
+    			 index = (nums[pre] + pre) % n;
+    			 if(index == i && pre != index)
+    				 return true;
+    			 else if(pre == index)
+    				 break;
+    		 }
+    	 }
+    	 for(int i=n-1; i>=0; i--) {
+    		 if(nums[i] > 0)
+    			 continue;
+    		 int index = i;
+    		 int pre = i;
+    		 while(nums[index] < 0) {
+    			 pre = index;
+    			 index = nums[pre] + pre;
+    			 if(index < 0)
+    				 index = n + index;
+    			 if(index == i && pre != index)
+    				 return true;
+    			 else if(pre == index)
+    				 break;
+    		 }
+    	 }
+    	 return false;
+     }
+     
      
      
      
