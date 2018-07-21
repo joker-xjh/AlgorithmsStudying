@@ -4305,9 +4305,52 @@ public class Array {
      
      
      
+     class Node {
+    	    public int val;
+    	    public Node prev;
+    	    public Node next;
+    	    public Node child;
+
+    	    public Node() {}
+
+    	    public Node(int _val,Node _prev,Node _next,Node _child) {
+    	        val = _val;
+    	        prev = _prev;
+    	        next = _next;
+    	        child = _child;
+    	    }
+    	};
      
-     
-     
+	public Node flatten(Node head) {
+		Node node = head;
+		Stack<Node> stack = new Stack<>();
+		outer:
+		while(node != null) {
+			while(node.child == null && node.next == null) {
+				Node next = null;
+				if(!stack.isEmpty())
+					next = stack.pop();
+				node.next = next;
+				if(next != null) {
+					next.prev = node;
+				}
+				node = next;
+				if(node == null)
+					break outer;
+			}
+			if(node.child == null) {
+				node = node.next;
+				continue;
+			}
+			Node next = node.next;
+			if(next != null)
+				stack.push(next);
+			node.next = node.child;
+			node.child.prev = node;
+			node.child = null;
+		}
+		return head;
+	}
      
      
      
