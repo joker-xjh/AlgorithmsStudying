@@ -4187,6 +4187,95 @@ public class Array {
      }
      
      
+     public boolean circularArrayLoop(int[] nums) {
+         int n = nums.length;
+         int[] forward = new int[n];
+         int[] backward = new int[n];
+         int next_forward_index = -1;
+         int pre_backward_index = -1;
+         if(nums[n-1] > 0) {
+        	 forward[n-1] = n-1 + nums[n-1];
+        	 next_forward_index = n-1;
+         }
+         else {
+        	 forward[n-1] = n-1;
+         }
+         
+    	 for(int i=n-2; i>=0; i--) {
+    		 if(nums[i] > 0 && next_forward_index != -1) {
+    			 forward[i] = Math.max(i + nums[i], forward[next_forward_index]);
+    			 next_forward_index = i;
+    		 }
+    		 else {
+    			 forward[i] = i;
+    		 }
+    	 }
+    	 if(nums[0] < 0) {
+    		 backward[0] = -nums[0];
+    		 pre_backward_index = 0;
+    	 }
+    	 else {
+    		 backward[0] = 0;
+    	 }
+    	 for(int i=1; i<n; i++) {
+    		 if(nums[i] < 0 && pre_backward_index != -1) {
+    			 backward[i] = Math.min(i + nums[i], backward[pre_backward_index]);
+    			 pre_backward_index = i;
+    		 }
+    		 else {
+    			 backward[i] = i;
+    		 }
+    	 }
+    	 return false;
+     }
+     
+     public boolean circularArrayLoop2(int[] nums) {
+    	 int n = nums.length;
+    	 boolean[] used = new boolean[n];
+    	 for(int i=0; i<n; i++) {
+    		 if(used[i] || nums[i] < 0)
+    			 continue;
+    		 int index = i;
+    		 int pre = index;
+    		 while(nums[index] > 0) {
+    			 pre = index;
+    			 used[pre] = true;
+    			 index = (nums[pre] + pre) % n;
+    			 if(index == i && pre != index)
+    				 return true;
+    			 else if(pre == index)
+    				 break;
+    		 }
+    	 }
+    	 Arrays.fill(used, false);
+    	 for(int i=n-1; i>=0; i--) {
+    		 if(used[i] || nums[i] > 0)
+    			 continue;
+    		 int index = i;
+    		 int pre = i;
+    		 while(nums[index] < 0) {
+    			 pre = index;
+    			 used[pre] = true;
+    			 index = nums[pre] + pre;
+    			 if(index < 0)
+    				 index = n + index;
+    			 if(index == i && pre != index)
+    				 return true;
+    			 else if(pre == index)
+    				 break;
+    		 }
+    	 }
+    	 return false;
+     }
+     
+     
+     
+     
+     
+     
+     
+     
+     
      
      
 
