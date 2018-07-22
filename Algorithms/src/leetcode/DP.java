@@ -1968,9 +1968,50 @@ public class DP {
     
     
     
+    public int lenLongestFibSubseq(int[] A) {
+    	int n = A.length;
+    	int fib = 0;
+    	int[][] dp = new int[n][n];
+    	Map<Integer, Integer> map = new HashMap<>();
+    	for(int i=0; i<n; i++) {
+    		map.put(A[i], i);
+    		for(int j=i+1; j<n; j++)
+    			dp[i][j] = 2;
+    	}
+    	for(int j=2; j<n; j++) {
+    		for(int i=j-1; i>=0; i--) {
+    			int target = A[j] - A[i];
+    			if(!map.containsKey(target))
+    				continue;
+    			int pre = map.get(target);
+    			if(pre > i)
+    				continue;
+    			dp[i][j] = Math.max(dp[i][j], dp[pre][i] + 1);
+    			fib = Math.max(fib, dp[i][j]);
+    		}
+    	}
+    	return fib == 2 ? 0 : fib;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     public static void main(String[] args) {
-    	
+    	DP test = new DP();
+    	int[] array = {1,2,3,4,5,6,7,8,9};
+    	test.lenLongestFibSubseq(array);
 	}
     
 
