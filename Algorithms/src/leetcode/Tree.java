@@ -1039,8 +1039,29 @@ public class Tree {
     }
     
     
+    public boolean leafSimilar(TreeNode root1, TreeNode root2) {
+        List<Integer> list1 = new ArrayList<>();
+        List<Integer> list2 = new ArrayList<>();
+    	leafSimilar(root1, list1);
+    	leafSimilar(root2, list2);
+    	if(list1.size() != list2.size())
+    		return false;
+    	int n = list1.size();
+    	for(int i=0; i<n; i++) {
+    		if(list1.get(i) != list2.get(i))
+    			return false;
+    	}
+    	return true;
+    }
     
-    
+    private void leafSimilar(TreeNode node, List<Integer> list) {
+    	if(node == null)
+    		return;
+    	if(node.left == null && node.right == null)
+    		list.add(node.val);
+    	leafSimilar(node.left, list);
+    	leafSimilar(node.right, list);
+    }
     
     
     
@@ -1048,15 +1069,7 @@ public class Tree {
  
 
 	public static void main(String[] args) {
-		int[][] grid = {{1,1,1,1,0,0,0,0},
-				        {1,1,1,1,0,0,0,0},
-				        {1,1,1,1,1,1,1,1},
-				        {1,1,1,1,1,1,1,1},
-				        {1,1,1,1,0,0,0,0},
-				        {1,1,1,1,0,0,0,0},
-				        {1,1,1,1,0,0,0,0},
-				        {1,1,1,1,0,0,0,0}};
-		new Tree().construct(grid);
+		
 	}
 
 }
