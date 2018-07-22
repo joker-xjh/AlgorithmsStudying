@@ -4351,7 +4351,109 @@ public class Array {
 		}
 		return head;
 	}
-     
+    
+	
+	public int robotSim(int[] commands, int[][] obstacles) {
+        int square = 0;
+        int x = 0, y = 0;
+        int dir = 0;
+        Map<Integer, TreeSet<Integer>> obstacles_x = new HashMap<>();
+        Map<Integer, TreeSet<Integer>> obstacles_y = new HashMap<>();
+        for(int[] ob : obstacles) {
+        	int X = ob[0], Y = ob[1];
+        	TreeSet<Integer> tree = obstacles_x.get(X);
+        	if(tree == null) {
+        		tree = new TreeSet<>();
+        		obstacles_x.put(X, tree);
+        	}
+        	tree.add(Y);
+        	tree = obstacles_y.get(Y);
+        	if(tree == null) {
+        		tree = new TreeSet<>();
+        		obstacles_y.put(Y, tree);
+        	}
+        	tree.add(X);
+        }
+        for(int c : commands) {
+        	if(c < 0) {
+        		if(c == -2) {
+        			dir -= 1;
+        			if(dir < 0)
+        				dir += 4;
+        		}
+        		else {
+        			dir = (dir+1) % 4;
+        		}
+        	}
+        	else {
+        		if(dir == 0) {
+        			TreeSet<Integer> tree = obstacles_x.get(x);
+        			if(tree != null) {
+        				Integer ob = tree.higher(y);
+        				if(ob != null && y + c >= ob) {
+        					y = ob - 1;
+        				}
+        				else {
+        					y += c;
+        				}
+        			}
+        			else {
+            			y += c;
+        			}
+        			
+        		}
+        		else if(dir == 1) {
+        			TreeSet<Integer> tree = obstacles_y.get(y);
+        			if(tree != null) {
+        				Integer ob = tree.higher(x);
+        				if(ob != null && x + c >= ob) {
+        					x = ob - 1;
+        				}
+        				else {
+        					x += c;
+        				}
+        			}
+        			else {
+        				x += c;
+        			}
+        			
+        		}
+        		else if(dir == 2) {
+        			TreeSet<Integer> tree = obstacles_x.get(x);
+        			if(tree != null) {
+        				Integer ob = tree.lower(y);
+        				if(ob != null && y - c <= ob) {
+        					y = ob + 1;
+        				}
+        				else {
+        					y -= c;
+        				}
+        			}
+        			else {
+            			y -= c;
+        			}
+        		}
+        		else {
+        			TreeSet<Integer> tree = obstacles_y.get(y);
+        			if(tree != null) {
+        				Integer ob = tree.lower(x);
+        				if(ob != null && x - c <= ob) {
+        					x = ob + 1;
+        				}
+        				else {
+        					x -= c;
+        				}
+        			}
+        			else {
+        				x -= c;
+        			}
+        		}
+        	}
+        	square = Math.max(square, x*x+y*y);
+        }
+        
+        return square;
+    }
      
      
      
