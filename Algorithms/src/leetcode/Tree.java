@@ -973,10 +973,70 @@ public class Tree {
     }
     
     
+    class QuadNode {
+        public boolean val;
+        public boolean isLeaf;
+        public QuadNode topLeft;
+        public QuadNode topRight;
+        public QuadNode bottomLeft;
+        public QuadNode bottomRight;
+
+        public QuadNode() {}
+
+        public QuadNode(boolean _val,boolean _isLeaf,QuadNode _topLeft,QuadNode _topRight,QuadNode _bottomLeft,QuadNode _bottomRight) {
+            val = _val;
+            isLeaf = _isLeaf;
+            topLeft = _topLeft;
+            topRight = _topRight;
+            bottomLeft = _bottomLeft;
+            bottomRight = _bottomRight;
+        }
+    };
     
     
+    public QuadNode construct(int[][] grid) {
+        int n = grid.length;
+    	QuadNode root = construct(grid, new int[] {0,0}, new int[] {0, n-1}, new int[] {n-1,0}, new int[] {n-1,n-1});
+    	return root;
+    }
     
-    
+    private QuadNode construct(int[][] grid, int[] top_left, int[] top_right, int[] bottom_left, int[] bottom_right) {
+		QuadNode node = new QuadNode();
+    	int cmp = grid[top_left[0]][top_left[1]];
+    	boolean isLeaf = true;
+    	outer:
+    	for(int i=top_left[0]; i<=bottom_left[0]; i++) {
+    		for(int j=top_left[1]; j<=top_right[1]; j++) {
+    			if(grid[i][j] != cmp) {
+    				isLeaf = false;
+    				break outer;
+    			}
+    		}
+    	}
+    	if(isLeaf) {
+    		node.isLeaf = true;
+    		node.val = cmp == 1 ? true : false;
+    	}
+    	else {
+    		node.topLeft = construct(grid, new int[] {top_left[0], top_left[1]}, 
+    								new int[] {top_right[0], (top_left[1]+top_right[1])/2}, 
+    								new int[] {(bottom_left[0]+top_left[0])/2, bottom_left[1]}, 
+    								new int[] {(bottom_right[0]+bottom_left[0])/2, (bottom_right[1]+top_right[1])/2});
+    		node.topRight = construct(grid, new int[] {top_left[0], (top_left[1]+top_right[1])/2+1}, 
+					new int[] {top_right[0], top_right[1]}, 
+					new int[] {(bottom_left[0]+top_left[0])/2, (bottom_left[1]+bottom_right[1])/2+1}, 
+					new int[] {(bottom_right[0]+top_right[0])/2, bottom_right[1]});
+    		node.bottomLeft = construct(grid, new int[] {(top_left[0]+bottom_left[0])/2+1, top_left[1]}, 
+					new int[] {(top_left[0]+bottom_left[0])/2+1, (top_right[1]+top_left[1])/2}, 
+					new int[] {bottom_left[0], bottom_left[1]}, 
+					new int[] {bottom_right[0], (bottom_right[1]+bottom_left[1])/2});
+    		node.bottomRight = construct(grid, new int[] {(top_left[0]+bottom_left[0])/2+1, (top_left[1]+top_right[1])/2+1}, 
+					new int[] {(top_right[0]+bottom_right[0])/2+1, top_right[1]}, 
+					new int[] {bottom_left[0], (bottom_left[1]+bottom_right[1])/2+1}, 
+					new int[] {bottom_right[0], bottom_right[1]});
+    	}
+    	return node;
+    }
     
     
     
@@ -988,7 +1048,15 @@ public class Tree {
  
 
 	public static void main(String[] args) {
-		
+		int[][] grid = {{1,1,1,1,0,0,0,0},
+				        {1,1,1,1,0,0,0,0},
+				        {1,1,1,1,1,1,1,1},
+				        {1,1,1,1,1,1,1,1},
+				        {1,1,1,1,0,0,0,0},
+				        {1,1,1,1,0,0,0,0},
+				        {1,1,1,1,0,0,0,0},
+				        {1,1,1,1,0,0,0,0}};
+		new Tree().construct(grid);
 	}
 
 }
