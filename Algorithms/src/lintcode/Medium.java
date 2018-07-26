@@ -1503,7 +1503,20 @@ public class Medium {
 		  return word;
 	  }
 	  
-	  
+	  public String DeleteDigits(String A, int k) {
+	      String result = A;
+	      while(k-- > 0) {
+	    	  int i = 0;
+	    	  while(i < result.length()-1 && result.charAt(i) <= result.charAt(i+1))
+	    		  i++;
+	    	  result = result.substring(0, i) + result.substring(i+1);
+	      }
+	      int i = 0;
+	      while(i < result.length() && result.charAt(i) == '0')
+	    	  i++;
+	      result = result.substring(i);
+	      return result;
+	  }
 	  
 	  
 	  
