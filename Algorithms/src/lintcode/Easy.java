@@ -736,6 +736,31 @@ public class Easy {
     }
 	
 	
+	public String[] findRestaurant(String[] list1, String[] list2) {
+        Map<String, Integer> map1 = new HashMap<>();
+        for(int i=0; i<list1.length; i++) {
+        	map1.put(list1[i], i);
+        }
+        int min = Integer.MAX_VALUE;
+        Map<Integer, List<String>> restaurant = new HashMap<>();
+        for(int i=0; i<list2.length; i++) {
+        	int index1 = map1.getOrDefault(list2[i], -1);
+        	if(index1 == -1 || index1 + i > min)
+        		continue;
+        	List<String> list = restaurant.get(index1 + i);
+        	if(list == null) {
+        		list = new ArrayList<>();
+        		restaurant.put(index1+i, list);
+        	}
+        	list.add(list2[i]);
+        	min = Math.min(min, index1 + i);
+        }
+        String[] answer = new String[restaurant.get(min).size()];
+        restaurant.get(min).toArray(answer);
+		return answer;
+    }
+	
+	
 	
 	
 	
