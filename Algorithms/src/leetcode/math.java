@@ -478,7 +478,36 @@ public class math {
     }
     
     
-    
+    static class RandomFlipMatrix {
+    	
+    	Set<String> used;
+    	int x, y;
+    	Random random;
+    	
+    	public RandomFlipMatrix(int n_rows, int n_cols) {
+    		used = new HashSet<>();
+    		x = n_rows;
+    		y = n_cols;
+    		random = new Random();
+        }
+        
+        public int[] flip() {
+            int row = random.nextInt(x);
+            int col = random.nextInt(y);
+            while(!used.add(row + "," + col)) {
+            	row = random.nextInt(x);
+                col = random.nextInt(y);
+            }
+            used.add(row+","+col);
+        	return new int[] {row, col};
+        }
+        
+        public void reset() {
+            used.clear();
+        }
+        
+        
+    }
     
     
     
