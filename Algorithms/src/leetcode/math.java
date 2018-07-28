@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -510,6 +511,109 @@ public class math {
     }
     
     
+   static class RandomFlipMatrix2 {
+    	int[] row_counter;
+        Map<Integer, Integer> row_map;
+        Map<Integer, Integer> row_to_col;
+        Map<Integer, Map<Integer, Integer>> map;
+        int row, original_row, original_col;
+        Random row_random, col_random;
+        public void Solution(int n_rows, int n_cols) {
+            row_counter = new int[n_rows];
+            row_map = new HashMap<>();
+            row_to_col = new HashMap<>();  
+            row = n_rows;
+            original_row = row;
+            original_col = n_cols;
+            row_random = new Random();
+            col_random = new Random();
+            map = new HashMap<>();
+            for(int i=0; i<row; i++) {
+                map.put(i, new HashMap<>());
+                row_to_col.put(i, n_cols);
+            }
+        }
+        
+        public int[] flip() {
+            int[] pos = new int[2];
+            int i = row_random.nextInt(row);
+            int pre_i = i;
+            i = row_map.getOrDefault(i, i);
+            row_counter[i]++;
+            if(row_counter[i] == original_col) {
+                row--;
+                if(i < row) {
+                    if(row_counter[row] == original_col)
+                			row = row_map.get(row);
+                    row_map.put(i, row);
+                }
+                else if(i > row) {
+                	row_map.put(pre_i, row);
+                }
+            }
+            pos[0] = i;
+          //  System.out.println(Arrays.toString(row_counter));
+            
+            int col = row_to_col.get(i);
+            Map<Integer, Integer> col_map = map.get(i);
+            int j = col_random.nextInt(col);
+            int pre_j = j;
+            j = col_map.getOrDefault(j, j);
+            col--;
+            row_to_col.put(i, col);
+            if(j < col) {
+            	int temp_col = col;
+            	if(col_map.containsKey(temp_col))
+            		temp_col = col_map.get(temp_col);
+                col_map.put(j, temp_col);
+            }
+            else if(j > col) {
+            	int temp_col = col;
+            	if(col_map.containsKey(temp_col))
+            		temp_col = col_map.get(temp_col);
+            	col_map.put(pre_j, temp_col);
+            }
+            pos[1] = j;
+            return pos;
+        }
+        
+        public void reset() {
+            row_map.clear();
+            row = original_row;
+            row_to_col.clear();
+            for(int i=0; i<row; i++) {
+                map.get(i).clear();
+                row_to_col.put(i, original_col);
+                row_counter[i] = 0;
+            }
+        }
+        
+        public static void main(String[] args) {
+        	RandomFlipMatrix2 test = new RandomFlipMatrix2();
+        	test.Solution(5, 5);
+        	Set<String> used = new LinkedHashSet<>();
+        	for(int i=0; i<100000; i++) {
+        		if(i % 5 == 0) {
+        			test.reset();
+        			used.clear();
+        		}
+        		else {
+        			String key = Arrays.toString(test.flip());
+        			if(!used.add(key)) {
+        				System.out.println(used);
+        				System.out.println(key +"    "+i);
+        				System.out.println(Arrays.toString(test.row_counter));
+        				System.out.println(test.row_to_col);
+        				System.out.println(test.row_map);
+        				System.out.println(test.map);
+        				System.out.println(false);
+        				break;        				
+        			}
+        		}
+        	}
+		}
+        
+    }
     
     
     
