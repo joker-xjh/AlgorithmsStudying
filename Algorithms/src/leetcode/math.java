@@ -6,13 +6,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Random;
 import java.util.Set;
+import java.util.TreeMap;
 
 public class math {
 	
@@ -507,8 +507,43 @@ public class math {
             used.clear();
         }
         
-        
     }
+    
+    class RandomPointinNonOverlappingRectangles{
+    	RandomFlipMatrix[] array;
+    	int n;
+    	int[] counter;
+    	Random random;
+    	
+    	public void Solution(int[][] rects) {
+            this.n = rects.length;
+            array = new RandomFlipMatrix[n];
+            counter = new int[n];
+            random = new Random();
+            for(int i=0; i<n; i++) {
+            	int[] pos = rects[i];
+            	int x = pos[2] - pos[0];
+            	int y = pos[3] - pos[1];
+            	counter[i] = x * y;
+            	array[i] = new RandomFlipMatrix(x, y);
+            }
+        }
+        
+        public int[] pick() {
+            int index = random.nextInt(n);
+        	while(counter[index] <= 0) {
+        		index = random.nextInt(n);
+        	}
+        	counter[index]--;
+        	return array[index].flip();
+        }
+    }
+    
+    
+    
+    
+    
+    
     
     
    static class RandomFlipMatrix2 {
@@ -588,33 +623,163 @@ public class math {
             }
         }
         
-        public static void main(String[] args) {
-        	RandomFlipMatrix2 test = new RandomFlipMatrix2();
-        	test.Solution(5, 5);
-        	Set<String> used = new LinkedHashSet<>();
-        	for(int i=0; i<100000; i++) {
-        		if(i % 5 == 0) {
-        			test.reset();
-        			used.clear();
-        		}
-        		else {
-        			String key = Arrays.toString(test.flip());
-        			if(!used.add(key)) {
-        				System.out.println(used);
-        				System.out.println(key +"    "+i);
-        				System.out.println(Arrays.toString(test.row_counter));
-        				System.out.println(test.row_to_col);
-        				System.out.println(test.row_map);
-        				System.out.println(test.map);
-        				System.out.println(false);
-        				break;        				
-        			}
-        		}
-        	}
-		}
-        
     }
     
+   
+   
+   static class RandomPointinNonoverlappingRectangles {
+	   static interface RandomFilpMrtixHelp {
+		   int[] pick();
+	   }
+	   
+	   static class RandomPointinNonoverlappingRectanglesHelp implements RandomFilpMrtixHelp {
+		int x, y;
+		int baseX,  baseY;
+		Map<Integer, Integer> map;
+		int total;
+		Random random;
+		   public RandomPointinNonoverlappingRectanglesHelp(int x, int y, int baseX, int baseY) {
+			   this.x = x;
+			   this.y = y;
+			   this.baseX = baseX;
+			   this.baseY = baseY;
+			   map = new HashMap<>();
+			   total = x * y;
+			   random = new Random();
+		}
+		
+		@Override
+		public int[] pick() {
+			int r = random.nextInt(total--);
+			int x = map.getOrDefault(r, r);
+			map.put(r, map.getOrDefault(total, total));
+			int[] answer = {x / y  + baseX, x % y + baseY};
+			return answer;
+		}
+		   
+	   }
+	   
+	   
+	   static class RandomPointinNonoverlappingRectanglesHelpLine implements RandomFilpMrtixHelp {
+		int length, baseX, baseY;
+		boolean isX;
+		Map<Integer, Integer> map;
+		Random random;
+		public RandomPointinNonoverlappingRectanglesHelpLine(int length, int baseX, int baseY, boolean isX) {
+			this.length = length;
+			this.baseX = baseX;
+			this.baseY = baseY;
+			this.isX = isX;
+			map = new HashMap<>();
+			random = new Random();
+		}
+		@Override
+		public int[] pick() {
+			int r = random.nextInt(length--);
+			int x = map.getOrDefault(r, r);
+			map.put(r, map.getOrDefault(length, length));
+			int[] answer = new int[2];
+			if(isX) {
+				answer[0] = baseX + x;
+			}
+			else {
+				answer[1] = baseY + x;
+			}
+ 			return answer;
+		}
+		   
+	   }
+	   
+	   RandomFilpMrtixHelp[] array;
+	   int n;
+	   int[] counter;
+	   Random random;
+	   Map<Integer, Integer> map;
+	   public void Solution(int[][] rects) {
+		   n = rects.length;
+		   counter = new int[n];
+		   array = new RandomFilpMrtixHelp[n];
+		   map = new HashMap<>();
+		   for(int i=0; i<n; i++) {
+			   int[] pos = rects[i];
+			   int x = pos[2] - pos[0];
+			   int y = pos[3] - pos[1];
+			   if(x == 0) {
+				   array[i] =new RandomPointinNonoverlappingRectanglesHelpLine(y, pos[0], pos[1], false);
+				   counter[i] = y;
+			   }
+			   else if(y == 0) {
+				   array[i] =new RandomPointinNonoverlappingRectanglesHelpLine(x, pos[0], pos[1], true);
+				   counter[i] = x;
+			   }
+			   else {
+				   array[i] = new RandomPointinNonoverlappingRectanglesHelp(x, y, pos[0], pos[1]);
+				   counter[i] = x * y;
+				   if(counter[i] == 0)
+					   counter[i] = 1;
+			   }
+		   }
+		   random = new Random();
+	   }
+	    
+	    
+	
+
+		public int[] pick() {
+			int r = random.nextInt(n);
+			int index = map.getOrDefault(r, r);
+			counter[index]--;
+			if(counter[index] == 0) {
+				map.put(r, map.getOrDefault(n, n));
+				n--;
+			}
+			
+	        //int index = random.nextInt(n);
+	    	while(counter[index] <= 0) {
+	    		index = random.nextInt(n);
+	    	}
+	    	counter[index]--;
+	    	if(array[index] instanceof RandomPointinNonoverlappingRectanglesHelp) {
+	    		RandomPointinNonoverlappingRectanglesHelp temp = (RandomPointinNonoverlappingRectanglesHelp)array[index];
+	    		if(temp.total == 0) {
+	    			return new int[] {temp.baseX, temp.baseY};
+	    		}
+	    	}
+	    	return array[index].pick();
+	    }
+	   
+   }
+   
+   
+   class  RandomPointinNonoverlappingRectangles2{
+	   TreeMap<Integer, Integer> tree;
+	   int sum;
+	   Random random;
+	   int[][] array;
+	   public void Solution(int[][] rects) {
+	        tree = new TreeMap<>();
+	        random = new Random();
+	        array = rects;
+	        for(int i=0; i<rects.length; i++) {
+	        	int[] pos = rects[i];
+	        	sum += (pos[2] - pos[0] + 1) * (pos[3] - pos[1] + 1);
+	        	tree.put(sum, i);
+	        }
+	   }
+	   public int[] pick() {
+	       int r = random.nextInt(sum) + 1;
+		   int i = tree.ceilingEntry(r).getValue();
+		   int[] pos = array[i];
+		   return new int[] {pos[0] + random.nextInt(pos[2] - pos[0] + 1),
+				             pos[1] + random.nextInt(pos[3] - pos[1] + 1)};
+	   }
+   }
+   
+   
+   
+   
+   
+   
     
     
     
