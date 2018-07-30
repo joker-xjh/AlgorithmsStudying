@@ -777,7 +777,28 @@ public class math {
    
    
    
-   
+   class GenerateRandomPointinaCircle {
+	   double R, X, Y;
+	   Random random;
+	   public GenerateRandomPointinaCircle(double radius, double x_center, double y_center) {
+	        random = new Random();
+	        R = radius;
+	        X = x_center;
+	        Y = y_center;
+	   }
+	    
+	   public double[] randPoint() {
+	       double x = random.nextDouble() * R;
+	       double y = random.nextDouble() * R;
+	       if( x * x + y *y > R * R)
+	    	   return randPoint();
+		   int bit = random.nextInt(2);
+		   x = bit == 0 ? x : -x;
+		   bit = random.nextInt(2);
+		   y = bit == 0 ? y : -y;
+		   return new double[] {x + X, y + Y};
+	   }
+   }
    
    
     
