@@ -1519,6 +1519,84 @@ public class Medium {
 	  }
 	  
 	  
+	  public boolean hasPath(int[][] maze, int[] start, int[] destination) {
+		  if(maze[start[0]][start[1]] == 1)
+			  return false;
+		  if(maze[destination[0]][destination[1]] == 1)
+			  return false;
+	      Queue<int[]> queue = new LinkedList<>();
+		  int m = maze.length, n = maze[0].length;
+		  boolean[][] visited = new boolean[m][n];
+		  visited[start[0]][start[1]] = true;
+		  queue.add(start);
+		  while(!queue.isEmpty()) {
+			  int size = queue.size();
+			  for(int i=0; i<size; i++) {
+				  int[] pos = queue.poll();
+				  int x = pos[0], y = pos[1];
+				  while(x > 0 && maze[x-1][y] == 0)
+					  x--;
+				  if(!visited[x][y]) {
+					  visited[x][y] = true;
+					  if(x == destination[0] && y == destination[1])
+						  return true;
+					  queue.add(new int[] {x, y});
+				  }
+				  
+				  x = pos[0];
+				  y = pos[1];
+				  while(x < m-1 && maze[x+1][y] == 0)
+					  x++;
+				  if(!visited[x][y]) {
+					  visited[x][y] = true;
+					  if(x == destination[0] && y == destination[1])
+						  return true;
+					  queue.add(new int[] {x, y});
+				  }
+				  
+				  
+				  
+				  x = pos[0];
+				  y = pos[1];
+				  while(y > 0 && maze[x][y-1] == 0)
+					  y--;
+				  if(!visited[x][y]) {
+					  visited[x][y] = true;
+					  if(x == destination[0] && y == destination[1])
+						  return true;
+					  queue.add(new int[] {x, y});
+				  }
+				  
+				  
+				  x = pos[0];
+				  y = pos[1];
+				  while(y < n-1 && maze[x][y+1] == 0)
+					  y++;
+				  if(!visited[x][y]) {
+					  visited[x][y] = true;
+					  if(x == destination[0] && y == destination[1])
+						  return true;
+					  queue.add(new int[] {x, y});
+				  }
+				  
+			  }
+		  }
+		  return false;
+	  }
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
 	  
 	  
 	  
