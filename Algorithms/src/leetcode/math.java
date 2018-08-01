@@ -800,6 +800,37 @@ public class math {
 	   }
    }
    
+   public int nthMagicalNumber(int N, int A, int B) {
+       long a = A, b = B, temp, L = 2, R = (long)1e14, mod = 1000000007;
+	   while(b > 0) {
+		   temp = a;
+		   a = b;
+		   b = temp % b;
+	   }
+	   
+	   while(L < R) {
+		   long mid = (L + R) / 2;
+		   if(mid / A + mid /B - mid / (A*B/a) < N)
+			   L = mid + 1;
+		   else
+			   R = mid;
+	   }
+	   
+	   return (int) (L % mod);
+   }
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
    
     
     
