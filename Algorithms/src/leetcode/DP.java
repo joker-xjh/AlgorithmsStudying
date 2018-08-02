@@ -1994,7 +1994,23 @@ public class DP {
     }
     
     
-    
+    public int profitableSchemes(int G, int P, int[] group, int[] profit) {
+        int[][] dp = new int[P+1][G+1];
+    	int mod = 1000000007;
+    	dp[0][0] = 1;
+    	for(int k=0; k<group.length; k++) {
+    		int g = group[k], p = profit[k];
+    		for(int i=P; i>=0; i--) {
+    			for(int j=G-g; j>=0; j--) {
+    				dp[Math.min(P, i + p)][j + g] = (dp[Math.min(P, i + p)][j + g] + dp[i][j]) % mod;
+    			}
+    		}
+    	}
+    	int answer = 0;
+    	for(int num : dp[P])
+    		answer = (answer + num) % mod;
+    	return answer;
+    }
     
     
     
@@ -2009,9 +2025,7 @@ public class DP {
     
     
     public static void main(String[] args) {
-    	DP test = new DP();
-    	int[] array = {1,2,3,4,5,6,7,8,9};
-    	test.lenLongestFibSubseq(array);
+    	
 	}
     
 
