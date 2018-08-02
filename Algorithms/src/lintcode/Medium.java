@@ -1585,7 +1585,19 @@ public class Medium {
 	  }
 	  
 	  
-	  
+	  public int cutting(int[] prices, int n) {
+		  int[] dp = new int[n+1];
+		  for(int i=1; i<=n; i++) {
+			  dp[i] = prices[i-1];
+			  int left = 1, right = i-1;
+			  while(left <= right) {
+				  dp[i] = Math.max(dp[left] + dp[right], dp[i]);
+				  left++;
+				  right--;
+			  }
+		  }
+		  return dp[n];
+	  }
 	  
 	  
 	  
