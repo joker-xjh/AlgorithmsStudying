@@ -4730,7 +4730,29 @@ public class Medium {
     }
 	
 	
-	
+	static int minimumSwaps(int[] arr) {
+		int swaps = 0;
+		int n = arr.length;
+		int[] clone = arr.clone();
+		Arrays.sort(clone);
+		Map<Integer, Integer> index = new HashMap<>();
+		for(int i=0; i<n; i++) {
+			index.put(arr[i], i);
+		}
+		for(int i=0; i<n; i++) {
+			if(arr[i] == clone[i])
+				continue;
+			int one = clone[i];
+			int one_index = index.get(one);
+			int two = arr[i];
+			arr[i] = one;
+			index.put(one, i);
+			arr[one_index] = two;
+			index.put(two, one_index);
+			swaps++;
+		}
+		return swaps;
+    }
 	
 	
 	
