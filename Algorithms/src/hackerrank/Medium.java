@@ -4755,25 +4755,37 @@ public class Medium {
     }
 	
 	
+	static long countTriplets(List<Long> arr, long r) {
+		long triplets = 0;
+		if(arr == null || arr.size() == 0)
+			return triplets;
+		Map<Long, Integer> right = new HashMap<>();
+		Map<Long, Integer> left = new HashMap<>();
+		for(int i=1; i<arr.size(); i++) {
+			long num = arr.get(i);
+			right.put(num, right.getOrDefault(num, 0) + 1);
+		}
+		left.put(arr.get(0), 1);
+		for(int i=1; i<arr.size()-1; i++) {
+			long num = arr.get(i);
+			right.put(num, right.get(num)-1);
+			if(num % r == 0) {
+				long left_size = left.getOrDefault(num/r, 0);
+				long right_size = right.getOrDefault(num * r, 0);
+				triplets += left_size * right_size;
+			}
+			left.put(num, left.getOrDefault(num, 0)+1);
+		}
+		return triplets;
+    }
+	
+	
 	
 	
 	
 	
 	public static void main(String[] args) throws IOException {
-		Scanner scanner = new Scanner(System.in);
-        while(scanner.hasNext()) {
-        	int t = scanner.nextInt();
-        	for(int a=0; a<t; a++) {
-        		int n = scanner.nextInt();
-            	int[] array = new int[n];
-            	int g = scanner.nextInt();
-            	for(int i=0; i<n; i++)
-            		array[i] = scanner.nextInt();
-            	System.out.println(indianJob(g, array));
-        	}
-            
-        }
-        scanner.close();
+		
     }
 	
 
