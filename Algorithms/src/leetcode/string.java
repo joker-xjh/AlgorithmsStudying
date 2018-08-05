@@ -3641,6 +3641,120 @@ public class string {
     		  return false;
     	  return true;
       }
+      
+      
+      public int minMutation(String start, String end, String[] bank) {
+    	  Set<String> bank_gene = new HashSet<>();
+    	  for(String gene : bank) {
+    		  bank_gene.add(gene);
+    	  }
+    	  if(!bank_gene.contains(end))
+    		  return -1;
+    	  PriorityQueue<minMutation_node> queue = new PriorityQueue<>(new minMutation_comparator(end));
+    	  queue.add(new minMutation_node(start, 0));
+    	  Set<String> used = new HashSet<>();
+    	  used.add(start);
+    	  char[] genes = {'A', 'C', 'G', 'T'};
+    	  while(!queue.isEmpty()) {
+    		  minMutation_node node = queue.poll();
+    		  char[] gene_array = node.gene.toCharArray();
+    		  for(int i=0; i<8; i++) {
+    			  char original = gene_array[i];
+    			  for(char c : genes) {
+    				  gene_array[i] = c;
+    				  String next_gene = new String(gene_array);
+    				  if(next_gene.equals(end))
+    					  return node.g+1;
+    				  if(bank_gene.contains(next_gene) && used.add(next_gene)) {
+    					  queue.add(new minMutation_node(next_gene, node.g+1));
+    				  }
+    				  gene_array[i] = original;
+    			  }
+    		  }
+    	  }
+    	  
+    	  return -1;
+      }
+      
+      class minMutation_comparator implements Comparator<minMutation_node>{
+    	  String end;
+    	  minMutation_comparator(String end){
+    		  this.end = end;
+    	  }
+
+		@Override
+		public int compare(minMutation_node o1, minMutation_node o2) {
+			String gene1 = o1.gene;
+			String gene2 = o2.gene;
+			return o1.g + getDiff(gene1, end) - o2.g - getDiff(gene2, end);
+		}
+		
+		int getDiff(String gene, String end) {
+			int diff = 0;
+			for(int i=0; i<8; i++) {
+				if(gene.charAt(i) != end.charAt(i))
+					diff++;
+			}
+			return diff;
+		}
+    	  
+      }
+      
+      
+      class minMutation_node {
+    	  String gene;
+    	  int g;
+    	  minMutation_node(String gene, int g){
+    		  this.gene = gene;
+    		  this.g = g;
+    	  }
+      }
+      
+      
+      public String decodeAtIndex(String S, int K) {
+          StringBuilder tape = new StringBuilder();
+          for(int i=0; i<S.length(); i++) {
+        	  char c = S.charAt(i);
+        	  if(c >= 'a' && c <= 'z') {
+        		  tape.append(c);
+        	  }
+        	  else {
+        		  int size = tape.length();
+        		  int repeat = c - '0' - 1;
+        		  for(int t=0; t<repeat; t++) {
+        			  for(int j=0; j<size; j++) {
+        				  tape.append(tape.charAt(j));
+        				  if(tape.length() >= K)
+        					  return tape.charAt(K-1) + "";
+        			  }
+        		  }
+        	  }
+          }
+          return null;
+      }
+      
+      
+     public String decodeAtIndex2(String S, int K) {
+    	 long n = 0;
+    	 int i = 0;
+    	 char[] array = S.toCharArray();
+    	 for(i=0; n < K; i++) {
+    		 n = (array[i] >= '0' && array[i] <= '9') ? n * (array[i] - '0') : n+1;
+    	 }
+    	 i--;
+    	 while(true) {
+    		if(array[i] >= '0' && array[i] <= '9') {
+    			n /= array[i] - '0';
+    			K %= n;
+    		}
+    		else if(K % n == 0) {
+    			return array[i]+"";
+    		}
+    		else
+    			n--;
+    		i--;
+    	 }
+     }
      
      
      
