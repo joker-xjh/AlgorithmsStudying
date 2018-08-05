@@ -4779,7 +4779,40 @@ public class Medium {
 		return triplets;
     }
 	
-	
+	static void freqQuery(int[][] queries) {
+        Map<Integer, Integer> map = new HashMap<>();
+        Map<Integer, Integer> fre = new HashMap<>();
+        for(int[] list : queries) {
+        	int i = list[0];
+        	int num = list[1];
+        	if(i == 1) {
+        		int count = map.getOrDefault(num, 0);
+        		map.put(num, count+1);
+        		if(count != 0) {
+        			fre.put(count, fre.get(count)-1);
+        		}
+        		fre.put(count+1, fre.getOrDefault(count+1, 0)+1);
+        	}
+        	else if(i == 2) {
+        		int count = map.getOrDefault(num, 0);
+        		if(count == 0)
+        			continue;
+        		map.put(num, count-1);
+        		int temp = fre.get(count);
+        		fre.put(count, temp-1);
+        		if(count-1 != 0) {
+        			fre.put(count-1, fre.getOrDefault(count-1, 0)+1);
+        		}
+        	}
+        	else {
+        		int f = fre.getOrDefault(num, 0);
+        		if(f != 0)
+        			System.out.println(1);
+        		else
+        			System.out.println(0);
+        	}
+        }
+    }
 	
 	
 	
