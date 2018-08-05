@@ -4814,7 +4814,60 @@ public class Medium {
         }
     }
 	
+	static long triplets(List<Integer> a, List<Integer> b, List<Integer> c) {
+		long triplets = 0;
+		int[] BIT_A = new int[a.size()+1];
+		int[] BIT_C = new int[c.size()+1];
+		Map<Integer, Integer> index_a = new HashMap<>();
+		Map<Integer, Integer> index_c = new HashMap<>();
+		TreeSet<Integer> tree_a = new TreeSet<>();
+		TreeSet<Integer> tree_c = new TreeSet<>();
+		Set<Integer> used = new HashSet<>();
+		Collections.sort(a);
+		Collections.sort(c);
+		for(int i=0; i<a.size(); i++) {
+			index_a.put(a.get(i), i);
+			tree_a.add(a.get(i));
+			BIT_update(BIT_A, i, 1);
+		}
+		for(int i=0; i<c.size(); i++) {
+			index_c.put(c.get(i), i);
+			tree_c.add(c.get(i));
+			BIT_update(BIT_C, i, 1);
+		}
+		for(int i=0; i<b.size(); i++) {
+			if(!used.add(b.get(i)))
+				continue;
+			int cur = b.get(i);
+			Integer left = tree_a.floor(cur);
+			Integer right = tree_c.floor(cur);
+			if(left == null || right == null)
+				continue;
+			int left_index = index_a.get(left);
+			int right_index = index_c.get(right);
+			triplets += BIT_sum(BIT_A, left_index) * BIT_sum(BIT_C, right_index);
+		}
+		
+		return triplets;
+    }
 	
+	static void BIT_update(int[] BIT, int i, int val) {
+		i++;
+		while(i < BIT.length) {
+			BIT[i] += val;
+			i += i & -i;
+		}
+	}
+	
+	static long BIT_sum(int[] BIT, int i) {
+		i++;
+		long sum = 0;
+		while(i > 0) {
+			sum = sum + BIT[i];
+			i -= i & -i;
+		}
+		return sum;
+	}
 	
 	
 	public static void main(String[] args) throws IOException {
