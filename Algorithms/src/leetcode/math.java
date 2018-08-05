@@ -821,7 +821,31 @@ public class math {
    
    
    
-   
+   public int projectionArea(int[][] grid) {
+       int area = 0;
+       int n = grid.length;
+       for(int i=0; i<n; i++) {
+    	   for(int j=0; j<n; j++) {
+    		   if(grid[i][j] > 0)
+    			   area++;
+    	   }
+       }
+       for(int i=0; i<n; i++) {
+    	   int max = -1;
+    	   for(int j=0; j<n; j++) {
+    		   max = Math.max(max, grid[i][j]);
+    	   }
+    	   area += max;
+       }
+       for(int j=0; j<n; j++) {
+    	   int max = -1;
+    	   for(int i=0; i<n; i++) {
+    		   max = Math.max(max, grid[i][j]);
+    	   }
+    	   area += max;
+       }
+       return area;
+   }
    
    
    
