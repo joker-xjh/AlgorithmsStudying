@@ -4870,6 +4870,38 @@ public class Medium {
 	}
 	
 	
+	static long triplets2(List<Integer> a, List<Integer> b, List<Integer> c) {
+		long triplets = 0;
+		Collections.sort(a);
+		Collections.sort(b);
+		Collections.sort(c);
+		int b_i = 0;
+		int a_i = 0;
+		int c_i = 0;
+		while(b_i < b.size()) {
+			while(a_i < a.size() && a.get(a_i) <= b.get(b_i))
+				a_i++;
+			while(c_i < c.size() && c.get(c_i) <= b.get(b_i))
+				c_i++;
+			triplets += (long)a_i * c_i;
+			b_i++;
+		}
+		return triplets;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	public static void main(String[] args) throws IOException {
 		
     }
