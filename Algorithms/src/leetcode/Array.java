@@ -4454,6 +4454,32 @@ public class Array {
         
         return square;
     }
+	
+	public int numRescueBoats(int[] people, int limit) {
+        int boats = 0;
+        TreeMap<Integer, Integer> tree = new TreeMap<>();
+        for(int weight : people) {
+        	tree.put(weight, tree.getOrDefault(weight, 0)+1);
+        }
+        while(!tree.isEmpty()) {
+        	Map.Entry<Integer, Integer> minEntry = tree.firstEntry();
+        	int weight = minEntry.getKey();
+        	int other_weight = limit - weight;
+        	Map.Entry<Integer, Integer> other_entry = tree.floorEntry(other_weight);
+        	if(other_entry != null) {
+        		tree.put(other_entry.getKey(), other_entry.getValue()-1);
+        		if(other_entry.getValue() == 1)
+        			tree.remove(other_entry.getKey());
+        	}
+        	if(tree.get(minEntry.getKey()) != null) {
+        		tree.put(minEntry.getKey(), tree.get(minEntry.getKey())-1);
+            	if(tree.get(minEntry.getKey()) == 0)
+            		tree.remove(minEntry.getKey());
+        	}
+        	boats++;
+        }
+        return boats;
+    }
      
      
      
