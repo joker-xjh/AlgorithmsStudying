@@ -4890,7 +4890,22 @@ public class Medium {
 	}
 	
 	
-	
+	static long minTime(long[] machines, long goal) {
+		long left = 1, right = 10000000000000L;
+		while(left < right) {
+			long mid = (left + right) / 2;
+			long count = 0;
+			for(long m : machines) {
+				count += mid / m;
+			}
+			if(count < goal)
+				left = mid+1;
+			else
+				right = mid;
+		}	
+		return left;
+    }
+
 	
 	
 	
