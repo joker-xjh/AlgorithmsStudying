@@ -956,7 +956,49 @@ public class Hard {
 		return triplets;
 	}
 	
+	static long countInversions(int[] arr) {
+		countInversions = 0;
+		countInversionsHelp = new int[arr.length];
+		countInversionsmergeSort(arr, 0, arr.length-1);
+		return countInversions;
+    }
 	
+	static int[] countInversionsHelp;
+	static long countInversions = 0;
+	
+	static void countInversionsmergeSort(int[] array, int left, int right) {
+		if(left >= right)
+			return;
+		int mid = left + (right - left) / 2;
+		countInversionsmergeSort(array, left, mid);
+		countInversionsmergeSort(array, mid+1, right);
+		countInversionsmergeSort(array, left, mid, right);
+	}
+	
+	static void countInversionsmergeSort(int[] array, int left, int mid, int right) {
+		int i=left, j = mid + 1;
+		for(int k=left; k<=right; k++) {
+			countInversionsHelp[k] = array[k];
+		}
+		for(int k=left; k<=right; k++) {
+			if(i > mid) {
+				array[k] = countInversionsHelp[j++];
+			}
+			else if(j > right) {
+				array[k] = countInversionsHelp[i++];
+				countInversions = countInversions + j - mid - 1;
+			}
+			else if(countInversionsHelp[i] > countInversionsHelp[j]) {
+				array[k] = countInversionsHelp[j];
+				j++;
+			}
+			else {
+				array[k] = countInversionsHelp[i];
+				i++;
+				countInversions = countInversions + j - mid - 1;
+			}
+		}
+	}
 	
 	
 	
@@ -966,15 +1008,7 @@ public class Hard {
 	
 	
 	public static void main(String[] args) {
-		Scanner scanner = new Scanner(System.in);
-        while(scanner.hasNext()){
-            int n = scanner.nextInt();
-            int[] d = new int[n];
-            for(int i=0; i<n; i++)
-            	d[i] = scanner.nextInt();
-            System.out.println(Triplets2(d));
-        }
-        scanner.close();
+		
 	}
 	
 	
