@@ -2150,6 +2150,22 @@ public class Easy {
 	 }
 	 
 	 
+	 static void checkMagazine(String[] magazine, String[] note) {
+		 Map<String, Integer> map = new HashMap<>();
+		 for(String word : magazine)
+			 map.put(word,  map.getOrDefault(word, 0)+1);
+		 for(String word : note) {
+			 int count = map.getOrDefault(word, 0);
+			 if(count <= 0) {
+				 System.out.println("No");
+				 return;
+			 }
+			 map.put(word, count-1);
+		 }
+		 System.out.println("Yes");
+	 }
+	 
+	 
 	
 
 	public static void main(String[] args) {
