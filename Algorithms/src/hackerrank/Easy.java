@@ -2165,7 +2165,20 @@ public class Easy {
 		 System.out.println("Yes");
 	 }
 	 
-	 
+	static int makeAnagram(String a, String b) {
+		int[] map = new int[26];
+		for(char c : a.toCharArray()) {
+			map[c - 'a']++;
+		}
+		for(char c : b.toCharArray()) {
+			map[c - 'a']--;
+		}
+		int answer = 0;
+		for(int num : map) {
+			answer += Math.abs(num);
+		}
+		return answer;
+	}
 	
 
 	public static void main(String[] args) {
