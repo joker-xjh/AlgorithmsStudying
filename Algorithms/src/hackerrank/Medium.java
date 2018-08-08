@@ -4907,9 +4907,54 @@ public class Medium {
     }
 
 	
+	static void whatFlavors(int[] cost, int money) {
+		Map<Integer, Integer> map = new HashMap<>();
+		for(int i=0; i<cost.length; i++) {
+			int other = money - cost[i];
+			int index = map.getOrDefault(other, -1);
+			if(index != -1) {
+				System.out.println((index+1)+" "+(i+1));
+				return;
+			}
+			map.put(cost[i], i);
+		}
+    }
 	
-	
-	
+	static long substrCount(int n, String s) {
+		long sub = 0;
+		int[] left = new int[n];
+		int[] right = new int[n];
+		left[0] = 1;
+		for(int i=1; i<n; i++) {
+			if(s.charAt(i) == s.charAt(i-1)) {
+				left[i] = left[i-1] + 1;
+			}
+			else {
+				left[i] = 1;
+			}
+		}
+		right[n-1] = 1;
+		for(int i=n-2; i>=0; i--) {
+			if(s.charAt(i) == s.charAt(i+1)) {
+				right[i] = right[i+1] + 1;
+			}
+			else {
+				right[i] = 1;
+			}
+		}
+		for(int i=0; i<n; i++) {
+			sub += right[i];
+			if(i != 0 && i != n-1) {
+				if(s.charAt(i-1) == s.charAt(i+1) &&
+				    s.charAt(i) != s.charAt(i-1)) {
+					sub += Math.min(left[i-1], right[i+1]);
+				}
+			}
+			
+		}
+		
+		return sub;
+    }
 	
 	
 	
@@ -4918,7 +4963,7 @@ public class Medium {
 	
 	
 	public static void main(String[] args) throws IOException {
-		
+		System.out.println(substrCount(8, "mnonopoo"));;
     }
 	
 
