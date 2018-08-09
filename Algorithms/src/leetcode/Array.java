@@ -4567,6 +4567,68 @@ public class Array {
 	    
 	}
 	
+	static class CountofSmallerNumbersAfterSelf {
+		
+		
+		public List<Integer> countSmaller(int[] nums) {
+			List<Integer> list = new LinkedList<>();
+			int min = Integer.MAX_VALUE, max = Integer.MIN_VALUE;
+			for(int num : nums) {
+				min = Math.min(min, num);
+				max = Math.max(max, num);
+			}
+			SegmentTreeNode node = new SegmentTreeNode(min, max);
+			for(int i=nums.length-1; i>=0; i--) {
+				list.add(0, find(node, nums[i]-1));
+				add(node, nums[i]);
+			}	
+			return list;
+		}
+		
+		class SegmentTreeNode {
+			int min, max;
+			SegmentTreeNode left, right;
+			int count;
+			public SegmentTreeNode(int min, int max) {
+				this.min = min;
+				this.max = max;
+			}
+		}
+		private int find(SegmentTreeNode node, int num) {
+			if(node == null)
+				return 0;
+			if(num >= node.max)
+				return node.count;
+			int mid = node.min + (node.max - node.min) / 2;
+			if(num <= mid)
+				return find(node.left, num);
+			return find(node.left, num) + find(node.right, num);
+		}
+		
+		
+		private void add(SegmentTreeNode node, int num) {
+			if(num < node.min || num > node.max)
+				return;
+			node.count++;
+			if(node.min == node.max)
+				return;
+			int mid = node.min + (node.max - node.min) / 2;
+			if(num <= mid) {
+				if(node.left == null)
+					node.left = new SegmentTreeNode(node.min, mid);
+				add(node.left, num);
+			}
+			else {
+				if(node.right == null)
+					node.right = new SegmentTreeNode(mid+1, node.max);
+				add(node.right, num);
+			}
+		}
+	}
+	
+	
+	
+	
 	
      
      
