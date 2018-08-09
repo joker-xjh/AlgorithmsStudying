@@ -4490,7 +4490,84 @@ public class Array {
 		}
 		return people.length-1 - j;
 	}
-     
+    
+	
+	
+	static class NumArray {
+		
+		class SegmentTreeNode {
+			int L, R;
+			int sum;
+			SegmentTreeNode left, right;
+			
+			public SegmentTreeNode(int i, int j) {
+				L = i;
+				R = j;
+			}
+		}
+		
+		SegmentTreeNode root = null;
+
+	    public NumArray(int[] nums) {
+	        root = build(nums, 0, nums.length-1);
+	    }
+	    
+	    public void update(int i, int val) {
+	        update(root, i, val);
+	    }
+	    
+	    public int sumRange(int i, int j) {
+	    	return rangsum(root, i, j);
+	    }
+	    
+	    
+	    private SegmentTreeNode build(int[] array, int from, int to) {
+	    	if(from > to)
+	    		return null;
+	    	SegmentTreeNode node = new SegmentTreeNode(from, to);
+	    	if(from == to) {
+	    		node.sum = array[from];
+	    	}
+	    	else {
+	    		int mid = from + (to - from) / 2;
+	    		node.left = build(array, from, mid);
+	    		node.right = build(array, mid+1, to);
+	    		node.sum = node.left.sum + node.right.sum;
+	    	}
+	    	return node;
+	    }
+	    
+	    private int rangsum(SegmentTreeNode node, int start, int end) {
+	    	if(node.L == start && node.R == end)
+	    		return node.sum;
+	    	int mid = node.L + (node.R - node.L) / 2;
+	    	if(end <= mid)
+	    		return rangsum(node.left, start, end);
+	    	else if(start > mid)
+	    		return rangsum(node.right, start, end);
+	    	return rangsum(node.left, start, mid) + rangsum(node.right, mid+1, end);
+	    }
+	    
+	    private void update(SegmentTreeNode node, int index, int val) {
+	    	if(node.L == node.R) {
+	    		node.sum = val;
+	    		return;
+	    	}
+	    	int mid = node.L + (node.R - node.L) / 2;
+	    	if(index <= mid) {
+	    		update(node.left, index, val);
+	    	}
+	    	else {
+	    		update(node.right, index, val);
+	    	}
+	    	node.sum = node.left.sum + node.right.sum;
+	    }
+	    
+	    
+	    
+	}
+	
+	
      
      
 
