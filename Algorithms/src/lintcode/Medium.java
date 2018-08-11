@@ -1599,13 +1599,85 @@ public class Medium {
 		  return dp[n];
 	  }
 	  
+	  public int backPackVIII(int n, int[] value, int[] amount) {
+		  int sum = 0;
+		  for(int num : amount)
+			  sum += num;
+		  boolean[][] dp = new boolean[sum+1][n+1];
+		  List<Integer> list = new ArrayList<>(sum);
+		  for(int i=0; i<value.length; i++) {
+			  for(int j=0; j<amount[i]; j++) {
+				  list.add(value[i]);
+			  }
+		  }
+		  dp[0][0] = true;
+		  for(int i=1; i<=sum; i++) {
+			  int num = list.get(i-1);
+			  for(int j=0; j<=n; j++) {
+				  if(j - num >= 0)
+					  dp[i][j] |= dp[i-1][j-num];
+				  dp[i][j] |= dp[i-1][j];
+			  }
+		  }
+		  int answer = 0;
+		  for(int i=1; i<=n; i++) {
+			  if(dp[sum][i])
+				  answer++;
+		  }
+	      return answer;
+	  }
 	  
 	  
+	  public int backPackVIII2(int n, int[] value, int[] amount) {
+		  boolean[][] dp = new boolean[value.length+1][n+1];
+		  for(int i=0; i<dp.length; i++) {
+			  dp[i][0] = true;
+		  }
+		  for(int i=1; i<=value.length; i++) {
+			  for(int j=1; j<=n; j++) {
+				  for(int k=1; k<=amount[i-1]; k++) {
+					  if(j - value[i-1]*k >= 0) {
+						  dp[i][j] |= dp[i-1][j-value[i-1]*k];
+					  }
+					  dp[i][j] |= dp[i-1][j];
+				  }
+			  }
+		  }
+		  int answer = 0;
+		  for(int i=1; i<=n; i++) {
+			  if(dp[value.length][i])
+				  answer++;
+		  }
+		  return answer;
+	  }
 	  
 	  
-	  
-	  
-	  
+	  public int backPackVIII3(int n, int[] value, int[] amount) {
+		  List<Integer> value_list = new ArrayList<>(value.length * 3);
+		  for(int i=0; i<value.length; i++) {
+			  for(int j=1; j<=amount[i]; j<<=1) {
+				  value_list.add(value[i] * j);
+				  amount[i] -= j;
+			  }
+			  if(amount[i] > 0) {
+				  value_list.add(amount[i] * value[i]);
+			  }
+		  }
+		  boolean[] dp = new boolean[n+1];
+		  dp[0] = true;
+		  for(int i=1; i<=value_list.size(); i++) {
+			  int v = value_list.get(i-1);
+			  for(int j=n; j>=v; j--) {
+				  dp[j] |= dp[j - v];
+			  }
+		  }
+		  int answer = 0;
+		  for(int i=1; i<=n; i++) {
+			  if(dp[i])
+				  answer++;
+		  }
+		  return answer;
+	  }
 	  
 	  
 	  
@@ -1614,7 +1686,7 @@ public class Medium {
 	  
 	  
 	  public static void main(String[] args) {
-		 
+		  
 	  }
 
 }
