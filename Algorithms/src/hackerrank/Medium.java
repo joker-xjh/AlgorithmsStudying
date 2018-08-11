@@ -4957,6 +4957,33 @@ public class Medium {
     }
 	
 	
+	void decode(String s, HuffmanNode root) {
+		HuffmanNode node = root;
+		for(char c : s.toCharArray()) {
+			if(c == '0')
+				node = node.left;
+			else
+				node = node.right;
+			if(node.left == null && node.right == null) {
+				System.out.print(node.data);
+				node = root;
+			}
+		}
+    }
+	
+	abstract class HuffmanNode implements Comparable<Node> {
+	    public  int frequency; // the frequency of this tree
+	    public  char data;
+	    public  HuffmanNode left, right; 
+	    public HuffmanNode(int freq) { 
+	      frequency = freq; 
+	    }
+	 
+	    // compares on the frequency
+	    public int compareTo(HuffmanNode tree) {
+	        return frequency - tree.frequency;
+	    }
+	}
 	
 	
 	
