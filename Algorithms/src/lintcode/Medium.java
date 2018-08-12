@@ -1950,6 +1950,48 @@ public class Medium {
 		   }
 		   return list;
 	   }
+	   
+	   
+	   public int[] business(int[] A, int k) {
+	        int[] profit = new int[A.length];
+	        SegmentTreeNode root= null;
+	        if(k > 10)
+	        	 root = intervalMinBuild(A, 0, A.length-1);
+	        for(int i=0; i<A.length; i++) {
+	        	int min = Integer.MAX_VALUE;
+	        	if(k > 10) {
+	        		int start = Math.max(0, i-k);
+		        	int end = Math.min(A.length-1, i+k);
+		        	profit[i] = A[i] - intervalMinQuery(start, end, root);
+		        	
+	        	}
+	        	else {
+	        		for(int j=Math.max(0, i-k); j<i; j++) {
+	        			min = Math.min(min, A[j]);
+	        		}
+	        		for(int j=i+1; j<=Math.min(A.length-1, i+k); j++) {
+	        			min = Math.min(min, A[j]);
+	        		}
+	        		profit[i] = Math.max(0, A[i] - min);
+	        	}
+	        	
+	        }
+	        return profit;
+	   }
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
 	  
 	  
 	  
