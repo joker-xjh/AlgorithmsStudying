@@ -1770,7 +1770,27 @@ public class Medium {
 	  }
 	  
 	  
-	  
+	   class SegmentTreeNode {
+		       public int start, end;
+		       public SegmentTreeNode left, right;
+		       public SegmentTreeNode(int start, int end) {
+		           this.start = start;
+		           this.end = end;
+		           this.left = this.right = null;
+		       }
+	   }
+	   
+	   public SegmentTreeNode build(int start, int end) {
+		   	if(start > end)
+			   return null;
+		   	if(start == end)
+		   		return new SegmentTreeNode(start, end);
+	        SegmentTreeNode node = new SegmentTreeNode(start, end);
+	        int mid = start + (end - start) / 2;
+	        node.left = build(start, mid);
+	        node.right = build(mid+1, end);
+	        return node;
+	   }
 	  
 	  
 	  
