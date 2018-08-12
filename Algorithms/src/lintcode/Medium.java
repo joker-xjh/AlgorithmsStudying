@@ -1866,6 +1866,19 @@ public class Medium {
 		   return list;
 	   }
 	   
+	   public void intervalSumBuildModify(int index, int value, SegmentTreeNode node) {
+	        if(node.start == node.end) {
+	        	node.sum = value;
+	        	return;
+	        }
+	        int mid = node.start + (node.end - node.start) / 2;
+	        if(index <= mid)
+	        	intervalSumBuildModify(index, value, node.left);
+	        else if(index > mid)
+	        	intervalSumBuildModify(index, value, node.right);
+	        node.sum = node.left.sum + node.right.sum;
+	    }
+	   
 	   private long intervalSumBuildQuery(int[] A, int start, int end, SegmentTreeNode node) {
 		   if(node == null)
 			   return 0;
