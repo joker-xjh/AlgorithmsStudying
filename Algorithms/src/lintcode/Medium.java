@@ -1772,6 +1772,7 @@ public class Medium {
 	  
 	   class SegmentTreeNode {
 		       public int start, end;
+		       public int max;
 		       public SegmentTreeNode left, right;
 		       public SegmentTreeNode(int start, int end) {
 		           this.start = start;
@@ -1792,7 +1793,22 @@ public class Medium {
 	        return node;
 	   }
 	  
-	  
+	   public int query(SegmentTreeNode root, int start, int end) {
+	       if(start == root.start && end == root.end)
+	    	   return root.max;
+		   int mid = (root.start + root.end) >>> 1;
+		   if(end <= mid) {
+			   return query(root.left, start, end);
+		   }
+		   else if(start > mid) {
+			   return query(root.right, start, end);
+		   }
+		   else {
+			   int left_max = query(root.left, start, mid);
+			   int right_max = query(root.right, mid+1, end);
+			   return Math.max(left_max, right_max);
+		   }
+	   }
 	  
 	  
 	  
