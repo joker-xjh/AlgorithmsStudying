@@ -1722,6 +1722,69 @@ public class Medium {
 	  }
 	  
 	  
+	  public int shortestDistance(int[][] grid) {
+		  int m = grid.length, n = grid[0].length;
+		  int post_count = 0;
+		  Queue<int[]> queue = new LinkedList<>();
+		  int[][] dirs = {{-1,0}, {1,0}, {0,-1}, {0,1}};
+	      @SuppressWarnings("unchecked")
+	      Set<Integer>[][] sets = new Set[m][n];
+	      int[][] distance = new int[m][n];
+		  for(int i=0; i<m; i++) {
+			  for(int j=0; j<n; j++) {
+				  sets[i][j] = new HashSet<>();
+				  if(grid[i][j] == 1) {
+					  queue.add(new int[] {i, j, post_count++});
+				  }
+			  }
+		  }
+		  int move = 0;
+		  while(!queue.isEmpty()) {
+			  move++;
+			  int size = queue.size();
+			  for(int t=0; t<size; t++) {
+				  int[] pos = queue.poll();
+				  for(int[] dir : dirs) {
+					  int x = dir[0] + pos[0];
+					  int y = dir[1] + pos[1];
+					  if(x<0 || x>=m || y<0 || y>=n || grid[x][y] != 0)
+						  continue;
+					  if(!sets[x][y].add(pos[2]))
+						  continue;
+					  distance[x][y] += move;
+					  queue.add(new int[] {x, y, pos[2]});
+				  }
+			  }
+		  }
+		  int answer = Integer.MAX_VALUE;
+		  for(int i=0; i<m; i++) {
+			  for(int j=0; j<n; j++) {
+				  if(sets[i][j].size() == post_count) {
+					  answer = Math.min(answer, distance[i][j]);
+				  }
+			  }
+		  }
+		  if(answer == Integer.MAX_VALUE)
+			  return -1;
+		  return answer;
+	  }
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
 	  
 	  
 	  
