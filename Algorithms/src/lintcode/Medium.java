@@ -1980,7 +1980,25 @@ public class Medium {
 	   }
 	   
 	   
-	   
+	   public List<Integer> countOfSmallerNumber(int[] A, int[] queries) {
+	        List<Integer> list = new ArrayList<>(queries.length);
+	        int[] data = new int[10001];
+	        for(int num : A) {
+	        	data[num]++;
+	        }
+	        for(int i=1; i<=10000; i++) {
+	        	data[i] += data[i-1];
+	        }
+	        for(int query : queries) {
+	        	if(query == 0) {
+	        		list.add(0);
+	        	}
+	        	else {
+	        		list.add(data[query-1]);
+	        	}
+	        }
+	        return list;
+	   }
 	   
 	   
 	   
