@@ -1773,6 +1773,7 @@ public class Medium {
 	   class SegmentTreeNode {
 		       public int start, end;
 		       public int max;
+		       public int min;
 		       public int count;
 		       public long sum;
 		       public SegmentTreeNode left, right;
@@ -1913,9 +1914,42 @@ public class Medium {
 		   return node;
 	   }
 	  
-	  
-	  
-	  
+	   private SegmentTreeNode intervalMinBuild(int[] A, int start, int end) {
+		   if(start > end)
+			   return null;
+		   SegmentTreeNode node = new SegmentTreeNode(start, end);
+		   if(start == end) {
+			   node.min = A[start];
+			   return node;
+		   }
+		   int mid = start + (end - start) / 2;
+		   node.left = intervalMinBuild(A, start, mid);
+		   node.right = intervalMinBuild(A, mid+1, end);
+		   node.min = Math.min(node.left.min, node.right.min);
+		   return node;
+	   }
+	   private int intervalMinQuery(int start, int end, SegmentTreeNode node) {
+		   if(node.start == start && node.end == end) {
+			   return node.min;
+		   }
+		   int mid = node.start + (node.end - node.start) / 2;
+		   if(end <= mid)
+			   return intervalMinQuery(start, end, node.left);
+		   else if(start > mid)
+			   return intervalMinQuery(start, end, node.right);
+		   else {
+			return Math.min(intervalMinQuery(start, mid, node.left),
+							intervalMinQuery(mid+1, end, node.right));
+		}
+	   }
+	   public List<Integer> intervalMinNumber(int[] A, List<Interval> queries) {
+		   List<Integer> list = new ArrayList<>(queries.size());
+		   SegmentTreeNode root = intervalMinBuild(A, 0, A.length-1);
+		   for(Interval interval : queries) {
+			   list.add(intervalMinQuery(interval.start, interval.end, root));
+		   }
+		   return list;
+	   }
 	  
 	  
 	  
