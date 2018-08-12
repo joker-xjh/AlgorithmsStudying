@@ -509,7 +509,7 @@ public class math {
         
     }
     
-    class RandomPointinNonOverlappingRectangles{
+    class RandomPointinNonOverlappingRectangles2{
     	RandomFlipMatrix[] array;
     	int n;
     	int[] counter;
@@ -848,7 +848,55 @@ public class math {
    }
    
    
-   
+   public int[][] spiralMatrixIII(int R, int C, int r0, int c0) {
+       int[][] answer = new int[R*C][2];
+       int index = 0;
+       answer[0] = new int[] {r0, c0};
+       index++;
+       if(index >= R*C)
+    	   return answer;
+       int X = r0, Y = c0+1;
+       int length = 1;
+       outer:
+       while(true) {
+    	   for(int i=X; i<X+length; i++) {
+    		   if(i >= 0 && i < R && Y >= 0 && Y < C) {
+    			   answer[index++] = new int[] {i, Y};
+    			   if(index >= R*C)
+    				   break outer;
+    		   }
+    	   }
+    	   for(int i=Y-1; i>=Y-length; i--) {
+    		   if(X+length-1 >= 0 && X+length-1 < R && i>=0 && i < C) {
+    			   answer[index++] = new int[] {X+length-1, i};
+    			   if(index >= R*C)
+    				   break outer;
+    		   }
+    	   }
+    	   
+    	   for(int i=X+length-2; i>= X-1; i--) {
+    		   if(i >= 0 && i < R && Y-length >= 0 && Y-length < C) {
+    			   answer[index++] = new int[] {i, Y-length};
+    			   if(index >= R*C)
+    				   break outer;
+    		   }
+    	   }
+    	   
+    	   for(int i=Y-length+1; i<=Y; i++) {
+    		   if(X-1 >= 0 && X-1 < R && i >= 0 && i<C) {
+    			   answer[index++] = new int[] {X-1, i};
+    			   if(index >= R*C)
+    				   break outer;
+    		   }
+    	   }
+    	   
+    	   X -= 1;
+    	   Y += 1;
+    	   length += 2;
+       }
+       
+       return answer;
+   }
    
    
    
