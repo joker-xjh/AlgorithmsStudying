@@ -1773,6 +1773,8 @@ public class Medium {
 	   class SegmentTreeNode {
 		       public int start, end;
 		       public int max;
+		       public int count;
+		       public long sum;
 		       public SegmentTreeNode left, right;
 		       public SegmentTreeNode(int start, int end) {
 		           this.start = start;
@@ -1827,10 +1829,76 @@ public class Medium {
 	   }
 	  
 	  
+	   public int queryCount(SegmentTreeNode root, int start, int end) {
+		   	if(root == null)
+		   		return 0;
+		   	start = Math.max(start, root.start);
+		   	end = Math.min(end, root.end);
+	        if(root.start == start && root.end == end)
+	        	return root.count;
+	        int mid = root.start + (root.end - root.start) / 2;
+	        if(end <= mid) {
+	        	return query(root.left, start, end);
+	        }
+	        else if(start > mid) {
+	        	return query(root.right, start, end);
+	        }
+	        else {
+	        	return query(root.left, start, mid) + query(root.right, mid+1, end);
+	        }
+	   }
 	  
 	  
-	  
-	  
+	   public class Interval {
+		        int start, end;
+		        Interval(int start, int end) {
+		            this.start = start;
+		            this.end = end;
+		        }
+	   }
+	   
+	   public List<Long> intervalSum(int[] A, List<Interval> queries) {
+	       SegmentTreeNode root = intervalSumBuild(A, 0, A.length-1);
+	       List<Long> list = new ArrayList<>(queries.size());
+	       for(Interval interval : queries) {
+	    	   list.add(intervalSumBuildQuery(A, interval.start, interval.end, root));
+	       }
+		   return list;
+	   }
+	   
+	   private long intervalSumBuildQuery(int[] A, int start, int end, SegmentTreeNode node) {
+		   if(node == null)
+			   return 0;
+		   if(node.start == start && node.end == end) {
+			   return node.sum;
+		   }
+		   int mid = node.start + (node.end - node.start) / 2;
+		   if(end <= mid) {
+			   return intervalSumBuildQuery(A, start, end, node.left);
+		   }
+		   else if(start > mid) {
+			   return intervalSumBuildQuery(A, start, end, node.right);
+		   }
+		   else {
+			   return intervalSumBuildQuery(A, start, mid, node.left) +
+					   intervalSumBuildQuery(A, mid+1, end, node.right);
+		   }
+	   }
+	   
+	   private SegmentTreeNode intervalSumBuild(int[] A, int start, int end) {
+		   if(start > end)
+			   return null;
+		   SegmentTreeNode node = new SegmentTreeNode(start, end);
+		   if(start == end) {
+			   node.sum = A[start];
+			   return node;
+		   }
+		   int mid = start + (end - start) / 2;
+		   node.left = intervalSumBuild(A, start, mid);
+		   node.right = intervalSumBuild(A, mid+1, end);
+		   node.sum = node.left.sum + node.right.sum;
+		   return node;
+	   }
 	  
 	  
 	  
