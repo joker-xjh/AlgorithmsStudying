@@ -2029,7 +2029,26 @@ public class Medium {
 	   }
 	   
 	   
-	   
+	   public List<Interval> merge(List<Interval> intervals) {
+	        List<Interval> list = new ArrayList<>();
+	        if(intervals == null || intervals.isEmpty())
+				   return list;
+	        Collections.sort(intervals, (a,b) -> (a.start - b.start));
+	        Interval cmp = intervals.get(0);
+	        for(int i=1; i<intervals.size(); i++) {
+	        	Interval interval = intervals.get(i);
+	        	if(interval.start > cmp.end) {
+	        		list.add(new Interval(cmp.start, cmp.end));
+	        		cmp.start = interval.start;
+	        		cmp.end = interval.end;
+	        	}
+	        	else {
+	        		cmp.end = Math.max(cmp.end, interval.end);
+	        	}
+	        }
+	        list.add(new Interval(cmp.start, cmp.end));
+	        return list;
+	   }
 	   
 	   
 	   
