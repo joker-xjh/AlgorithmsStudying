@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 
 
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -2001,7 +2002,31 @@ public class Medium {
 	   }
 	   
 	   
-	   
+	   public int countOfAirplanes(List<Interval> airplanes) {
+		   	if(airplanes == null || airplanes.isEmpty())
+			   return 0;
+	        List<int[]> list = new ArrayList<>(airplanes.size()*2);
+	        for(Interval interval : airplanes) {
+	        	list.add(new int[] {interval.start, 1});
+	        	list.add(new int[] {interval.end, -1});
+	        }
+	        Collections.sort(list, new Comparator<int[]>() {
+				@Override
+				public int compare(int[] o1, int[] o2) {
+					if(o1[0] == o2[0]) {
+						return o1[1] - o2[1];
+					}
+					return o1[0] - o2[0];
+				}
+			});
+	        int planes = 0;
+	        int max = 0;
+	        for(int[] pair : list) {
+	        	planes += pair[1];
+	        	max = Math.max(max, planes);
+	        }
+	        return max;
+	   }
 	   
 	   
 	   
