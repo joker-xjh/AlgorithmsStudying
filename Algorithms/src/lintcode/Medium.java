@@ -1,5 +1,6 @@
 package lintcode;
 
+import java.awt.Point;
 import java.util.ArrayList;
 
 
@@ -2050,7 +2051,91 @@ public class Medium {
 	        return list;
 	   }
 	   
+	   public int shortestPath(boolean[][] grid, Point source, Point destination) {
+		   if(source.x == destination.x && source.y == destination.y)
+			   return 0;
+		   int m = grid.length, n = grid[0].length;
+	       boolean[][] visited = new boolean[m][n];
+		   int[][] dirs = {{1,2}, {1,-2}, {-1,2}, {-1,-2},
+				   			{2,1}, {2,-1}, {-2,1}, {-2,-1}};
+		   visited[source.x][source.y] = true;
+		   Queue<int[]> queue = new LinkedList<>();
+		   queue.add(new int[] {source.x, source.y, 0});
+		   while(!queue.isEmpty()) {
+			   int size = queue.size();
+			   for(int t=0; t<size; t++) {
+				   int[] pair = queue.poll();
+				   for(int[] dir : dirs) {
+					   int x = pair[0] + dir[0];
+					   int y = pair[1] + dir[1];
+					   if(x<0 || x>=m || y<0 || y>=n || visited[x][y] || grid[x][y])
+						   continue;
+					   visited[x][y] = true;
+					   int[] new_pair = {x, y, pair[2]+1};
+					   if(x == destination.x && y == destination.y)
+						   return new_pair[2];
+					   queue.add(new_pair);
+				   }
+			   }
+		   }
+		   
+		   return -1;
+	   }
 	   
+	   
+	   public int shortestPath2(boolean[][] grid, Point source, Point destination) {
+		   if(source.x == destination.x && source.y == destination.y)
+			   return 0;
+		   int m = grid.length, n = grid[0].length;
+		   int[][] start_visited = new int[m][n];
+		   int[][] end_visited = new int[m][n];
+		   for(int i=0; i<m; i++) {
+			   Arrays.fill(start_visited[i], -1);
+			   Arrays.fill(end_visited[i], -1);
+		   }
+		   start_visited[source.x][source.y] = 0;
+		   end_visited[destination.x][destination.y] = 0;
+		   int[][] dirs = {{1,2}, {1,-2}, {-1,2}, {-1,-2},
+				   			{2,1}, {2,-1}, {-2,1}, {-2,-1}};
+		   Queue<int[]> start_queue = new LinkedList<>();
+		   Queue<int[]> end_queue = new LinkedList<>();
+		   start_queue.add(new int[] {source.x, source.y});
+		   end_queue.add(new int[] {destination.x, destination.y});
+		   while(!start_queue.isEmpty() && !end_queue.isEmpty()) {
+			   int size = start_queue.size();
+			   for(int t=0; t<size; t++) {
+				   int[] pair = start_queue.poll();
+				   for(int[] dir : dirs) {
+					   int x = pair[0] + dir[0];
+					   int y = pair[1] + dir[1];
+					   if(x<0 || x>=m || y<0 || y>=n || (start_visited[x][y] != -1) || grid[x][y])
+						   continue;
+					   start_visited[x][y] = start_visited[pair[0]][pair[1]] + 1;
+					   if(end_visited[x][y] != -1)
+						   return start_visited[x][y] + end_visited[x][y];
+					   int[] new_pair = {x, y};
+					   start_queue.add(new_pair);
+				   }
+			   }
+			   size = end_queue.size();
+			   for(int t=0; t<size; t++) {
+				   int[] pair = end_queue.poll();
+				   for(int[] dir : dirs) {
+					   int x = pair[0] + dir[0];
+					   int y = pair[1] + dir[1];
+					   if(x<0 || x>=m || y<0 || y>=n || (end_visited[x][y] != -1) || grid[x][y])
+						   continue;
+					   end_visited[x][y] = end_visited[pair[0]][pair[1]] + 1;
+					   if(start_visited[x][y] != -1)
+						   return start_visited[x][y] + end_visited[x][y];
+					   int[] new_pair = {x, y};
+					   end_queue.add(new_pair);
+				   }
+			   }
+		   }
+		   
+		   return -1;
+	   }
 	   
 	   
 	   
