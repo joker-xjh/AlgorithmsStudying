@@ -761,6 +761,30 @@ public class Easy {
     }
 	
 	
+	public int reachNumber(int target) {
+		if(target < 0)
+			target = -target;
+        long sum = 0;
+        int count = 0;
+        int n = 1;
+        while(true) {
+        	sum += n;
+        	count++;
+        	if((sum >= target) && ((sum - target) % 2 == 0))
+        		return count;
+        	n++;
+        }
+        
+    }
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
