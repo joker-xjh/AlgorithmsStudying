@@ -2224,7 +2224,19 @@ public class Medium {
 	   }
 	   
 	   
-	   
+	   public void sortColors2(int[] colors, int k) {
+		   int index = 0;
+		   for(int i=1; i<=k; i++) {
+			   for(int j=index; j<colors.length; j++) {
+				   if(colors[j] == i) {
+					   int temp = colors[index];
+					   colors[index] = colors[j];
+					   colors[j] = temp;
+					   index++;
+				   }
+			   }
+		   }
+	   }
 	   
 	   
 	   
