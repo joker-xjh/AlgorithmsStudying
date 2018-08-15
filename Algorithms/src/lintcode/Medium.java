@@ -2198,7 +2198,30 @@ public class Medium {
 	   }
 	   
 	   
-	   
+	    
+	   public ListNode[] rehashing(ListNode[] hashTable) {
+	       int size = hashTable.length;
+		   int new_size = size << 1;
+		   ListNode[] new_table = new ListNode[new_size];
+		   for(int i=0; i<size; i++) {
+			   for(ListNode node = hashTable[i]; node!=null; node=node.next) {
+				   int val = node.val;
+				   int mod = val % new_size;
+				   if(mod < 0)
+					   mod = (mod + new_size) % new_size;
+				   if(new_table[mod] == null) {
+					   new_table[mod] = new ListNode(val);
+				   }
+				   else {
+					   ListNode temp = new_table[mod];
+					   while(temp.next != null)
+						   temp = temp.next;
+					   temp.next = new ListNode(val);
+				   }
+			   }
+		   }
+		   return new_table;
+	   }
 	   
 	   
 	   
