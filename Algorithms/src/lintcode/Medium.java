@@ -2138,6 +2138,78 @@ public class Medium {
 	   }
 	   
 	   
+	   class NumMatrix {
+		   
+		   long[][] dp;
+
+		    public NumMatrix(int[][] matrix) {
+		        dp = new long[matrix.length][matrix[0].length];
+		        dp[0][0] = matrix[0][0];
+		        for(int i=1; i<matrix[0].length; i++) {
+		        	dp[0][i] += matrix[0][i-1];
+		        }
+		        for(int i=1; i<matrix.length; i++) {
+		        	for(int j=0; j<matrix[0].length; j++) {
+		        		if(j == 0) {
+		        			dp[i][j] = dp[i-1][0] + matrix[i][0];
+		        		}
+		        		else {
+		        			dp[i][j] = dp[i-1][j] + dp[i][j-1] + matrix[i][j];
+		        		}
+		        	}
+		        }
+		    }
+		    
+		    public int sumRegion(int row1, int col1, int row2, int col2) {
+		        long sum = dp[row2][col2];
+		        if(col1 > 0) {
+		        	sum -= dp[row2][col1-1];
+		        }
+		        if(row1 > 0) {
+		        	sum -= dp[row1-1][col2];
+		        }
+		        if(row1 > 0 && col1 > 0) {
+		        	sum += dp[row1-1][col1-1];
+		        }
+		    	return (int) sum;
+		    }
+		}
+	   
+	   
+	   public boolean isBipartite(int[][] graph) {
+		   int N = graph.length;
+		   int[] color = new int[N];
+		   for(int i=0; i<N; i++) {
+			   if(color[i] == 0 && !isBipartite(graph, color, i, 1))
+				   return false;
+		   }
+		   return true;
+	   }
+	   
+	   private boolean isBipartite(int[][] graph, int[] color, int index, int tag) {
+		   color[index] = tag;
+		   for(int i : graph[index]) {
+			   if(color[i] == tag)
+				   return false;
+			   if(color[i] == 0 && !isBipartite(graph, color, i, -tag))
+				   return false; 
+		   }
+		   return true;
+	   }
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
 	   
 	  
 	  
