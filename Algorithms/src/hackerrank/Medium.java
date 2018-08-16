@@ -5022,7 +5022,42 @@ public class Medium {
 		return dp[index];
 	}
 	
-	
+	static void riddle(long[] arr, BufferedWriter bw) throws IOException {
+		int n = arr.length;
+		Stack<Integer> stack = new Stack<>();
+		int[] previous = new int[n];
+		int[] next = new int[n];
+		long[] answer = new long[n+1];
+		for(int i=0; i<n; i++) {
+			previous[i] = -1;
+			next[i] = n;
+		}
+		for(int i=0; i<n; i++) {
+			while(!stack.isEmpty() && arr[stack.peek()] >= arr[i])
+				stack.pop();
+			if(!stack.isEmpty())
+				previous[i] = stack.peek();
+			stack.push(i);
+		}
+		stack.clear();
+		for(int i=n-1; i>=0; i--) {
+			while(!stack.isEmpty() && arr[stack.peek()] >= arr[i])
+				stack.pop();
+			if(!stack.isEmpty())
+				next[i] = stack.peek();
+			stack.push(i);
+		}
+		for(int i=0; i<n; i++) {
+			int len = next[i] - previous[i] - 1;
+			answer[len] = Math.max(answer[len], arr[i]);
+		}
+		for(int i=n-1; i>0; i--) {
+			answer[i] = Math.max(answer[i], answer[i+1]);
+		}
+		for(int i=1; i<=n; i++) {
+			bw.write(answer[i]+" ");
+		}
+    }
 	
 	
 	
