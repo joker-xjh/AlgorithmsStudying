@@ -4986,11 +4986,49 @@ public class Medium {
 	}
 	
 	
+	static void queryMin(int[] array) {
+		int n = array.length;
+		int[][] min = new int[n][n];
+		for(int i=1; i<=n; i<<=1) {
+			for(int j=0; j+i-1<n; j++) {
+				int a = j, b = j+i-1;
+				if(i == 1) {
+					min[a][b] = array[j];
+				}
+				else {
+					int w = (b - a) / 2;
+					min[a][b] = Math.min(min[a][a+w-1],min[a+w][b]);
+				}
+			}
+		}
+	}
+	
+	static int maxSubsetSum(int[] arr) {
+		if(arr == null || arr.length == 0)
+			return 0;
+		return maxSubsetSumDP(arr, arr.length-1, new Integer[arr.length]);
+    }
+	
+	private static int maxSubsetSumDP(int[] arr, int index, Integer[] dp) {
+		if(index == 0)
+			return arr[0];
+		if(index == 1)
+			return Math.max(arr[0], arr[1]);
+		if(dp[index] != null)
+			return dp[index];
+		dp[index] = arr[index];
+		dp[index] = Math.max(dp[index], maxSubsetSumDP(arr, index-1, dp));
+		dp[index] = Math.max(dp[index], maxSubsetSumDP(arr, index-2, dp) + arr[index]);
+		return dp[index];
+	}
+	
+	
+	
+	
 	
 	
 	
 	public static void main(String[] args) throws IOException {
-		System.out.println(substrCount(8, "mnonopoo"));;
     }
 	
 
