@@ -2256,7 +2256,87 @@ public class Medium {
 	        return start;
 	    }
 	   
-	   
+	   public int maxKilledEnemies(char[][] grid) {
+		   if(grid == null || grid.length == 0)
+			   return 0;
+	       int m = grid.length, n = grid[0].length;
+		   int[][] up = new int[m][n];
+		   int[][] down = new int[m][n];
+		   int[][] left = new int[m][n];
+		   int[][] right = new int[m][n];
+		   for(int j=0; j<n; j++) {
+			   for(int i=0; i<m; i++) {
+				   if(i == 0) {
+					   up[i][j] = grid[i][j] == 'E' ? 1 : 0;
+				   }
+				   else {
+					   if(grid[i][j] == 'W') {
+						   up[i][j] = 0;
+					   }
+					   else {
+						   up[i][j] = up[i-1][j] + (grid[i][j] == 'E' ? 1 : 0);
+					   }
+				   }
+			   }
+		   }
+		   
+		   for(int j=0; j<n; j++) {
+			   for(int i=m-1; i>=0; i--) {
+				   if(i == m-1) {
+					   down[i][j] = grid[i][j] == 'E' ? 1 : 0;
+				   }
+				   else {
+					   if(grid[i][j] == 'W') {
+						   down[i][j] = 0;
+					   }
+					   else {
+						   down[i][j] = down[i+1][j] + (grid[i][j] == 'E' ? 1 : 0);
+					   }
+				   }
+			   }
+		   }
+		   
+		   for(int i=0; i<m; i++) {
+			   for(int j=0; j<n; j++) {
+				   if(j == 0) {
+					   left[i][j] = grid[i][j] == 'E' ? 1 : 0;
+				   }
+				   else {
+					   if(grid[i][j] == 'W') {
+						   left[i][j] = 0;
+					   }
+					   else {
+						   left[i][j] = left[i][j-1] + (grid[i][j] == 'E' ? 1 : 0);
+					   }
+				   }
+			   }
+		   }
+		   
+		   for(int i=0; i<m; i++) {
+			   for(int j=n-1; j>=0; j--) {
+				   if(j == n-1) {
+					   right[i][j] = grid[i][j] == 'E' ? 1 : 0;
+				   }
+				   else {
+					   if(grid[i][j] == 'W') {
+						   right[i][j] = 0;
+					   }
+					   else {
+						   right[i][j] = right[i][j+1] + (grid[i][j] == 'E' ? 1 : 0);
+					   }
+				   }
+			   }
+		   }
+		   int max = 0;
+		   for(int i=0; i<m; i++) {
+			   for(int j=0; j<n; j++) {
+				   if(grid[i][j] == '0') {
+					   max = Math.max(max, left[i][j] + right[i][j] + up[i][j] + down[i][j]);
+				   }
+			   }
+		   }  
+		   return max;
+	    }
 	   
 	   
 	   
