@@ -1081,7 +1081,32 @@ public class Hard {
 	
 	
 	
-	
+	static long chiefHopper(int[] arr) {
+		long limit = 1000000000000L;
+		long left = 1, right = 1000000000000L;
+		while(left < right) {
+			long mid = left + (right - left) / 2;
+			long energy = mid;
+			for(int h : arr) {
+				energy = Math.min(energy, limit);
+				if(energy < h) {
+					energy -= h - energy;
+				}
+				else {
+					energy += energy - h;
+				}
+				if(energy < 0)
+					break;
+			}
+			if(energy < 0) {
+				left = mid+1;
+			}
+			else {
+				right = mid;
+			}
+		}
+		return left;
+    }
 	
 	
 	
