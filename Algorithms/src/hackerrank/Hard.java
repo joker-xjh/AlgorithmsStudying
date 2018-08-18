@@ -1001,6 +1001,95 @@ public class Hard {
 	}
 	
 	
+	static long minimumPasses(long m, long w, long p, long n) {
+		long passes = 0;
+		if(p >= n) {
+			long mod = n % (m * n);
+			if(mod != 0)
+				mod = 1;
+			else
+				mod = 0;
+			return n / (m*w) + mod;
+		}
+		if(m == 1 && w == 1 && p != 1) {
+			passes += p;
+			m++;
+		}
+		long cadnies_left = 0;
+		while(true) {
+			long candies = m * w + cadnies_left;
+			passes++;
+			if(candies >= n)
+				break;
+			long units = candies / p;
+			long mod = candies % p;
+			if(mod != 0)
+				cadnies_left = mod;
+			
+			
+			long max = Math.max(units / 2, units - units/2);
+			long min = Math.min(units / 2, units - units/2);
+			if(w < m) {
+				w += max;
+				m += min;
+			}
+			else {
+				m += max;
+				w += min;
+			}
+			
+		}
+		return passes;
+    }
+	
+	
+	static void shortestReach(int n, int[][] edges, int s) {
+		long[] answer = new long[n+1];
+		Arrays.fill(answer, -1);
+		PriorityQueue<long[]> pq = new PriorityQueue<>(new Comparator<long[]>() {
+			@Override
+			public int compare(long[] o1, long[] o2) {
+				if(o1[1] < o2[1])
+					return -1;
+				else if(o1[1] > o2[1])
+					return 1;
+				return 0;
+			}
+		});
+		pq.add(new long[] {s, 0});
+		while(!pq.isEmpty()) {
+			long[] pair = pq.poll();
+			int cur = (int) pair[0];
+			long dis = pair[1];
+			if(answer[cur] != -1)
+				continue;
+			answer[cur] = dis;
+			for(int i=1; i<=n; i++) {
+				if(edges[(int) cur][i] != -1) {
+					pq.offer(new long[] {i, dis + edges[cur][i]});
+				}
+			}
+		}
+		for(int i=1; i<=n; i++) {
+			if(i != s) {
+				System.out.print(answer[i]+" ");
+			}
+		}
+		System.out.println();
+    }
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
