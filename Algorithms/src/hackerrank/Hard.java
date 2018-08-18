@@ -1108,7 +1108,34 @@ public class Hard {
 		return left;
     }
 	
-	
+	static void FloydCityofBlindingLights(int[][] edges, int n, int[][] queries) {
+		int[][] shortest_path = new int[n+1][n+1];
+		PriorityQueue<int[]> pq = new PriorityQueue<>((a,b) -> a[1] - b[1]);
+		for(int x=1; x<=n; x++) {
+			int[] distance = new int[n+1];
+			Arrays.fill(distance, -1);
+			pq.clear();
+			pq.add(new int[] {x, 0});
+			while(!pq.isEmpty()) {
+				int[] pair = pq.poll();
+				int cur = pair[0];
+				int dis = pair[1];
+				if(distance[cur] != -1)
+					continue;
+				distance[cur] = dis;
+				for(int i=1; i<=n; i++) {
+					if(edges[cur][i] == -1)
+						continue;
+					pq.add(new int[] {i, dis + edges[cur][i]});
+				}
+			}
+			shortest_path[x] = distance;
+		}
+		
+		for(int[] query : queries) {
+			System.out.println(shortest_path[query[0]][query[1]]);
+		}
+	}
 	
 	
 	
