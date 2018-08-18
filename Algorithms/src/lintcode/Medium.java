@@ -2336,7 +2336,21 @@ public class Medium {
 	    }
 	   
 	   
-	   
+	   public int backPackX(int n) {
+	       boolean[] dp = new boolean[n+1];
+	       dp[0] = true;
+		   int[] goods = {150, 250, 350};
+		   for(int good : goods) {
+			   for(int j=good; j<=n; j++) {
+				   dp[j] |= dp[j-good];
+			   }
+		   }
+		   for(int i=n; i>0; i--) {
+			   if(dp[i])
+				   return n - i;
+		   }
+		   return -1;
+	   }
 	   
 	  
 	  
