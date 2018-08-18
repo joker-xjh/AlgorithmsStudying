@@ -5059,6 +5059,53 @@ public class Medium {
 		}
     }
 	
+	static void travelAroundTheWorld(int[] a, int[] b, long c, int n) {
+		int s = 0;
+		int answer = 0;
+        long tank = 0;
+        for(int i=0; i<n*2; i++) {
+        	tank += a[i];
+        	tank = Math.min(tank, c);
+        	tank -= b[i];
+        	if(tank < 0) {
+        		tank = 0;
+        		s = i + 1;
+        	}
+        }
+        if(s >= n) {
+        	System.out.println(answer);
+        	return;
+        }
+        answer = 1;
+        long[] need = new long[2*n];
+        for(int i=1; i<n; i++) {
+        	int index = s + n - i;
+        	need[index] = Math.max((long)0, need[index+1] + b[index] - Math.min(c, a[index]));
+        	if(need[index] == 0)
+        		answer++;
+        }
+        System.out.println(answer);
+    }
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
