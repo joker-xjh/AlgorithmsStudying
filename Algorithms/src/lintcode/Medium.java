@@ -2352,7 +2352,80 @@ public class Medium {
 		   return -1;
 	   }
 	   
-	  
+	   public int countNumbersWithUniqueDigits(int n) {
+		   if(n > 10)
+	        	n = 10;
+	         if(n == 0)
+	        	return 1;
+	        if(n == 1)
+	        	return 10;
+	        if(n == 2)
+	        	return 91;
+	        int[] array = {9,9,8,7,6,5,4,3,2,1};
+	        int[] dp = new int[n+1];
+	        dp[1] = 10;
+	        dp[2] = 91;
+	        for(int i=3; i<=n; i++) {
+	        	dp[i] += dp[i-1];
+	        	int temp = 1;
+	        	for(int j=0; j<i; j++)
+	        		temp *= array[j];
+	        	dp[i] += temp;
+	        }
+	        return dp[n];	    
+	  }
+	   
+	   
+	   public void rerange(int[] A) {
+	        int index = 0;
+	        int negative_count = 0;
+	        for(int i=0; i<A.length; i++) {
+	        	if(A[i] < 0) {
+	        		int temp = A[i];
+	        		A[i] = A[index];
+	        		A[index] = temp;
+	        		index++;
+	        		negative_count++;
+	        	}
+	        }
+	        if(negative_count < A.length - negative_count) {
+	        	if(negative_count % 2 == 0)
+	        		index++;
+	        	for(int i=0; index<A.length; index+=2,i+=2) {
+	        		int temp = A[i];
+	        		A[i] = A[index];
+	        		A[index] = temp;
+	        	}
+	        }
+	        else if(negative_count > A.length - negative_count) {
+	        	if(negative_count % 2 == 1)
+	        		index -= 2;
+	        	else
+	        		index -=1;
+	        	for(int i=A.length-1; index>=0; index-=2,i-=2) {
+	        		int temp = A[i];
+	        		A[i] = A[index];
+	        		A[index] = temp;
+	        	}
+	        }
+	        else {
+	        	int start = negative_count % 2 == 1 ? 0 : 1;
+	        	for(int i=start; index < A.length; index+=2,i+=2) {
+	        		int temp = A[i];
+	        		A[i] = A[index];
+	        		A[index] = temp;
+	        	}
+	        }
+	   }
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
 	  
 	  
 	  public static void main(String[] args) {
