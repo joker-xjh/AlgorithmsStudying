@@ -2180,6 +2180,39 @@ public class Easy {
 		return answer;
 	}
 	
+	
+	static void countSwaps(int[] a) {
+		int swap = 0;
+		for(int i=0; i<a.length; i++) {
+			for(int j=0; j<a.length-i-1; j++) {
+				if(a[j] > a[j+1]) {
+					int temp = a[j];
+					a[j] = a[j+1];
+					a[j+1] = temp;
+					swap++;
+				}
+			}
+		}
+		int first = a[0];
+		int last = a[a.length-1];
+		System.out.println("Array is sorted in "+swap+" swaps.");
+		System.out.println("First Element: "+first);
+		System.out.println("Last Element: "+last);
+    }
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 	public static void main(String[] args) {
 		Scanner scanner = new Scanner(System.in);
