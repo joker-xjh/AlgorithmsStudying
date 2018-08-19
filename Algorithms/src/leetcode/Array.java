@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 
 
+
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -4662,13 +4663,88 @@ public class Array {
 		return nodes;
     }
 	
+	public void Dijkstra(int[][] edges, int source, int N) {
+		int[][] graph = new int[N][N];
+		for(int i=0; i<N; i++) {
+			Arrays.fill(graph[i], -1);
+		}
+		for(int[] edge : edges) {
+			graph[edge[0]][edge[1]] = edge[2];
+			graph[edge[1]][edge[0]] = edge[2];
+		}
+		boolean[] visited = new boolean[N];
+		int[] distance = new int[N];
+		PriorityQueue<int[]> pq = new PriorityQueue<>((a,b) -> (a[1] - b[1]));
+		pq.offer(new int[] {source, 0});
+		while(!pq.isEmpty()) {
+			int[] cur = pq.poll();
+			int point = cur[0];
+			int dis = cur[1];
+			if(visited[point])
+				continue;
+			distance[point] = dis;
+			for(int i=0; i<N; i++) {
+				if(graph[point][i] == -1)
+					continue;
+				pq.offer(new int[] {i, dis + graph[point][i]});
+			}
+		}
+		
+	}
+	
+	
+	public boolean possibleBipartition(int N, int[][] dislikes) {
+        int[][] graph = new int[N][N];
+        for(int[] dis : dislikes) {
+        	graph[dis[0] - 1][dis[1] - 1] = 1;
+        	graph[dis[1] - 1][dis[0] - 1] = 1;
+        }
+        int[] color = new int[N];
+        for(int i=0; i<N; i++) {
+        	if(color[i] == 0 && !possibleBipartitionDFS(graph, color, i, 1))
+        		return false;
+        }
+		return true;
+    }
+	
+	private boolean possibleBipartitionDFS(int[][] graph, int[] color, int index, int tag) {
+		color[index] = tag;
+		for(int i=0; i<graph.length; i++) {
+			if(graph[index][i] == 1) {
+				if(color[i] == tag)
+					return false;
+				if(color[i] == 0 && !possibleBipartitionDFS(graph, color, i, -tag))
+					return false;
+			}
+		}
+		return true;
+	}
+	
+	public int[] fairCandySwap(int[] A, int[] B) {
+        Set<Integer> set = new HashSet<>();
+        long sum_A = 0, sum_B = 0;
+        for(int candy : A) {
+        	sum_A += candy;
+        	set.add(candy);
+        }
+        for(int candy : B) {
+        	sum_B += candy;
+        }
+        for(int candy_B : B) {
+        	int candy_A = (int) (sum_A + candy_B - (sum_B - candy_B ));
+        	if(candy_A % 2 == 0) {
+        		candy_A /= 2;
+        		if(set.contains(candy_A)) {
+        			return new int[] {candy_A, candy_B};
+        		}
+        	}
+        }
+		return null;
+    }
 	
 	
 	
-	
-	
-	
-	
+
 	
 	
 	
