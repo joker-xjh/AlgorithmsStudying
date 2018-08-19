@@ -2,6 +2,7 @@ package leetcode;
 
 import java.util.ArrayList;
 
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -3755,6 +3756,68 @@ public class string {
     		i--;
     	 }
      }
+     
+     
+     public String[] uncommonFromSentences(String A, String B) {
+    	 Map<String, Integer> map = new HashMap<>();
+    	 String[] A_array = A.split(" ");
+    	 String[] B_array = B.split(" ");
+    	 for(String str : A_array) {
+    		 int old = map.getOrDefault(str, 0);
+    		 map.put(str, old+1);
+    	 }
+    	 for(String str : B_array) {
+    		 int old = map.getOrDefault(str, 0);
+    		 map.put(str, old+1);
+    	 }
+    	 List<String> list = new ArrayList<>();
+    	 for(String key : map.keySet()) {
+    		 if(map.get(key) == 1) {
+    			 list.add(key);
+    		 }
+    	 }
+    	 String[] answer = new String[list.size()];
+    	 list.toArray(answer);
+    	 return answer;
+     }
+     
+     
+     public List<String> findAndReplacePattern(String[] words, String pattern) {
+    	 List<String> answer = new ArrayList<>();
+    	 for(String word : words) {
+    		 if(word.length() != pattern.length())
+    			 continue;
+    		 String new_word = getPatternWord(pattern, word);
+    		 if(new_word.equals(word)) {
+    			 answer.add(word);
+    		 }
+    	 }
+    	 return answer;
+     }
+     
+     private String getPatternWord(String pattern, String word){
+    	 char[] array = new char[pattern.length()];
+    	 int[] pattern_to_word = new int[26];
+    	 int[] word_to_pattern = new int[26];
+    	 for(int i=0; i<array.length; i++) {
+    		 char pattern_c = pattern.charAt(i);
+    		 char word_c = word.charAt(i);
+    		 if(pattern_to_word[pattern_c - 'a'] != 0) {
+    			 array[i] = (char) pattern_to_word[pattern_c - 'a'];
+    		 }
+    		 else {
+    			 if(word_to_pattern[word_c - 'a'] != 0)
+    				 break;
+    			 pattern_to_word[pattern_c - 'a'] = word_c;
+    			 word_to_pattern[word_c - 'a'] = pattern_c;
+    			 array[i] = (char) word_c;
+    		 }
+    	 }
+    	 return new String(array);
+     }
+     
+     
+     
      
      
      
