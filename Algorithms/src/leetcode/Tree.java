@@ -1063,7 +1063,33 @@ public class Tree {
     	leafSimilar(node.right, list);
     }
     
+    public TreeNode constructFromPrePost(int[] pre, int[] post) {
+        Map<Integer, Integer> pre_map = new HashMap<>();
+        Map<Integer, Integer> post_map = new HashMap<>();
+        for(int i=0; i<pre.length; i++) {
+        	pre_map.put(pre[i], i);
+        	post_map.put(post[i], i);
+        }
+    	return constructFromPrePost(pre, 0, pre.length-1, post, 0, post.length-1, pre_map, post_map);
+    }
     
+    private TreeNode constructFromPrePost(int[] pre, int pre_start, int pre_end, int[] post, int post_start, int post_end, Map<Integer, Integer> pre_map, Map<Integer, Integer> post_map) {
+    	if(pre_start > pre_end || post_start > post_end)
+    		return null;
+    	TreeNode root = new TreeNode(pre[pre_start]);
+    	if(pre_start == pre_end)
+    		return root;
+    	int left_val = pre[pre_start + 1];
+    	int right_val = post[post_end-1];
+    	if(left_val != right_val) {
+    		root.left = constructFromPrePost(pre, pre_start+1, pre_map.get(right_val) - 1, post, post_start, post_map.get(left_val), pre_map, post_map);
+        	root.right = constructFromPrePost(pre, pre_map.get(right_val), pre_end, post, post_map.get(left_val)+1, post_end-1, pre_map, post_map);
+    	}
+    	else {
+    		root.left = constructFromPrePost(pre, pre_start+1, pre_end, post, post_start, post_map.get(left_val), pre_map, post_map);
+    	}
+    	return root;
+    }
     
     
  
