@@ -899,7 +899,24 @@ public class math {
    }
    
    
-   
+   public int sumSubseqWidths(int[] A) {
+	   if(A.length < 2)
+		   return 0;
+       Arrays.sort(A);
+	   long mod = 1000000007;
+	   long two_sum = 1;
+	   long sub = A[0];
+	   long width = 0;
+	   for(int i=1; i<A.length; i++) {
+		   width = (width + (A[i] * two_sum)%mod) % mod;
+		   width = (width- sub) % mod;
+		   if(width < 0)
+			   width = width + mod;
+		   two_sum = ((two_sum * 2) % mod + 1) % mod;
+		   sub = ((sub*2)%mod + A[i]) % mod;
+	   }
+	   return (int) width;
+   }
    
    
    
