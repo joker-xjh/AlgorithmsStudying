@@ -1138,10 +1138,61 @@ public class Hard {
 	}
 	
 	
+	static long[] playingWithNumbers(long[] arr, int[] queries) {
+		long[] answer = new long[queries.length];
+		int n = arr.length;
+		Arrays.sort(arr);
+		long[] cum =new long[n+1];
+		for(int i = 0;i < n;i++){
+			cum[i+1] = cum[i] + arr[i];
+		}
+		long h = 0;
+		for(int Q = 0;Q < queries.length;Q++){
+			int x = queries[0];
+			h -= x;
+			int ind = Arrays.binarySearch(arr, h);
+			if(ind < 0)ind = -ind-2;
+			long ret = 0;
+			ret += cum[n]-cum[ind+1]-h*(n-(ind+1));
+			ret += -cum[ind+1]+h*(ind+1);
+			answer[Q] = ret;
+		}
+		return answer;
+    }
 	
 	
-	
-	
+	static int findShortest(int N, Map<Integer, List<Integer>> graph, int[] ids, int val) {
+		int[][] pairs = new int[N+1][2];
+		Queue<Integer> queue = new LinkedList<>();
+		for(int i=0; i<ids.length; i++) {
+			if(ids[i] == val) {
+				pairs[i+1] = new int[] {i+1, 0};
+				queue.add(i+1);
+			}
+		}
+		while(!queue.isEmpty()) {
+			int size = queue.size();
+			for(int t=0; t<size; t++) {
+				int cur = queue.poll();
+				List<Integer> list = graph.get(cur);
+				if(list == null)
+					continue;
+				for(int next : list) {
+					if(pairs[next][0] == 0) {
+						pairs[next] = new int[] {pairs[cur][0], pairs[cur][1] + 1};
+						queue.add(next);
+					}
+					else {
+						if(pairs[next][0] == pairs[cur][0])
+							continue;
+						return pairs[next][1] + pairs[cur][1] + 1;
+					}
+				}
+			}
+		}
+		
+		return -1;
+    }
 	
 	
 	
@@ -1149,7 +1200,29 @@ public class Hard {
 	
 	
 	public static void main(String[] args) {
-		
+		Scanner scanner = new Scanner(System.in);
+        while(scanner.hasNext()){
+            int N = scanner.nextInt();
+            int m = scanner.nextInt();
+            Map<Integer, List<Integer>> graph = new HashMap<>();
+            for(int i=1; i<=N; i++){
+                graph.put(i, new ArrayList<>());
+            }
+            for(int i=0; i<m; i++){
+                int v = scanner.nextInt();
+                int u = scanner.nextInt();
+                graph.get(v).add(u);
+                graph.get(u).add(v);
+            }
+            int[] ids = new int[N];
+            for(int i=0; i<N; i++){
+                ids[i] = scanner.nextInt();
+            }
+            int val = scanner.nextInt();
+            int ans = findShortest(N, graph, ids, val);
+            System.out.println(ans);
+        }
+        scanner.close();
 	}
 	
 	
