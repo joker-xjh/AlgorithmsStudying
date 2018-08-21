@@ -4742,7 +4742,28 @@ public class Array {
 		return null;
     }
 	
-	
+	public boolean find132pattern(int[] nums) {
+        int n = nums.length;
+        if(n < 3)
+        	return false;
+        int[] min = new int[n];
+		min[0] = nums[0];
+		for(int i=1; i<n; i++) {
+			min[i] = Math.min(min[i-1], nums[i]);
+		}
+		TreeSet<Integer> tree = new TreeSet<>();
+		tree.add(nums[n-1]);
+		for(int i=n-2; i>0; i--) {
+			int num = nums[i];
+			if(num > min[i]) {
+				Integer right = tree.lower(num);
+				if(right != null && right > min[i])
+					return true;
+			}
+			tree.add(num);
+		}
+		return false;
+    }
 	
 
 	
