@@ -1194,7 +1194,46 @@ public class Hard {
 		return -1;
     }
 	
+	static int minTime(int[][] roads, int[] machines) {
+		int time = 0;
+		int N = roads.length + 1;
+		int[] UF = new int[N];
+		boolean[] is_machine = new boolean[N];
+		for(int machine : machines) {
+			is_machine[machine] = true;
+		}
+		for(int i=0; i<N; i++) {
+			UF[i] = i;
+		}
+		Arrays.sort(roads, (a,b) -> (b[2] - a[2]));
+		for(int i=0; i<roads.length; i++) {
+			int[] road = roads[i];
+			int a = road[0], b = road[1], cost = road[2];
+			int parent_a = minTimeFind(UF, a);
+			int parent_b = minTimeFind(UF, b);
+			if(parent_a == parent_b)
+				continue;
+			if(is_machine[parent_a] && is_machine[parent_b]) {
+				time += cost;
+			}
+			else {
+				if(is_machine[parent_b]) {
+					is_machine[parent_a] = true;
+				}
+				UF[parent_b] = parent_a;
+			}
+		}
+		
+		return time;
+    }
 	
+	static int minTimeFind(int[] UF, int i) {
+		while(UF[i] != i) {
+			UF[i] = UF[UF[i]];
+			i = UF[i];
+		}
+		return i;
+	}
 	
 	
 	
