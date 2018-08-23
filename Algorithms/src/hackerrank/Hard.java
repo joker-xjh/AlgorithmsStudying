@@ -1237,31 +1237,76 @@ public class Hard {
 	
 	
 	
+	@SuppressWarnings("unchecked")
+	static long maximumPeople(long[][] city, long[][] cloud) {
+		long people = 0;
+		long answer = 0;
+		long[] cloud_bucket = new long[cloud.length];
+		List<Integer>[] city_diff = (ArrayList<Integer>[])new ArrayList[city.length+1];
+		city_diff[city.length] = new ArrayList<>();
+		Arrays.sort(city, new Comparator<long[]>() {
+
+			@Override
+			public int compare(long[] o1, long[] o2) {
+				if(o1[1] < o2[1])
+					return -1;
+				else if(o1[1] > o2[1])
+					return 1;
+				return 0;
+			}
+		});
+		TreeMap<Long, Integer> tree = new TreeMap<>();
+		for(int i=0; i<city.length; i++) {
+			if(i > 0 && city[i][1] == city[i-1][1]) {
+				city[i][0] += city[i-1][0];
+				city[i-1][0] = 0;
+			}
+			tree.put(city[i][1], i);
+			city_diff[i] = new ArrayList<>();
+		}
+		for(int i=0; i<cloud.length; i++) {
+			long[] pair = cloud[i];
+			long start = pair[0] - pair[1];
+			long end = pair[0] + pair[1];
+			Map.Entry<Long, Integer> start_entry = tree.ceilingEntry(start);
+			if(start_entry == null)
+				continue;
+			Map.Entry<Long, Integer> end_entry = tree.floorEntry(end);
+			if(end_entry == null)
+				continue;
+			int start_index = start_entry.getValue();
+			int end_index = end_entry.getValue();
+			if(start_index > end_index)
+				continue;
+			city_diff[start_index].add(i+1);
+			city_diff[end_index+1].add(-(i+1));
+		}
+		Set<Integer> set = new HashSet<>();
+        for(int i=0; i<city.length; i++) {
+            for(int temp : city_diff[i]) {
+                if(temp > 0)
+                    set.add(temp);
+                else
+                    set.remove(-temp);
+            }
+            if(set.size() == 1) {
+                int index = set.iterator().next() - 1;
+                cloud_bucket[index] = cloud_bucket[index] + city[i][0];
+            }
+            else if(set.isEmpty()) {
+                people = people + city[i][0];
+            }
+        }
+        answer = people;
+        for(int i=0; i<cloud_bucket.length; i++) {
+            answer = Math.max(answer, people + cloud_bucket[i]);
+        }
+        return answer;
+	}
+	
 	
 	public static void main(String[] args) {
-		Scanner scanner = new Scanner(System.in);
-        while(scanner.hasNext()){
-            int N = scanner.nextInt();
-            int m = scanner.nextInt();
-            Map<Integer, List<Integer>> graph = new HashMap<>();
-            for(int i=1; i<=N; i++){
-                graph.put(i, new ArrayList<>());
-            }
-            for(int i=0; i<m; i++){
-                int v = scanner.nextInt();
-                int u = scanner.nextInt();
-                graph.get(v).add(u);
-                graph.get(u).add(v);
-            }
-            int[] ids = new int[N];
-            for(int i=0; i<N; i++){
-                ids[i] = scanner.nextInt();
-            }
-            int val = scanner.nextInt();
-            int ans = findShortest(N, graph, ids, val);
-            System.out.println(ans);
-        }
-        scanner.close();
+		
 	}
 	
 	
