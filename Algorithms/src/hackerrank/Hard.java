@@ -1305,8 +1305,138 @@ public class Hard {
 	}
 	
 	
+	static String roadsInHackerland(int n, int[][] roads) {
+		Arrays.sort(roads, (a,b) -> (a[2]-b[2]));
+		List<List<Integer>> tree = new ArrayList<>();
+		for(int i=0; i<=n; i++) {
+			tree.add(new ArrayList<>());
+		}
+		UF uf = new UF(n+1);
+		Map<String, Integer> weight_map = new HashMap<>();
+		for(int[] road : roads) {
+			int a = road[0], b = road[1], weight = road[2];
+			if(uf.isConnected(a, b))
+				continue;
+			uf.union(a, b);
+			tree.get(a).add(b);
+			tree.get(b).add(a);
+			String key = Math.min(a, b) + "," + Math.max(a, b);
+			weight_map.put(key, weight);
+		}
+		tree.get(1).add(1);
+		List<Integer> binary = new ArrayList<>();
+		List<Long> binary_counter = new ArrayList<>();
+		boolean[] visited = new boolean[n+1];
+		int[] child_counter = new int[n+1];
+		visited[1] = true;
+		roadsInHackerland_childCount(tree, 1, child_counter, visited, weight_map, binary, binary_counter, n);
+		roadsInHackerlandBinaryFinalAdd(binary, binary_counter);
+		StringBuilder sb = new StringBuilder();
+		for(int i=binary.size()-1; i>=0; i--) {
+			char c = binary.get(i) == 0 ? '0' : '1';
+			sb.append(c);
+		}
+		return sb.toString();
+    }
+	
+	
+	
+	
+	static void roadsInHackerland_childCount(List<List<Integer>> tree, int cur, int[] child_counter, boolean[] visited, Map<String, Integer> weight_map, List<Integer> binary, List<Long> binary_counter, int n) {
+		child_counter[cur] = 1;
+		List<Integer> child = tree.get(cur);
+		for(int next : child) {
+			if(visited[next])
+				continue;
+			visited[next] = true;
+			roadsInHackerland_childCount(tree, next, child_counter, visited,weight_map, binary, binary_counter, n);
+			String path = Math.min(cur, next) + "," + Math.max(cur, next);
+			int weight = weight_map.get(path);
+			roadsInHackerlandBinaryAdd(binary, binary_counter, weight, ((long)n-child_counter[next]) * child_counter[next]);
+			child_counter[cur] += child_counter[next];
+		}
+	}
+	
+	static void roadsInHackerlandBinaryFinalAdd(List<Integer> binary, List<Long> binary_counter) {
+		for(int i=0; i<binary.size(); i++) {
+			long count = binary_counter.get(i);
+			if(count == 0)
+				continue;
+			int bit = binary.get(i);
+			if(bit == 1) {
+				binary.set(i, 0);
+				binary_counter.set(i+1, binary_counter.get(i+1)+1);
+				count--;
+			}
+			binary.set(i, (int)(count % 2));
+			binary_counter.set(i, 0L);
+			binary_counter.set(i+1, binary_counter.get(i+1) + count / 2);
+		}
+		while(binary_counter.get(binary_counter.size()-1) != 0) {
+			long last = binary_counter.get(binary_counter.size()-1);
+			binary.add((int)last % 2);
+			binary_counter.set(binary_counter.size()-1, 0L);
+			binary_counter.add(last / 2);
+		}
+	}
+	
+	
+	static void roadsInHackerlandBinaryAdd(List<Integer> binary, List<Long> binary_counter, int i, long count) {
+		while(binary.size() < i+1) {
+			binary.add(0);
+			binary_counter.add(0L);
+		}
+		if(binary_counter.size() < i+2) {
+			binary_counter.add(0L);
+		}
+		if(binary.get(i) == 1) {
+			binary.set(i, 0);
+			binary_counter.set(i+1, binary_counter.get(i+1) + 1);
+			count--;
+		}
+		binary.set(i, (int)(count % 2));
+		binary_counter.set(i+1, binary_counter.get(i+1) + count / 2);
+	}
+	
+	static class UF {
+		int[] parent;
+		public UF(int n) {
+			parent = new int[n];
+			for(int i=0; i<n; i++)
+				parent[i] = i;
+		}
+		public int find(int i) {
+			while(i != parent[i]) {
+				parent[i] = parent[parent[i]];
+				i = parent[i];
+			}
+			return i;
+		}
+		public void union(int i, int j) {
+			int p_i = find(i);
+			int p_j = find(j);
+			if(p_i == p_j)
+				return;
+			parent[p_j] = p_i;
+		}
+		public boolean isConnected(int i, int j) {
+			int p_i = find(i);
+			int p_j = find(j);
+			if(p_i == p_j)
+				return true;
+			return false;
+		}
+	}
+	
+
+	
+	
 	public static void main(String[] args) {
-		
+		Scanner scanner = new Scanner(System.in);
+		while(scanner.hasNext()) {
+			
+		}
+		scanner.close();
 	}
 	
 	
