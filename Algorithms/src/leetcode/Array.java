@@ -4797,6 +4797,63 @@ public class Array {
 		 }
 		 return count == numCourses;
 	 }
+	 
+	 
+	 public int[] findOrder(int numCourses, int[][] prerequisites) {
+		 if(numCourses == 0) {
+			 return new int[] {};
+		 }
+		 if(prerequisites == null || prerequisites.length == 0) {
+			 int[] order = new int[numCourses];
+			 for(int i=0; i<order.length; i++)
+				 order[i] = i;
+			 return order;
+		 }
+		 boolean[][] matrix = new boolean[numCourses][numCourses];
+		 int[] indegree = new int[numCourses];
+		 for(int[] edge : prerequisites) {
+			 int pre = edge[1];
+			 int cur = edge[0];
+			 if(matrix[pre][cur])
+				 continue;
+			 matrix[pre][cur] = true;
+			 indegree[cur]++;
+		 }
+		 Queue<Integer> queue = new LinkedList<>();
+		 for(int i=0; i<numCourses; i++) {
+			 if(indegree[i] == 0) {
+				 queue.add(i);
+			 }
+		 }
+		 int[] order = new int[numCourses];
+		 int index = 0;
+		 while(!queue.isEmpty()) {
+			 int cur = queue.poll();
+			 order[index++] = cur;
+			 for(int i=0; i<numCourses; i++) {
+				 if(matrix[cur][i]) {
+					 indegree[i]--;
+					 if(indegree[i] == 0) {
+						 queue.add(i);
+					 }
+				 }
+			 }
+		 }
+		 if(index == numCourses)
+			 return order;
+		 return new int[] {};
+	 }
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
 	
 	
      
