@@ -4845,9 +4845,35 @@ public class Array {
 	 }
 	 
 	 
+	 public int longestIncreasingPath(int[][] matrix) {
+		 if(matrix == null || matrix.length == 0 || matrix[0].length == 0)
+			 return 0;
+		 int m = matrix.length, n = matrix[0].length;
+		 int[][] dp = new int[m][n];
+		 int answer = 0;
+		 for(int i=0; i<m; i++) {
+			 for(int j=0; j<n; j++) {
+				 if(dp[i][j] == 0) {
+					 answer = Math.max(answer, longestIncreasingPathDFS(matrix, i, j, dp));
+				 }
+			 }
+		 }
+		 return answer;
+	 }
 	 
-	 
-	 
+	 private int longestIncreasingPathDFS(int[][] matrix, int i, int j, int[][] dp) {
+		 if(dp[i][j] != 0)
+			 return dp[i][j];
+		 dp[i][j] = 1;
+		 for(int[] dir : directions) {
+			 int x = dir[0] + i;
+			 int y = dir[1] + j;
+			 if(x<0 || x>=matrix.length || y<0 || y>=matrix[0].length || !(matrix[x][y] > matrix[i][j]))
+				 continue;
+			 dp[i][j] = Math.max(dp[i][j], longestIncreasingPathDFS(matrix, x, y, dp)+1);
+		 }
+		 return dp[i][j];
+	 }
 	 
 	 
 	 
