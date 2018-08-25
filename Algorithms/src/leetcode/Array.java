@@ -4767,7 +4767,36 @@ public class Array {
 	
 
 	
-	
+	 public boolean canFinish(int numCourses, int[][] prerequisites) {
+		 int[][] matrix = new int[numCourses][numCourses];
+		 int[] indegree = new int[numCourses];
+		 Queue<Integer> queue = new LinkedList<>();
+		 int count = 0;
+		 for(int[] edge : prerequisites) {
+			 int cur = edge[0];
+			 int pre = edge[1];
+			 matrix[pre][cur] = 1;
+			 indegree[cur]++;
+		 }
+		 for(int i=0; i<numCourses; i++) {
+			 if(indegree[i] == 0) {
+				 queue.add(i);
+			 }
+		 }
+		 while(!queue.isEmpty()) {
+			 int cur = queue.poll();
+			 count++;
+			 for(int i=0; i<numCourses; i++) {
+				 if(matrix[cur][i] != 0) {
+					 indegree[i]--;
+					 if(indegree[i] == 0) {
+						 queue.add(i);
+					 }
+				 }
+			 }
+		 }
+		 return count == numCourses;
+	 }
 	
 	
      
