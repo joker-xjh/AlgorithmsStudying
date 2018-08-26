@@ -720,13 +720,53 @@ public class Design {
 		    	return counter.get(min).iterator().next();
 		    }
 		}
+	 
+	 
+	static class FreqStack {
+		int counter;
+		Map<Integer, Integer> counter_map;
+		TreeMap<Integer, PriorityQueue<int[]>> fre_map;
+	    public FreqStack() {
+	        counter_map = new HashMap<>();
+	        fre_map = new TreeMap<>();
+	    }
+	    
+	    public void push(int x) {
+	        int fre = counter_map.getOrDefault(x, 0);
+	        int next_fre = fre + 1;
+	        counter_map.put(x, next_fre);
+	        PriorityQueue<int[]> pq = fre_map.get(next_fre);
+	        if(pq == null) {
+	        	pq = new PriorityQueue<>((a,b) -> b[1]-a[1]);
+	        	fre_map.put(next_fre, pq);
+	        }
+	        pq.add(new int[] {x, counter});
+	        counter++;
+	    }
+	    
+	    public int pop() {
+	        Map.Entry<Integer, PriorityQueue<int[]>> entry = fre_map.lastEntry();
+	        PriorityQueue<int[]> pq = entry.getValue();
+	        int answer = pq.poll()[0];
+	        if(pq.isEmpty()) {
+	        	fre_map.remove(entry.getKey());
+	        }
+	    	return answer;
+	    }
+	}
+	 
+	 
+	 
+	 
+	 
+	 
+	 
 	
 	
 	
 
 	public static void main(String[] args) {
 		
-
 	}
 
 }
