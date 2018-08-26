@@ -2419,6 +2419,81 @@ public class Medium {
 	   }
 	   
 	   
+	   public boolean sequenceReconstruction(int[] org, int[][] seqs) {
+		   if(org.length == 0) {
+			   int size = 0;
+			   for(int[] array : seqs)
+				   size += array.length;
+			   if(size == 0)
+				   return true;
+			   return false;
+		   }
+	       if(seqs == null || seqs.length == 0)
+	    	   return false;
+	       int n = org.length;
+	       int[] indegree = new int[n+1];
+	       Arrays.fill(indegree, -1);
+	       List<List<Integer>> graph = new ArrayList<>();
+		   for(int i=0; i<=n;i++) {
+			   graph.add(new ArrayList<>());
+		   }
+		   for(int[] array : seqs) {
+			   if(array.length == 1) {
+				   if(array[0] < 1 || array[0] > n)
+					   return false;
+				   indegree[array[0]] = 0;
+			   }
+			   else if(array.length > 1) {
+				   for(int i=1; i<array.length; i++) {
+					   int pre = array[i-1];
+					   int cur = array[i];
+					   if(pre < 1 || pre > n || cur < 1 || cur > n)
+						   return false;
+					   graph.get(pre).add(cur);
+					   if(indegree[cur] == -1) {
+						   indegree[cur] = 1;
+					   }
+					   else {
+						   indegree[cur]++;
+					   }
+					   if(indegree[pre] == -1) {
+						   indegree[pre] = 0;
+					   }
+				   }
+			   }
+		   }
+		   Queue<Integer> queue = new LinkedList<>();
+		   int index = 0;
+		   for(int i=1; i<=n; i++) {
+			   if(indegree[i] == 0) {
+				   queue.add(i);
+			   }
+		   }
+		   if(queue.size() != 1)
+			   return false;
+		   while(!queue.isEmpty()) {
+			   int cur = queue.poll();
+			   if(org[index] != cur)
+				   return false;
+			   index++;
+			   for(int next : graph.get(cur)) {
+				   indegree[next]--;
+				   if(indegree[next] == 0) {
+					   queue.add(next);
+				   }
+			   }
+			   if(queue.size() > 1)
+				   return false;
+			   if(index >= org.length && !queue.isEmpty())
+				   return false;
+		   }
+		   if(index != org.length)
+			   return false;
+		   
+		   return true;
+	   }
+	   
+	   
 	   
 	   
 	   
@@ -2429,7 +2504,10 @@ public class Medium {
 	  
 	  
 	  public static void main(String[] args) {
-		  
+		  Medium test = new Medium();
+		  int[] org = {1,2,3};
+		  int[][] seqs = {{1,2}, {1,3}, {2,3}};
+		  test.sequenceReconstruction(org, seqs);
 	  }
 
 }
