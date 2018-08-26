@@ -3816,10 +3816,75 @@ public class string {
     	 return new String(array);
      }
      
+     public int numSpecialEquivGroups(String[] A) {
+         int answer = 0;
+         Set<String> words = new HashSet<>(Arrays.asList(A));
+         Queue<String> queue = new LinkedList<>();
+         Set<String> used = new HashSet<>();
+         for(int i=0; i<A.length && !words.isEmpty(); i++) {
+        	 queue.add(A[i]);
+        	 while(!queue.isEmpty()) {
+        		 String word = queue.poll();
+            	 char[] array = word.toCharArray();
+            	 for(int j=0; j<word.length(); j++) {
+            		 for(int k=j; k<word.length(); k+=2) {
+            			 numSpecialEquivGroupsSwap(array, j, k);
+            			 String new_word = new String(array);
+            			 if(used.add(new_word)) {
+            				 queue.add(new_word);
+            				 words.remove(new_word);
+            			 }
+            			 numSpecialEquivGroupsSwap(array, j, k);
+            		 }
+            	 }
+        	 }
+        	 answer++;
+        	 queue.clear();
+        	 used.clear();
+         }
+         
+         return answer;
+     }
      
+     private void numSpecialEquivGroupsSwap(char[] array, int i, int j) {
+    	 char temp = array[i];
+    	 array[i] = array[j];
+    	 array[j] = temp;
+     }
      
-     
-     
+     public int numSpecialEquivGroups2(String[] A) {
+    	 int answer = A.length;
+    	 boolean[] used = new boolean[A.length];
+    	 int[][] array_odd = new int[A.length][26];
+    	 int[][] array_even = new int[A.length][26];
+    	 for(int i=0; i<A.length; i++) {
+    		 for(int j=0; j<A[i].length(); j+=2) {
+    			 char c = A[i].charAt(j);
+    			 array_odd[i][c-'a']++;
+    		 }
+    		 for(int j=1; j<A[i].length(); j+=2) {
+    			 char c = A[i].charAt(j);
+    			 array_even[i][c-'a']++;
+    		 }
+    	 }
+    	 for(int i=0; i<A.length; i++) {
+    		 if(used[i])
+    			 continue;
+    		 used[i] = true;
+    		 answer--;
+    		 int[] odd_1 = array_odd[i];
+    		 int[] even_1 = array_even[i];
+    		 for(int j=i+1; j<A.length; j++) {
+    			 int[] odd_2 = array_odd[j];
+    			 int[] even_2 = array_even[j];
+    			 if(Arrays.equals(odd_1, odd_2) && Arrays.equals(even_1, even_2)) {
+    				 used[j] = true;
+    			 }
+    		 }
+    	 }
+    	 
+    	 return answer;
+     }
      
     
     public static void main(String[] args) {
