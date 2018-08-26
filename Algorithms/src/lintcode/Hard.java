@@ -3,10 +3,13 @@ package lintcode;
 import java.util.AbstractMap;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.Set;
 
 public class Hard {
@@ -192,7 +195,7 @@ public class Hard {
 	private int maxSubArrayMemo(int[] nums, int k, int n, int[][] dp, int[] preSum) {
 		if(k > n || k == 0)
 			return 0;
-		if(k == 1 || k == n)
+		if(k == n)
 			return preSum[n];
 		if(dp[k][n] > 0)
 			return dp[k][n];
@@ -206,10 +209,172 @@ public class Hard {
 		return dp[k][n];
 	}
 	
+	public String alienOrder(String[] words) {
+		if(words == null || words.length == 0)
+			return "";
+		int[] indegree = new int[26];
+		Map<Character, Set<Character>> graph = new HashMap<>();
+		Set<String> set = new HashSet<>();
+		for(int i=0; i<26; i++) {
+			char c = (char) (i + 'a');
+			graph.put(c, new HashSet<>());
+		}
+		Arrays.fill(indegree, -1);
+		for(String word : words) {
+			if(word.length() == 1) {
+				int i = word.charAt(0) - 'a';
+				indegree[i] = 0;
+			}
+			else {
+				for(int i=1; i<word.length(); i++) {
+					int cur = word.charAt(i) - 'a';
+					int pre = word.charAt(i-1) - 'a';
+					if(cur == pre)
+						continue;
+					String edge = pre + "," + cur;
+					if(!set.add(edge))
+						continue;
+					graph.get(word.charAt(i-1)).add(word.charAt(i));
+					if(indegree[cur] == -1) {
+						indegree[cur] = 1;
+					}
+					else {
+						indegree[cur]++;
+					}
+					if(indegree[pre] == -1) {
+						indegree[pre] = 0;
+					}
+				}
+			}
+		}
+		
+		StringBuilder sb = new StringBuilder();
+		PriorityQueue<Character> pq = new PriorityQueue<>();
+		int count = 0;
+		for(int i=0; i<26; i++) {
+			int num = indegree[i];
+			if(num != -1) {
+				count++;
+			}
+			if(num == 0) {
+				pq.add((char)(i+'a'));
+			}
+		}
+		while(!pq.isEmpty()) {
+			char c = pq.poll();
+			sb.append(c);
+			for(char next : graph.get(c)) {
+				int i = next - 'a';
+				indegree[i]--;
+				if(indegree[i] == 0) {
+					pq.offer(next);
+				}
+			}
+		}
+		if(sb.length() == count)
+			return sb.toString();
+        return "";
+    }
+	
+	
+	
+	public String alienOrder2(String[] words) {
+		if(words == null || words.length == 0)
+			return "";
+		PriorityQueue<Character> pq = new PriorityQueue<>();
+		int[] indegree = new int[26];
+		Arrays.fill(indegree, -1);
+		Map<Character, Set<Character>> graph = new HashMap<>();
+		for(int i=0; i<26; i++) {
+			char c = (char) (i + 'a');
+			graph.put(c, new HashSet<>());
+		}
+		if(words.length == 1) {
+			for(char c : words[0].toCharArray()) {
+				int i = c - 'a';
+				indegree[i] = 0;
+			}
+		}
+		else {
+			for(int i=1; i<words.length; i++) {
+				String pre_word = words[i-1];
+				String cur_word = words[i];
+				int min = Math.min(pre_word.length(), cur_word.length());
+				int max = Math.max(pre_word.length(), cur_word.length());
+				for(int j=0; j<min; j++) {
+					char pre_c = pre_word.charAt(j);
+					char cur_c = cur_word.charAt(j);
+					if(indegree[pre_c - 'a'] == -1) {
+						indegree[pre_c - 'a'] = 0;
+					}
+					if(pre_c == cur_c)
+						continue;
+					graph.get(pre_c).add(cur_c);
+					if(indegree[cur_c - 'a'] == -1) {
+						indegree[cur_c - 'a'] = 1;
+					}
+					else {
+						indegree[cur_c - 'a']++;
+					}
+					
+					for(int k=j+1; k<max; k++) {
+						if(k < pre_word.length()) {
+							if(indegree[pre_word.charAt(k) - 'a'] == -1) {
+								indegree[pre_word.charAt(k) - 'a'] = 0;
+							}
+						}
+						if(k < cur_word.length()) {
+							if(indegree[cur_word.charAt(k) - 'a'] == -1) {
+								indegree[cur_word.charAt(k) - 'a'] = 0;
+							}
+						}
+					}
+					break;
+				}
+			}
+		}
+		int count = 0;
+		for(int i=0; i<26;i++) {
+			if(indegree[i] != -1) {
+				count++;
+			}
+			if(indegree[i] == 0) {
+				char c = (char) (i + 'a');
+				pq.add(c);
+			}
+		}
+		StringBuilder sb = new StringBuilder();
+		while(!pq.isEmpty()) {
+			char c = pq.poll();
+			sb.append(c);
+			for(char next : graph.get(c)) {
+				int i = next - 'a';
+				if(--indegree[i] == 0) {
+					pq.add(next);
+				}
+			}
+		}
+		if(sb.length() == count)
+			return sb.toString();
+		return "";
+	}
 	
 	
 	
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	public static void main(String[] args) {
+		Hard test = new Hard();
+		String[] words = {"wrt","wrf","er","ett","rftt"};
+		test.alienOrder2(words);
+	}
 	
 	
 	
