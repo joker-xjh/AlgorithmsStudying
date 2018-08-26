@@ -918,7 +918,27 @@ public class math {
 	   return (int) width;
    }
    
-   
+   public int surfaceArea(int[][] grid) {
+       int area = 0;
+       int N = grid.length;
+       for(int i=0; i<N; i++) {
+    	   int[] array = grid[i];
+    	   for(int j=0; j<N; j++) {
+    		   if(array[j] == 0)
+    			   continue;
+    		   area += array[j]*6 - (array[j]-1)*2;
+    		   if(j > 0) {
+    			   int left = Math.min(array[j-1], array[j]);
+    			   area -= left*2;
+    		   }
+    		   if(i > 0) {
+    			   int up = Math.min(array[j], grid[i-1][j]);
+    			   area -= up*2;
+    		   }
+    	   }
+       }
+       return area;
+   }
    
    
     
