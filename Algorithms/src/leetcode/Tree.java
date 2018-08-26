@@ -1091,11 +1091,62 @@ public class Tree {
     	return root;
     }
     
+    public List<TreeNode> allPossibleFBT(int N) {
+        List<TreeNode> list = new ArrayList<>();
+        if(N % 2 == 0)
+        	return list;
+        list = allPossibleFBT(N, new HashMap<>());
+    	return list;
+    }
     
- 
+    private List<TreeNode> allPossibleFBT(int N, Map<Integer, List<TreeNode>> dp){
+    	if(dp.containsKey(N))
+    		return dp.get(N);
+    	List<TreeNode> list = new ArrayList<>();
+    	if(N == 1) {
+    		TreeNode node = new TreeNode(0);
+    		list.add(node);
+    		return list;
+    	}
+    	for(int i=1; i<N; i+=2) {
+    		List<TreeNode> left = allPossibleFBT(i, dp);
+    		List<TreeNode> right = allPossibleFBT(N-1-i, dp);
+    		for(TreeNode L : left) {
+    			for(TreeNode R : right) {
+    	    		TreeNode root = new TreeNode(0);
+    	    		root.left = L;
+    	    		root.right = R;
+    	    		list.add(root);
+    			}
+    		}
+    	}
+    	dp.put(N, list);
+    	return list;
+    }
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
 	public static void main(String[] args) {
-		
+		Tree test = new Tree();
+		test.allPossibleFBT(3);
 	}
 
 }
