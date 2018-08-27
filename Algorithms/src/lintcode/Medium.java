@@ -2589,9 +2589,39 @@ public class Medium {
 		   return lands;   
 	   }
 	   
+	   int[][] dirs = {{-1,0}, {1,0}, {0,-1}, {0,1}};
+	   public int numberofDistinctIslands(int[][] grid) {
+	       Set<String> set = new HashSet<>();
+	       if(grid == null || grid.length == 0)
+	    	   return 0;
+	       for(int i=0; i<grid.length; i++) {
+	    	   for(int j=0; j<grid[0].length; j++) {
+	    		   if(grid[i][j] == 0)
+	    			   continue;
+	    		   grid[i][j] = 0;
+	    	       StringBuilder sb = new StringBuilder();
+	    		   sb.append("(0,0)");
+	    		   numberofDistinctIslandsDFS(grid, i, j, sb,new int[] {0,0});
+	    		   set.add(sb.toString());
+	    	   }
+	       }
+	       
+	       return set.size();
+	   }
 	   
-	   
-	   
+	   private void numberofDistinctIslandsDFS(int[][] grid, int i, int j, StringBuilder sb, int[] move) {
+		   for(int[] d : dirs) {
+			   int x = d[0] + i;
+			   int y = d[1] + j;
+			   if(x<0 || x>=grid.length || y<0 || y>=grid[0].length || grid[x][y] == 0)
+				   continue;
+			   grid[x][y] = 0;
+			   int[] next_move = new int[] {move[0]+d[0], move[1]+d[1]};
+			   String str = "(" + next_move[0] + "," + next_move[1] + ")";
+			   sb.append(str);
+			   numberofDistinctIslandsDFS(grid, x, y, sb,next_move);
+		   }
+	   }
 	   
 	   
 	   
