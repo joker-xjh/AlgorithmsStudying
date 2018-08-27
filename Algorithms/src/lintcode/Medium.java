@@ -2554,6 +2554,60 @@ public class Medium {
 		   return i;
 	   }
 	   
+	   
+	   public int numsofIsland(boolean[][] grid, int k) {
+		   int lands = 0;
+		   if(grid == null || grid.length == 0)
+			   return lands;
+		   Queue<int[]> queue = new LinkedList<>();
+		   int[][] dirs = {{-1,0}, {1,0}, {0,-1}, {0,1}};
+		   for(int i=0; i<grid.length; i++) {
+			   for(int j=0; j<grid[0].length; j++) {
+				   if(!grid[i][j])
+					   continue;
+				   grid[i][j] = false;
+				   int temp = 1;
+				   queue.add(new int[] {i, j});
+				   while(!queue.isEmpty()) {
+					   int[] pos = queue.poll();
+					   for(int[] d : dirs) {
+						   int x = d[0] + pos[0];
+						   int y = d[1] + pos[1];
+						   if(x < 0 || x >= grid.length || y < 0 || y >= grid[0].length || !grid[x][y])
+							   continue;
+						   grid[x][y] = false;
+						   temp++;
+						   queue.add(new int[] {x, y});
+					   }
+				   }
+				   if(temp >= k)
+					   lands++;
+				   queue.clear();
+			   }
+		   }
+		   
+		   return lands;   
+	   }
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
 	  
 	  
 	  public static void main(String[] args) {
