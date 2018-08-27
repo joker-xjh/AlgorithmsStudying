@@ -2493,21 +2493,71 @@ public class Medium {
 		   return true;
 	   }
 	   
+	 
 	   
 	   
 	   
+	   public List<Integer> numIslands2(int n, int m, Point[] operators) {
+		    if(operators == null || operators.length == 0)
+	        	return new ArrayList<>();
+	        List<Integer> list = new ArrayList<>(operators.length);
+	        int[] parent = new int[operators.length];
+	        Arrays.fill(parent, -1);
+	        int lands = 0;
+	        int[][] dirs = {{-1,0}, {1,0}, {0,-1}, {0,1}};
+	        int[][] matrix = new int[n][m];
+	        for(int i=0; i<n; i++) {
+	        	Arrays.fill(matrix[i], -1);
+	        }
+	        for(int a=0; a<operators.length; a++) {
+	        	Point point = operators[a];
+	        	int x = point.x;
+	        	int y = point.y;
+	        	if(x < 0 || x >= n || y < 0 || y >= m || matrix[x][y] != -1) {
+	        		list.add(lands);
+	        		continue;
+	        	}
+	        	matrix[x][y] = a;
+	        	lands++;
+	        	parent[a] = a;
+	        	for(int[] dir : dirs) {
+	        		int i = x + dir[0];
+	        		int j = y + dir[1];
+	        		if(i < 0 || i >= n || j < 0 || j >= m || matrix[i][j] == -1)
+	        			continue;
+	        		int p = numIslands2Find(parent, matrix[i][j]);
+	        		parent[a] = p;
+	        		lands--;
+	        		break;
+	        	}
+	        	for(int[] dir : dirs) {
+	        		int i = x + dir[0];
+	        		int j = y + dir[1];
+	        		if(i < 0 || i >= n || j < 0 || j >= m || matrix[i][j] == -1)
+	        			continue;
+	        		int p = numIslands2Find(parent, matrix[i][j]);
+	        		if(p != parent[a]) {
+	        			lands--;
+	        			parent[p] = parent[a];
+	        		}
+	        	}
+	        	list.add(lands);
+	        }
+	        return list;
+	    }
 	   
-	   
-	   
-	   
+	   private int numIslands2Find(int[] parent, int i) {
+		   while(i != parent[i]) {
+			   parent[i] = parent[parent[i]];
+			   i = parent[i];
+		   }
+		   return i;
+	   }
 	   
 	  
 	  
 	  public static void main(String[] args) {
-		  Medium test = new Medium();
-		  int[] org = {1,2,3};
-		  int[][] seqs = {{1,2}, {1,3}, {2,3}};
-		  test.sequenceReconstruction(org, seqs);
+		  
 	  }
 
 }
