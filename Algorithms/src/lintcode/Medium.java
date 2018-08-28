@@ -2624,9 +2624,52 @@ public class Medium {
 	   }
 	   
 	   
+	   public void surroundedRegions(char[][] board) {
+		   if(board == null || board.length == 0)
+			   return;
+		   for(int i=0; i<board.length; i++) {
+			   if(board[i][0] == 'O') {
+				   board[i][0] = '@';
+				   surroundedRegionsDFS(board, i, 0);
+			   }
+			   if(board[i][board[0].length-1] == 'O') {
+				   board[i][board[0].length-1] = '@';
+				   surroundedRegionsDFS(board, i, board[0].length-1);
+			   }
+		   }
+		   for(int i=0; i<board[0].length; i++) {
+			   if(board[board.length-1][i] == 'O') {
+				   board[board.length-1][i] = '@';
+				   surroundedRegionsDFS(board, board.length-1, i);
+			   }
+			   if(board[0][i] == 'O') {
+				   board[0][i] = '@';
+				   surroundedRegionsDFS(board, 0, i);
+			   }
+		   }
+		   for(int i=0; i<board.length; i++) {
+			   for(int j=0; j<board[0].length; j++) {
+				   if(board[i][j] == 'O') {
+					   board[i][j] = 'X';
+				   }
+				   else if(board[i][j] == '@') {
+					   board[i][j] = 'O';
+				   }
+			   }
+		   }
+		   
+	   }
 	   
-	   
-	   
+	   private void surroundedRegionsDFS(char[][] board, int i, int j) {
+		   for(int[] d : dirs) {
+			   int x = d[0] + i;
+			   int y = d[1] + j;
+			   if(x<0 || x>=board.length || y<0 || y>=board[0].length || board[x][y] != 'O')
+				   continue;
+			   board[x][y] = '@';
+			   surroundedRegionsDFS(board, x, y);
+		   }
+	   }
 	   
 	   
 	   
