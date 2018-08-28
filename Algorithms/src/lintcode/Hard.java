@@ -4,12 +4,16 @@ import java.util.AbstractMap;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.BitSet;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.Set;
 
 public class Hard {
@@ -360,20 +364,162 @@ public class Hard {
 	}
 	
 	
+	public int shortestDistance(int[][] grid) {
+        int m = grid.length, n = grid[0].length;
+		@SuppressWarnings("unchecked")
+		Set<Integer>[][] sets = (HashSet<Integer>[][])new HashSet[m][n];
+		int build = 0;
+		Queue<int[]> queue = new LinkedList<>();
+		int[][] counter = new int[m][n];
+		for(int i=0; i<m; i++) {
+			for(int j=0; j<n; j++) {
+				sets[i][j] = new HashSet<>();
+				if(grid[i][j] == 1) {
+					queue.add(new int[] {i, j, build});
+					build++;
+				}
+			}
+		}
+		int distance = 0;
+		int[][] dirs = {{-1,0}, {1,0}, {0,-1}, {0,1}};
+		while(!queue.isEmpty()) {
+			int size = queue.size();
+			distance++;
+			while(size-- > 0) {
+				int[] pos = queue.poll();
+				int label = pos[2];
+				for(int[] d : dirs) {
+					int x = d[0] + pos[0];
+					int y = d[1] + pos[1];
+					if(x<0||x>=m||y<0||y>=n||grid[x][y]!=0)
+						continue;
+					if(!sets[x][y].add(label))
+						continue;
+					counter[x][y] += distance;
+					queue.add(new int[] {x,y,label});
+				}
+			}
+		}
+		distance = Integer.MAX_VALUE;
+		for(int i=0; i<m; i++) {
+			for(int j=0; j<n; j++) {
+				if(grid[i][j] == 0 && sets[i][j].size() == build) {
+					distance = Math.min(distance, counter[i][j]);
+				}
+			}
+		}
+		return distance;
+    }
 	
 	
+	public int minTotalDistance(int[][] grid) {
+		int m = grid.length, n = grid[0].length;
+		BitSet[][] bitSets = new BitSet[m][n];
+		int build = 0;
+		Queue<short[]> queue = new LinkedList<>();
+		int[][] counter = new int[m][n];
+		for(int i=0; i<m; i++) {
+			for(int j=0; j<n; j++) {
+				BitSet bs = new BitSet();
+				if(grid[i][j] == 1) {
+					queue.add(new short[] {(short) i, (short) j, (short) build});
+					bs.set(build);
+					build++;
+				}
+				bitSets[i][j] = bs;
+			}
+		}
+		int distance = 0;
+		int[][] dirs = {{-1,0}, {1,0}, {0,-1}, {0,1}};
+		while(!queue.isEmpty()) {
+			int size = queue.size();
+			distance++;
+			while(size-- > 0) {
+				short[] pos = queue.poll();
+				int label = pos[2];
+				for(int[] d : dirs) {
+					short x = (short) (d[0] + pos[0]);
+					short y = (short) (d[1] + pos[1]);
+					if(x<0||x>=m||y<0||y>=n)
+						continue;
+					if(bitSets[x][y].get(label))
+						continue;
+					bitSets[x][y].set(label);
+					counter[x][y] += distance;
+					queue.add(new short[] {(short)x,(short)y,(short)label});
+				}
+			}
+		}
+		distance = Integer.MAX_VALUE;
+		for(int i=0; i<m; i++) {
+			for(int j=0; j<n; j++) {
+				BitSet bs = bitSets[i][j];
+				if( bs.length() == build) {
+					distance = Math.min(distance, counter[i][j]);
+				}
+			}
+		}
+		return distance;
+    }
+	
+	  public int minTotalDistance2(int[][] grid) {
+		  int row = grid.length;
+		  int col = grid[0].length;
+
+		      int distance = Integer.MAX_VALUE;
+		      for (int i = 0; i < row; i++) {
+		          for (int j = 0; j < col; j++) {
+		              int temp = helper(grid, i, j);
+		              distance = Math.min(temp, distance);
+		          }
+		      }
+		      return distance;
+		  }
+
+		  private int helper(int[][] grid,
+		                     int a,
+		                     int b) {
+		      int row = grid.length;
+		      int col = grid[0].length;
+		      int result = 0;
+		      for (int i = 0; i < row; i++) {
+		          for (int j = 0; j < col; j++) {
+		              if (grid[i][j] == 1) {
+		                  result += Math.abs(a - i) + Math.abs(b - j);
+		              }
+		          }
+		      }
+		      return result;
+		  }
 	
 	
-	
-	
+	public int minTotalDistance3(int[][] grid) {
+		int distance = 0;
+		int row = grid.length, col = grid[0].length;
+		List<Integer> X = new ArrayList<>();
+		List<Integer> Y = new ArrayList<>();
+		for(int i=0; i<row; i++) {
+			for(int j=0; j<col; j++) {
+				if(grid[i][j] == 1) {
+					X.add(i);
+					Y.add(j);
+				}
+			}
+		}
+		Collections.sort(X);
+		Collections.sort(Y);
+		for(int i=0; i<X.size(); i++) {
+			distance += Math.abs(X.get(X.size()/2) - X.get(i));
+			distance += Math.abs(Y.get(Y.size()/2) - Y.get(i));
+		}
+		return distance;
+	}
 	
 	
 	
 	
 	public static void main(String[] args) {
-		Hard test = new Hard();
-		String[] words = {"wrt","wrf","er","ett","rftt"};
-		test.alienOrder2(words);
+		
 	}
 	
 	
