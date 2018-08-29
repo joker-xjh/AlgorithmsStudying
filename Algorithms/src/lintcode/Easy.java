@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -777,7 +778,18 @@ public class Easy {
         
     }
 	
-	
+	public boolean canAttendMeetings(List<Interval> intervals) {
+		if(intervals == null || intervals.isEmpty())
+			return true;
+        Collections.sort(intervals, (a,b) -> a.start - b.start);
+		for(int i=1; i<intervals.size();i++) {
+			Interval cur = intervals.get(i);
+			Interval pre = intervals.get(i-1);
+			if(pre.end > cur.start)
+				return false;
+		}
+		return true;
+    }
 	
 	
 	
