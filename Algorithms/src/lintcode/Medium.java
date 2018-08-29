@@ -2672,7 +2672,28 @@ public class Medium {
 	   }
 	   
 	   
-	   
+	   public int minMeetingRooms(List<Interval> intervals) {
+		   int rooms = 0;
+		   List<int[]> list_pos = new ArrayList<>(intervals.size() * 2);
+		   for(Interval interval : intervals) {
+			   list_pos.add(new int[] {interval.start, 1});
+			   list_pos.add(new int[] {interval.end, -1});
+		   }
+		   Collections.sort(list_pos, new Comparator<int[]>() {
+			@Override
+			public int compare(int[] o1, int[] o2) {
+				if(o1[0] == o2[0])
+					return o1[1] - o2[1];
+				return o1[0] - o2[0];
+			}
+		   });
+		   int temp = 0;
+		   for(int[] pos : list_pos) {
+			   temp += pos[1];
+			   rooms = Math.max(rooms, temp);
+		   }
+		   return rooms;
+	   }
 	   
 	   
 	   
