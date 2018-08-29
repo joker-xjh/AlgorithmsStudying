@@ -819,7 +819,37 @@ public class Easy {
 		return true;
 	}
 	
-	
+	public List<Interval> merge(List<Interval> intervals) {
+		List<Interval> list = new ArrayList<>();
+		if(intervals == null || intervals.isEmpty())
+			return list;
+		List<int[]> list_pos = new ArrayList<>(intervals.size() * 2);
+		for(Interval interval : intervals) {
+			list_pos.add(new int[] {interval.start, 1});
+			list_pos.add(new int[] {interval.end, -1});
+		}
+		Collections.sort(list_pos, new Comparator<int[]>() {
+			@Override
+			public int compare(int[] o1, int[] o2) {
+				if(o1[0] == o2[0])
+					return o2[1] - o1[1];
+				return o1[0] - o2[0];
+			}
+		});
+		Interval temp = null;
+		int count = 0;
+		for(int[] pos : list_pos) {
+			if(count == 0 && pos[1] == 1) {
+				temp = new Interval(pos[0], -1);
+			}
+			count += pos[1];
+			if(count == 0 && pos[1] == -1) {
+				temp.end = pos[0];
+				list.add(temp);
+			}
+		}
+		return list;
+	}
 	
 	
 	
