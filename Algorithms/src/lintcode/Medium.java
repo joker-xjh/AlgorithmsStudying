@@ -2696,7 +2696,49 @@ public class Medium {
 	   }
 	   
 	   
-	   
+	   public List<Integer> partitionLabels(String S) {
+	        List<Integer> list = new ArrayList<>();
+	        if(S == null || S.length() == 0)
+	        	return list;
+	        int[] start = new int[26];
+	        int[] end = new int[26];
+	        Arrays.fill(start, Integer.MAX_VALUE);
+	        Arrays.fill(end, -1);
+	        for(int i=0,j=S.length()-1; j>=0;i++,j--) {
+	        	char c1 = S.charAt(i);
+	        	end[c1 - 'a'] = Math.max(i, end[c1-'a']);
+	        	char c2 = S.charAt(j);
+	        	start[c2 - 'a'] = Math.min(j, start[c2 - 'a']);
+	        }
+	        List<int[]> list_pos = new ArrayList<>();
+	        for(int i=0; i<26; i++) {
+	        	if(end[i] == -1)
+	        		continue;
+	        	list_pos.add(new int[] {start[i], 1});
+	        	list_pos.add(new int[] {end[i], -1});
+	        }
+	        Collections.sort(list_pos, new Comparator<int[]>() {
+				@Override
+				public int compare(int[] o1, int[] o2) {
+					if(o1[0] == o2[0]) {
+						return o2[1] - o1[1];
+					}
+					return o1[0] - o2[0];
+				}
+			});
+	        int left = 0;
+	        int count = 0;
+	        for(int[] pos : list_pos) {
+	        	if(count == 0 && pos[1] == 1) {
+	        		left = pos[0];
+	        	}
+	        	count += pos[1];
+	        	if(count == 0) {
+	        		list.add(pos[0] - left + 1);
+	        	}
+	        }
+	        return list;
+	   } 
 	   
 	   
 	   
