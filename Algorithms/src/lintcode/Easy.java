@@ -3,11 +3,13 @@ package lintcode;
 import java.util.ArrayList;
 
 
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -852,6 +854,52 @@ public class Easy {
 	}
 	
 	
+	
+	  public class TreeNode {
+		      public int val;
+		      public TreeNode left, right;
+		      public TreeNode(int val) {
+		          this.val = val;
+		          this.left = this.right = null;
+		      }
+	  }
+	
+	
+	
+	
+	public boolean isSymmetric(TreeNode root) {
+        if(root == null)
+        	return true;
+		LinkedList<TreeNode> queue = new LinkedList<>();
+		queue.add(root);
+		while(!queue.isEmpty()) {
+			int size = queue.size();
+			LinkedList<TreeNode> next_queue = new LinkedList<>();
+			while(size-- > 0) {
+				TreeNode node = queue.poll();
+				if(node == null)
+					continue;
+				next_queue.add(node.left);
+				next_queue.add(node.right);
+			}
+			int left = 0, right = next_queue.size()-1;
+			while(left < right) {
+				TreeNode L = next_queue.get(left);
+				TreeNode R = next_queue.get(right);
+				if(L != null && R != null) {
+					if(L.val != R.val)
+						return false;
+				}
+				if((L == null && R != null) || (L != null && R == null))
+					return false;
+				left++;
+				right--;
+			}
+			queue = next_queue;
+		}
+		
+		return true;
+    }
 	
 	
 	
