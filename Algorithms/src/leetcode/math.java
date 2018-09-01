@@ -4,6 +4,7 @@ import java.math.BigInteger;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -941,12 +942,70 @@ public class math {
    }
    
    
+   public int rectangleArea(int[][] rectangles) {
+       long area = 0;
+       long mod = 1000000007;
+       int n = rectangles.length;
+       boolean[] active = new boolean[n];
+       List<int[]> list_X = new ArrayList<>();
+       List<int[]> list_Y = new ArrayList<>();
+       for(int i=0; i<n; i++) {
+    	   int[] rectangle = rectangles[i];
+    	   list_X.add(new int[] {rectangle[0], i, 0});
+    	   list_X.add(new int[] {rectangle[2], i, 1});
+    	   list_Y.add(new int[] {rectangle[1], i, 0});
+    	   list_Y.add(new int[] {rectangle[3], i, 1});
+       }
+       Collections.sort(list_X, (a,b) -> (a[0]-b[0]));
+       Collections.sort(list_Y, (a,b) -> (a[0]-b[0]));
+       active[list_X.get(0)[1]] = true;
+       for(int i=1; i<list_X.size(); i++) {
+    	   int[] array = list_X.get(i);
+    	   int delta_x = array[0] - list_X.get(i-1)[0];
+    	   if(delta_x == 0) {
+    		   active[array[1]] = array[2] == 0;
+    		   continue;
+    	   }
+    	   int counter = 0;
+    	   int begin_y = 0;
+    	   for(int j=0; j<list_Y.size(); j++) {
+    		   int[] array_y = list_Y.get(j);
+    		   if(!active[array_y[1]])
+    			   continue;
+    		   if(array_y[2] == 0) {
+    			   if(counter == 0) {
+    				   begin_y = array_y[0];
+    			   }
+    			   counter++;
+    		   }
+    		   else {
+    			   counter--;
+    			   if(counter == 0) {
+    				   int delta_y = array_y[0] - begin_y;
+    				   long temp = ((long)delta_x * delta_y) % mod;
+    				   area = (area + temp) % mod;
+    			   }
+    		   }
+    	   }
+    	   active[array[1]] = array[2] == 0;
+       }
+       return (int) area;
+   }
+   
+   
+   
+   
+   
+   
+   
     
     
     
     
     public static void main(String[] args) {
-		
+		math test = new math();
+		int[][] array = {{0,0,2,2}, {1,1,3,3}};
+		test.rectangleArea(array);
 	}
     
     
