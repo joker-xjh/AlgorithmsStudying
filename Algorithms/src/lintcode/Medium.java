@@ -2817,7 +2817,38 @@ public class Medium {
 	   
 	   
 	   
-	   
+	   public int shortestDistance(int N, int[][] barriers) {
+		   int path = 0;
+		   if(N == 1)
+			   return 0;
+		   boolean[][][] used = new boolean[N][N][N];
+		   for(int[] pos : barriers) {
+			   used[pos[0]][pos[1]][pos[2]] = true;
+		   }
+		   Queue<int[]> queue = new LinkedList<>();
+		   queue.add(new int[] {0, 0, 0});
+		   used[0][0][0] = true;
+		   int[][] D = {{-1,0,0}, {1,0,0}, {0,-1,0}, {0,1,0}, {0,0,1}, {0,0,-1}};
+		   while(!queue.isEmpty()) {
+			   int size = queue.size();
+			   path++;
+			   while(size-- > 0) {
+				   int[] pos = queue.poll();
+				   for(int[] d : D) {
+					   int x = pos[0] + d[0];
+					   int y = pos[1] + d[1];
+					   int z = pos[2] + d[2];
+					   if(x<0||x>=N||y<0||y>=N||z<0||z>=N||used[x][y][z])
+						   continue;
+					   used[x][y][z] = true;
+					   if(x == N-1 && y == N-1 && z == N-1)
+						   return path;
+					   queue.add(new int[] {x, y, z});
+				   }
+			   }
+		   }
+		   return -1;
+	   }
 	   
 	   
 	   
