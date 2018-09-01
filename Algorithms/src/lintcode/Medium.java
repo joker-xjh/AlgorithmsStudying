@@ -2742,6 +2742,89 @@ public class Medium {
 	   
 	   
 	   
+	   public int getBestRoad(int[][] grid) {
+		   int answer = Integer.MAX_VALUE;
+		   if(grid == null || grid.length == 0 || grid[0].length == 0)
+			   return 0;
+		   int m = grid.length, n = grid[0].length;
+		   int[][] top_left = new int[m][n];
+		   int[][] bottom_right = new int[m][n];
+		   for(int i=0; i<m; i++) {
+			   Arrays.fill(top_left[i], -1);
+			   Arrays.fill(bottom_right[i], -1);
+		   }
+		   grid[0][0] = 0;
+		   getBestRoadBFS(grid, new int[] {0,0}, top_left);
+		   getBestRoadBFS(grid, new int[] {m-1,n-1}, bottom_right);
+		   if(grid[m-1][n-1] == 1) {
+			   if(bottom_right[0][0] == -1)
+				   return -1;
+			   return bottom_right[0][0];
+		   }
+		   if(bottom_right[0][0] != -1)
+			   answer = bottom_right[0][0];
+		   int[][] dis = {{-1,0}, {1,0}, {0,-1}, {0,1}};
+		   for(int i=0; i<m; i++) {
+			   for(int j=0; j<n; j++) {
+				   if(grid[i][j] != 1)
+					   continue;
+				   for(int[] d1 : dis) {
+					   int x1 = i + d1[0];
+					   int y1 = j + d1[1];
+					   if(x1<0||x1>=m||y1<0||y1>=n)
+						   continue;
+					   for(int[] d2 : dis) {
+						   int x2 = i + d2[0];
+						   int y2 = j + d2[1];
+						   if(x2<0||x2>=m||y2<0||y2>=n || (x1==x2&&y1==y2))
+							   continue;
+						   if(top_left[x1][y1] != -1 && bottom_right[x2][y2] != -1) {
+							   answer = Math.min(answer, top_left[x1][y1] + bottom_right[x2][y2]+2);
+						   }
+						   if(top_left[x2][y2] != -1 && bottom_right[x1][y1] !=-1) {
+							   answer = Math.min(answer, top_left[x2][y2] + bottom_right[x1][y1]+2);
+						   }
+					   }
+				   }
+			   }
+		   }
+		   
+	       return answer == Integer.MAX_VALUE ? -1 : answer;
+	   }
+	   
+	   private void getBestRoadBFS(int[][] grid, int[] start, int[][] dp) {
+		   Queue<int[]> queue = new LinkedList<>();
+		   queue.add(start);
+		   int step = 0;
+		   dp[start[0]][start[1]] = 0;
+		   int[][] dis = {{-1,0}, {1,0}, {0,-1}, {0,1}};
+		   while(!queue.isEmpty()) {
+			   step++;
+			   int size = queue.size();
+			   while(size-- > 0) {
+				   int[] pair = queue.poll();
+				   for(int[] d : dis) {
+					   int x = pair[0] + d[0];
+					   int y = pair[1] + d[1];
+					   if(x<0||x>=grid.length||y<0||y>=grid[0].length||grid[x][y]==1||dp[x][y]!=-1)
+						   continue;
+					   dp[x][y] = step;
+					   queue.add(new int[] {x, y});
+				   }
+			   }
+		   }
+	   }
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
 	   
 	   
 	  
