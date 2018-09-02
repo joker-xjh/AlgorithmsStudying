@@ -4875,11 +4875,33 @@ public class Array {
 		 return dp[i][j];
 	 }
 	 
+	 public boolean isMonotonic(int[] A) {
+		 if(is_monotone_increasing(A))
+			 return true;
+		 if(is_monotone_decreasing(A))
+			 return true;
+		 return false;
+	 }
 	 
+	 private boolean is_monotone_increasing(int[] A) {
+		 int pre = Integer.MIN_VALUE;
+		 for(int num : A) {
+			 if(num < pre)
+				 return false;
+			 pre = Math.max(pre, num);
+		 }
+		 return true;
+	 }
 	 
-	 
-	 
-	 
+	 private boolean is_monotone_decreasing(int[] A) {
+		 int pre = Integer.MIN_VALUE;
+		 for(int i=A.length-1; i>=0; i--) {
+			 if(A[i] < pre)
+				 return false;
+			 pre = Math.max(pre, A[i]);
+		 }
+		 return true;
+	 }
 	
 	
      
