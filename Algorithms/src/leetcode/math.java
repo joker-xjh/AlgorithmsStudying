@@ -1068,7 +1068,37 @@ public class math {
        return answer;
    }
    
-   
+   public int subarrayBitwiseORs(int[] A) {
+       Set<Integer> answers = new HashSet<>();
+       int[] pre_bit = new int[32];
+       Arrays.fill(pre_bit, -1);
+       for(int i=31; i>=0; i--) {
+    	   if(((A[0] >>> i) & 1) == 1) {
+    		   pre_bit[i] = 0;
+    	   }
+       }
+       answers.add(A[0]);
+       for(int i=1; i<A.length; i++) {
+    	   int num = A[i];
+    	   answers.add(num);
+    	   int min_index = A.length;
+    	   for(int index : pre_bit) {
+    		   if(index == -1)
+    			   continue;
+    		   min_index = Math.min(min_index, index);
+    	   }
+    	   for(int j=i-1; j>=min_index; j--) {
+    		   num |= A[j];
+    		   answers.add(num);
+    	   }
+    	   for(int j=31; j>=0; j--) {
+    		   if(((A[i] >>> j) & 1) == 1) {
+    			   pre_bit[j] = i;
+    		   }
+    	   }
+       }
+       return answers.size();
+   }
     
     
     
