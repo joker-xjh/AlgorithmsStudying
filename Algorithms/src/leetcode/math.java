@@ -1,10 +1,12 @@
 package leetcode;
 
+import java.awt.Point;
 import java.math.BigInteger;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -992,10 +994,79 @@ public class math {
        return (int) area;
    }
    
+   public List<Point> outerTrees(Point[] points) {
+       List<Point> convex_hull = new ArrayList<>();
+       if(points == null || points.length == 0)
+    	   return convex_hull;
+       Arrays.sort(points, new Comparator<Point>() {
+		@Override
+		public int compare(Point o1, Point o2) {
+			if(o1.x == o2.x)
+				return o1.y - o2.y;
+			return o1.x - o2.x;
+		}
+       });
+       for(int i=0; i<points.length; i++) {
+    	   while(convex_hull.size() >= 2 && cross(convex_hull.get(convex_hull.size()-2), convex_hull.get(convex_hull.size()-1), points[i]) < 0)
+    		   convex_hull.remove(convex_hull.size()-1);
+    	   convex_hull.add(points[i]);
+       }
+       for(int i=points.length-2, t=convex_hull.size()+1; i>=0; i--) {
+    	   while(convex_hull.size() >= t && cross(convex_hull.get(convex_hull.size()-2), convex_hull.get(convex_hull.size()-1), points[i]) < 0)
+    		   convex_hull.remove(convex_hull.size()-1);
+    	   if(i == points.length - 2 && convex_hull.size() >= 2) {
+    		   if(points[i].x == convex_hull.get(convex_hull.size()-2).x &&
+    			  points[i].y == convex_hull.get(convex_hull.size()-2).y)
+    			   continue;
+    	   }
+    	   convex_hull.add(points[i]);
+       }
+       if(convex_hull.size() > 1) {
+    	   if(convex_hull.get(0).x == convex_hull.get(convex_hull.size()-1).x &&
+    		  convex_hull.get(0).y == convex_hull.get(convex_hull.size()-1).y) {
+    		   convex_hull.remove(convex_hull.size()-1);
+    	   }
+       }
+       return convex_hull;
+   }
+   
+   private int cross(Point o, Point a, Point b) {
+	   return (a.x - o.x) * (b.y - o.y) - (a.y - o.y) * (b.x - o.x);
+   }
    
    
-   
-   
+   public List<Point> outerTrees2(Point[] points) {
+	   List<Point> convex_hull = new ArrayList<>();
+       if(points == null || points.length == 0)
+    	   return convex_hull;
+       Arrays.sort(points, new Comparator<Point>() {
+		@Override
+		public int compare(Point o1, Point o2) {
+			if(o1.x == o2.x)
+				return o1.y - o2.y;
+			return o1.x - o2.x;
+		}
+       });
+       for(int i=0; i<points.length; i++) {
+    	   while(convex_hull.size() >= 2 && cross(convex_hull.get(convex_hull.size()-2), convex_hull.get(convex_hull.size()-1), points[i]) < 0)
+    		   convex_hull.remove(convex_hull.size()-1);
+    	   convex_hull.add(points[i]);
+       }
+       for(int i=points.length-1; i>=0; i--) {
+    	   while(convex_hull.size() >= 2 && cross(convex_hull.get(convex_hull.size()-2), convex_hull.get(convex_hull.size()-1), points[i]) < 0)
+    		   convex_hull.remove(convex_hull.size()-1);
+    	   convex_hull.add(points[i]);
+       }
+       Set<String> used = new HashSet<>();
+       List<Point> answer = new ArrayList<>();
+       for(Point point : convex_hull) {
+    	   String key = point.x + "," + point.y;
+    	   if(used.add(key)) {
+    		   answer.add(point);
+    	   }
+       }
+       return answer;
+   }
    
    
     
@@ -1003,9 +1074,7 @@ public class math {
     
     
     public static void main(String[] args) {
-		math test = new math();
-		int[][] array = {{0,0,2,2}, {1,1,3,3}};
-		test.rectangleArea(array);
+		
 	}
     
     
