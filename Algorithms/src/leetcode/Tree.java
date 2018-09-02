@@ -1125,8 +1125,27 @@ public class Tree {
     }
     
     
+    public TreeNode increasingBST(TreeNode root) {
+        List<TreeNode> list = new ArrayList<>();
+        increasingBSTHelp(root, list);
+    	if(list.isEmpty())
+    		return null;
+    	TreeNode new_root = new TreeNode(list.get(0).val);
+    	TreeNode temp = new_root;
+    	for(int i=1; i<list.size(); i++) {
+    		temp.right = new TreeNode(list.get(i).val);
+    		temp = temp.right;
+    	}
+    	return new_root;
+    }
 
-    
+    private void increasingBSTHelp(TreeNode node, List<TreeNode> list) {
+    	if(node == null)
+    		return;
+    	increasingBSTHelp(node.left, list);
+    	list.add(node);
+    	increasingBSTHelp(node.right, list);
+    }
     
     
     
@@ -1145,8 +1164,7 @@ public class Tree {
     
 
 	public static void main(String[] args) {
-		Tree test = new Tree();
-		test.allPossibleFBT(3);
+		
 	}
 
 }
