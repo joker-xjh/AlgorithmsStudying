@@ -917,6 +917,29 @@ public class Easy {
     }
 	
 	
+	public void derangement(int n) {
+		List<Integer> list = new ArrayList<>();
+		boolean[] used = new boolean[n+1];
+		derangementDFS(list, used, n, 1);
+	}
+	
+	private void derangementDFS(List<Integer> list, boolean[] used, int n, int index) {
+		if(list.size() == n) {
+			System.out.println(list);
+			return;
+		}
+		for(int i=1; i<=n; i++) {
+			if(index ==i || used[i])
+				continue;
+			list.add(i);
+			used[i] = true;
+			derangementDFS(list, used, n, index+1);
+			used[i] = false;
+			list.remove(list.size()-1);
+		}
+	}
+	
+	
 	
 	public static void main(String[] args) {
 		
