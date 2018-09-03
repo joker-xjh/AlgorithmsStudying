@@ -2925,6 +2925,129 @@ public class Medium {
 	    }
 	   
 	   
+	   public String findShortestWay(int[][] maze, int[] ball, int[] hole) {
+		      Queue<int[]> queue = new LinkedList<>();
+			  int m = maze.length, n = maze[0].length;
+			  boolean[][] visited = new boolean[m][n];
+			  visited[ball[0]][ball[1]] = true;
+			  Map<String, int[]> paths = new HashMap<>();
+			  paths.put(ball[0]+","+ball[1], null);
+			  queue.add(new int[] {ball[0], ball[1], 'a'});
+			  while(!queue.isEmpty()) {
+				  int size = queue.size();
+				  for(int i=0; i<size; i++) {
+					  int[] pos = queue.poll();
+					  int x = pos[0], y = pos[1];
+					  while(x > 0 && maze[x-1][y] == 0) {
+						  x--;
+						  if(x == hole[0] && y == hole[1]) {
+							  paths.put(x+","+y, new int[] {pos[0],pos[1],'u'});
+							  return findShortestWayHelp(paths, x, y);
+						  }
+					  }
+					  if(!visited[x][y]) {
+						  visited[x][y] = true;
+						  if(x == hole[0] && y == hole[1])
+							  return findShortestWayHelp(paths, x, y);
+						  paths.put(x+","+y, pos);
+						  queue.add(new int[] {x, y, 'u'});
+					  }
+					  x = pos[0];
+					  y = pos[1];
+					  while(x < m-1 && maze[x+1][y] == 0) {
+						  x++;
+						  if(x == hole[0] && y == hole[1]) {
+							  paths.put(x+","+y, new int[] {pos[0],pos[1],'d'});
+							  return findShortestWayHelp(paths, x, y);
+						  }
+					  }
+					  if(!visited[x][y]) {
+						  visited[x][y] = true;
+						  if(x == hole[0] && y == hole[1])
+							  return findShortestWayHelp(paths, x, y);
+						  paths.put(x+","+y, pos);
+						  queue.add(new int[] {x, y, 'd'});
+					  }
+					
+					  x = pos[0];
+					  y = pos[1];
+					  while(y > 0 && maze[x][y-1] == 0) {
+						  y--;
+						  if(x == hole[0] && y == hole[1]) {
+							  paths.put(x+","+y, new int[] {pos[0],pos[1],'l'});
+							  return findShortestWayHelp(paths, x, y);
+						  }
+					  }
+					  if(!visited[x][y]) {
+						  visited[x][y] = true;
+						  if(x == hole[0] && y == hole[1])
+							  return findShortestWayHelp(paths, x, y);
+						  paths.put(x+","+y, pos);
+						  queue.add(new int[] {x, y,'l'});
+					  }
+					  
+					  x = pos[0];
+					  y = pos[1];
+					  while(y < n-1 && maze[x][y+1] == 0) {
+						  y++;
+						  if(x == hole[0] && y == hole[1]) {
+							  paths.put(x+","+y, new int[] {pos[0],pos[1],'r'});
+							  return findShortestWayHelp(paths, x, y);
+						  }
+					  }
+					  if(!visited[x][y]) {
+						  visited[x][y] = true;
+						  if(x == hole[0] && y == hole[1])
+							  return findShortestWayHelp(paths, x, y);
+						  paths.put(x+","+y, pos);
+						  queue.add(new int[] {x, y, 'r'});
+					  }
+					  
+				  }
+			  }		   
+		   return "impossible";
+	   }
+	   
+	   private String findShortestWayHelp(Map<String, int[]> paths, int x, int y) {
+		   StringBuilder sb = new StringBuilder();
+		   String key = x + "," + y;
+		   int[] pos = paths.get(key);
+		   while(pos != null) {
+			   char c = (char) (pos[2] - 'a');
+			   sb.append(c);
+			   key = pos[0] + ","+ pos[1];
+			   System.out.println(key);
+			   pos = paths.get(key);
+			   //System.out.println(sb.toString());
+		   }
+		   return sb.reverse().toString();
+	   }
+	   
+	   public String parseTernary(String expression) {
+	       Stack<Character> stack = new Stack<>();
+	       stack.add(expression.charAt(expression.length()-1));
+	       for(int i=expression.length()-2; i>=0; i--) {
+	    	   char cur = expression.charAt(i);
+	    	   if(cur == ':' || cur == '?')
+	    		   continue;
+	    	   char next = expression.charAt(i+1);
+	    	   if(next == '?') {
+	    		   char one = stack.pop();
+	    		   char two = stack.pop();
+	    		   if(cur == 'T') {
+	    			   stack.add(one);
+	    		   }
+	    		   else {
+	    			   stack.add(two);
+	    		   }
+	    	   }
+	    	   else {
+		    	   stack.add(cur);
+	    	   }
+	       }
+	       String answer = stack.pop()+"";
+		   return answer;
+	   }
 	   
 	   
 	   
