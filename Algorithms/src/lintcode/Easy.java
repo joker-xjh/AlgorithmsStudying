@@ -901,7 +901,20 @@ public class Easy {
 		return true;
     }
 	
-	
+	public List<String> longestWords(String[] dictionary) {
+        List<String> words = new ArrayList<>();
+        int max_length = 0;
+        for(String word : dictionary) {
+        	if(word.length() > max_length) {
+        		max_length = word.length();
+        		words.clear();
+        	}
+        	if(word.length() < max_length)
+        		continue;
+        	words.add(word);
+        }
+        return words;
+    }
 	
 	
 	
