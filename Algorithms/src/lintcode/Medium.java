@@ -3050,7 +3050,53 @@ public class Medium {
 	   }
 	   
 	   
+	   public List<List<Integer>> findLeaves(TreeNode root) {
+	        List<List<Integer>> answer = new ArrayList<>();
+	        if(root == null)
+	        	return answer;
+	        TreeNode negative = new TreeNode(-1);
+	        Map<TreeNode, TreeNode> tree = new HashMap<>();
+	        Map<TreeNode, Integer> indegree = new HashMap<>();
+	        indegree.put(negative, 100);
+	        findLeavesHelp(root, negative, tree, indegree);
+	        Queue<TreeNode> queue = new LinkedList<>();
+	        List<Integer> list = new ArrayList<>();
+	        for(TreeNode node : indegree.keySet()) {
+	        	if(indegree.get(node) == 0) {
+	        		queue.add(node);
+	        		list.add(node.val);
+	        	}
+	        }
+	        answer.add(list);
+	        while(!queue.isEmpty()) {
+	        	int size = queue.size();
+	        	list = new ArrayList<>();
+	        	while(size-- > 0) {
+	        		TreeNode node = queue.poll();
+	        		TreeNode father = tree.get(node);
+	        		int ind = indegree.get(father) - 1;
+	        		indegree.put(father, ind);
+	        		if(ind == 0) {
+	        			queue.add(father);
+	        			list.add(father.val);
+	        		}
+	        	}
+	        	if(!list.isEmpty())
+	        		answer.add(list);
+	        }
+	        
+	        return answer;
+	   }
 	   
+	   private void findLeavesHelp(TreeNode node, TreeNode father, Map<TreeNode, TreeNode> tree, Map<TreeNode, Integer> indegree) {
+		   if(node == null)
+			   return;
+		   tree.put(node, father);
+		   indegree.put(node, 0);
+		   indegree.put(father, indegree.get(father)+1);
+		   findLeavesHelp(node.left, node, tree, indegree);
+		   findLeavesHelp(node.right, node, tree, indegree);
+	   }
 	   
 	  
 	  
