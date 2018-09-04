@@ -3098,6 +3098,67 @@ public class Medium {
 		   findLeavesHelp(node.right, node, tree, indegree);
 	   }
 	   
+	   
+	   public boolean canBeGenerated(String[] generator, char startSymbol, String symbolString) {
+	       Map<String, List<String>> generator_map = new HashMap<>();
+	       for(String str : generator) {
+	    	   String[] pair = str.split("->");
+	    	   String from = pair[0].trim();
+	    	   String to = pair[1].trim();
+	    	   if(to.contains(from))
+	    		   continue;
+	    	   List<String> list = generator_map.get(from);
+	    	   if(list == null) {
+	    		   list = new ArrayList<>();
+	    		   generator_map.put(from, list);
+	    	   }
+	    	   list.add(to);
+	       }
+		   boolean answer = canBeGeneratedDFS(startSymbol+"", "", "", generator_map, symbolString);
+		   return answer;
+	   }
+	   
+	   
+	   private boolean canBeGeneratedDFS(String cur, String left, String right, Map<String, List<String>> generator_map, String goal) {
+		   String word = left + cur + right;
+		   if(word.length() > goal.length())
+			   return false;
+		   if(!canBeGeneratedHelp(word))
+			   return word.equals(goal);
+		   for(int i=0; i<word.length(); i++) {
+			   char c = word.charAt(i);
+			   if(c >= 'A' && c <= 'Z') {
+				   String next_left = word.substring(0, i);
+				   String next_right = word.substring(i+1);
+				   List<String> list = generator_map.get(c+"");
+				   if(list == null || list.isEmpty())
+					   return false;
+				   for(String next_cur : list) {
+					   if(canBeGeneratedDFS(next_cur, next_left, next_right, generator_map, goal))
+						   return true;
+				   }
+			   }
+		   }
+		   
+		   return false;
+	   }
+	   
+	   
+	   private boolean canBeGeneratedHelp(String word) {
+		   for(char c : word.toCharArray()) {
+			   if(c >= 'A' && c <= 'Z')
+				   return true;
+		   }
+		   return false;
+	   }
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
 	  
 	  
 	  public static void main(String[] args) {
