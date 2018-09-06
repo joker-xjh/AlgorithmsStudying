@@ -939,6 +939,33 @@ public class Easy {
 		}
 	}
 	
+	public List<List<String>> splitString(String s) {
+        List<List<String>> answer = new ArrayList<>();
+        splitStringDFS(answer, new ArrayList<>(), s, 0);
+        return answer;
+    }
+	
+	private void splitStringDFS(List<List<String>> answer, List<String> list, String S, int index) {
+		if(index == S.length()) {
+			answer.add(new ArrayList<>(list));
+			return;
+		}
+		String temp = S.charAt(index) + "";
+		list.add(temp);
+		splitStringDFS(answer, list, S, index + 1);
+		list.remove(list.size()-1);
+		if(index + 1 < S.length()) {
+			temp += S.charAt(index+1);
+			list.add(temp);
+			splitStringDFS(answer, list, S, index + 2);
+			list.remove(list.size()-1);
+		}
+	}
+	
+	
+	
+	
+	
 	
 	
 	public static void main(String[] args) {
