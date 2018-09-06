@@ -3886,6 +3886,35 @@ public class string {
     	 return answer;
      }
      
+     
+     public String orderlyQueue(String S, int K) {
+         if(K > 1) {
+        	 char[] array = S.toCharArray();
+        	 Arrays.sort(array);
+        	 return new String(array);
+         }
+         int length = S.length();
+    	 String answer = S;
+    	 S = S + S;
+    	 for(int i=1; i<length; i++) {
+    		 String temp = S.substring(i, i+length);
+    		 if(temp.compareTo(answer) < 0) {
+    			 answer = temp;
+    		 }
+    	 }
+    	 return answer;
+     }
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
     
     public static void main(String[] args) {
     	
