@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -515,7 +516,100 @@ public class Hard {
 		return distance;
 	}
 	
-	
+		int[][] dirs = {{-1,0}, {1,0}, {0,-1}, {0,1}};
+		
+	   class Island {
+		   int x, y;
+		   public Island(int x, int y) {
+			this.x = x;
+			this.y = y;
+		}
+		 @Override
+		public String toString() {
+			return "["+x+","+y+"]";
+		}
+	   }
+		
+	   public int numberofDistinctIslands(int[][] grid) {
+	       Set<String> set = new HashSet<>();
+	       if(grid == null || grid.length == 0)
+	    	   return 0;
+	       int answer = 0;
+	       for(int i=0; i<grid.length; i++) {
+	    	   for(int j=0; j<grid[0].length; j++) {
+	    		   if(grid[i][j] == 0)
+	    			   continue;
+	    		   grid[i][j] = 0;
+	    		   List<Island> list = new ArrayList<>();
+	    		   list.add(new Island(i, j));
+	    		   numberofDistinctIslandsDFS(grid, i, j, list);
+	    		   norm(list);
+	    		   String str = list.toString();
+	    		   if(set.add(str)) {
+	    			   answer++;
+	    			   numberofDistinctIslandsGetTransformStr(list, set);
+	    		   }
+	    	   }
+	       }
+	       
+	       return answer;
+	   }
+	   
+	   private void numberofDistinctIslandsDFS(int[][] grid, int i, int j, List<Island> list) {
+		   for(int[] d : dirs) {
+			   int x = d[0] + i;
+			   int y = d[1] + j;
+			   if(x<0 || x>=grid.length || y<0 || y>=grid[0].length || grid[x][y] == 0)
+				   continue;
+			   grid[x][y] = 0;
+			   list.add(new Island(x, y));
+			   numberofDistinctIslandsDFS(grid, x, y, list);
+		   }
+	   }
+	   
+	   class IslandComparator implements Comparator<Island> {
+
+		@Override
+		public int compare(Island o1, Island o2) {
+			if(o1.x == o2.x)
+				return o1.y - o2.y;
+			return o1.x - o2.x;
+		}
+		   
+	   }
+	   
+	   private void norm(List<Island> list) {
+		   Collections.sort(list, new IslandComparator());
+		   System.out.println(list);
+		   for(int i=1; i<list.size(); i++) {
+			   list.get(i).x = list.get(i).x - list.get(0).x;
+			   list.get(i).y = list.get(i).y - list.get(0).y;
+		   }
+		   list.get(0).x = 0;
+		   list.get(0).y = 0;
+	   }
+	   
+	   private void numberofDistinctIslandsGetTransformStr(List<Island> list, Set<String> set){
+		   List<List<Island>> list_list = new ArrayList<>();
+		   for(int i=0; i<7; i++) {
+			   list_list.add(new ArrayList<>());
+		   }
+		   for(Island island : list) {
+			   int x = island.x;
+			   int y = island.y;
+			   list_list.get(0).add(new Island(x, -y));
+			   list_list.get(1).add(new Island(-x, y));
+			   list_list.get(2).add(new Island(-x, -y));
+			   list_list.get(3).add(new Island(y, -x));
+			   list_list.get(4).add(new Island(-y, x));
+			   list_list.get(5).add(new Island(-y, -x));
+			   list_list.get(6).add(new Island(y, x));
+		   }
+		   for(List<Island> L : list_list) {
+			   norm(L);
+			   set.add(L.toString());
+		   }
+	   }
 	
 	
 	public static void main(String[] args) {
