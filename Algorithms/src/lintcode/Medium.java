@@ -3152,7 +3152,21 @@ public class Medium {
 		   return false;
 	   }
 	   
-	   
+	   public List<List<Integer>> subsets(int[] nums) {
+		   List<List<Integer>> subsets = new ArrayList<>();
+		   Arrays.sort(nums);
+		   int size = 1 << (nums.length);
+		   for(int i=0; i<size; i++) {
+			   List<Integer> list = new ArrayList<>();
+			   for(int j=nums.length-1; j>=0; j--) {
+				   if(((i >>> j) & 1) == 1) {
+					   list.add(nums[nums.length-1 - j]);
+				   }
+			   }
+			   subsets.add(list);
+		   } 
+		   return subsets;
+	   }
 	   
 	   
 	   
