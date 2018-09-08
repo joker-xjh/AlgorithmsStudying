@@ -18,6 +18,7 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
+import java.util.TreeSet;
 
 
 
@@ -3169,7 +3170,23 @@ public class Medium {
 	   }
 	   
 	   
-	   
+	   public int smallestDifference(int[] A, int[] B) {
+	        int differ = Integer.MAX_VALUE;
+	        TreeSet<Integer> tree = new TreeSet<>();
+	        for(int num : A)
+	        	tree.add(num);
+	        for(int num : B) {
+	        	Integer small = tree.floor(num);
+	        	if(small != null) {
+	        		differ = Math.min(differ, num - small);
+	        	}
+	        	Integer big = tree.ceiling(num);
+	        	if(big != null) {
+	        		differ = Math.min(differ, big - num);
+	        	}
+	        }
+	        return differ;
+	   }
 	   
 	   
 	   
