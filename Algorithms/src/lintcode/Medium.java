@@ -3232,6 +3232,35 @@ public class Medium {
 		   return subsets;
 	   }
 	   
+	   
+	   public String longestCommonPrefix(String[] strs) {
+		   String commonPrefix = "";
+		   if(strs == null || strs.length == 0)
+			   return commonPrefix;
+		   commonPrefix = strs[0];
+		   for(int i=1; i<strs.length; i++) {
+			   commonPrefix = longestCommonPrefixHelp(commonPrefix, strs[i]);
+		   }
+		   return commonPrefix;
+	   }
+	   
+	   private String longestCommonPrefixHelp(String a, String b) {
+		   StringBuilder sb = new StringBuilder();
+		   int min = Math.min(a.length(), b.length());
+		   for(int i=0; i<min; i++) {
+			   char c1 = a.charAt(i);
+			   char c2 = b.charAt(i);
+			   if(c1 != c2)
+				   return sb.toString();
+			   sb.append(c1);
+		   }
+		   return sb.toString();
+	   }
+	   
+	   
+	   
+	   
+	   
 	  
 	  
 	  public static void main(String[] args) {
