@@ -3209,12 +3209,33 @@ public class Medium {
 		   kSumIIDFS(A, k, index-1, target, answer, list);
 	   }
 	   
+	   
+	   public List<List<Integer>> kSumII2(int[] A, int k, int targer) {
+		   List<List<Integer>> subsets = new ArrayList<>();
+		   int size = 1 << (A.length);
+		   for(int i=0; i<size; i++) {
+			   int bitCount = Integer.bitCount(i);
+			   if(bitCount != k)
+				   continue;
+			   List<Integer> list = new ArrayList<>();
+			   int sum = 0;
+			   for(int j=A.length-1; j>=0; j--) {
+				   if(((i >>> j) & 1) == 1) {
+					   list.add(A[A.length-1 - j]);
+					   sum += A[A.length-1 - j];
+				   }
+			   }
+			   if(!list.isEmpty() && targer == sum) {
+				   subsets.add(list);
+			   }
+		   } 
+		   return subsets;
+	   }
+	   
 	  
 	  
 	  public static void main(String[] args) {
-		  Medium test = new Medium();
-		  int[] array = {1, 2, 3, 4};
-		  test.kSumII(array, 2, 4);
+		  
 	  }
 
 }
