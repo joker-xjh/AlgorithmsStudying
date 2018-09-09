@@ -2,7 +2,9 @@ package leetcode;
 
 import java.util.ArrayList;
 
+
 import java.util.Comparator;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -756,7 +758,41 @@ public class Design {
 	}
 	 
 	 
-	 
+	class RLEIterator {
+		Deque<Integer> nums;
+		Deque<Integer> fre;
+
+	    public RLEIterator(int[] A) {
+	        nums = new LinkedList<>();
+	        fre = new LinkedList<>();
+	        for(int i=0; i<A.length; i+=2) {
+	        	int times = A[i];
+	        	if(times == 0)
+	        		continue;
+	        	int num = A[i+1];
+	        	nums.add(num);
+	        	fre.add(times);
+	        }
+	    }
+	    
+	    public int next(int n) {
+	    	int answer = -1;
+	        while(!nums.isEmpty() && n > 0) {
+	        	answer = nums.pollFirst();
+	        	int time = fre.pollFirst();
+	        	int min = Math.min(time, n);
+	        	time -= min;
+	        	n -= min;
+	        	if(time != 0) {
+	        		nums.addFirst(answer);
+	        		fre.addFirst(time);
+	        	}
+	        }
+	        if(n != 0)
+	        	return -1;
+	    	return answer;
+	    }
+	}
 	 
 	 
 	 
