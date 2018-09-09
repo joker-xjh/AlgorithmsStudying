@@ -4903,13 +4903,74 @@ public class Array {
 		 return true;
 	 }
 	
-	
+	 public int atMostNGivenDigitSet(String[] D, int N) {
+		 Set<Long> numbers = new HashSet<>();
+		 atMostNGivenDigitSetDFS(D, N, numbers, 0);
+		 System.out.println(numbers);
+		 return numbers.size();
+	 }
+	 
+	 private void atMostNGivenDigitSetDFS(String[] D, int N, Set<Long> used, long number) {
+		 for(int i=0; i<D.length; i++) {
+			 int digit = D[i].charAt(0) - '0';
+			 long next_number = number * 10 + digit;
+			 if(next_number > N)
+				 continue;
+			 used.add(next_number);
+			 atMostNGivenDigitSetDFS(D, N, used, next_number);
+		 }
+	 }
+	 
+	 
+	 public int atMostNGivenDigitSet2(String[] D, int N) {
+		 String limit = Integer.toString(N);
+		 int power = D.length;
+		 long[] array = new long[limit.length() + 1];
+		 array[0] = 1;
+		 array[1] = power;
+		 for(int i=2; i<array.length; i++) {
+			 array[i] = array[i-1] * power;
+		 }
+		 long answer = 0;
+		 for(int i=0; i<limit.length(); i++) {
+			 char c = limit.charAt(i);
+			 boolean end = true;
+			 int length = limit.length() - 1 - i;
+			 for(int j=0; j<D.length; j++) {
+				 char d = D[j].charAt(0);
+				 if(d == c) {
+					 end = false;
+					 break;
+				 }
+				 if(d > c)
+					 break;
+				 answer += array[length]; 
+			 }
+			 if(end)
+				 break;
+			 if(i == limit.length()-1)
+				 answer++;
+		 }
+		 for(int i=1; i<limit.length(); i++) {
+			 answer += array[i];
+		 }
+		 return (int) answer;
+	 }
+	 
+	 
+	 
+	 
+	 
+	 
+	 
      
      
 
 
 	public static void main(String[] args) {
-		 
+		 Array test = new Array();
+		 String[] array = {"1","3","5","6"};
+		 test.atMostNGivenDigitSet2(array, 23456);
 	}
 
 }
