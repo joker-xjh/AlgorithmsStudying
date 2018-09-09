@@ -18,6 +18,7 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 
@@ -3257,7 +3258,53 @@ public class Medium {
 		   return sb.toString();
 	   }
 	   
+	   public List<List<Integer>> combinationSum2(int[] num, int target) {
+	       List<List<Integer>> subsets = new ArrayList<>();
+	       Arrays.sort(num);
+	       TreeMap<String, List<Integer>> used = new TreeMap<>();
+		   int size = 1 << (num.length);
+		   for(int i=0; i<size; i++) {
+			   List<Integer> list = new ArrayList<>();
+			   int sum = 0;
+			   for(int j=num.length-1; j>=0; j--) {
+				   if(((i >>> j) & 1) == 1) {
+					   list.add(num[num.length-1 - j]);
+					   sum += num[num.length-1 - j];
+				   }
+			   }
+			   if(!list.isEmpty() && target == sum) {
+				   used.put(list.toString(), list);
+			   }
+		   } 
+		   for(List<Integer> list : used.values()) {
+			   subsets.add(list);
+		   }
+		   return subsets;
+	   }
 	   
+	   public List<List<Integer>> combinationSum22(int[] num, int target) {
+		   List<List<Integer>> answer = new ArrayList<>();
+		   Arrays.sort(num);
+		   combinationSum2(num, 0, target, answer, new ArrayList<>(), new HashSet<>());
+		   return answer;
+	   }
+	   
+	   private void combinationSum2(int[] A, int index, int target, List<List<Integer>> answer, List<Integer> list, Set<String> used) {
+		   if(target < 0)
+			   return;
+		   if(target == 0 && !list.isEmpty()) {
+			   if(used.add(list.toString())) {
+				   answer.add(new ArrayList<>(list));
+			   }
+			   return;
+		   }
+		   if(index >= A.length)
+			   return;
+		   list.add(A[index]);
+		   combinationSum2(A, index+1, target - A[index], answer, list, used);
+		   list.remove(list.size()-1);
+		   combinationSum2(A, index+1, target, answer, list, used);
+	   }
 	   
 	   
 	   
