@@ -3188,12 +3188,33 @@ public class Medium {
 	        return differ;
 	   }
 	   
+	   public List<List<Integer>> kSumII(int[] A, int k, int targer) {
+		   List<List<Integer>> answer = new ArrayList<>();
+		   kSumIIDFS(A, k, A.length-1, targer, answer, new ArrayList<>());
+	       return answer;
+	   }
 	   
+	   private void kSumIIDFS(int[] A, int k, int index, int target, List<List<Integer>> answer, List<Integer> list) {
+		   if(k == 0 && target != 0)
+			   return;
+		   if(k == 0 && target == 0) {
+			   answer.add(new ArrayList<>(list));
+			   return;
+		   }
+		   if(index < 0 || k < 0)
+			   return;
+		   list.add(A[index]);
+		   kSumIIDFS(A, k-1, index-1, target - A[index], answer, list);
+		   list.remove(list.size()-1);
+		   kSumIIDFS(A, k, index-1, target, answer, list);
+	   }
 	   
 	  
 	  
 	  public static void main(String[] args) {
-		  
+		  Medium test = new Medium();
+		  int[] array = {1, 2, 3, 4};
+		  test.kSumII(array, 2, 4);
 	  }
 
 }
