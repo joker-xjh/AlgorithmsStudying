@@ -794,7 +794,30 @@ public class Design {
 	    }
 	}
 	 
-	 
+	
+	class StockSpanner {
+		
+		Stack<int[]> stack;
+		int index = 0;
+	    public StockSpanner() {
+	        stack = new Stack<>();
+	    }
+	    
+	    public int next(int price) {
+	        while(!stack.isEmpty() && stack.peek()[0] <= price) {
+	        	stack.pop();
+	        }
+	        if(stack.isEmpty()) {
+	        	stack.push(new int[] {price, index++});
+	        	return index;
+	        }
+	        else {
+	        	int pre_index = stack.peek()[1];
+	        	stack.push(new int[] {price, index++});
+	        	return index - pre_index - 1;
+	        }
+	    }
+	}
 	 
 	 
 	
