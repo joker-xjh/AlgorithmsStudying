@@ -3332,9 +3332,81 @@ public class Medium {
 		   list.remove(list.size()-1);
 		   combinationSum(A, index+1, target, answer, list, used);
 	   }
+	   
+	   
+	   public int smallestFactorization(int a) {
+		   int A = a;
+		   int[] array = {2, 3, 5, 7};
+		   for(int p : array) {
+			   while(A % p == 0)
+				   A /= p;
+		   }
+		   if(A != 1)
+			   return 0;
+		   List<Integer> prime = new ArrayList<>();
+		   List<Integer> prime_exp = new ArrayList<>();
+		   for(int p : array) {
+			   int temp = a;
+			   int exp = 0;
+			   while(temp % p == 0) {
+				   temp /= p;
+				   exp++;
+			   }
+			   prime.add(p);
+			   prime_exp.add(exp);
+		   }
+		   prime.add(2, 4);
+		   prime_exp.add(2, 0);
+		   prime.add(4, 6);
+		   prime_exp.add(4, 0);
+		   prime.add(8);
+		   prime_exp.add(0);
+		   prime.add(9);
+		   prime_exp.add(0);
+		   long answer = 0;
+		   while(prime_exp.get(0) >= 3) {
+			   prime_exp.set(6, prime_exp.get(6)+1);
+			   prime_exp.set(0, prime_exp.get(0) - 3);
+		   }
+		   while(prime_exp.get(1) >= 2) {
+			   prime_exp.set(7, prime_exp.get(7) + 1);
+			   prime_exp.set(1, prime_exp.get(1)-2);
+		   }
+		   while(prime_exp.get(0) >= 1 && prime_exp.get(1) >= 1) {
+			   prime_exp.set(4, prime_exp.get(4)+1);
+			   prime_exp.set(0, prime_exp.get(0)-1);
+			   prime_exp.set(1, prime_exp.get(1)-1);
+		   }
+		   while(prime_exp.get(0) >= 2) {
+			   prime_exp.set(2, prime_exp.get(2) + 1);
+			   prime_exp.set(0, prime_exp.get(0)-2);
+		   }
+		   for(int i=0; i<prime.size(); i++) {
+			   int p = prime.get(i);
+			   for(int j=0; j<prime_exp.get(i); j++) {
+				   answer = answer * 10 + p;
+				   if(answer > Integer.MAX_VALUE)
+					   return 0;
+			   }
+		   }
+	       return (int) answer;
+	   }
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
 	  
 	  public static void main(String[] args) {
-		  
+		  Medium test = new Medium();
+		  test.smallestFactorization(48);
 	  }
 
 }
