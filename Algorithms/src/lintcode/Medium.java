@@ -3306,9 +3306,32 @@ public class Medium {
 		   combinationSum2(A, index+1, target, answer, list, used);
 	   }
 	   
+	   public List<List<Integer>> combinationSum(int[] candidates, int target) {
+		   List<List<Integer>> answer = new ArrayList<>();
+		   Arrays.sort(candidates);
+		   combinationSum(candidates, 0, target, answer, new ArrayList<>(), new HashSet<>());
+		   return answer;
+	   }
 	   
-	   
-	  
+	   private void combinationSum(int[] A, int index, int target, List<List<Integer>> answer, List<Integer> list, Set<String> used) {
+		   if(target < 0)
+			   return;
+		   if(target == 0 && !list.isEmpty()) {
+			   if(used.add(list.toString())) {
+				   answer.add(new ArrayList<>(list));
+			   }
+			   return;
+		   }
+		   if(index >= A.length)
+			   return;
+		   list.add(A[index]);
+		   combinationSum(A, index+1, target - A[index], answer, list, used);
+		   list.remove(list.size()-1);
+		   list.add(A[index]);
+		   combinationSum(A, index, target - A[index], answer, list, used);
+		   list.remove(list.size()-1);
+		   combinationSum(A, index+1, target, answer, list, used);
+	   }
 	  
 	  public static void main(String[] args) {
 		  
