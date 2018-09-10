@@ -3428,7 +3428,36 @@ public class Medium {
 	    }
 	   
 	   
-	   
+	   public List<Integer> subarraySum(int[] nums) {
+		   List<Integer> list = new ArrayList<>();
+	        if(nums == null || nums.length == 0)
+	        	return list;
+	        int sum = 0;
+	        int[][] preSum = new int[nums.length][2];
+	        sum += nums[0];
+	        preSum[0] = new int[] {sum, 0};
+	        for(int i=1; i<nums.length; i++) {
+	        	sum += nums[i];
+	        	preSum[i][0] = sum;
+	        	preSum[i][1] = i;
+	        }
+	        if(sum == 0) {
+	        	list.add(0);
+	        	list.add(nums.length-1);
+	        	return list;
+	        }
+	        Arrays.sort(preSum, (a,b) -> (a[0] - b[0]));
+	        for(int i=1; i<preSum.length; i++) {
+	        	int[] a = preSum[i];
+	        	int[] b = preSum[i-1];
+	        	if(a[0] == b[0]) {
+	        		list.add(Math.min(a[1], b[1])+1);
+	        		list.add(Math.max(a[1], b[1]));
+	        		break;
+	        	}
+	        }
+		   return list;
+	   }
 	   
 	   
 	   
