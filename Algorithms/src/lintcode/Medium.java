@@ -3393,7 +3393,39 @@ public class Medium {
 	   }
 	   
 	   
-	   
+	   public int[] subarraySumClosest(int[] nums) {
+	        int[] answer = {0, 0};
+	        if(nums == null || nums.length == 0)
+	        	return answer;
+	        int cloest = Integer.MAX_VALUE;
+	        int sum = 0;
+	        int[][] preSum = new int[nums.length][2];
+	        sum += nums[0];
+	        preSum[0] = new int[] {sum, 0};
+	        for(int i=1; i<nums.length; i++) {
+	        	sum += nums[i];
+	        	preSum[i][0] = sum;
+	        	preSum[i][1] = i;
+	        }
+	        Arrays.sort(preSum, (a,b) -> (a[0] - b[0]));
+	        for(int i=1; i<preSum.length; i++) {
+	        	int[] a = preSum[i];
+	        	int[] b = preSum[i-1];
+	        	int diff = a[0] - b[0];
+	        	if(diff < cloest) {
+	        		cloest = diff;
+	        		if(a[1] < b[1]) {
+	        			answer[0] = a[1] + 1;
+	        			answer[1] = b[1];
+	        		}
+	        		else {
+	        			answer[0] = b[1] + 1;
+	        			answer[1] = a[1];
+	        		}
+	        	}
+	        }
+	        return answer;
+	    }
 	   
 	   
 	   
@@ -3405,8 +3437,7 @@ public class Medium {
 	   
 	  
 	  public static void main(String[] args) {
-		  Medium test = new Medium();
-		  test.smallestFactorization(48);
+		  
 	  }
 
 }
