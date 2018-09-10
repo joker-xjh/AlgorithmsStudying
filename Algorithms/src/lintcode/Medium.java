@@ -3460,7 +3460,25 @@ public class Medium {
 	   }
 	   
 	   
-	   
+	   public int minimumSize(int[] nums, int s) {
+		   int length = nums.length + 1;
+		   TreeMap<Integer, Integer> tree = new TreeMap<>();
+		   int sum = 0;
+		   for(int i=0; i<nums.length; i++) {
+			   sum += nums[i];
+			   tree.put(sum, i);
+			   Map.Entry<Integer, Integer> low = tree.floorEntry(sum - s);
+			   if(low == null)
+				   continue;
+			   int pre_i = low.getValue();
+			   length = Math.min(length, i - pre_i);
+		   }
+		   if(length == nums.length + 1 && sum >= s)
+			   return nums.length;
+		   if(length == nums.length + 1)
+			   return -1;
+		   return length;
+	   }
 	   
 	   
 	   
