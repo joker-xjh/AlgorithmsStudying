@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.Random;
 import java.util.Set;
 import java.util.Stack;
 import java.util.TreeMap;
@@ -3479,6 +3480,64 @@ public class Medium {
 			   return -1;
 		   return length;
 	   }
+	   
+	   
+	   
+	   class RandomizedSet {
+		   List<Integer> list;
+		   Random random;
+		   Set<Integer> set;
+		   Map<Integer, Integer> map;
+		   int count = 0;
+		    public RandomizedSet() {
+		    	list = new ArrayList<>();
+		    	random = new Random();
+		    	set = new HashSet<>();
+		    	map = new HashMap<>();
+		    }
+
+		    /*
+		     * @param val: a value to the set
+		     * @return: true if the set did not already contain the specified element or false
+		     */
+		    public boolean insert(int val) {
+		        if(set.contains(val))
+		        	return false;
+		    	set.add(val);
+		    	if(count >= list.size()) {
+		    		list.add(Integer.MAX_VALUE);
+		    	}
+		    	list.set(count, val);
+		    	map.put(val, count);
+		    	count++;
+		    	return true;
+		    }
+
+		    /*
+		     * @param val: a value from the set
+		     * @return: true if the set contained the specified element or false
+		     */
+		    public boolean remove(int val) {
+		        if(!set.contains(val))
+		        	return false;
+		    	int i = map.get(val);
+		    	int last_val = list.get(count-1);
+		    	list.set(i, last_val);
+		    	map.put(last_val, i);
+		    	map.remove(val);
+		    	set.remove(val);
+		    	count--;
+		    	return true;
+		    }
+
+		    /*
+		     * @return: Get a random element from the set
+		     */
+		    public int getRandom() {
+		        int index = random.nextInt(list.size());
+		        return list.get(index);
+		    }
+		}
 	   
 	   
 	   
