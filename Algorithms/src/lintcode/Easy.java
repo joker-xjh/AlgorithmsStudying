@@ -962,9 +962,37 @@ public class Easy {
 		}
 	}
 	
+	public boolean wordPattern(String pattern, String teststr) {
+		String s1 = buildPattern(pattern, null);
+		String s2 = buildPattern(null, teststr.split(" "));
+		if(s1.equals(s2))
+			return true;
+		return false;
+    }
 	
-	
-	
+	private String buildPattern(String word, String[] array) {
+		StringBuilder sb = new StringBuilder();
+		if(word != null) {
+			Map<Character, Integer> map = new HashMap<>();
+			for(int i=0; i<word.length(); i++) {
+				char c = word.charAt(i);
+				if(!map.containsKey(c)) {
+					map.put(c, map.size());
+				}
+				sb.append(map.get(c));
+			}
+		}
+		else {
+			Map<String, Integer> map = new HashMap<>();
+			for(String s : array) {
+				if(!map.containsKey(s)) {
+					map.put(s, map.size());
+				}
+				sb.append(map.get(s));
+			}
+		}
+		return sb.toString();
+	}
 	
 	
 	
