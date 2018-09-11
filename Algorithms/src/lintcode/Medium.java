@@ -3539,6 +3539,42 @@ public class Medium {
 		    }
 		}
 	   
+	  
+	   public boolean isOneEditDistance(String s, String t) {
+	       int len1 = s.length();
+	       int len2 = t.length();
+	       if(Math.abs(len1 - len2) > 1)
+	    	   return false;
+		   if(len1 == len2) {
+			   int diff = 0;
+			   for(int i=0; i<len1; i++) {
+				   char c1 = s.charAt(i);
+				   char c2 = t.charAt(i);
+				   if(c1 != c2)
+					   diff++;
+			   }
+			   if(diff != 1)
+				   return false;
+		   }
+		   else {
+			   int[] map = new int[128];
+			   for(char c : s.toCharArray()) {
+				   map[c]++;
+			   }
+			   for(char c : t.toCharArray()) {
+				   map[c]--;
+			   }
+			   int sum = 0;
+			   for(int num : map) {
+				   sum += num;
+			   }
+			   if(Math.abs(sum) != 1)
+				   return false;
+		   }
+		   return true;
+	   }
+	   
+	   
 	   
 	   
 	  
