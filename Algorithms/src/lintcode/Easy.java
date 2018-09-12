@@ -995,6 +995,41 @@ public class Easy {
 	}
 	
 	
+	public int[][] floodFill(int[][] image, int sr, int sc, int newColor) {
+		int oldColor = image[sr][sc];
+		image[sr][sc] = newColor;
+		floodFillDFS(image, sr, sc, newColor, oldColor);
+		return image;
+    }
+	
+	private void floodFillDFS(int[][] image, int i, int j, int newColor, int oldColor) {
+		int[][] dirs = {{-1,0}, {1,0}, {0,-1}, {0,1}};
+		for(int[] d : dirs) {
+			int x = d[0] + i;
+			int y = d[1] + j;
+			if(x<0||x>=image.length||y<0||y>=image[0].length||image[x][y]!=oldColor)
+				continue;
+			image[x][y] = newColor;
+			floodFillDFS(image, x, y, newColor, oldColor);
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	public static void main(String[] args) {
 		
