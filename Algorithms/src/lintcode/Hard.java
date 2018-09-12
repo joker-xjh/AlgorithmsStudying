@@ -611,9 +611,128 @@ public class Hard {
 		   }
 	   }
 	
+	   
+	   //"itwasthebestoftimes"
+	  // "ittwaastthhebesttoofttimes"
+	   
+	   public boolean wordPatternMatch(String pattern, String str) {
+	        pattern = buildPattern(pattern, null);
+	        if(wordPatternMatch(str, pattern,  new HashMap<>(), new HashSet<>()))
+			   return true;
+		   return false;
+	   } 
+	   
+	   private boolean wordPatternMatch(String str, String pattern, Map<Character, String> map, Set<String> set) {
+		   if(pattern.length() == 0) {
+			   return str.length() == 0;
+		   }
+		   char patternChar = pattern.charAt(0);
+		   if(map.containsKey(patternChar)) {
+			   if(!str.startsWith(map.get(patternChar)))
+				   return false;
+			   return wordPatternMatch(str.substring(map.get(patternChar).length()), pattern.substring(1), map, set);
+		   }
+		   for(int i=0; i<str.length(); i++) {
+			   String sub = str.substring(0, i+1);
+			   if(set.contains(sub))
+				   continue;
+			   map.put(patternChar, sub);
+			   set.add(sub);
+			   if(wordPatternMatch(str.substring(i+1), pattern.substring(1), map, set))
+				   return true;
+			   map.remove(patternChar);
+			   set.remove(sub);
+		   }
+		   return false;
+	   }
+	   	   
+	   @SuppressWarnings("unused")
+	private boolean wordPatternMatchBT(String str, int index, String pattern, List<String> list, Map<Character, String> map, Map<String, Character> remap) {
+		   if(index == str.length()) {
+			   String p = buildPattern(null, list);
+			   return p.equals(pattern);
+		   }
+		   if(list.size() >= pattern.length())
+			   return false;
+		   StringBuilder sb = new StringBuilder();
+		   for(int i=index; i<str.length(); i++) {
+			   char c = str.charAt(i);
+			   char p = pattern.charAt(list.size());
+			   sb.append(c);
+			   String symble = map.get(p);
+			   if(symble != null) {
+				   if(sb.length() < symble.length())
+					   continue;
+				   if(sb.length() == symble.length()) {
+					   if(!symble.equals(sb.toString())) {
+						   return false;
+					   }
+				   }
+				   if(sb.length() > symble.length())
+					   return false;
+			   }
+			   String key = sb.toString();
+			   Character re_p = remap.get(key);
+			   if(re_p != null && re_p != p)
+				   return false;
+			   map.put(p, key);
+			   remap.put(key, p);
+			   list.add(key);
+			   if(wordPatternMatchBT(str, i+1, pattern, list, map, remap)) {
+				   list.remove(list.size()-1);
+				   return true;
+			   }
+			   list.remove(list.size()-1);
+			   map.remove(p);
+			   remap.remove(key);
+		   }
+		   
+		   return false;
+	   }
+	   
+	   private String buildPattern(String word, List<String> list) {
+			StringBuilder sb = new StringBuilder();
+			if(word != null) {
+				Map<Character, Integer> map = new HashMap<>();
+				for(int i=0; i<word.length(); i++) {
+					char c = word.charAt(i);
+					if(!map.containsKey(c)) {
+						map.put(c, map.size());
+					}
+					sb.append(map.get(c));
+				}
+			}
+			else {
+				Map<String, Integer> map = new HashMap<>();
+				for(String s : list) {
+					if(!map.containsKey(s)) {
+						map.put(s, map.size());
+					}
+					sb.append(map.get(s));
+				}
+			}
+			return sb.toString();
+		}
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
 	
 	public static void main(String[] args) {
-		
+		Hard test = new Hard();
+		test.wordPatternMatch("itwasthebestoftimes", "ittwaastthhebesttoofttimes");
 	}
 	
 	
