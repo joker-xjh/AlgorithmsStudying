@@ -3603,9 +3603,54 @@ public class Medium {
 	   } 
 	   
 	   
+     public boolean wordBreak2(String s, Set<String> dict) {
+    	int[] map = new int[26];
+ 		for(char c : s.toCharArray()) {
+ 			map[c - 'a'] = 1;
+ 		}
+ 		for(String word : dict) {
+ 			for(char c : word.toCharArray()) {
+ 				map[c - 'a'] = 0;
+ 			}
+ 		}
+ 		for(int i=0; i<26; i++) {
+ 			if(map[i] == 1) {
+ 				return false;
+ 			}
+ 		}
+    	int n = s.length();
+    	boolean[] dp = new boolean[n+1];
+ 		dp[0] = true;
+ 		for(int i=1; i<=n; i++) {
+ 			for(int j=i-1; j>=0; j--) {
+ 				String sub = s.substring(j, i);
+				if(dict.contains(sub) && dp[j]) {
+ 					dp[i] = true;
+ 					break;
+ 				}
+ 			}
+ 		}
+ 		return dp[n];
+     } 
 	   
-	   
-	   
+	 @SuppressWarnings("unused")
+	private boolean wordBreak2(String s, Set<String> dict, Map<String, Boolean> dp) {
+		 if(s.length() == 0)
+			 return true;
+		 if(dp.containsKey(s))
+			 return dp.get(s);
+		 boolean result = false;
+		 for(int i=0; i<s.length(); i++) {
+			 String sub = s.substring(0, i+1);
+			 if(dict.contains(sub)) {
+				 result |= wordBreak2(s.substring(sub.length()), dict, dp);
+				 if(result)
+					 break;
+			 }
+		 }
+		 dp.put(s, result);
+		 return result;
+	 }
 	   
 	   
 	   
