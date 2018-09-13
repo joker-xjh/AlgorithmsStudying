@@ -3575,6 +3575,49 @@ public class Medium {
 	   }
 	   
 	   
+	   public long getSum(int n, int[] nums) {
+	        long sum = 0;
+	        int or = 0;
+	        int max = Integer.MIN_VALUE;
+	        int min = Integer.MAX_VALUE;
+	        boolean[] bits = new boolean[32];
+	        for(int num : nums) {
+	        	or |= num;
+	        	max = Math.max(max, num);
+	        	min = Math.min(min, num);
+	        	for(int i=31; i>=0; i--) {
+	        		if(((num >>> i) & 1 ) == 0) {
+	        			bits[i] = true;
+	        		}
+	        	}
+	        }
+	        sum = sum + or + max + min;
+	        int last = 0;
+	        for(int i=0; i<32; i++) {
+	        	if(bits[i] == false) {
+	        		last |= 1 << i;
+	        	}
+	        }
+	        sum = sum + last;
+	        return sum;
+	   } 
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
 	   
 	   
 	  
