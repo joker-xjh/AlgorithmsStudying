@@ -714,8 +714,49 @@ public class Hard {
 			return sb.toString();
 		}
 	   
-	   
-	   
+	public List<String> wordBreak(String s, Set<String> wordDict) {
+		List<String> list = new ArrayList<>();
+		int[] map = new int[26];
+		for(char c : s.toCharArray()) {
+			map[c - 'a'] = 1;
+		}
+		for(String word : wordDict) {
+			for(char c : word.toCharArray()) {
+				map[c - 'a'] = 0;
+			}
+		}
+		for(int i=0; i<26; i++) {
+			if(map[i] == 1) {
+				return list;
+			}
+		}
+		wordBreakBT(s, wordDict, new ArrayList<>(), list);
+		return list;
+    }
+	
+	private void wordBreakBT(String s, Set<String> dict, List<String> buffer, List<String> list) {
+		if(s.length() == 0) {
+			StringBuilder sb = new StringBuilder();
+			for(int i=0; i<buffer.size(); i++) {
+				if(i == buffer.size()-1) {
+					sb.append(buffer.get(i));
+				}
+				else {
+					sb.append(buffer.get(i) + " ");
+				}
+			}
+			list.add(sb.toString());
+			return;
+		}
+		for(int i=0; i<s.length(); i++) {
+			String word = s.substring(0, i+1);
+			if(dict.contains(word)) {
+				buffer.add(word);
+				wordBreakBT(s.substring(word.length()), dict, buffer, list);
+				buffer.remove(buffer.size()-1);
+			}
+		}		
+	}
 	   
 	   
 	   
@@ -731,8 +772,7 @@ public class Hard {
 	   
 	
 	public static void main(String[] args) {
-		Hard test = new Hard();
-		test.wordPatternMatch("itwasthebestoftimes", "ittwaastthhebesttoofttimes");
+		
 	}
 	
 	
