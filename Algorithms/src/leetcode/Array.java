@@ -4957,7 +4957,17 @@ public class Array {
 		 return (int) answer;
 	 }
 	 
-	 
+	 public int[] sortArrayByParity(int[] A) {
+		 int index = 0;
+		 for(int i=0; i<A.length; i++) {
+			 if((A[i] & 1) == 0) {
+				 int temp = A[i];
+				 A[i] = A[index];
+				 A[index++] = temp;
+			 }
+		 }
+		 return A;
+	 }
 	 
 	 
 	 
@@ -4968,9 +4978,7 @@ public class Array {
 
 
 	public static void main(String[] args) {
-		 Array test = new Array();
-		 String[] array = {"1","3","5","6"};
-		 test.atMostNGivenDigitSet2(array, 23456);
+		 
 	}
 
 }
