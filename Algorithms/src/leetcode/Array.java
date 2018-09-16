@@ -4970,7 +4970,22 @@ public class Array {
 	 }
 	 
 	 
-	 
+	 public int totalFruit(int[] tree) {
+		 int total = 0;
+		 Map<Integer, Integer> map = new HashMap<>();
+		 for(int i=0, j=0; i<tree.length; i++) {
+			 while(j<tree.length && (map.size() < 2 || (map.size() == 2 && map.containsKey(tree[j])))) {
+				 map.put(tree[j], map.getOrDefault(tree[j], 0)+1);
+				 j++;
+			 }
+			 total = Math.max(total, j - i);
+			 int temp = map.get(tree[i]);
+			 map.put(tree[i], temp-1);
+			 if(temp - 1 == 0)
+				 map.remove(tree[i]);
+		 }
+		 return total;
+	 }
 	 
 	 
      
@@ -4978,7 +4993,9 @@ public class Array {
 
 
 	public static void main(String[] args) {
-		 
+		 Array test = new Array();
+		 int[] tree = {3,3,3,1,2,1,1,2,3,3,4};
+		 test.totalFruit(tree);
 	}
 
 }
