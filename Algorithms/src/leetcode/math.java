@@ -1100,6 +1100,98 @@ public class math {
        return answers.size();
    }
     
+   
+   
+   public int superpalindromesInRange(String L, String R) {
+       int superPalindromes = 0;
+       long l = Long.parseLong(L);
+       long r = Long.parseLong(R);
+       for(long i=(long) Math.sqrt(l); i*i <= r;) {
+    	   long p = nextPalindrome(i);
+    	   if(p * p <= r && isPalindrome(Long.toString(p*p))) {
+    		   superPalindromes++;
+    	   }
+    	   i = p+1;
+       }
+       
+       return superPalindromes;
+   }
+   
+   private long nextPalindrome(long l) {
+	   String s = Long.toString(l);
+	   int len = s.length();
+	   List<Long> list = new ArrayList<>();
+	   list.add((long)(Math.pow(10, len) - 1));
+	   String half = s.substring(0, (len+1)/2);
+	   String nextHalf = Long.toString(Long.parseLong(half)+1);
+	   String half_reverse = new StringBuilder(half.substring(0, len/2)).reverse().toString();
+	   String nextHalf_reverse = new StringBuilder(nextHalf.subSequence(0, len/2)).reverse().toString();
+	   list.add(Long.parseLong(half + half_reverse));
+	   list.add(Long.parseLong(nextHalf + nextHalf_reverse));
+	   long result = Long.MAX_VALUE;
+	   for(long num : list) {
+		   if(num >= l) {
+			   result = Math.min(result, num);
+		   }
+	   }
+	   return result;
+   }
+   
+   private boolean isPalindrome(String str) {
+	   int left = 0, right = str.length()-1;
+	   while(left <= right) {
+		   char c1 = str.charAt(left);
+		   char c2 = str.charAt(right);
+		   if(c1 != c2)
+			   return false;
+		   left++;
+		   right--;
+	   }
+	   return true;
+   }
+   
+   public int superpalindromesInRange2(String L, String R) {
+	   long l = (long) Math.sqrt(Long.parseLong(L));
+	   long r = (long) Math.sqrt(Long.parseLong(R));
+	   List<Long> list = new ArrayList<>();
+	   superpalindromesInRangeHelp(list, l, r);
+	   int answer = 0;
+	   for(long p : list) {
+		   if(isPalindrome(Long.toString(p*p))) {
+			   answer++;
+		   }
+	   }
+	   return answer;
+   }
+   
+   private void superpalindromesInRangeHelp(List<Long> list, long from, long to) {
+	   for(int i=0; i<2; i++) {
+		   long p = 0;
+		   long counter = 1;
+		   while((p = createP(counter, i)) <= to) {
+			   if(p >= from) {
+				   list.add(p);
+			   }
+			   counter++;
+		   }
+	   }
+   }
+   
+   private long createP(long val, int odd) {
+	   long answer = val;
+	   long temp = val;
+	   if(odd == 1)
+		   temp /= 10;
+	   while(temp > 0) {
+		   answer = answer * 10 + temp % 10;
+		   temp /= 10;
+	   }
+	   return answer;
+   }
+   
+   
+   
+   
     
     
     
