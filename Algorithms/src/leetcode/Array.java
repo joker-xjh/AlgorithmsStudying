@@ -4987,15 +4987,48 @@ public class Array {
 		 return total;
 	 }
 	 
-	 
+	 public int sumSubarrayMins(int[] A) {
+		 long answer = 0;
+		 long mod = 1000000007;
+		 int[] left = new int[A.length];
+		 int[] right = new int[A.length];
+		 Arrays.fill(left, -1);
+		 Arrays.fill(right, A.length);
+		 Stack<Integer> stack = new Stack<>();
+		 for(int i=0; i<A.length; i++) {
+			 answer = (answer + A[i]) % mod;
+			 while(!stack.isEmpty() && A[stack.peek()] > A[i]) {
+				 stack.pop();
+			 }
+			 if(!stack.isEmpty()) {
+				 left[i] = stack.peek();
+			 }
+			 stack.push(i);
+		 }
+		 stack.clear();
+		 for(int i=A.length-1; i>=0; i--) {
+			 while(!stack.isEmpty() && A[stack.peek()] >= A[i]) {
+				 stack.pop();
+			 }
+			 if(!stack.isEmpty()) {
+				 right[i] = stack.peek();
+			 }
+			 stack.push(i);
+		 }
+		 for(int i=0; i<A.length; i++) {
+			 long times = (i - left[i] - 1L) * (right[i] - i - 1L);
+			 times += (i - left[i] - 1L) + (right[i] - i - 1L);
+			 long temp = A[i] * times;
+			 answer = (answer + temp) % mod;
+		 }
+		 return (int) answer;
+	 }
      
      
 
 
 	public static void main(String[] args) {
-		 Array test = new Array();
-		 int[] tree = {3,3,3,1,2,1,1,2,3,3,4};
-		 test.totalFruit(tree);
+		 
 	}
 
 }
