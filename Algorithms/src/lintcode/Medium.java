@@ -3683,8 +3683,74 @@ public class Medium {
 		 return true;
 	 }
 	   
-	   
-	   
+	 
+	 public List<List<Integer>> verticalOrder(TreeNode root) {
+		 List<List<Integer>> answer = new ArrayList<>();
+		 if(root == null)
+			 return answer;
+		 Map<TreeNode, Integer> index_map = new HashMap<>();
+		 Map<TreeNode, Integer> depth_map = new HashMap<>();
+		 List<TreeNode> list = new ArrayList<>();
+		 verticalOrderHelp(root, 0, 0, index_map, depth_map, list);
+		 Collections.sort(list, new verticalOrderComparator(index_map, depth_map));
+		 for(int i=0; i<list.size(); i++) {
+			 TreeNode node = list.get(i);
+			 if(i == 0) {
+				 List<Integer> temp = new ArrayList<>();
+				 temp.add(node.val);
+				 answer.add(temp);
+			 }
+			 else {
+				 TreeNode pre_node = list.get(i-1);
+				 int index = index_map.get(node);
+				 int pre_index = index_map.get(pre_node);
+				 if(index == pre_index) {
+					 List<Integer> pre_list = answer.get(answer.size()-1);
+					 pre_list.add(node.val);
+				 }
+				 else {
+					 List<Integer> temp = new ArrayList<>();
+					 temp.add(node.val);
+					 answer.add(temp);
+				 }
+			 }
+			 
+		 }
+		 return answer;
+	 }
+	 
+	 class verticalOrderComparator implements Comparator<TreeNode> {
+		
+		 Map<TreeNode, Integer> index_map;
+		 Map<TreeNode, Integer> depth_map;
+		 public verticalOrderComparator(Map<TreeNode, Integer> index_map, Map<TreeNode, Integer> depth_map) {
+			 this.index_map = index_map;
+			 this.depth_map = depth_map;
+		 }
+
+		@Override
+		public int compare(TreeNode o1, TreeNode o2) {
+			int index1 = index_map.get(o1);
+			int index2 = index_map.get(o2);
+			if(index1 == index2) {
+				int depth1 = depth_map.get(o1);
+				int depth2 = depth_map.get(o2);
+				return depth1 - depth2;
+			}
+			return index1 - index2;
+		}
+		 
+	 }
+	 
+	 private void verticalOrderHelp(TreeNode node, int index, int depth, Map<TreeNode, Integer> index_map, Map<TreeNode, Integer> depth_map, List<TreeNode> list) {
+		 if(node == null)
+			 return;
+		 index_map.put(node, index);
+		 depth_map.put(node, depth);
+		 list.add(node);
+		 verticalOrderHelp(node.left, index-1, depth+1, index_map, depth_map, list);
+		 verticalOrderHelp(node.right, index+1, depth+1, index_map, depth_map, list);
+	 }
 	   
 	   
 	   
