@@ -3752,7 +3752,12 @@ public class Medium {
 		 verticalOrderHelp(node.right, index+1, depth+1, index_map, depth_map, list);
 	 }
 	   
-	   
+	 
+	 public boolean firstWillWin(int n) {
+		 if(n % 3 == 0)
+			 return false;
+		 return true;
+	 }
 	   
 	   
 	   
