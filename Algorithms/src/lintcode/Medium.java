@@ -3784,8 +3784,27 @@ public class Medium {
 		 dp[index] = Math.max(value1, value2);
 		 return dp[index];
 	 }
-	   
-	   
+	 
+	 public boolean firstWillWin2(int[] values) {
+		 return firstWillWin(values, 0, 0, 0, new HashMap<>());
+	 }
+	 
+	 private boolean firstWillWin(int[] values, int index, long A, long B, Map<String, Boolean> dp) {
+		 if(index >= values.length)
+			 return A >= B;
+ 		String key = index + "," + A +"," + B;
+ 		if(dp.containsKey(key))
+ 			return dp.get(key);
+		boolean result = false; 
+ 		if(!firstWillWin(values, index+1, B, A+values[index], dp)) {
+ 			result = true;
+ 		}
+ 		if(index+1 < values.length && !result && !firstWillWin(values, index+2, B, A+values[index]+values[index+1], dp)) {
+ 			result = true;
+ 		}
+		dp.put(key, result);
+		return result;
+	 }
 	   
 	   
 	   
