@@ -3759,7 +3759,31 @@ public class Medium {
 		 return true;
 	 }
 	   
-	   
+	 public boolean firstWillWin(int[] values) {
+		 long sum = 0;
+		 for(int num : values)
+			 sum = sum + num;
+		 long value1 = firstWillWin(values, 0, new Long[values.length]);
+		 return value1 >= sum - value1;
+	 }
+	 
+	 private long firstWillWin(int[] values, int index, Long[] dp) {
+		 if(index >= values.length)
+			 return 0;
+		 if(index >= values.length-2) {
+			 long temp = 0;
+			 for(int i=index; i<values.length; i++) {
+				 temp = temp + values[i];
+			 }
+			 return temp;
+		 }
+		 if(dp[index] != null)
+			 return dp[index];
+		 long value1 = values[index] + Math.min(firstWillWin(values, index+2, dp), firstWillWin(values, index+3, dp));
+		 long value2 = values[index] + values[index+1] + Math.min(firstWillWin(values, index+3, dp), firstWillWin(values, index+4, dp));
+		 dp[index] = Math.max(value1, value2);
+		 return dp[index];
+	 }
 	   
 	   
 	   
