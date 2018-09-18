@@ -3805,6 +3805,31 @@ public class Medium {
 		dp.put(key, result);
 		return result;
 	 }
+	 
+	 public int[] getModifiedArray(int length, int[][] updates) {
+		 int[] answer = new int[length];
+		 int[] differ = new int[length+1];
+		 for(int[] update : updates) {
+			 int i = update[0], j = update[1], inc = update[2];
+			 differ[i] += inc;
+			 differ[j+1] -= inc;
+		 }
+		 int sum = 0;
+		 for(int i=0; i<length; i++) {
+			 sum += differ[i];
+			 answer[i] = sum;
+		 }
+		 return answer;
+	 }
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
 	   
 	   
 	   
