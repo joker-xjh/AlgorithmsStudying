@@ -3823,10 +3823,54 @@ public class Medium {
 	 }
 	 
 	 
+	 public int findDerangement(int n) {
+		 if(n < 2)
+			 return 0;
+		 if(n == 2)
+			 return 1;
+		 long mod = 1000000007;
+		 long[] dp = new long[n+1];
+		 dp[2] = 1;
+		 for(int i=3; i<=n; i++) {
+			 dp[i] = ((dp[i-1] + dp[i-2]) * (i - 1)) % mod;
+		 }
+		 return (int) dp[n];
+	 }
 	 
 	 
+	 public int findDerangement2(int n) {
+		 if(n < 2)
+			 return 0;
+		 if(n == 2)
+			 return 1;
+		 long[] first = new long[] {1, 0};
+		 long[] power = {2, 1, 2, 0};
+		 power = matrixPower(power, n-2);
+		 long answer = (first[0] * power[0] + first[1] * power[2]) % 1000000007;
+		 return (int) answer;
+	 }
 	 
+	 private long[] matrixPower(long[] matrix, int power) {
+		 long[] answer = new long[]{1, 0, 0, 1};
+		 while(power > 0) {
+			 if((power & 1) == 1) {
+				 answer = matrixMul(answer, matrix);
+				 power--;
+			 }
+			 matrix = matrixMul(matrix, matrix);
+			 power /= 2;
+		 }
+		 return answer;
+	 }
 	 
+	 private long[] matrixMul(long[] matrix1, long[] matrix2) {
+		 long[] answer = new long[4];
+		 answer[0] = (matrix1[0] * matrix2[0] + matrix1[1] * matrix2[2]) % 1000000007;
+		 answer[1] = (matrix1[0] * matrix2[1] + matrix1[1] * matrix2[3]) % 1000000007;
+		 answer[2] = (matrix1[2] * matrix2[0] + matrix1[3] * matrix2[2]) % 1000000007;
+		 answer[3] = (matrix1[2] * matrix2[1] + matrix1[3] * matrix2[3]) % 1000000007;
+		 return answer;
+	 }
 	 
 	 
 	 
