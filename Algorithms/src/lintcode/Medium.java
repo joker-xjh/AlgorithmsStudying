@@ -3908,7 +3908,30 @@ public class Medium {
 		    }
 		}
 	   
-	   
+	 public List<String> generateAbbreviations(String word) {
+	        List<String> list = new ArrayList<>();
+	        int size = 1 << word.length();
+	        for(int i=0; i<size; i++) {
+	        	int count = 0;
+	        	StringBuilder sb = new StringBuilder();
+	        	for(int j=0; j<word.length(); j++) {
+	        		if(((i >>> word.length()-1-j) & 1) == 1) {
+	        			count++;
+	        		}
+	        		else {
+	        			if(count != 0) {
+	        				sb.append(count);
+	        				count = 0;
+	        			}
+	        			sb.append(word.charAt(j));
+	        		}
+	        	}
+	        	if(count != 0)
+	        		sb.append(count);
+	        	list.add(sb.toString());
+	        }
+	        return list;
+	 }
 	   
 	  
 	  public static void main(String[] args) {
