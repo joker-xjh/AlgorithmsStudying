@@ -3873,7 +3873,40 @@ public class Medium {
 	 }
 	 
 	 
-	 
+	 class ValidWordAbbr {
+		Map<String, Set<String>> map;
+		    
+		    public ValidWordAbbr(String[] dictionary) {
+		    	map = new HashMap<>();
+		    	for(String word : dictionary) {
+		    		String t = transform(word);
+		    		Set<String> set = map.get(t);
+		    		if(set == null) {
+		    			set = new HashSet<>();
+		    			map.put(t, set);
+		    		}
+		    		set.add(word);
+		    	}
+		    }
+		    
+		    private String transform(String word) {
+		    	if(word.length() < 3)
+		    		return word;
+		    	String temp = word.charAt(0) + "" + (word.length()-2) + word.charAt(word.length()-1);
+		    	return temp;
+		    }
+
+		   
+		    public boolean isUnique(String word) {
+		    	String t = transform(word);
+		    	Set<String> set = map.get(t);
+		    	if(set == null)
+		    		return true;
+		    	if(set.size() == 1 && set.contains(word))
+		    		return true;
+		    	return false;
+		    }
+		}
 	   
 	   
 	   
