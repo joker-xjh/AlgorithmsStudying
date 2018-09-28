@@ -3958,7 +3958,18 @@ public class Medium {
 	 }
 	 
 	 
-	 
+	 public int lengthOfLongestSubstring(String s) {
+		 int longest = 0;
+		 Set<Character> used = new HashSet<>();
+		 for(int i=0,j=0; i<s.length(); i++) {
+			 while(j < s.length() && used.add(s.charAt(j))) {
+				 j++;
+			 }
+			 longest = Math.max(longest, j - i);
+			 used.remove(s.charAt(i));
+		 }
+		 return longest;
+	 }
 	 
 	 
 	 
