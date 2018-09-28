@@ -3932,6 +3932,41 @@ public class Medium {
 	        }
 	        return list;
 	 }
+	 
+	 
+	 public List<String> letterCombinations(String digits) {
+		 List<String> answer = new ArrayList<>();
+		 if(digits == null || digits.length() == 0)
+			 return answer;
+		 String[][] array = {{},{"a", "b", "c"}, {"d", "e", "f"}, {"g", "h", "i"},
+				 			 {"j", "k", "l"}, {"m", "n", "o"}, {"p", "q", "r", "s"},
+				 			 {"t", "u", "v"}, {"w", "x", "y", "z"}};
+		 letterCombinationsHelp(0, array, answer, "", digits);
+		 return answer;
+	 }
+	 
+	 private void letterCombinationsHelp(int index, String[][] array, List<String> answer, String str, String digits) {
+		 if(index >= digits.length()) {
+			 answer.add(str);
+			 return;
+		 }
+		 int i = digits.charAt(index) - '1';
+		 String[] group = array[i];
+		 for(String word : group) {
+			 letterCombinationsHelp(index+1, array, answer, str+word, digits);
+		 }
+	 }
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
 	   
 	  
 	  public static void main(String[] args) {
