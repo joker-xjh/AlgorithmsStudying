@@ -8,11 +8,13 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.TreeSet;
 
 
@@ -1121,6 +1123,33 @@ public class Easy {
         nums[index++] = nums[nums.length-1];
         return index;
     }
+	
+	
+	public int[] intersection(int[] nums1, int[] nums2) {
+        Set<Integer> set1 = new HashSet<>();
+        Set<Integer> set2 = new HashSet<>();
+        for(int num : nums1)
+        	set1.add(num);
+        for(int num : nums2)
+        	set2.add(num);
+        List<Integer> list = new ArrayList<>();
+        for(int num : set1) {
+        	if(set2.contains(num)) {
+        		list.add(num);
+        	}
+        }
+        int length = list.size();
+        int[] answer = new int[length];
+        for(int i=0; i<length; i++) {
+        	answer[i] = list.get(i);
+        }
+        return answer;
+    }
+	
+	
+	
+	
+	
 	
 	
 	
