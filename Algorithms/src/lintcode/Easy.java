@@ -1108,7 +1108,19 @@ public class Easy {
         return index;
     }
 	
-	
+	public int removeDuplicates2(int[] nums) {
+        if(nums.length < 3)
+        	return nums.length;
+        int index = 0;
+        for(int i=0; i+2<nums.length; i++) {
+        	if(nums[i] == nums[i+1] && nums[i+1] == nums[i+2])
+        		continue;
+        	nums[index++] = nums[i];
+        }
+        nums[index++] = nums[nums.length-2];
+        nums[index++] = nums[nums.length-1];
+        return index;
+    }
 	
 	
 	
