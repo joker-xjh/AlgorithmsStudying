@@ -3972,7 +3972,25 @@ public class Medium {
 	 }
 	 
 	 
-	 
+	 public int lengthOfLongestSubstringKDistinct(String s, int k) {
+	      int longest = 0;
+	      if(k == 0 || s == null || s.length() == 0)
+	    	  return 0;
+	      Map<Character, Integer> map = new HashMap<>();
+	      for(int i=0,j=0; i<s.length(); i++) {
+	    	  while(j < s.length() && (map.size() < k || (map.size() == k && map.containsKey(s.charAt(j))))) {
+	    		  map.put(s.charAt(j), map.getOrDefault(s.charAt(j), 0)+1);
+	    		  j++;
+	    	  }
+	    	  longest = Math.max(longest, j-i);
+	    	  int temp = map.get(s.charAt(i));
+	    	  if(temp == 1)
+	    		  map.remove(s.charAt(i));
+	    	  else
+	    		  map.put(s.charAt(i), temp-1);
+	      }
+	      return longest;
+	 }
 	 
 	 
 	 
