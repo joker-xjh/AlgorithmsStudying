@@ -13,6 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.TreeSet;
 
 
 
@@ -1015,13 +1016,72 @@ public class Easy {
 	}
 	
 	
+	public boolean canPermutePalindrome(String s) {
+		int[] map = new int[128];
+		for(char c : s.toCharArray()) {
+			map[c]++;
+		}
+		int odd = 0;
+		for(int num : map) {
+			if((num & 1) == 1) {
+				odd++;
+			}
+		}
+		if(odd > 1)
+			return false;
+		return true;
+    }
 	
 	
+	public class TwoSum {
+		TreeSet<Integer> tree = new TreeSet<>();
+		Map<Integer, Integer> map = new HashMap<>();
+		{
+			tree.add(Integer.MIN_VALUE);
+			tree.add(Integer.MAX_VALUE);
+		}
+	    
+	    public void add(int number) {
+	    	tree.add(number);
+	    	map.put(number, map.getOrDefault(number, 0) + 1);
+	    }
+
+	    public boolean find(int value) {
+	    	if(value % 2 == 0) {
+	    		int half = value / 2;
+	    		if(map.getOrDefault(half, 0) > 1)
+	    			return true;
+	    	}
+	    	int left = tree.first();
+	    	int right = tree.last();
+	    	while(left < right) {
+	    		long temp = (long)left + right;
+	    		if(temp < value) {
+	    			left = tree.higher(left);
+	    		}
+	    		else if(temp > value) {
+	    			right = tree.lower(right);
+	    		}
+	    		else {
+	    			return true;
+	    		}
+	    	}
+	    	return false;
+	    }
+	}
 	
 	
-	
-	
-	
+	public void moveZeroes(int[] nums) {
+		int index = 0;
+		for(int i=0; i<nums.length; i++) {
+			if(nums[i] != 0) {
+				nums[index++] = nums[i];
+			}
+		}
+		for(int i=index; i<nums.length; i++) {
+			nums[i] = 0;
+		}
+    }
 	
 	
 	
