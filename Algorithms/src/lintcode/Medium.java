@@ -4056,7 +4056,23 @@ public class Medium {
 		 return index;
 	 }
 	 
-	 
+	 public int minElements(int[] arr) {
+		 int min = 0;
+		 Arrays.sort(arr);
+		 long sum = 0;
+		 for(int i=0; i<arr.length; i++) {
+			 sum = sum + arr[i];
+		 }
+		 long right = 0;
+		 for(int i=arr.length-1; i>=0; i--) {
+			 right = right + arr[i];
+			 min++;
+			 if(right > sum - right)
+				 return min;
+		 }
+		 
+		 return min;
+	 }
 	 
 	 
 	 
