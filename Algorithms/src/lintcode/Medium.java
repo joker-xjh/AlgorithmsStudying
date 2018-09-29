@@ -3992,6 +3992,61 @@ public class Medium {
 	      return longest;
 	 }
 	 
+	 public int findMinArrowShots(int[][] points) {
+		 if(points == null || points.length == 0)
+			 return 0;
+		 List<int[]> list = new ArrayList<>(points.length*2);
+		 for(int[] pos : points) {
+			 list.add(new int[] {pos[0], 1});
+			 list.add(new int[] {pos[1], -1});
+		 }
+		 Collections.sort(list, new findMinArrowShotsComparator());
+		 int shots = 0;
+		 int sum = 0;
+		 for(int[] pos : list) {
+			 sum += pos[1];
+			 if(sum == 0) {
+				 shots++;
+			 }
+		 }
+		 return shots;
+	 }
+	 
+	 class findMinArrowShotsComparator implements Comparator<int[]> {
+		@Override
+		public int compare(int[] o1, int[] o2) {
+			if(o1[0] == o2[0]) {
+				return o2[1] - o1[1];
+			}
+			return o1[0] - o2[0];
+		}
+		 
+	 }
+	 
+	 
+	 public int eraseOverlapIntervals(List<Interval> intervals) {
+		 int answer = 0;
+		 if(intervals == null || intervals.size() < 2)
+			 return 0;
+		 Collections.sort(intervals, (a,b) -> a.end - b.end);
+		 int pos = intervals.get(0).end;
+		 for(int i=1; i<intervals.size(); i++) {
+			 Interval interval = intervals.get(i);
+			 if(interval.start >= pos) {
+				 pos = interval.end;
+			 }
+			 else {
+				 answer++;
+			 }
+		 }
+		 return answer;
+	 }
+	 
+	 
+	 
+	 
+	 
+	 
 	 
 	 
 	 
