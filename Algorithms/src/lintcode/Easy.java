@@ -1188,6 +1188,39 @@ public class Easy {
     }
 	
 	
+	public String reverseVowels(String s) {
+        if(s == null || s.length() == 0)
+        	return s;
+		char[] array = s.toCharArray();
+		List<Character> list = new ArrayList<>();
+		for(int i=0; i<array.length; i++) {
+			if(array[i] == 'a' || array[i] == 'e' || array[i] == 'i' || 
+					array[i] == 'o' || array[i] == 'u' || array[i] == 'A' || array[i] == 'E'
+					|| array[i] == 'I' ||array[i] == 'O' || array[i] == 'U') {
+				list.add(array[i]);
+			}
+		}
+		int index = 0;
+		for(int i=array.length-1; i>=0; i--) {
+			if(array[i] == 'a' || array[i] == 'e' || array[i] == 'i' || 
+					array[i] == 'o' || array[i] == 'u'|| array[i] == 'A' || array[i] == 'E'
+					|| array[i] == 'I' ||array[i] == 'O' || array[i] == 'U') {
+				array[i] = list.get(index++);
+			}
+		}
+		
+		return new String(array);
+    }
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	public static void main(String[] args) {
 		
