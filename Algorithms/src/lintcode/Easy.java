@@ -1159,7 +1159,33 @@ public class Easy {
         }
     }
 	
-	
+	public int findPairs(int[] nums, int k) {
+		if(nums.length < 2)
+			return 0;
+        int pairs = 0;
+        if(k == 0) {
+        	Map<Integer, Integer> map = new HashMap<>();
+        	for(int num : nums) {
+        		map.put(num, map.getOrDefault(num, 0) + 1);
+        	}
+        	for(int val : map.values()) {
+        		if(val > 1)
+        			pairs++;
+        	}
+        	return pairs;
+        }
+        Set<Integer> set = new HashSet<>();
+        Arrays.sort(nums);
+        for(int num : nums)
+        	set.add(num);
+        for(int i=0; i<nums.length; i++) {
+        	if(i > 0 && nums[i] == nums[i-1] && k != 0)
+        		continue;
+        	if(set.contains(nums[i] + k))
+        		pairs++;
+        }
+        return pairs;
+    }
 	
 	
 	
