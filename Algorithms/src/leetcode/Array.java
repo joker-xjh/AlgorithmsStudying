@@ -5023,12 +5023,233 @@ public class Array {
 		 }
 		 return (int) answer;
 	 }
+	 
+	 public int smallestRangeI(int[] A, int K) {
+		 int max = Integer.MIN_VALUE;
+		 int min = Integer.MAX_VALUE;
+		 for(int num : A) {
+			 max = Math.max(max, num);
+			 min = Math.min(min, num);
+		 }
+		 if(min + K >= max - K)
+			 return 0;
+		 return max - K - (min + K);
+	 }
+	 
+	 class TopVotedCandidate {
+		 
+		 TreeMap<Integer, Integer> tree;
+		 int[] P;
+		 
+		    public TopVotedCandidate(int[] persons, int[] times) {
+		        P = new int[persons.length + 1];
+		        tree = new TreeMap<>();
+		        int max = 0;
+		        int max_p = 0;
+		        for(int i=0; i<persons.length; i++) {
+		        	int person = persons[i];
+		        	int time = times[i];
+		        	P[person]++;
+		        	if(P[person] >= max) {
+		        		max = P[person];
+		        		max_p = person;
+		        	}
+		        	tree.put(time, max_p);
+		        }
+		        
+		    }
+		    
+		    public int q(int t) {
+		        Map.Entry<Integer, Integer> entry = tree.floorEntry(t);
+		        return entry.getValue();
+		    }
+	}
+	 
+	 
+	 public int snakesAndLadders(int[][] board) {
+		 int goal = board.length * board.length;
+		 Queue<int[]> queue = new LinkedList<>();
+		 board[0][0] = -1;
+		 board[board.length-1][0] = -1;
+		 List<Integer> list = new ArrayList<>(goal);
+		 list.add(0);
+		 for(int i=board.length-1, j = 0; i>=0; i--) {
+			 if(j == 0) {
+				 for(int k=0; k<board.length; k++) {
+					 list.add(board[i][k]);
+				 }
+			 }
+			 else {
+				for(int k=board.length-1; k>=0; k--) {
+					list.add(board[i][k]);
+				}
+			 }
+			 j ^= 1;
+		 }
+		 
+		 int[] dp = new int[goal+1];
+		 dp[1] = 1;
+		 queue.add(new int[] {1, 0, 0});
+		 while(!queue.isEmpty()) {
+			 int size = queue.size();
+			 while(size-- > 0) {
+				 int[] pos = queue.poll();
+				 if(list.get(pos[0]) != -1 && pos[2] == 0) {
+					 pos[0] = list.get(pos[0]);
+				 }
+				 if(pos[0] + 6 >= goal)
+					 return pos[1] + 1;
+				 for(int i=1; i<=6; i++) {
+					 int next_index = pos[0] + i;
+					 int next_used = 0;
+					 if(list.get(next_index) != -1) {
+						 next_index = list.get(next_index);
+						 next_used = 1;
+					 }
+					 if(dp[next_index] != 0)
+						 continue;
+					 if(next_index >= goal)
+						 return pos[1] + 1;
+					 dp[next_index] = pos[1] + 1;
+					 queue.add(new int[] {next_index, pos[1] + 1, next_used});
+				 }
+			 }
+		 }
+		 return -1;
+	 }
+	 
+	 
+	 public int smallestRangeII(int[] A, int K) {
+		 if(A.length < 2)
+			 return 0;
+		 int min = Integer.MAX_VALUE, max = Integer.MIN_VALUE;
+		 int answer = Integer.MAX_VALUE;
+		 TreeSet<Integer> max_tree = new TreeSet<>();
+		 TreeSet<Integer> min_tree = new TreeSet<>();
+		 for(int num : A) {
+			 min = Math.min(min, num);
+			 max = Math.max(max, num);
+		 }
+		 Map<Integer, Integer> map = new HashMap<>();
+		 for(int num : A) {
+			 int sub = num - K;
+			 int add = num + K;
+			 if(sub <= min + K) {
+				 map.put(sub, 1);
+				 min_tree.add(sub);
+			 }
+			 if(add <= min + K) {
+				 map.put(add, 1);
+				 min_tree.add(add);
+			 }
+			 if(sub >= max - K) {
+				 map.put(sub, 2);
+				 max_tree.add(sub);
+			 }
+			 if(add >= max - K) {
+				 map.put(add, 2);
+				 max_tree.add(add);
+			 }
+		 }
+		 for(Map.Entry<Integer, Integer> entry : map.entrySet()) {
+			 int key = entry.getKey();
+			 int val = entry.getValue();
+			 if(val == 1) {
+				 int ceil = max_tree.ceiling(key);
+				 answer = Math.min(answer, ceil - key);
+			 }
+			 else {
+				 int floor = min_tree.floor(key);
+				 answer = Math.min(answer, key - floor);
+			 }
+		 }
+		 return answer;
+	 }
+	 
+	 
+	 public int catMouseGame(int[][] graph) {
+		return catMouseGame(graph, new int[] {1,2,0}, new Integer[graph.length][graph.length][2]);
+	 }
+		
+	private int catMouseGame(int[][] graph, int[] state, Integer[][][] dp) {
+		int mouse = state[0], cat = state[1], who = state[2];
+		if(dp[mouse][cat][who] != null)
+			return dp[mouse][cat][who];
+		dp[mouse][cat][who] = 0;
+		if(mouse == cat)
+			return 2;
+		if(mouse == 0)
+			return 1;
+		if(who == 0) {
+			int answer = 10;
+			for(int next : graph[mouse]) {
+				if(next == 0) {
+					dp[mouse][cat][who] = 1;
+					return 1;
+				}
+			}
+			for(int next : graph[mouse]) {
+				int temp = catMouseGame(graph, new int[] {next, cat, 1}, dp);
+				if(temp == 1) {
+					dp[mouse][cat][who] = 1;
+					return temp;
+				}
+				answer = Math.min(answer, temp);
+			}
+			dp[mouse][cat][who] = answer;
+			return answer;
+		}
+		else {
+			int answer = 10;
+			for(int next : graph[cat]) {
+				if(next == mouse) {
+					dp[mouse][cat][who] = 2;
+					return 2;
+				}
+			}
+			for(int next : graph[cat]) {
+				if(next == 0)
+					continue;
+				int temp = catMouseGame(graph, new int[] {mouse,next,0},dp);
+				if(temp == 2) {
+					dp[mouse][cat][who] = 2;
+					return temp;
+				}
+				answer = Math.min(answer, temp);
+			}
+			dp[mouse][cat][who] = answer;
+			return answer;
+		}
+	}
+	
+	
+	
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
      
      
 
 
 	public static void main(String[] args) {
-		 
+		 Array test = new Array();
+		 int[][] array = {{4,7,8,9},
+				 		  {4,5,7,8},
+				 		  {4,5,8,9},
+				 		  {4,5,8},
+				 		  {0,1,2,3,5,6},
+				 		  {1,2,3,4,7,8,9},
+				 		  {4,7,8,9},
+				 		  {0,1,5,6},
+				 		  {0,1,2,3,5,6,9},
+				 		  {0,2,5,6,8}};
+		 System.out.println(test.catMouseGame(array));;
 	}
 
 }
